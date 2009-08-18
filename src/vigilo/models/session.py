@@ -8,15 +8,13 @@ and shouldn't use this.
 Thread-local, autoflush, no autocommit.
 """
 
+from sqlalchemy.engine import engine_from_config
 from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy import create_engine
 from vigilo.common.conf import settings
 
 __all__ = ( 'DBSession', )
 
 DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False))
 
-engine = create_engine(settings['VIGILO_MODELS'])
-
-DBSession.configure(bind=engine)
+engine = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
 
