@@ -12,6 +12,7 @@ setup(name='vigilo-models',
         long_description='Definition of the vigilo data model, db access.',
         install_requires=[
             'SQLAlchemy',
+            'vigilo-common',
             ],
         namespace_packages = [
             'vigilo',
