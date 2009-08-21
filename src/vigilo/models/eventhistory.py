@@ -20,22 +20,18 @@ event_history =  Table(
         MSEnum('Nagios update state', 'Acknowlegement change state',
             'New occurence', 'User comment', 'Ticket change', 'Oncall',
             'Forced state'),
-        primary_key=False, nullable=False),
+        nullable=False),
     Column(u'idevent', Integer(),
         ForeignKey(
             bdd_basename +'events.idevent'
-        ), index=True, primary_key=False, nullable=False),
+        ), index=True, nullable=False),
     Column(u'value',
-        UnicodeText(),
-        primary_key=False),
+        UnicodeText()),
     Column(u'text',
-        Text(length=None, convert_unicode=True, assert_unicode=None),
-        primary_key=False),
-    Column(u'timestamp', DateTime(timezone=False), default=datetime.now(),
-        primary_key=False),
+        Text(length=None, convert_unicode=True, assert_unicode=None)),
+    Column(u'timestamp', DateTime(timezone=False), default=datetime.now()),
     Column(u'username',
-        UnicodeText(),
-        primary_key=False),
+        UnicodeText()),
     mysql_engine='InnoDB',
     mysql_charset='utf8'
 )

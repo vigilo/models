@@ -18,10 +18,10 @@ graph =  Table(bdd_basename + 'graph',
             primary_key=True, nullable=False),
         Column(u'template',
             UnicodeText(),
-            primary_key=False, nullable=False),
+            nullable=False),
         Column(u'vlabel',
             UnicodeText(),
-            primary_key=False, nullable=False),
+            nullable=False),
         mysql_engine='InnoDB',
         mysql_charset='utf8'
     )

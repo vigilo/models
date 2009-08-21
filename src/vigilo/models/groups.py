@@ -18,7 +18,7 @@ groups =  Table(bdd_basename + 'groups',
             primary_key=True, nullable=False),
         Column(u'parent',
             UnicodeText(),
-            index=True, primary_key=False),
+            index=True),
         mysql_engine='InnoDB',
         mysql_charset='utf8'
     )

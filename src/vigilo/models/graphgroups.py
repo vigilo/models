@@ -16,7 +16,7 @@ graphgroups = Table(bdd_basename + 'graphgroups',
         Column(u'name',
             UnicodeText(),
             primary_key=True, nullable=False),
-        Column(u'parent', Integer(), primary_key=False, nullable=True),
+        Column(u'parent', Integer(), nullable=True),
         mysql_engine='InnoDB',
         mysql_charset='utf8'
     )

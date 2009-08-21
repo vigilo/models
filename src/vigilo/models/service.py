@@ -18,10 +18,10 @@ service =  Table(bdd_basename + 'service',
             index=True, primary_key=True, nullable=False),
         Column(u'type',
             UnicodeText(),
-            primary_key=False, nullable=False),
+            nullable=False),
         Column(u'command',
             UnicodeText(),
-            primary_key=False, nullable=False),
+            nullable=False),
         mysql_engine='InnoDB',
         mysql_charset='utf8'
     )

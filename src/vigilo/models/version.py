@@ -18,7 +18,7 @@ version = Table(bdd_basename + 'version',
             index=True,primary_key=True, nullable=False),
         Column(u'version',
             UnicodeText(),
-            primary_key=False, nullable=False),
+            nullable=False),
         mysql_engine='InnoDB',
         mysql_charset='utf8'
     )
