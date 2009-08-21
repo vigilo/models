@@ -15,6 +15,5 @@ from vigilo.common.conf import settings
 __all__ = ( 'DBSession', )
 
 DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False))
-
-engine = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
+DBSession.bind = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
 

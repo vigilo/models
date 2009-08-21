@@ -12,7 +12,7 @@ from sqlalchemy.databases.mysql import MSEnum
 
 from datetime import datetime
 
-from ..vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, metadata
 
 # Generation par SQLAutoCode
 

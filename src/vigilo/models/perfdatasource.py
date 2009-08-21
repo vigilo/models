@@ -7,7 +7,7 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import String, Float
 
-from ..vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, metadata
 
 # Generation par SQLAutoCode
 

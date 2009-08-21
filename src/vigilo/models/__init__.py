@@ -1,15 +1,28 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""
-BdD Vigilo initialisation
-"""
+"""BdD Vigiboard"""
 
-from sqlalchemy.ext.declarative import declarative_base
+__all__ = (
+        'EventHistory', 'Events', 'GraphGroups', 'Graph', 'Groups',
+        'GroupPermissions', 'HostGroups', 'Host', 'PerfDataSource', 'ServiceGroups',
+        'ServiceHautNiveau', 'Service', 'ServiceTopo', 'GraphToGroups', 'Version',
+        'State',
+        )
 
-DeclarativeBase = declarative_base()
 
-metadata = DeclarativeBase.metadata
-
-from .vigilo_bdd import EventHistory, Events, GraphGroups, Graph, Groups, \
-        GroupPermissions, HostGroups, Host, PerfDataSource, ServiceGroups, \
-        ServiceHautNiveau, Service, ServiceTopo, GraphToGroups, Version, State
+from .eventhistory import EventHistory
+from .events import Events
+from .graphgroups import GraphGroups
+from .graph import Graph
+from .groups import Groups
+from .grouppermissions import GroupPermissions
+from .hostgroups import HostGroups
+from .host import Host
+from .perfdatasource import PerfDataSource
+from .servicegroups import ServiceGroups
+from .servicehautniveau import ServiceHautNiveau
+from .service import Service
+from .servicetopo import ServiceTopo
+from .graphtogroups import GraphToGroups
+from .version import Version
+from .state import State
