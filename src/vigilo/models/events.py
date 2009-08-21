@@ -11,50 +11,41 @@ from sqlalchemy.databases.mysql import MSEnum, MSBoolean
 
 from datetime import datetime
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-events = Table(bdd_basename + 'events', metadata,
-    Column(u'idevent', Integer(), primary_key=True, nullable=False,
-        autoincrement=True),
-    Column(u'hostname',
+class Events(DeclarativeBase):
+
+    __tablename__ = bdd_basename + 'events'
+
+    idevent = Column( Integer(), primary_key=True, nullable=False,
+        autoincrement=True)
+    hostname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename +'host.name'),
-        index=True, nullable=False),
-    Column(u'servicename',
+        index=True, nullable=False)
+    servicename = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + 'service.name'),
-        index=True),
-    Column(u'severity', Integer(), nullable=False),
-    Column(u'status', MSEnum('None','Acknowledged','AAClosed'), 
-        nullable=False, 
-        server_default=DefaultClause('None', for_update=False)),
-    Column(u'active', MSBoolean(), default='True'),
-    Column(u'timestamp', DateTime(timezone=False)),
-    Column(u'output',
+        index=True)
+    severity = Column( Integer(), nullable=False)
+    status = Column( MSEnum('None','Acknowledged','AAClosed'),
+        nullable=False,
+        server_default=DefaultClause('None', for_update=False))
+    active = Column( MSBoolean(), default='True')
+    timestamp = Column( DateTime(timezone=False))
+    output = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None),
-        nullable=False),
-    Column(u'timestamp_active', DateTime(timezone=False)),
-    Column(u'trouble_ticket',
-        UnicodeText()),
-    Column(u'occurence', Integer()),
-    Column(u'impact', Integer()),
-    Column(u'rawstate', MSEnum('WARNING','OK','CRITICAL','UNKNOWN')),
-    mysql_engine='InnoDB',
-    mysql_charset='utf8'
-)
-
-# Classe a mapper
-
-class Events(object):
-    
-    """
-    Classe liée avec la table associée
-    """
+        nullable=False)
+    timestamp_active = Column( DateTime(timezone=False))
+    trouble_ticket = Column(
+        UnicodeText())
+    occurence = Column( Integer())
+    impact = Column( Integer())
+    rawstate = Column( MSEnum('WARNING','OK','CRITICAL','UNKNOWN'))
 
     def __init__(self, hostname, servicename, server_source = '', severity = 0,
-            status = 'None', active = True, timestamp = datetime.now(), 
+            status = 'None', active = True, timestamp = datetime.now(),
             output = '', event_timestamp = datetime.now(),
             last_check = datetime.now(), recover_output = '',
             timestamp_active = datetime.now(),
@@ -78,9 +69,9 @@ class Events(object):
         self.occurence = occurence
 
     def get_date(self, element):
-        
+
         """
-        Permet de convertir une variable de temps en la chaîne de caractère : 
+        Permet de convertir une variable de temps en la chaîne de caractère :
         jour mois heure:minutes:secondes
 
         @param element: nom de l'élément à convertir de la classe elle même
@@ -90,11 +81,11 @@ class Events(object):
         date = datetime.now() - element
         if date.days < 7 :
             return element.strftime('%a %H:%M:%S')
-        else :    
+        else :
             return element.strftime('%d %b %H:%M:%S')
 
     def get_since_date(self, element):
-        
+
         """
         Permet d'obtenir le temps écoulé entre maintenant (datetime.now())
         et le temps contenu dans la variable de temps indiquée
@@ -108,4 +99,4 @@ class Events(object):
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
 
-mapper(Events, events)
+

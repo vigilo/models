@@ -7,33 +7,21 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import Integer, UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-grouppermissions = Table(
-    bdd_basename + 'grouppermissions',
-    metadata,
-    Column(u'groupname',
+
+
+
+class GroupPermissions(DeclarativeBase):
+    __tablename__ = bdd_basename + 'grouppermissions'
+
+    groupname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename +'groups.name'),
-        primary_key=True, nullable=False),
-    Column(u'idpermission',
-        Integer(), autoincrement=False, primary_key=True, nullable=False),
-    mysql_engine='InnoDB',
-    mysql_charset='utf8'
-)
+        primary_key=True, nullable=False)
+    idpermission = Column(
+        Integer(),
+        default=0,
+        autoincrement=False, primary_key=True, nullable=False)
 
-# Classe a mapper
-
-class GroupPermissions(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-
-    def __init__(self, groupname, idpermission = 0):
-        self.groupname = groupname
-        self.idpermission = idpermission
-
-mapper(GroupPermissions, grouppermissions)

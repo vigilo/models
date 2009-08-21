@@ -7,37 +7,27 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-servicehautniveau = Table(
-    bdd_basename + 'servicehautniveau',
-    metadata,
-    Column(u'servicename',
+
+class ServiceHautNiveau(DeclarativeBase):
+    __tablename__ = bdd_basename + 'servicehautniveau'
+
+    servicename = Column(
         UnicodeText(),
         ForeignKey(
             bdd_basename + u'service.name'
-        ), primary_key=True, nullable=False),
-    Column(u'servicename_dep',
+        ), primary_key=True, nullable=False)
+    servicename_dep = Column(
         UnicodeText(),
         ForeignKey(
-            bdd_basename + u'service.name'
-        ), index=True ,primary_key=True, nullable=False),
-    mysql_engine='InnoDB',
-    mysql_charset='utf8'
-)
+            bdd_basename + u'service.name',
+        ), index=True ,primary_key=True, nullable=False)
 
-# Classe a mapper
 
-class ServiceHautNiveau(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, servicename, servicename_dep):
-        self.servicename = servicename
-        self.servicename_dep = servicename_dep
 
-mapper(ServiceHautNiveau, servicehautniveau)
+
+
+
+

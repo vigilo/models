@@ -7,36 +7,22 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-graphtogroups =  Table(
-    bdd_basename + 'graphtogroups',
-    metadata,
-    Column(u'graphname',
+
+
+
+class GraphToGroups(DeclarativeBase):
+    __tablename__ = bdd_basename + 'graphtogroups'
+
+    graphname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + 'graph.name'),
-        primary_key=True, nullable=False),
-    Column(u'groupname',
+        primary_key=True, nullable=False)
+    groupname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + \
                 'graphgroups.name'),
-        primary_key=True, nullable=False),
-        mysql_engine='InnoDB',
-        mysql_charset='utf8'
-    )
+        primary_key=True, nullable=False)
 
-# Classe a mapper
-
-class GraphToGroups(object):
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, graphname, groupname):
-        self.graphname = graphname
-        self.groupname = groupname
-
-
-mapper(GraphToGroups, graphtogroups)

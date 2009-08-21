@@ -7,32 +7,19 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column
 from sqlalchemy.types import UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-groups =  Table(bdd_basename + 'groups',
-        metadata,
-        Column(u'name',
-            UnicodeText(),
-            primary_key=True, nullable=False),
-        Column(u'parent',
-            UnicodeText(),
-            index=True),
-        mysql_engine='InnoDB',
-        mysql_charset='utf8'
-    )
 
-# Classe a mapper
+class Groups(DeclarativeBase):
+    __tablename__ = bdd_basename + 'groups'
 
-class Groups(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, name, parent=None):
-        self.name = name
-        self.parent = parent
+    name = Column(
+        UnicodeText(),
+        primary_key=True, nullable=False)
+    parent = Column(
+        UnicodeText(),
+        index=True)
 
-mapper(Groups, groups)
+
+

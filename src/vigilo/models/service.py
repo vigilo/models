@@ -7,38 +7,23 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column
 from sqlalchemy.types import UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
+class Service(DeclarativeBase):
 
-service =  Table(bdd_basename + 'service',
-        metadata,
-        Column(u'name',
-            UnicodeText(),
-            index=True, primary_key=True, nullable=False),
-        Column(u'type',
-            UnicodeText(),
-            nullable=False),
-        Column(u'command',
-            UnicodeText(),
-            nullable=False),
-        mysql_engine='InnoDB',
-        mysql_charset='utf8'
-    )
+    __tablename__ = bdd_basename + 'service'
 
-# Classe a mapper
+    name = Column(
+        UnicodeText(),
+        index=True, primary_key=True, nullable=False)
+    type = Column(
+        UnicodeText(),
+        default=0,
+        nullable=False)
+    command = Column(
+        UnicodeText(),
+        default='',
+        nullable=False)
 
-class Service(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, name, servicetype = 0, command = ''):
-        self.name = name
-        self.type = servicetype
-        self.command = command
-      
-mapper(Service, service)
 
 

@@ -7,36 +7,22 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-hostgroups = Table(bdd_basename + 'hostgroups',
-    metadata,
-    Column(u'hostname',
+class HostGroups(DeclarativeBase):
+
+    __tablename__ = bdd_basename + 'hostgroups'
+
+    hostname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + u'host.name'),
-        primary_key=True, nullable=False),
-    Column(u'groupname',
+        primary_key=True, nullable=False)
+    groupname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + u'groups.name'),
-        index=True ,primary_key=True, nullable=False),
-    mysql_engine='InnoDB',
-    mysql_charset='utf8'
-)
+        index=True ,primary_key=True, nullable=False)
 
-# Classe a mapper
 
-class HostGroups(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, hostname, groupname):
-        self.hostname = hostname
-        self.groupname = groupname
-
-mapper(HostGroups, hostgroups)
 
 

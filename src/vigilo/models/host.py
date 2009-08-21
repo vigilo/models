@@ -7,46 +7,36 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column
 from sqlalchemy.types import Integer, UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-host = Table(bdd_basename + 'host',
-        metadata,
-        Column(u'name',
-            UnicodeText(),
-            index=True,primary_key=True, nullable=False),
-        Column(u'checkhostcmd',
-            UnicodeText(),
-            nullable=False),
-        Column(u'community',
-            UnicodeText(),
-            nullable=False),
-        Column(u'fqhn',
-            UnicodeText(),
-            nullable=False),
-        Column(u'hosttpl',
-            UnicodeText(),
-            nullable=False),
-        Column(u'mainip',
-            UnicodeText(),
-            nullable=False),
-        Column(u'port', Integer(), nullable=False),
-        Column(u'snmpoidsperpdu', Integer()),
-        Column(u'snmpversion',
-            UnicodeText()),
-        mysql_engine='InnoDB',
-        mysql_charset='utf8'
-    )
 
-# Classe a mapper
+class Host(DeclarativeBase):
+    __tablename__ = bdd_basename + 'host'
 
-class Host(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
+    name = Column(
+        UnicodeText(),
+        index=True,primary_key=True, nullable=False)
+    checkhostcmd = Column(
+        UnicodeText(),
+        nullable=False)
+    community = Column(
+        UnicodeText(),
+        nullable=False)
+    fqhn = Column(
+        UnicodeText(),
+        nullable=False)
+    hosttpl = Column(
+        UnicodeText(),
+        nullable=False)
+    mainip = Column(
+        UnicodeText(),
+        nullable=False)
+    port = Column( Integer(), nullable=False)
+    snmpoidsperpdu = Column( Integer())
+    snmpversion = Column(
+        UnicodeText())
+
     def __init__(self, name, checkhostcmd = '', community = '', fqhn = '',
             hosttpl = '', mainip = '', port = 0, snmpoidsperdu = 0,
             snmpversion = ''):
@@ -60,6 +50,6 @@ class Host(object):
         self.snmpoidsperdu = snmpoidsperdu
         self.snmpversion = snmpversion
 
-mapper(Host, host)
+
 
 

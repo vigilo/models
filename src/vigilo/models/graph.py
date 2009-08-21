@@ -7,36 +7,26 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column
 from sqlalchemy.types import UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-graph =  Table(bdd_basename + 'graph',
-        metadata,
-        Column(u'name',
+
+class Graph(DeclarativeBase):
+    __tablename__ = bdd_basename + 'graph'
+
+    name = Column(
             UnicodeText(),
-            primary_key=True, nullable=False),
-        Column(u'template',
+            primary_key=True, nullable=False)
+    template = Column(
             UnicodeText(),
-            nullable=False),
-        Column(u'vlabel',
+            default='',
+            nullable=False)
+    vlabel = Column(
             UnicodeText(),
-            nullable=False),
-        mysql_engine='InnoDB',
-        mysql_charset='utf8'
-    )
+            default='',
+            nullable=False)
 
-# Classe a mapper
 
-class Graph(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, name, template = '', vlabel = ''):
-        self.name = name
-        self.template = template
-        self.vlabel = vlabel
-        
-mapper(Graph, graph)
+
+
+

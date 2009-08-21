@@ -7,53 +7,36 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import UnicodeText, Float
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-perfdatasource = Table(
-    bdd_basename + 'perfdatasource',
-    metadata,
-    Column(u'hostname',
+class PerfDataSource(DeclarativeBase):
+
+    __tablename__ = bdd_basename + 'perfdatasource'
+
+    hostname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + u'host.name'),
-        primary_key=True, nullable=False),
-    Column(u'servicename',
+        primary_key=True, nullable=False)
+    servicename = Column(
         UnicodeText(),
         ForeignKey(
             bdd_basename + u'service.name'
-        ), index=True, primary_key=True, nullable=False),
-    Column(u'graphname',
+        ), index=True, primary_key=True, nullable=False)
+    graphname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + u'graph.name'),
-        index=True,nullable=False),
-    Column(u'type',
+        index=True,nullable=False)
+    type = Column(
         UnicodeText(),
-        nullable=False),
-    Column(u'label',
-        UnicodeText()),
-    Column(u'factor',
+        default='',
+        nullable=False)
+    label = Column(
+        UnicodeText(),
+        default='')
+    factor = Column(
         Float(precision=None, asdecimal=False),
-        nullable=False),
-    mysql_engine='InnoDB',
-    mysql_charset='utf8'
-)
+        default=0.0,
+        nullable=False)
 
-# Classe a mapper
 
-class PerfDataSource(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, hostname, servicename, graphname, typeperf = '',
-            label = '', factor = 0.0):
-        self.hostname = hostname
-        self.servicename = servicename
-        self.graphname = graphname
-        self.type = typeperf
-        self.label = label
-        self.factor = factor
-
-mapper(PerfDataSource, perfdatasource)

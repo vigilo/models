@@ -7,34 +7,21 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-servicetopo =  Table(bdd_basename + 'servicetopo',
-    metadata,
-    Column(u'servicename',
+class ServiceTopo(DeclarativeBase):
+
+    __tablename__ = bdd_basename + 'servicetopo'
+
+    servicename = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + \
                 u'service.name'),
-        primary_key=True, nullable=False),
-    Column(u'function',
+        primary_key=True, nullable=False)
+
+    function = Column(
         UnicodeText(),
-        nullable=False),
-    mysql_engine='InnoDB',
-    mysql_charset='utf8'
-)
+        default='',
+        nullable=False)
 
-# Classe a mapper
-
-class ServiceTopo(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, servicename, function=''):
-        self.servicename = servicename
-        self.function = function
-
-mapper(ServiceTopo, servicetopo)

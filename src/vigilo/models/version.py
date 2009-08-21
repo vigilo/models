@@ -7,32 +7,18 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column
 from sqlalchemy.types import Integer, UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-version = Table(bdd_basename + 'version',
-        metadata,
-        Column(u'name',
+
+class Version(DeclarativeBase):
+    __tablename__ = bdd_basename + 'version'
+
+    name = Column(
             UnicodeText(),
-            index=True,primary_key=True, nullable=False),
-        Column(u'version',
+            index=True,primary_key=True, nullable=False)
+    version = Column(
             UnicodeText(),
-            nullable=False),
-        mysql_engine='InnoDB',
-        mysql_charset='utf8'
-    )
-
-# Classe a mapper
-
-class Version(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    pass
-
-mapper(Version, version)
+            nullable=False)
 
 

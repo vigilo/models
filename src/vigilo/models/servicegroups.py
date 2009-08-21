@@ -7,39 +7,23 @@ from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
 from sqlalchemy.types import UnicodeText
 
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
+class ServiceGroups(DeclarativeBase):
 
-servicegroups =  Table(
-    bdd_basename + 'servicegroups',
-    metadata,
-    Column(u'servicename',
+    __tablename__ = bdd_basename + 'servicegroups'
+
+    servicename = Column(
         UnicodeText(),
         ForeignKey(
             bdd_basename + u'service.name'
-        ), primary_key=True, nullable=False),
-    Column(u'groupname',
+        ), primary_key=True, nullable=False)
+    groupname = Column(
         UnicodeText(),
         ForeignKey(
             bdd_basename + u'groups.name'
-        ), index=True, primary_key=True, nullable=False),
-    mysql_engine='InnoDB',
-    mysql_charset='utf8'
-)
+        ), index=True, primary_key=True, nullable=False)
 
-# Classe a mapper
 
-class ServiceGroups(object):
-    
-    """
-    Classe liée avec la table associée
-    """
-    
-    def __init__(self, servicename, groupname):
-        self.servicename = servicename
-        self.groupname = groupname
-
-mapper(ServiceGroups, servicegroups)
 
 

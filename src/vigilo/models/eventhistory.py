@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# vim:set expandtab tabstop=4 shiftwidth=4: 
+# vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table EventHistory"""
 from __future__ import absolute_import
 from sqlalchemy.orm import mapper
@@ -8,58 +8,41 @@ from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
 from datetime import datetime
-from .vigilo_bdd_config import bdd_basename, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-# Generation par SQLAutoCode
 
-event_history =  Table(
-    bdd_basename + 'event_history', metadata,
-    Column(u'idhistory', Integer(), primary_key=True, nullable=False, 
-        autoincrement=True),
-    Column(u'type_action',
+
+
+
+class EventHistory(DeclarativeBase):
+    """
+    @param type_action: Le type d'action effectué, peut être 'Nagios update state',
+                        'Acknowlegement change state', 'New occurence', 'User comment', 'Ticket change',
+                        'Oncall' ou 'Forced state'
+    @param idevent: Identifiant de l'évènement
+    @param value: Nouvelle sévérité
+    @param text: Commentaire sur l'action effectuée
+    @param username: Nom d'utilisateur de la personne effectuant l'action
+    """
+
+    __tablename__ = bdd_basename + 'event_history'
+
+    idhistory = Column( Integer(), primary_key=True, nullable=False,
+        autoincrement=True)
+    type_action = Column(
         MSEnum('Nagios update state', 'Acknowlegement change state',
             'New occurence', 'User comment', 'Ticket change', 'Oncall',
             'Forced state'),
-        nullable=False),
-    Column(u'idevent', Integer(),
+        nullable=False)
+    idevent = Column(Integer(),
         ForeignKey(
             bdd_basename +'events.idevent'
-        ), index=True, nullable=False),
-    Column(u'value',
-        UnicodeText()),
-    Column(u'text',
-        Text(length=None, convert_unicode=True, assert_unicode=None)),
-    Column(u'timestamp', DateTime(timezone=False), default=datetime.now()),
-    Column(u'username',
-        UnicodeText()),
-    mysql_engine='InnoDB',
-    mysql_charset='utf8'
-)
+        ), index=True, nullable=False)
+    value = Column(
+        UnicodeText())
+    text = Column(
+        Text(length=None, convert_unicode=True, assert_unicode=None))
+    timestamp = Column(DateTime(timezone=False), default=datetime.now())
+    username = Column(
+        UnicodeText())
 
-# Classe a mapper
-
-class EventHistory(object):
-    """
-    Classe liée avec la table associée
-    """
-    def __init__(self, type_action, idevent, value='', text='', username=''):
-        
-        """
-        Fonction d'initialisation, permet de faire un INSERT en une fonction
-
-        @param type_action: Le type d'action effectué, peut être 'Nagios update state',
-                            'Acknowlegement change state', 'New occurence', 'User comment', 'Ticket change',
-                            'Oncall' ou 'Forced state'
-        @param idevent: Identifiant de l'évènement
-        @param value: Nouvelle sévérité
-        @param text: Commentaire sur l'action effectuée
-        @param username: Nom d'utilisateur de la personne effectuant l'action
-        """
-
-        self.type_action = type_action
-        self.idevent = idevent 
-        self.value = value
-        self.text = text
-        self.username = username
-
-mapper(EventHistory, event_history)

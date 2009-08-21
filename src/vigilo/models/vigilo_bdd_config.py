@@ -14,7 +14,7 @@ __all__ = ('metadata', 'DeclarativeBase', 'bdd_basename', )
 
 
 bdd_basename = settings['VIGILO_MODELS_BDD_BASENAME']
-DeclarativeBase = declarative_base() # Not used, a shame
+DeclarativeBase = declarative_base()
 metadata = DeclarativeBase.metadata
 
 
