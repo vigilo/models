@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column
-from sqlalchemy.types import String
+from sqlalchemy.types import UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, metadata
 
@@ -14,10 +14,10 @@ from .vigilo_bdd_config import bdd_basename, metadata
 groups =  Table(bdd_basename + 'groups',
         metadata,
         Column(u'name',
-            String(length=100, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             primary_key=True, nullable=False),
         Column(u'parent',
-            String(length=100, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             index=True, primary_key=False),
         mysql_engine='InnoDB',
         mysql_charset='utf8'

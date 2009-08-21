@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column
-from sqlalchemy.types import Integer, String
+from sqlalchemy.types import Integer, UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, metadata
 
@@ -14,27 +14,27 @@ from .vigilo_bdd_config import bdd_basename, metadata
 host = Table(bdd_basename + 'host',
         metadata,
         Column(u'name',
-            String(length=255, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             index=True,primary_key=True, nullable=False),
         Column(u'checkhostcmd',
-            String(length=255, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             primary_key=False, nullable=False),
         Column(u'community',
-            String(length=255, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             primary_key=False, nullable=False),
         Column(u'fqhn',
-            String(length=255, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             primary_key=False, nullable=False),
         Column(u'hosttpl',
-            String(length=255, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             primary_key=False, nullable=False),
         Column(u'mainip',
-            String(length=255, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             primary_key=False, nullable=False),
         Column(u'port', Integer(), primary_key=False, nullable=False),
         Column(u'snmpoidsperpdu', Integer(), primary_key=False),
         Column(u'snmpversion',
-            String(length=255, convert_unicode=True, assert_unicode=None),
+            UnicodeText(),
             primary_key=False),
         mysql_engine='InnoDB',
         mysql_charset='utf8'

@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column, DefaultClause, ForeignKey
-from sqlalchemy.types import Integer, String, Text, DateTime
+from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum, MSBoolean
 
@@ -19,11 +19,11 @@ events = Table(bdd_basename + 'events', metadata,
     Column(u'idevent', Integer(), primary_key=True, nullable=False,
         autoincrement=True),
     Column(u'hostname',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename +'host.name'),
         index=True, primary_key=False, nullable=False),
     Column(u'servicename',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename + 'service.name'),
         index=True, primary_key=False),
     Column(u'severity', Integer(), primary_key=False, nullable=False),
@@ -37,7 +37,7 @@ events = Table(bdd_basename + 'events', metadata,
         primary_key=False, nullable=False),
     Column(u'timestamp_active', DateTime(timezone=False), primary_key=False),
     Column(u'trouble_ticket',
-        String(length=20, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         primary_key=False),
     Column(u'occurence', Integer(), primary_key=False),
     Column(u'impact', Integer(), primary_key=False),

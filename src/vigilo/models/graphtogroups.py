@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.types import String
+from sqlalchemy.types import UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, metadata
 
@@ -15,11 +15,11 @@ graphtogroups =  Table(
     bdd_basename + 'graphtogroups',
     metadata,
     Column(u'graphname',
-        String(length=100, convert_unicode=False, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename + 'graph.name'),
         primary_key=True, nullable=False),
     Column(u'groupname',
-        String(length=100, convert_unicode=False, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename + \
                 'graphgroups.name'),
         primary_key=True, nullable=False),

@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.types import Integer, String
+from sqlalchemy.types import Integer, UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, metadata
 
@@ -15,7 +15,7 @@ grouppermissions = Table(
     bdd_basename + 'grouppermissions',
     metadata,
     Column(u'groupname',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename +'groups.name'),
         primary_key=True, nullable=False),
     Column(u'idpermission',

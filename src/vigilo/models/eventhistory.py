@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 from sqlalchemy.orm import mapper
 from sqlalchemy import ForeignKey, Table, Column
-from sqlalchemy.types import Integer, String, Text, DateTime
+from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
 from datetime import datetime
@@ -26,7 +26,7 @@ event_history =  Table(
             bdd_basename +'events.idevent'
         ), index=True, primary_key=False, nullable=False),
     Column(u'value',
-        String(length=255, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         primary_key=False),
     Column(u'text',
         Text(length=None, convert_unicode=True, assert_unicode=None),
@@ -34,7 +34,7 @@ event_history =  Table(
     Column(u'timestamp', DateTime(timezone=False), default=datetime.now(),
         primary_key=False),
     Column(u'username',
-        String(length=255, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         primary_key=False),
     mysql_engine='InnoDB',
     mysql_charset='utf8'

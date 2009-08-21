@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.types import String, Float
+from sqlalchemy.types import UnicodeText, Float
 
 from .vigilo_bdd_config import bdd_basename, metadata
 
@@ -15,23 +15,23 @@ perfdatasource = Table(
     bdd_basename + 'perfdatasource',
     metadata,
     Column(u'hostname',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename + u'host.name'),
         primary_key=True, nullable=False),
     Column(u'servicename',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(
             bdd_basename + u'service.name'
         ), index=True, primary_key=True, nullable=False),
     Column(u'graphname',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename + u'graph.name'),
         index=True,primary_key=False, nullable=False),
     Column(u'type',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         primary_key=False, nullable=False),
     Column(u'label',
-        String(length=255, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         primary_key=False),
     Column(u'factor',
         Float(precision=None, asdecimal=False),

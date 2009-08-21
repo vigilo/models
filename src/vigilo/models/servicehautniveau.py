@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.types import String
+from sqlalchemy.types import UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, metadata
 
@@ -15,12 +15,12 @@ servicehautniveau = Table(
     bdd_basename + 'servicehautniveau',
     metadata,
     Column(u'servicename',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(
             bdd_basename + u'service.name'
         ), primary_key=True, nullable=False),
     Column(u'servicename_dep',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(
             bdd_basename + u'service.name'
         ), index=True ,primary_key=True, nullable=False),

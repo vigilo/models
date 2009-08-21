@@ -6,7 +6,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column, DefaultClause, ForeignKey
-from sqlalchemy.types import Integer, String, Text, DateTime
+from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
 
@@ -20,15 +20,15 @@ state = Table(bdd_basename + 'state', metadata,
     Column(u'idstat', Integer(), primary_key=True, nullable=False,
         autoincrement=True),
     Column(u'hostname',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename +'host.name'),
         index=True, primary_key=False, nullable=False),
     Column(u'servicename',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename + 'service.name'),
         index=True, primary_key=False),
     Column(u'ip',
-        String(length=40, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         primary_key=False),
     Column(u'timestamp', DateTime(timezone=False), primary_key=False),
     Column(u'statename', MSEnum('WARNING','OK','CRITICAL','UNKNOWN'),

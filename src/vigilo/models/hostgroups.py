@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import mapper
 from sqlalchemy import Table, ForeignKey, Column
-from sqlalchemy.types import String
+from sqlalchemy.types import UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, metadata
 
@@ -14,11 +14,11 @@ from .vigilo_bdd_config import bdd_basename, metadata
 hostgroups = Table(bdd_basename + 'hostgroups',
     metadata,
     Column(u'hostname',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename + u'host.name'),
         primary_key=True, nullable=False),
     Column(u'groupname',
-        String(length=100, convert_unicode=True, assert_unicode=None),
+        UnicodeText(),
         ForeignKey(bdd_basename + u'groups.name'),
         index=True ,primary_key=True, nullable=False),
     mysql_engine='InnoDB',
