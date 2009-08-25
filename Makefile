@@ -22,7 +22,8 @@ doc/apidoc/index.html: src/vigilo/$(NAME)
 		   --docformat=epytext vigilo.$(NAME)
 
 lint: $(PYTHON) src/vigilo/$(NAME)
-	-PYTHONPATH=src $(PYTHON) $$(which pylint) src/vigilo/$(NAME)
+	-PYTHONPATH=src $(PYTHON) $$(which pylint) \
+		--rcfile=$(BUILDENV)/extra/pylintrc src/vigilo/$(NAME)
 
 
 .PHONY: all clean buildclean apidoc lint tests
