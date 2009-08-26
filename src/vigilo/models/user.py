@@ -9,6 +9,7 @@ from sqlalchemy.types import Unicode, UnicodeText
 from tg import config
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from .session import DBSession
 
 __all__ = ('User', )
 
