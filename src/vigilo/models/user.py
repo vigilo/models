@@ -42,6 +42,26 @@ class User(DeclarativeBase):
     def __unicode__(self):
         return self.user_name
 
+    @property
+    def permissions(self):
+        """Return a set of strings for the permissions granted."""
+        perms = set()
+        for g in self.groups:
+            perms = perms | set(g.permissions)
+        return perms
+
+    @classmethod
+    def by_email_address(cls, email):
+        """Return the user object whose email address is ``email``."""
+        return DBSession.query(cls).filter(cls.email==email).first()
+
+    @classmethod
+    def by_user_name(cls, username):
+        """Return the user object whose user name is ``username``."""
+        return DBSession.query(cls).filter(cls.user_name==username).first()
+
+
+
     # @TODO adapt this method to set the password remotely.
     def _set_password(self, password):
         """
