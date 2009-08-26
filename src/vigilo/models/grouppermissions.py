@@ -22,6 +22,7 @@ class GroupPermissions(DeclarativeBase):
         primary_key=True, nullable=False)
     idpermission = Column(
         Integer(),
+        ForeignKey(bdd_basename + 'permission.idpermission'),
         default=0,
         autoincrement=False, primary_key=True, nullable=False)
 

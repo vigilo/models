@@ -6,7 +6,7 @@ __all__ = (
         'EventHistory', 'Events', 'GraphGroups', 'Graph', 'Groups',
         'GroupPermissions', 'HostGroups', 'Host', 'PerfDataSource', 'ServiceGroups',
         'ServiceHautNiveau', 'Service', 'ServiceTopo', 'GraphToGroups', 'Version',
-        'State',
+        'State', 'Permission', 'UserGroup', 'User',
         )
 
 
@@ -26,3 +26,7 @@ from .servicetopo import ServiceTopo
 from .graphtogroups import GraphToGroups
 from .version import Version
 from .state import State
+from .permission import Permission
+from .usergroup import UserGroup
+from .user import User
+
