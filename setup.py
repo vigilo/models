@@ -12,6 +12,8 @@ setup(name='vigilo-models',
         long_description='Definition of the vigilo data model, db access.',
         install_requires=[
             'SQLAlchemy',
+            # I'd like to prevent the zope stuff from leaking in, but couldn't.
+            'zope.sqlalchemy',
             'vigilo-common',
             ],
         namespace_packages = [
