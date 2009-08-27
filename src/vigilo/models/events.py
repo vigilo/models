@@ -3,8 +3,7 @@
 """Modèle pour la table Events"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import mapper
-from sqlalchemy import Table, Column, DefaultClause, ForeignKey
+from sqlalchemy import Column, DefaultClause, ForeignKey
 from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum, MSBoolean
@@ -18,7 +17,7 @@ class Events(DeclarativeBase):
 
     __tablename__ = bdd_basename + 'events'
 
-    idevent = Column( Integer(), primary_key=True, nullable=False,
+    idevent = Column(Integer(), primary_key=True, nullable=False,
         autoincrement=True)
     hostname = Column(
         UnicodeText(),
@@ -28,21 +27,21 @@ class Events(DeclarativeBase):
         UnicodeText(),
         ForeignKey(bdd_basename + 'service.name'),
         index=True)
-    severity = Column( Integer(), nullable=False)
-    status = Column( MSEnum('None','Acknowledged','AAClosed'),
+    severity = Column(Integer(), nullable=False)
+    status = Column(MSEnum('None', 'Acknowledged', 'AAClosed'),
         nullable=False,
         server_default=DefaultClause('None', for_update=False))
-    active = Column( MSBoolean(), default='True')
+    active = Column(MSBoolean(), default='True')
     timestamp = Column( DateTime(timezone=False))
     output = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None),
         nullable=False)
-    timestamp_active = Column( DateTime(timezone=False))
+    timestamp_active = Column(DateTime(timezone=False))
     trouble_ticket = Column(
         UnicodeText())
-    occurence = Column( Integer())
-    impact = Column( Integer())
-    rawstate = Column( MSEnum('WARNING','OK','CRITICAL','UNKNOWN'))
+    occurence = Column(Integer())
+    impact = Column(Integer())
+    rawstate = Column(MSEnum('WARNING', 'OK', 'CRITICAL', 'UNKNOWN'))
 
     def __init__(self, hostname, servicename, server_source = '', severity = 0,
             status = 'None', active = True, timestamp = datetime.now(),

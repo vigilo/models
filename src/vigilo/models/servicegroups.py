@@ -3,8 +3,7 @@
 """Modèle pour la table ServiceGroups"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import mapper
-from sqlalchemy import Table, ForeignKey, Column
+from sqlalchemy import ForeignKey, Column
 from sqlalchemy.types import UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase

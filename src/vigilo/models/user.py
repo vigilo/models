@@ -3,9 +3,10 @@
 """Modèle pour la table User"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import mapper, synonym, composite
+from sqlalchemy.orm import synonym
 from sqlalchemy import Table, Column
 from sqlalchemy.types import Unicode, UnicodeText
+from sqlalchemy.schema import ColumnDefault
 from tg import config
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -37,8 +38,12 @@ class User(DeclarativeBase):
     # We don't actually store the password in the database,
     # but we need to define it for Rum to be able to "see" it.
     _password = Column('password', Unicode(0),
+                        nullable=True, default=None,
                         info={'rum': {'field': 'Password'}})
 
+
+    def __init__(self, **kwargs):
+        DeclarativeBase.__init__(self, **kwargs)
 
     def __unicode__(self):
         return self.user_name
@@ -70,6 +75,9 @@ class User(DeclarativeBase):
 
         Where the password actually gets stored is configuration dependent.
         This method delegates the actual operation to the proper method.
+
+        :param password: the new password for the current user.
+        :type password: unicode object
         """
         pass
 
@@ -93,7 +101,7 @@ class User(DeclarativeBase):
         :param password: the password that was provided by the user to
             try and authenticate. This is the clear text version that we will
             need to match against the hashed one in the database.
-        :type password: unicode object.
+        :type password: unicode object
         :return: Whether the password is valid.
         :rtype: bool
 
@@ -104,14 +112,29 @@ class User(DeclarativeBase):
                                                         _set_password))
 
     def _set_language(self, language):
+        """
+        Sets the user's language.
+
+        :param language: the new language to use with the current user.
+        :type language: unicode object
+        """
         self._language = language
 
     def _get_language(self):
+        """
+        Returns the language to use to communicate with this user.
+
+        If no language has been chosen by this user, a default one is taken
+        from the configuration settings.
+
+        :return: The language to use to communicate with this user.
+        :rtype: unicode object
+        """
         if self._language is None:
-            language = config['vigicore.default_language'];
+            language = config['vigicore.default_language']
             if language is None:
                 raise KeyError, "No default language defined in configuration"
-            return language;
+            return language
         return self._language
 
     language = synonym('_language', descriptor=property(_get_language,

@@ -3,17 +3,15 @@
 """Modèle pour la table Permissions"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import Integer, UnicodeText
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
-from .usergroup import UserGroup
 
 __all__ = ('Permission', )
 
-group_permission_table = Table('usergrouppermissions', metadata,
+GROUP_PERMISSION_TABLE = Table('usergrouppermissions', metadata,
     Column('groupname', UnicodeText, ForeignKey(
         bdd_basename + 'usergroup.group_name',
         onupdate="CASCADE", ondelete="CASCADE")),
@@ -41,8 +39,11 @@ class Permission(DeclarativeBase):
         unique=True,
         nullable=False)
 
-    groups = relation('UserGroup', secondary=group_permission_table,
+    groups = relation('UserGroup', secondary=GROUP_PERMISSION_TABLE,
                       backref='permissions')
+
+    def __init__(self, **kwargs):
+        DeclarativeBase.__init__(self, **kwargs)
 
     def __unicode__(self):
         return self.permission_name

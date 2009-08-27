@@ -3,17 +3,15 @@
 """Modèle pour la table UserGroup"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import mapper
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import UnicodeText
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
-from .user import User
 
 __all__ = ('UserGroup', )
 
-user_group_table = Table('usertousergroups', metadata,
+USER_GROUP_TABLE = Table('usertousergroups', metadata,
     Column('username', UnicodeText, ForeignKey(
         bdd_basename + 'user.user_name',
         onupdate="CASCADE", ondelete="CASCADE")),
@@ -32,7 +30,10 @@ class UserGroup(DeclarativeBase):
         UnicodeText(),
         primary_key=True)
 
-    users = relation('User', secondary=user_group_table, backref='groups')
+    users = relation('User', secondary=USER_GROUP_TABLE, backref='groups')
+
+    def __init__(self, **kwargs):
+        DeclarativeBase.__init__(self, **kwargs)
 
     def __unicode__(self):
         return self.group_name

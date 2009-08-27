@@ -3,8 +3,7 @@
 """Modèle pour la table Host"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import mapper
-from sqlalchemy import Table, Column
+from sqlalchemy import Column
 from sqlalchemy.types import Integer, UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase

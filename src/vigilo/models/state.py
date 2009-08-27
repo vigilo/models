@@ -4,8 +4,7 @@
 
 from __future__ import absolute_import
 
-from sqlalchemy.orm import mapper
-from sqlalchemy import Table, Column, DefaultClause, ForeignKey
+from sqlalchemy import Column, DefaultClause, ForeignKey
 from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
@@ -19,7 +18,7 @@ class State(DeclarativeBase):
 
     __tablename__ = bdd_basename + 'state'
 
-    idstat = Column( Integer(), primary_key=True, nullable=False,
+    idstat = Column(Integer(), primary_key=True, nullable=False,
         autoincrement=True)
     hostname = Column(
         UnicodeText(),
@@ -31,14 +30,14 @@ class State(DeclarativeBase):
         index=True)
     ip = Column(
         UnicodeText())
-    timestamp = Column( DateTime(timezone=False))
-    statename = Column( MSEnum('WARNING','OK','CRITICAL','UNKNOWN'),
+    timestamp = Column(DateTime(timezone=False))
+    statename = Column(MSEnum('WARNING', 'OK', 'CRITICAL', 'UNKNOWN'),
         nullable=False,
         server_default=DefaultClause('OK', for_update=False))
-    type = Column( MSEnum('SOFT','HARD'),
+    type = Column(MSEnum('SOFT', 'HARD'),
         nullable=False,
         server_default=DefaultClause('SOFT', for_update=False))
-    attempt = Column( Integer(), nullable=False,
+    attempt = Column(Integer(), nullable=False,
         autoincrement=False)
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None))
