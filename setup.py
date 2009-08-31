@@ -2,6 +2,12 @@
 # vim: set fileencoding=utf-8 sw=4 ts=4 et :
 from setuptools import setup
 
+tests_require = [
+        'coverage',
+        'nose',
+        'pylint',
+        ]
+
 setup(name='vigilo-models',
         version='0.1',
         author='Gabriel de Perthuis',
@@ -16,12 +22,20 @@ setup(name='vigilo-models',
             'zope.sqlalchemy',
             'vigilo-common',
             ],
+        extras_require ={
+            'tests': tests_require
+            },
         namespace_packages = [
             'vigilo',
             ],
         packages=[
             'vigilo.models',
             ],
+        entry_points={
+            'console_scripts': [
+                'runtests-models = vigilo.models.tests:runtests [tests]',
+                ]
+            },
         package_dir={'': 'src'},
         )
 

@@ -25,6 +25,9 @@ lint: $(PYTHON) src/vigilo/$(NAME)
 	-PYTHONPATH=src $(PYTHON) $$(which pylint) \
 		--rcfile=$(BUILDENV)/extra/pylintrc src/vigilo/$(NAME)
 
+tests: $(PYTHON)
+	VIGILO_SETTINGS_MODULE=settings_tests \
+		PYTHONPATH=$(BUILDENV) $(BUILDENV)/bin/runtests-$(NAME)
 
 .PHONY: all clean buildclean apidoc lint tests
 
