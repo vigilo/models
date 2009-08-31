@@ -20,7 +20,7 @@ USER_GROUP_TABLE = Table('usertousergroups', metadata,
         onupdate="CASCADE", ondelete="CASCADE"))
 )
 
-class UserGroup(DeclarativeBase):
+class UserGroup(DeclarativeBase, object):
     """User groups, used eg. to organize users by services, privileges, etc."""
 
     __tablename__ = bdd_basename + 'usergroup'

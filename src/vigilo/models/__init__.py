@@ -4,9 +4,10 @@
 
 __all__ = (
         'EventHistory', 'Events', 'GraphGroups', 'Graph', 'Groups',
-        'GroupPermissions', 'HostGroups', 'Host', 'PerfDataSource', 'ServiceGroups',
-        'ServiceHautNiveau', 'Service', 'ServiceTopo', 'GraphToGroups', 'Version',
-        'State', 'Permission', 'UserGroup', 'User',
+        'GroupPermissions', 'HostGroups', 'Host', 'PerfDataSource',
+        'ServiceGroups', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
+        'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
+        'User',
         )
 
 

@@ -4,17 +4,16 @@
 from __future__ import absolute_import
 
 from sqlalchemy.orm import synonym
-from sqlalchemy import Table, Column
+from sqlalchemy import Column
 from sqlalchemy.types import Unicode, UnicodeText
-from sqlalchemy.schema import ColumnDefault
-from tg import config
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
+from vigilo.common.conf import settings
 
 __all__ = ('User', )
 
-class User(DeclarativeBase):
+class User(DeclarativeBase, object):
     """Stores information about users."""
 
     __tablename__ = bdd_basename + 'user'
@@ -100,7 +99,7 @@ class User(DeclarativeBase):
         
         :param password: the password that was provided by the user to
             try and authenticate. This is the clear text version that we will
-            need to match against the hashed one in the database.
+            need to match against the one we have in store.
         :type password: unicode object
         :return: Whether the password is valid.
         :rtype: bool
@@ -131,9 +130,9 @@ class User(DeclarativeBase):
         :rtype: unicode object
         """
         if self._language is None:
-            language = config['vigicore.default_language']
+            language = settings['VIGILO_ALL_DEFAULT_LANGUAGE']
             if language is None:
-                raise KeyError, "No default language defined in configuration"
+                raise KeyError, "No default language in settings"
             return language
         return self._language
 

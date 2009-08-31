@@ -20,7 +20,7 @@ GROUP_PERMISSION_TABLE = Table('usergrouppermissions', metadata,
         onupdate="CASCADE", ondelete="CASCADE"))
 )
 
-class Permission(DeclarativeBase):
+class Permission(DeclarativeBase, object):
     """
     Permission definition for :mod:`repoze.what`.
     Only the ``permission_name`` column is required by :mod:`repoze.what`.
