@@ -7,5 +7,5 @@ class TestGroups(ModelTest):
     """Test de la table Groups"""
 
     klass = Groups
-    attrs = dict(name = "mongroup")
+    attrs = dict(name = u"mongroup")
 

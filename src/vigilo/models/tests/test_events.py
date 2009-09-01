@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 """Test suite for Event class"""
-from vigilo.models import Event
+from vigilo.models import Events, Host, Service
 from vigilo.models.tests import ModelTest
+from vigilo.models.session import DBSession
+from nose.tools import assert_true
+import re
 
-class TestEvent(ModelTest):
+class TestEvents(ModelTest):
     """Test de la table Events"""
 
     klass = Events
@@ -12,10 +15,10 @@ class TestEvent(ModelTest):
     def do_get_dependencies(self):
         """Generate some data for the test"""
 
-        DBSession.add(Host(name = "monhost"))
-        DBSession.add(Service(name = "monservice"))
+        DBSession.add(Host(name = u"monhost"))
+        DBSession.add(Service(name = u"monservice"))
         DBSession.flush()
-        return dict(hostname = "monhost", servicename = "monservice")
+        return dict(hostname = u"monhost", servicename = u"monservice")
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""

@@ -7,5 +7,5 @@ class TestHost(ModelTest):
     """Test de la table host"""
 
     klass = Host
-    attrs = dict(name = "monhost")
+    attrs = dict(name = u"monhost")
 

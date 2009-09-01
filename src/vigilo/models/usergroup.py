@@ -30,7 +30,7 @@ class UserGroup(DeclarativeBase, object):
         UnicodeText(),
         primary_key=True)
 
-    users = relation('User', secondary=USER_GROUP_TABLE, backref='groups')
+    users = relation('User', secondary=USER_GROUP_TABLE, backref='usergroups')
 
     def __init__(self, **kwargs):
         DeclarativeBase.__init__(self, **kwargs)

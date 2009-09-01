@@ -39,7 +39,7 @@ class Permission(DeclarativeBase, object):
         unique=True,
         nullable=False)
 
-    groups = relation('UserGroup', secondary=GROUP_PERMISSION_TABLE,
+    usergroups = relation('UserGroup', secondary=GROUP_PERMISSION_TABLE,
                       backref='permissions')
 
     def __init__(self, **kwargs):

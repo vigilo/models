@@ -7,5 +7,5 @@ class TestService(ModelTest):
     """Test de la table service"""
 
     klass = Service
-    attrs = dict(name = "monservice")
+    attrs = dict(name = u"monservice")
 

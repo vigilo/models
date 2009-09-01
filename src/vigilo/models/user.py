@@ -51,7 +51,7 @@ class User(DeclarativeBase, object):
     def permissions(self):
         """Return a set of strings for the permissions granted."""
         perms = set()
-        for g in self.groups:
+        for g in self.usergroups:
             perms = perms | set(g.permissions)
         return perms
 

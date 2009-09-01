@@ -20,5 +20,3 @@ class Groups(DeclarativeBase):
         UnicodeText(),
         index=True)
 
-
-
