@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.types import UnicodeText
+from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -21,5 +22,12 @@ class HostGroups(DeclarativeBase):
         UnicodeText(),
         ForeignKey(bdd_basename + u'groups.name'),
         index=True ,primary_key=True, nullable=False)
+
+
+    host = relation('Host', backref='host_groups')
+    group = relation('Groups', backref='hosts')
+
+    def __init__(self, **kwargs):
+        DeclarativeBase.__init__(**kwargs)
 
 

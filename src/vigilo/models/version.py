@@ -15,9 +15,12 @@ class Version(DeclarativeBase):
 
     name = Column(
             UnicodeText(),
-            index=True,primary_key=True, nullable=False)
+            index=True, primary_key=True, nullable=False)
     version = Column(
             UnicodeText(),
             nullable=False)
+
+    def __init__(self, **kwargs):
+        DeclarativeBase.__init__(self, **kwargs)
 
 

@@ -7,17 +7,21 @@ from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import Integer, UnicodeText
 from sqlalchemy.orm import relation
 
+from .session import DBSession
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 
 __all__ = ('Permission', )
 
-GROUP_PERMISSION_TABLE = Table('usergrouppermissions', metadata,
+USERGROUP_PERMISSION_TABLE = Table(
+    bdd_basename + 'usergrouppermissions', metadata,
     Column('groupname', UnicodeText, ForeignKey(
-        bdd_basename + 'usergroup.group_name',
-        onupdate="CASCADE", ondelete="CASCADE")),
+                bdd_basename + 'usergroup.group_name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
     Column('idpermission', Integer, ForeignKey(
-        bdd_basename + 'permission.idpermission',
-        onupdate="CASCADE", ondelete="CASCADE"))
+                bdd_basename + 'permission.idpermission',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True)
 )
 
 class Permission(DeclarativeBase, object):
@@ -39,7 +43,7 @@ class Permission(DeclarativeBase, object):
         unique=True,
         nullable=False)
 
-    usergroups = relation('UserGroup', secondary=GROUP_PERMISSION_TABLE,
+    usergroups = relation('UserGroup', secondary=USERGROUP_PERMISSION_TABLE,
                       backref='permissions')
 
     def __init__(self, **kwargs):
@@ -47,4 +51,11 @@ class Permission(DeclarativeBase, object):
 
     def __unicode__(self):
         return self.permission_name
+
+    @classmethod
+    def by_permission_name(cls, perm_name):
+        """Return the permission object whose name is ``perm_name``."""
+        return None
+        return DBSession.query(cls).filter(
+            cls.permission_name==perm_name).first()
 

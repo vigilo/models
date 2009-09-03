@@ -11,13 +11,16 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 
 __all__ = ('UserGroup', )
 
-USER_GROUP_TABLE = Table('usertousergroups', metadata,
+USER_GROUP_TABLE = Table(
+    bdd_basename + 'usertousergroups', metadata,
     Column('username', UnicodeText, ForeignKey(
-        bdd_basename + 'user.user_name',
-        onupdate="CASCADE", ondelete="CASCADE")),
+                bdd_basename + 'user.user_name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
     Column('groupname', UnicodeText, ForeignKey(
-        bdd_basename + 'usergroup.group_name',
-        onupdate="CASCADE", ondelete="CASCADE"))
+                bdd_basename + 'usergroup.group_name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True)
 )
 
 class UserGroup(DeclarativeBase, object):
@@ -37,4 +40,9 @@ class UserGroup(DeclarativeBase, object):
 
     def __unicode__(self):
         return self.group_name
+
+    @classmethod
+    def by_group_name(cls, group_name):
+        """Return the group object whose group name is ``group_name``."""
+        return DBSession.query(cls).filter(cls.group_name==group_name).first()
 

@@ -4,7 +4,7 @@
 
 __all__ = (
         'EventHistory', 'Events', 'GraphGroups', 'Graph', 'Groups',
-        'GroupPermissions', 'HostGroups', 'Host', 'PerfDataSource',
+        'HostGroups', 'Host', 'PerfDataSource',
         'ServiceGroups', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User',
@@ -16,7 +16,6 @@ from .events import Events
 from .graphgroups import GraphGroups
 from .graph import Graph
 from .groups import Groups
-from .grouppermissions import GroupPermissions
 from .hostgroups import HostGroups
 from .host import Host
 from .perfdatasource import PerfDataSource

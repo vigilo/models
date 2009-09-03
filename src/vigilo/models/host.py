@@ -3,12 +3,14 @@
 """Modèle pour la table Host"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column
+from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import Integer, UnicodeText
+from sqlalchemy.orm import relation
+from sqlalchemy.ext.associationproxy import association_proxy
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 
-
+__all__ = ('Host', )
 
 class Host(DeclarativeBase):
     __tablename__ = bdd_basename + 'host'
@@ -36,6 +38,8 @@ class Host(DeclarativeBase):
     snmpversion = Column(
         UnicodeText())
 
+    groups = association_proxy('host_groups', 'groups')
+
     def __init__(self, name, checkhostcmd = '', community = '', fqhn = '',
             hosttpl = '', mainip = '', port = 0, snmpoidsperdu = 0,
             snmpversion = ''):
@@ -48,7 +52,5 @@ class Host(DeclarativeBase):
         self.port = port
         self.snmpoidsperdu = snmpoidsperdu
         self.snmpversion = snmpversion
-
-
 
 

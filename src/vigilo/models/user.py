@@ -55,6 +55,22 @@ class User(DeclarativeBase, object):
             perms = perms | set(g.permissions)
         return perms
 
+    @property
+    def groups(self):
+        """
+        Return a set of strings for the groups of hosts/services
+        this user is allowed to see.
+        """
+        groups = set()
+        for ug in self.usergroups:
+            for p in ug.permissions:
+                for g in p.groups:
+                    node = g
+                    while not node is None:
+                        groups = groups | set([node.name])
+                        node = node.parent
+        return groups
+
     @classmethod
     def by_email_address(cls, email):
         """Return the user object whose email address is ``email``."""
