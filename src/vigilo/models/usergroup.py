@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.types import UnicodeText
+from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
@@ -13,11 +13,11 @@ __all__ = ('UserGroup', )
 
 USER_GROUP_TABLE = Table(
     bdd_basename + 'usertousergroups', metadata,
-    Column('username', UnicodeText, ForeignKey(
+    Column('username', Unicode(255), ForeignKey(
                 bdd_basename + 'user.user_name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
-    Column('groupname', UnicodeText, ForeignKey(
+    Column('groupname', Unicode(255), ForeignKey(
                 bdd_basename + 'usergroup.group_name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True)
@@ -30,7 +30,7 @@ class UserGroup(DeclarativeBase, object):
 
     # TG2 expects this name.
     group_name = Column(
-        UnicodeText(),
+        Unicode(255),
         primary_key=True)
 
     users = relation('User', secondary=USER_GROUP_TABLE, backref='usergroups')

@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.types import Integer, UnicodeText
+from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 
 from .session import DBSession
@@ -14,7 +14,7 @@ __all__ = ('Permission', )
 
 USERGROUP_PERMISSION_TABLE = Table(
     bdd_basename + 'usergrouppermissions', metadata,
-    Column('groupname', UnicodeText, ForeignKey(
+    Column('groupname', Unicode(255), ForeignKey(
                 bdd_basename + 'usergroup.group_name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
@@ -39,7 +39,7 @@ class Permission(DeclarativeBase, object):
 
     # TG2 expects this name.
     permission_name = Column(
-        UnicodeText(),
+        Unicode(255),
         unique=True,
         nullable=False)
 

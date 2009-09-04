@@ -48,14 +48,33 @@ class User(DeclarativeBase, object):
 
 
     def __init__(self, **kwargs):
+        """
+        Initialise l'instance avec les informations de l'utilisateur.
+        
+        @param kwargs: Un dictionnaire contenant les informations sur
+            l'utilisateur.
+        @type kwargs: 
+        """
         DeclarativeBase.__init__(self, **kwargs)
 
     def __unicode__(self):
+        """
+        Conversion en unicode.
+        
+        @return: Le nom de l'utilisateur.
+        @rtype: C{str}
+        """
         return self.user_name
 
     @property
     def permissions(self):
-        """Return a set of strings for the permissions granted."""
+        """
+        Renvoie un ensemble de chaînes de caractères indiquant les permissions
+        associées à l'utilisateur.
+
+        @return: Les permissions de cet utilisateur.
+        @rtype: C{set} of C{str}       
+        """
         perms = set()
         for g in self.usergroups:
             perms = perms | set(g.permissions)
@@ -64,8 +83,11 @@ class User(DeclarativeBase, object):
     @property
     def groups(self):
         """
-        Return a set of strings for the groups of hosts/services
-        this user is allowed to see.
+        Renvoie un ensemble de chaînes de caractères indiquant les groupes
+        d'hôtes / services auxquels l'utilisateur a accès.
+
+        @return: Les groupes auxquels l'utilisateur a accès.
+        @rtype: C{set} of C{str}
         """
         groups = set()
         for ug in self.usergroups:
@@ -79,12 +101,16 @@ class User(DeclarativeBase, object):
 
     @classmethod
     def by_email_address(cls, email):
-        """Return the user object whose email address is ``email``."""
+        """
+        Return the user object whose email address is C{email}.
+        """
         return DBSession.query(cls).filter(cls.email==email).first()
 
     @classmethod
     def by_user_name(cls, username):
-        """Return the user object whose user name is ``username``."""
+        """
+        Return the user object whose user name is C{username}.
+        """
         return DBSession.query(cls).filter(cls.user_name==username).first()
 
 
@@ -92,39 +118,41 @@ class User(DeclarativeBase, object):
     # @TODO adapt this method to set the password remotely.
     def _set_password(self, password):
         """
-        Sets the user's password to the new password given.
+        Attribue le mot de passe donné à l'utilisateur.
 
-        Where the password actually gets stored is configuration dependent.
-        This method delegates the actual operation to the proper method.
+        Le mot de passe n'est pas stocké dans la base de données mais est géré
+        par une source quelconque. L'utilisateur peut simplement le modifier ou
+        comparer un texte avec le mot de passe.
 
-        :param password: the new password for the current user.
-        :type password: unicode object
+        @param password: Le nouveau mot de passe de l'utilisateur.
+        @type password: C{str}
         """
         pass
 
     def _get_password(self):
         """
-        Returns a dummy value for password.
+        Retourne une constante en guise de mot de passe.
 
-        The password must be considered write-only event though you can
-        validate a user using validate_password (see below).
+        Dans Vigilo, le mot de passe de l'utilisateur n'est pas stocké en base
+        de données. À la place, il est stocké dans une source quelconque
+        et n'est pas accessible en lecture.
 
-        Returns a dummy value makes Rum hide the column in display screens,
-        while still allowing for edition.
+        @return: La constante "[Hidden]".
+        @rtype: C{str}
         """
         return '[Hidden]'
 
     # @TODO adapt this method to authenticate against a remote source.
     def validate_password(self, password):
         """
-        Check the password against existing credentials.
+        Teste si le mot de passe proposé correspond au mot de passe de
+        l'utilisateur.
         
-        :param password: the password that was provided by the user to
-            try and authenticate. This is the clear text version that we will
-            need to match against the one we have in store.
-        :type password: unicode object
-        :return: Whether the password is valid.
-        :rtype: bool
+        @param password: Le mot de passe donné par l'utilisateur pour
+            s'authentifier, en texte clair.
+        @type password: C{str}
+        @return: Un booléen indiquant si le mot de passe est correct.
+        @rtype: C{bool}
 
         """
         return password == '42'
@@ -134,22 +162,22 @@ class User(DeclarativeBase, object):
 
     def _set_language(self, language):
         """
-        Sets the user's language.
+        Change la langue de l'utilisateur.
 
-        :param language: the new language to use with the current user.
-        :type language: unicode object
+        @param language: La nouvelle langue de l'utilisateur.
+        @type language: C{str}
         """
         self._language = language
 
     def _get_language(self):
         """
-        Returns the language to use to communicate with this user.
+        Renvoie la langue préférée de l'utilisateur.
 
-        If no language has been chosen by this user, a default one is taken
-        from the configuration settings.
+        Si l'utilisateur n'a pas choisi sa langue, la langue par défaut
+        dans la configuration est renvoyée.
 
-        :return: The language to use to communicate with this user.
-        :rtype: unicode object
+        :return: La langue préférée de l'utilisateur.
+        :rtype: C{str}
         """
         if self._language is None:
             language = settings['VIGILO_ALL_DEFAULT_LANGUAGE']

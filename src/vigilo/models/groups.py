@@ -23,6 +23,7 @@ GROUP_PERMISSION_TABLE = Table(
 )
 
 class Groups(DeclarativeBase):
+    """Gère les groupes (récursifs) d'hôtes/services.'"""
     __tablename__ = bdd_basename + 'groups'
 
     name = Column(
@@ -41,7 +42,16 @@ class Groups(DeclarativeBase):
 
 
     @classmethod
-    def by_name(cls, groupname):
-        """Returns the group whose name is ``groupname``."""
+    def by_group_name(cls, groupname):
+        """
+        Renvoie le groupe dont le nom est C{groupname}.
+
+        @param cls: La classe à utiliser, c'est-à-dire L{Groups}.
+        @type cls: C{class}
+        @param groupname: Le nom du groupe que l'on souhaite récupérer.
+        @type groupname: C{str}
+        @return: Le groupe demandé.
+        @rtype: Une instance de la classe L{Groups}
+        """
         return DBSession.query(cls).filter(cls.name==groupname).first()
 
