@@ -9,3 +9,6 @@ class TestHost(ModelTest):
     klass = Host
     attrs = dict(name = u"monhost")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

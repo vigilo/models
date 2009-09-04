@@ -32,3 +32,6 @@ class TestEvents(ModelTest):
         assert_true(re.compile("^\d*d \d*h \d'$").match(
             self.obj.get_since_date("timestamp_active")))
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

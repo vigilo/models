@@ -18,3 +18,6 @@ class TestGraphToGroups(ModelTest):
         DBSession.flush()
         return dict(graphname = u"mongraph", groupname = u"mongraphgroup")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

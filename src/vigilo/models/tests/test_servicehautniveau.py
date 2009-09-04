@@ -17,3 +17,6 @@ class TestServiceHautNiveau(ModelTest):
         DBSession.flush()
         return dict(servicename = u"monservice", servicename_dep = u"monservice")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

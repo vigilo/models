@@ -9,3 +9,6 @@ class TestGraphGroups(ModelTest):
     klass = GraphGroups
     attrs = dict(name = u"mongraph")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

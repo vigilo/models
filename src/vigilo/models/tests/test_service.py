@@ -9,3 +9,6 @@ class TestService(ModelTest):
     klass = Service
     attrs = dict(name = u"monservice")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

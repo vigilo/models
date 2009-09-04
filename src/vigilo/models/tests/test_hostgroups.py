@@ -18,3 +18,6 @@ class TestHostGroups(ModelTest):
         DBSession.flush()
         return dict(hostname = u"monhost", groupname = u"mongroup")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

@@ -18,3 +18,6 @@ class TestServiceGroups(ModelTest):
         DBSession.flush()
         return dict(servicename = u"monservice", groupname = u"mongroupe")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

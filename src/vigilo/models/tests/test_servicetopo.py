@@ -19,3 +19,6 @@ class TestServiceTopo(ModelTest):
         DBSession.flush()
         return dict(servicename = u"monservice")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+

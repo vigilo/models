@@ -9,3 +9,6 @@ class TestGroups(ModelTest):
     klass = Groups
     attrs = dict(name = u"mongroup")
 
+    def __init__(self):
+        ModelTest.__init__(self)
+
