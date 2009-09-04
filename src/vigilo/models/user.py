@@ -21,11 +21,14 @@ class User(DeclarativeBase, object):
     # TG2 expects this name.
     user_name = Column(
         Unicode(255),
-        primary_key=True)
+        unique=True,
+        primary_key=True,
+        info={'rum': {'field': 'Text'}})
 
     email = Column(
         Unicode(255),
-        unique=True)
+        unique=True,
+        info={'rum': {'field': 'Email'}})
 
     # Language code using the format from RFC 4646.
     # See also http://www.ietf.org/rfc/rfc4646.txt
