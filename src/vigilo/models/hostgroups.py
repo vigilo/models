@@ -28,6 +28,6 @@ class HostGroups(DeclarativeBase):
     group = relation('Groups', backref='hosts')
 
     def __init__(self, **kwargs):
-        DeclarativeBase.__init__(**kwargs)
+        DeclarativeBase.__init__(self, **kwargs)
 
 

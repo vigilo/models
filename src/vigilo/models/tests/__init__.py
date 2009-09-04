@@ -76,7 +76,7 @@ class ModelTest(object):
 def runtests():
     """This is the method called when running unit tests."""
     # XXX hard-coded path.
-    sys.argv[1:0] = ['--with-coverage', '--cover-inclusive',
+    sys.argv[1:0] = ['--cover-inclusive',
                      '--cover-erase', '--cover-package', 'models',
                      'vigilo.models.tests']
     nose.main()

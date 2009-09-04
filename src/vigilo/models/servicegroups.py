@@ -28,6 +28,6 @@ class ServiceGroups(DeclarativeBase):
     group = relation('Groups', backref='services')
 
     def __init__(self, **kwargs):
-        DeclarativeBase.__init__(**kwargs)
+        DeclarativeBase.__init__(self, **kwargs)
 
 

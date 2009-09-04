@@ -20,25 +20,28 @@ class User(DeclarativeBase, object):
 
     # TG2 expects this name.
     user_name = Column(
-        UnicodeText(),
+        Unicode(255),
         primary_key=True)
 
     email = Column(
-        UnicodeText(),
+        Unicode(255),
         unique=True)
 
-    # Language code using the format from RFC 1766.
+    # Language code using the format from RFC 4646.
+    # See also http://www.ietf.org/rfc/rfc4646.txt
     _language = Column(
-        'language',
-        UnicodeText(),
+        # The 42 characters limit matches the minimal requirement
+        # from RFC 4646 (4.3.1).
+        'language', Unicode(42),
         nullable=True,
         default=None)
 
     # We don't actually store the password in the database,
     # but we need to define it for Rum to be able to "see" it.
-    _password = Column('password', Unicode(0),
-                        nullable=True, default=None,
-                        info={'rum': {'field': 'Password'}})
+    _password = Column(
+        'password', Unicode(0),
+        nullable=True, default=None,
+        info={'rum': {'field': 'Password'}})
 
 
     def __init__(self, **kwargs):
