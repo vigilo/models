@@ -44,7 +44,7 @@ class Permission(DeclarativeBase, object):
         nullable=False)
 
     usergroups = relation('UserGroup', secondary=USERGROUP_PERMISSION_TABLE,
-                      backref='permissions')
+                      backref='permissions', lazy='dynamic')
 
     def __init__(self, **kwargs):
         DeclarativeBase.__init__(self, **kwargs)
@@ -57,5 +57,5 @@ class Permission(DeclarativeBase, object):
         """Return the permission object whose name is ``perm_name``."""
         return None
         return DBSession.query(cls).filter(
-            cls.permission_name==perm_name).first()
+            cls.permission_name == perm_name).first()
 

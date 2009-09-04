@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Test suite for BoardViewFilter class"""
-from vigilo.models import BoardViewFilter, Host, Service, User
+"""Test suite for CustomGraphView class"""
+from vigilo.models import CustomGraphView, Host, Graph, User
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
-class TestBoardViewFilter(ModelTest):
-    """Test de la table BoardViewFilter"""
+class TestCustomGraphView(ModelTest):
+    """Test de la table CustomGraphView"""
 
-    klass = BoardViewFilter
+    klass = CustomGraphView
     attrs = {
+        'viewname': u'mavue',
         'username': u'manager',
         'hostname': u'monhost',
-        'servicename': u'monservice',
-        'output': u'WARNING2: SNMP error: No response from remote host',
-        'trouble_ticket': u'42',
+        'graphname': u'mongraph',
+        'pos_x': 1337,
+        'pos_y': 42,
     }
 
     def __init__(self):
@@ -23,7 +24,7 @@ class TestBoardViewFilter(ModelTest):
         """Generate some data for the test"""
         DBSession.add(User(user_name=u'manager'))
         DBSession.add(Host(name=u"monhost"))
-        DBSession.add(Service(name=u"monservice"))
+        DBSession.add(Graph(name=u"mongraph", template=u"", vlabel=u""))
         DBSession.flush()
         return {}
 

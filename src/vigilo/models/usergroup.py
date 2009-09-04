@@ -33,7 +33,8 @@ class UserGroup(DeclarativeBase, object):
         Unicode(255),
         primary_key=True)
 
-    users = relation('User', secondary=USER_GROUP_TABLE, backref='usergroups')
+    users = relation('User', secondary=USER_GROUP_TABLE,
+        backref='usergroups', lazy='dynamic')
 
     def __init__(self, **kwargs):
         DeclarativeBase.__init__(self, **kwargs)
@@ -44,5 +45,5 @@ class UserGroup(DeclarativeBase, object):
     @classmethod
     def by_group_name(cls, group_name):
         """Return the group object whose group name is ``group_name``."""
-        return DBSession.query(cls).filter(cls.group_name==group_name).first()
+        return DBSession.query(cls).filter(cls.group_name == group_name).first()
 

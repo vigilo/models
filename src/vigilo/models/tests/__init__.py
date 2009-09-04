@@ -12,23 +12,15 @@ __all__ = ['ModelTest']
 
 metadata.bind = DBSession.bind
 
-def setup_db():
-    """Method used to build a database"""
-    metadata.create_all()
-
-def teardown_db():
-    """Method used to destroy a database"""
-    metadata.drop_all()
-
 #Create an empty database before we start our tests for this module
 def setup():
     """Function called by nose on module load"""
-    setup_db()
+    metadata.create_all()
     
 #Teardown that database 
 def teardown():
     """Function called by nose after all tests in this module ran"""
-    teardown_db()
+    metadata.drop_all()
 
 class ModelTest(object):
     """Base unit test case for the models."""

@@ -3,7 +3,7 @@
 """Modèle pour la table User"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import synonym
+from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, UnicodeText
 
@@ -45,6 +45,11 @@ class User(DeclarativeBase, object):
         'password', Unicode(0),
         nullable=True, default=None,
         info={'rum': {'field': 'Password'}})
+
+
+    customgraphviews = relation('CustomGraphView', cascade='delete',
+        backref='user', lazy='dynamic')
+
 
 
     def __init__(self, **kwargs):
@@ -104,14 +109,14 @@ class User(DeclarativeBase, object):
         """
         Return the user object whose email address is C{email}.
         """
-        return DBSession.query(cls).filter(cls.email==email).first()
+        return DBSession.query(cls).filter(cls.email == email).first()
 
     @classmethod
     def by_user_name(cls, username):
         """
         Return the user object whose user name is C{username}.
         """
-        return DBSession.query(cls).filter(cls.user_name==username).first()
+        return DBSession.query(cls).filter(cls.user_name == username).first()
 
 
 

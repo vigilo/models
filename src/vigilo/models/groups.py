@@ -37,8 +37,8 @@ class Groups(DeclarativeBase):
 
     children = relation('Groups', backref=backref('parent', remote_side=[name]))
 
-    permissions = relation('Permission',
-        secondary=GROUP_PERMISSION_TABLE, backref='groups')
+    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
+                    backref='groups', lazy='dynamic')
 
 
     @classmethod
@@ -53,5 +53,5 @@ class Groups(DeclarativeBase):
         @return: Le groupe demandé.
         @rtype: Une instance de la classe L{Groups}
         """
-        return DBSession.query(cls).filter(cls.name==groupname).first()
+        return DBSession.query(cls).filter(cls.name == groupname).first()
 
