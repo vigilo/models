@@ -7,7 +7,7 @@ __all__ = (
         'HostGroups', 'Host', 'PerfDataSource',
         'ServiceGroups', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
-        'User',
+        'User', 'BoardViewFilter',
         )
 
 
@@ -29,4 +29,5 @@ from .state import State
 from .permission import Permission
 from .usergroup import UserGroup
 from .user import User
+from .boardviewfilter import BoardViewFilter
 
