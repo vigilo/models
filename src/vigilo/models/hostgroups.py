@@ -4,30 +4,33 @@
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
-from sqlalchemy.types import UnicodeText
+from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 
-class HostGroups(DeclarativeBase):
+class HostGroups(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'hostgroups'
 
     hostname = Column(
-        UnicodeText(),
+        Unicode(255),
         ForeignKey(bdd_basename + u'host.name'),
-        primary_key=True, nullable=False)
+        primary_key=True, nullable=False,
+        info={'rum': {'field': 'Text'}})
+
     groupname = Column(
-        UnicodeText(),
+        Unicode(255),
         ForeignKey(bdd_basename + u'groups.name'),
-        index=True ,primary_key=True, nullable=False)
+        primary_key=True, nullable=False,
+        info={'rum': {'field': 'Text'}})
 
 
-    host = relation('Host', backref='host_groups')
-    group = relation('Groups', backref='hosts')
+#    host = relation('Host', backref='host_groups')
+#    group = relation('Groups', backref='hosts')
 
     def __init__(self, **kwargs):
+        """Initialise un groupe d'hôtes."""
         DeclarativeBase.__init__(self, **kwargs)
-
 

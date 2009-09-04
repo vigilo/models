@@ -58,7 +58,7 @@ class User(DeclarativeBase, object):
         
         @param kwargs: Un dictionnaire contenant les informations sur
             l'utilisateur.
-        @type kwargs: 
+        @type kwargs: C{dict}
         """
         DeclarativeBase.__init__(self, **kwargs)
 

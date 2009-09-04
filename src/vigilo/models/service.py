@@ -32,6 +32,17 @@ class Service(DeclarativeBase):
 
 
     def __init__(self, **kwargs):
+        """Initialise un service."""
         DeclarativeBase.__init__(self, **kwargs)
 
+    def __unicode__(self):
+        """
+        Formatte un C{Service} pour l'afficher dans les formulaires.
+
+        Le nom du service est utilisé pour le représenter dans les formulaires.
+
+        @return: Le nom du service.
+        @rtype: C{str}
+        """
+        return self.name
 

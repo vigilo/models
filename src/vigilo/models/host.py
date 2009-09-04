@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.types import Integer, UnicodeText
+from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
 
@@ -16,33 +16,43 @@ class Host(DeclarativeBase):
     __tablename__ = bdd_basename + 'host'
 
     name = Column(
-        UnicodeText(),
-        index=True,primary_key=True, nullable=False)
+        Unicode(255),
+        index=True,primary_key=True, nullable=False,
+        info={'rum': {'field': 'Text'}})
+
     checkhostcmd = Column(
         UnicodeText(),
         nullable=False)
+
     community = Column(
-        UnicodeText(),
+        Unicode(255),
         nullable=False)
+
     fqhn = Column(
-        UnicodeText(),
+        Unicode(255),
         nullable=False)
+
     hosttpl = Column(
-        UnicodeText(),
+        Unicode(255),
         nullable=False)
+
     mainip = Column(
-        UnicodeText(),
+        Unicode(15),
         nullable=False)
-    port = Column( Integer(), nullable=False)
-    snmpoidsperpdu = Column( Integer())
-    snmpversion = Column(
-        UnicodeText())
+
+    port = Column(Integer(), nullable=False)
+
+    snmpoidsperpdu = Column(Integer())
+
+    snmpversion = Column(UnicodeText())
 
     groups = association_proxy('host_groups', 'groups')
+
 
     def __init__(self, name, checkhostcmd = '', community = '', fqhn = '',
             hosttpl = '', mainip = '', port = 0, snmpoidsperdu = 0,
             snmpversion = ''):
+        """Initialise un hôte."""
         self.name = name
         self.checkhostcmd = checkhostcmd
         self.community = community
@@ -52,5 +62,16 @@ class Host(DeclarativeBase):
         self.port = port
         self.snmpoidsperdu = snmpoidsperdu
         self.snmpversion = snmpversion
+
+    def __unicode__(self):
+        """
+        Formatte un C{Host} pour l'afficher dans les formulaires.
+
+        Le nom de l'hôte est utilisé pour le représenter dans les formulaires.
+
+        @return: Le nom de l'hôte.
+        @rtype: C{str}
+        """
+        return self.name
 
 

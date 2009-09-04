@@ -22,23 +22,44 @@ GROUP_PERMISSION_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
-class Groups(DeclarativeBase):
+class Groups(DeclarativeBase, object):
     """Gère les groupes (récursifs) d'hôtes/services.'"""
     __tablename__ = bdd_basename + 'groups'
 
     name = Column(
         UnicodeText(),
-        primary_key=True, nullable=False)
+        primary_key=True, nullable=False,
+        info={'rum': {'field': 'Text'}})
 
     _parent = Column(
         'parent', UnicodeText(),
         ForeignKey(bdd_basename + 'groups.name'),
-        index=True)
+        index=True,
+        info={'rum': {'field': 'Text'}})
 
     children = relation('Groups', backref=backref('parent', remote_side=[name]))
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
-                    backref='groups', lazy='dynamic')
+                    backref='groups')
+
+
+    def __init__(self, **kwargs):
+        """
+        Initialise l'instance avec les informations du groupe.
+        
+        @param kwargs: Un dictionnaire contenant les informations sur le groupe.
+        @type kwargs: C{dict}
+        """
+        DeclarativeBase.__init__(self, **kwargs)
+
+    def __unicode__(self):
+        """
+        Conversion en unicode.
+        
+        @return: Le nom du groupe.
+        @rtype: C{str}
+        """
+        return self.name
 
 
     @classmethod
