@@ -25,6 +25,7 @@ lint: $(PYTHON) src/vigilo/$(NAME)
 	-PYTHONPATH=src $(PYTHON) $$(which pylint) \
 		--rcfile=$(BUILDENV)/extra/pylintrc src/vigilo/$(NAME)
 
+PYLINT := $(shell [ -f $(BUILDENV)/bin/pylint ] && echo $(BUILDENV)/bin/pylint || echo $(PYTHON) /usr/bin/pylint)
 tests: $(PYTHON)
 	VIGILO_SETTINGS_MODULE=settings_tests \
 		PYTHONPATH=$(BUILDENV) $(BUILDENV)/bin/runtests-$(NAME)
