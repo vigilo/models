@@ -3,77 +3,81 @@
 """Modèle pour la table Events"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column, DefaultClause, ForeignKey
-from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.types import Unicode, UnicodeText, Text, DateTime
 
-from sqlalchemy.databases.mysql import MSEnum, MSBoolean
+from sqlalchemy.databases.mysql import MSBoolean
 
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 
-class Events(DeclarativeBase):
+class Events(DeclarativeBase, object):
+    """
+    Evènement brut ou corrélé.
+
+    @ivar idevent: Identifiant de l'évènement, tel que fourni par Nagios
+        ou généré par le corrélateur.
+    @ivar timestamp: Date de ??? XXX à quoi sert ce champ ?
+    @ivar hostname: Identifiant de l'hôte concerné par l'évènement.
+    @ivar servicename: Identifiant du service concerné par l'évènement.
+        Vaut None si l'évènement concerne directement l'hôte.
+    @ivar active: ??? XXX à quoi sert ce champ ?
+    @ivar state: L'état du service/hôte, tel que transmis par Nagios.
+    @ivar message: Le message transmis par Nagios avec l'évènement.
+    """
 
     __tablename__ = bdd_basename + 'events'
 
-    idevent = Column(Integer(), primary_key=True, nullable=False,
-        autoincrement=True)
+    idevent = Column(
+        Unicode(255),
+        primary_key=True,
+        nullable=False)
+
+    # XXX à quoi correspond cette date ???
+    timestamp = Column(DateTime(timezone=False))
+
     hostname = Column(
-        UnicodeText(),
+        Unicode(255),
         ForeignKey(bdd_basename +'host.name'),
         index=True, nullable=False)
+
+    ip = Column(
+        Unicode(15),
+        index=True, nullable=True)
+
     servicename = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + 'service.name'),
-        index=True)
-    severity = Column(Integer(), nullable=False)
-    status = Column(MSEnum('None', 'Acknowledged', 'AAClosed'),
-        nullable=False,
-        server_default=DefaultClause('None', for_update=False))
-    active = Column(MSBoolean(), default='True')
-    timestamp = Column( DateTime(timezone=False))
-    output = Column(
+        index=True, nullable=True)
+
+    active = Column(MSBoolean(), default='True', nullable=False)
+
+    state = Column(Unicode(16))
+
+    message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None),
         nullable=False)
-    timestamp_active = Column(DateTime(timezone=False))
-    trouble_ticket = Column(
-        UnicodeText())
-    occurence = Column(Integer())
-    impact = Column(Integer())
-    rawstate = Column(MSEnum('WARNING', 'OK', 'CRITICAL', 'UNKNOWN'))
 
-    def __init__(self, hostname, servicename, server_source = '', severity = 0,
-            status = 'None', active = True, timestamp = datetime.now(),
-            output = '', event_timestamp = datetime.now(),
-            last_check = datetime.now(), recover_output = '',
-            timestamp_active = datetime.now(),
-            timestamp_cleared=None, trouble_ticket = None,
-            occurence = 1):
 
-        self.hostname = hostname
-        self.servicename = servicename
-        self.server_source = server_source
-        self.severity = severity
-        self.status = status
-        self.active = active
-        self.timestamp = timestamp
-        self.output = output
-        self.event_timestamp = event_timestamp
-        self.last_check = last_check
-        self.recover_output = recover_output
-        self.timestamp_active = timestamp_active
-        self.timestamp_cleared = timestamp_cleared
-        self.trouble_ticket = trouble_ticket
-        self.occurence = occurence
+    def __init__(self, **kwargs):
+        """
+        Initialise un évènement brut ou corrélé.
+        """
+        # On empêche la création d'un évènement dans lequel les champs
+        # obligatoires ne seraient pas renseignés.
+        DeclarativeBase.__init__(self, **kwargs)
 
     def get_date(self, element):
-
         """
         Permet de convertir une variable de temps en la chaîne de caractère :
         jour mois heure:minutes:secondes
 
         @param element: nom de l'élément à convertir de la classe elle même
+        @type element: C{unicode}
+        @return: La date demandée.
+        @rtype: C{unicode}
         """
 
         element = self.__dict__[element]
@@ -84,18 +88,18 @@ class Events(DeclarativeBase):
             return element.strftime('%d %b %H:%M:%S')
 
     def get_since_date(self, element):
-
         """
         Permet d'obtenir le temps écoulé entre maintenant (datetime.now())
-        et le temps contenu dans la variable de temps indiquée
+        et le temps contenu dans la variable de temps indiquée.
 
-        @param element: nom de l'élément de la classe elle même à utiliser
-                        pour le calcul
+        @param element: nom de l'élément de la classe à utiliser pour le calcul.
+        @type element: C{unicode}
+        @return: Le temps écoulé depuis la date demandée, ex: "4d 8h 15'".
+        @rtype: C{unicode}
         """
 
         date = datetime.now() - self.__dict__[element]
         minutes, seconds = divmod(date.seconds, 60)
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
-
 

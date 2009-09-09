@@ -9,6 +9,7 @@ from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .session import DBSession
 
 __all__ = ('Host', )
 
@@ -17,7 +18,7 @@ class Host(DeclarativeBase):
 
     name = Column(
         Unicode(255),
-        index=True,primary_key=True, nullable=False,
+        index=True, primary_key=True, nullable=False,
         info={'rum': {'field': 'Text'}})
 
     checkhostcmd = Column(
@@ -49,19 +50,9 @@ class Host(DeclarativeBase):
     groups = association_proxy('host_groups', 'groups')
 
 
-    def __init__(self, name, checkhostcmd = '', community = '', fqhn = '',
-            hosttpl = '', mainip = '', port = 0, snmpoidsperdu = 0,
-            snmpversion = ''):
+    def __init__(self, **kwargs):
         """Initialise un hôte."""
-        self.name = name
-        self.checkhostcmd = checkhostcmd
-        self.community = community
-        self.fqhn = fqhn
-        self.hosttpl = hosttpl
-        self.mainip = mainip
-        self.port = port
-        self.snmpoidsperdu = snmpoidsperdu
-        self.snmpversion = snmpversion
+        DeclarativeBase.__init__(self, **kwargs)
 
     def __unicode__(self):
         """
@@ -74,4 +65,15 @@ class Host(DeclarativeBase):
         """
         return self.name
 
+    @classmethod
+    def by_host_name(cls, hostname):
+        """
+        Renvoie l'hôte dont le nom est L{hostname}.
+        
+        @param hostname: Nom de l'hôte voulu.
+        @type hostname: C{unicode}
+        @return: L'hôte demandé.
+        @rtype: L{Host}
+        """
+        return DBSession.query(cls).filter(cls.name == hostname).first()
 

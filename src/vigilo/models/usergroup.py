@@ -8,6 +8,7 @@ from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .session import DBSession
 
 __all__ = ('UserGroup', )
 

@@ -13,7 +13,11 @@ class TestServiceHautNiveau(ModelTest):
     def do_get_dependencies(self):
         """Generate some data for the test"""
         
-        DBSession.add(Service(name = u"monservice"))
+        DBSession.add(Service(
+            name=u'monservice',
+            servicetype=u'foo',
+            command=u'halt',
+            ))
         DBSession.flush()
         return dict(servicename = u"monservice", servicename_dep = u"monservice")
 

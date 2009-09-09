@@ -5,52 +5,52 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, DefaultClause, ForeignKey
-from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
-
-from sqlalchemy.databases.mysql import MSEnum
+from sqlalchemy.types import Integer, UnicodeText, Text, DateTime, Unicode
 
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 
-class State(DeclarativeBase):
+class State(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'state'
 
-    idstat = Column(Integer(), primary_key=True, nullable=False,
-        autoincrement=True)
+    idstate = Column(
+        Integer,
+        primary_key=True, nullable=False, autoincrement=True)
+
     hostname = Column(
-        UnicodeText(),
+        Unicode(255),
         ForeignKey(bdd_basename +'host.name'),
         index=True, nullable=False)
+
     servicename = Column(
-        UnicodeText(),
+        Unicode(255),
         ForeignKey(bdd_basename + 'service.name'),
         index=True)
-    ip = Column(
-        UnicodeText())
+
+    ip = Column(Unicode(15))
+
     timestamp = Column(DateTime(timezone=False))
-    statename = Column(MSEnum('WARNING', 'OK', 'CRITICAL', 'UNKNOWN'),
+
+    statename = Column(
+        Unicode(16),
         nullable=False,
         server_default=DefaultClause('OK', for_update=False))
-    type = Column(MSEnum('SOFT', 'HARD'),
+
+    statetype = Column(Unicode(8),
         nullable=False,
         server_default=DefaultClause('SOFT', for_update=False))
-    attempt = Column(Integer(), nullable=False,
-        autoincrement=False)
+
+    attempt = Column(
+        Integer,
+        nullable=False, autoincrement=False)
+
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None))
 
-    def __init__(self, hostname, servicename, ip, timestamp = datetime.now(),
-            statename = 'OK', type = 'SOFT', attempt = 1, message = ''):
-
-        self.hostname = hostname
-        self.servicename = servicename
-        self.ip = ip
-        self.timestamp = timestamp
-        self.statename = statename
-        self.type = type
-        self.attempt = attempt
-        self.message = message
+    def __init__(self, **kwargs):
+        """Intiialise un état."""
+        DeclarativeBase.__init__(self, **kwargs)
 

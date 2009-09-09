@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
-from sqlalchemy.types import Integer, UnicodeText, Text, DateTime
+from sqlalchemy.types import Integer, UnicodeText, Unicode, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
 from datetime import datetime
@@ -12,7 +12,7 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 
 
-class EventHistory(DeclarativeBase):
+class EventHistory(DeclarativeBase, object):
     """
     @param type_action: Le type d'action effectué, peut être 'Nagios update state',
                         'Acknowlegement change state', 'New occurence', 'User comment', 'Ticket change',
@@ -25,22 +25,33 @@ class EventHistory(DeclarativeBase):
 
     __tablename__ = bdd_basename + 'event_history'
 
-    idhistory = Column( Integer(), primary_key=True, nullable=False,
-        autoincrement=True)
+    idhistory = Column(
+        Integer,
+        primary_key=True, nullable=False, autoincrement=True)
+
     type_action = Column(
         MSEnum('Nagios update state', 'Acknowlegement change state',
             'New occurence', 'User comment', 'Ticket change', 'Oncall',
             'Forced state'),
         nullable=False)
-    idevent = Column(Integer(),
+
+    idevent = Column(
+        Unicode(255),
         ForeignKey(
             bdd_basename + 'events.idevent'
-        ), index=True, nullable=False)
-    value = Column(
-        UnicodeText())
-    text = Column(
-        Text(length=None, convert_unicode=True, assert_unicode=None))
+        ),
+        index=True, nullable=False)
+
+    value = Column(UnicodeText)
+
+    text = Column(Text(length=None, convert_unicode=True, assert_unicode=None))
+
     timestamp = Column(DateTime(timezone=False), default=datetime.now())
-    username = Column(
-        UnicodeText())
+
+    username = Column(UnicodeText())
+
+
+    def __init__(self, **kwargs):
+        """Initialise un évènement de l'historique des modifications."""
+        DeclarativeBase.__init__(self, **kwargs)
 

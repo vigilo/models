@@ -3,16 +3,17 @@
 """BdD Vigiboard"""
 
 __all__ = (
-        'EventHistory', 'Events', 'GraphGroups', 'Graph', 'Groups',
-        'HostGroups', 'Host', 'PerfDataSource',
+        'EventHistory', 'Events', 'EventsAggregate', 'Groups',
+        'GraphGroups', 'Graph', 'HostGroups', 'Host', 'PerfDataSource',
         'ServiceGroups', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
-        'User', 'BoardViewFilter', 'CustomGraphView',
+        'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
         )
 
 
 from .eventhistory import EventHistory
 from .events import Events
+from .eventsaggregate import EventsAggregate
 from .graphgroups import GraphGroups
 from .graph import Graph
 from .groups import Groups
@@ -31,4 +32,4 @@ from .usergroup import UserGroup
 from .user import User
 from .boardviewfilter import BoardViewFilter
 from .customgraphview import CustomGraphView
-
+from .tag import Tag

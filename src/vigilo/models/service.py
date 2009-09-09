@@ -4,11 +4,12 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.types import UnicodeText
+from sqlalchemy.types import UnicodeText, Unicode
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .session import DBSession
 
 __all__ = ('Service', )
 
@@ -17,12 +18,14 @@ class Service(DeclarativeBase):
     __tablename__ = bdd_basename + 'service'
 
     name = Column(
-        UnicodeText(),
+        Unicode(255),
         index=True, primary_key=True, nullable=False)
-    type = Column(
+
+    servicetype = Column(
         UnicodeText(),
         default=0,
         nullable=False)
+
     command = Column(
         UnicodeText(),
         default='',
@@ -45,4 +48,16 @@ class Service(DeclarativeBase):
         @rtype: C{str}
         """
         return self.name
+
+    @classmethod
+    def by_service_name(cls, servicename):
+        """
+        Renvoie le service dont le nom est L{servicename}.
+        
+        @param servicename: Nom du service voulu.
+        @type servicename: C{unicode}
+        @return: Le service demandé.
+        @rtype: L{Service}
+        """
+        return DBSession.query(cls).filter(cls.name == servicename).first()
 

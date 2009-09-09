@@ -3,6 +3,7 @@
 from vigilo.models import EventHistory, Host, Service, Events
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
+from datetime import datetime
 
 class TestEventHistory(ModelTest):
     """Test de la table EventHistory"""
@@ -17,10 +18,30 @@ class TestEventHistory(ModelTest):
     def do_get_dependencies(self):
         """Generate some data for the test"""
 
-        DBSession.add(Host(name = u"monhost"))
-        DBSession.add(Service(name = u"monservice"))
+        DBSession.add(Host(
+            name=u'monhost',
+            checkhostcmd=u'halt -f',
+            community=u'public',
+            fqhn=u'localhost.localdomain',
+            hosttpl=u'template',
+            mainip=u'127.0.0.1',
+            port=u'1234',
+            ))
+        DBSession.add(Service(
+            name=u'monservice',
+            servicetype=u'foo',
+            command=u'halt',
+            ))
         DBSession.flush()
-        DBSession.add(Events(hostname = u"monhost", servicename = u"monservice"))
+        DBSession.add(Events(
+            idevent=u'foo',
+            timestamp=datetime.now(),
+            hostname=u'monhost',
+            servicename=u'monservice',
+            active=True,
+            state=u'OK',
+            message=u'Foo',
+            ))
         DBSession.flush()
         return dict(idevent = DBSession.query(Events.idevent)[0].idevent)
 

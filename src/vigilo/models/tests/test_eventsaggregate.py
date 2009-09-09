@@ -1,23 +1,19 @@
 # -*- coding: utf-8 -*-
-"""Test suite for Event class"""
-from vigilo.models import Events, Host, Service
+"""Test suite for EventsAggregate class"""
+from vigilo.models import EventsAggregate, Events, Service, Host
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true
 import re
 from datetime import datetime
 
-class TestEvents(ModelTest):
+class TestEventsAggregate(ModelTest):
     """Test de la table Events"""
 
-    klass = Events
+    klass = EventsAggregate
     attrs = {
-        'idevent': u'foo',
-        'timestamp': datetime.now(),
-        'hostname': u'monhost',
-        'active': True,
-        'state': u'OK',
-        'message': u'Foo',
+        'status': u'OK',
+        'timestamp_active': datetime.now(),
     }
 
     def __init__(self):
@@ -25,6 +21,11 @@ class TestEvents(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
+        DBSession.add(Service(
+            name=u'monservice',
+            servicetype=u'foo',
+            command=u'halt',
+            ))
         DBSession.add(Host(
             name=u'monhost',
             checkhostcmd=u'halt -f',
@@ -34,23 +35,28 @@ class TestEvents(ModelTest):
             mainip=u'127.0.0.1',
             port=u'1234',
             ))
-        DBSession.add(Service(
-            name=u'monservice',
-            servicetype=u'foo',
-            command=u'halt',
+        DBSession.flush()
+        DBSession.add(Events(
+            idevent=u'foo',
+            timestamp=datetime.now(),
+            hostname=u'monhost',
+            servicename=u'monservice',
+            active=True,
+            state=u'OK',
+            message=u'Foo',
             ))
         DBSession.flush()
-        return dict(hostname=u"monhost", servicename=u"monservice")
+        return dict(idcause=u'foo')
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""
         form1 = re.compile("^\w* \w* \d*:\d*:\d*$")
         form2 = re.compile("^\w* \d*:\d*:\d*$")
-        assert_true(form1.match(self.obj.get_date("timestamp")) \
-                or form2.match(self.obj.get_date("timestamp")))
+        date = self.obj.get_date("timestamp_active")
+        assert_true(form1.match(date) or form2.match(date))
 
     def test_get_since_date(self):
         """La fonction GetSinceDate doit renvoyer un objet formaté"""
         assert_true(re.compile("^\d*d \d*h \d'$").match(
-            self.obj.get_since_date("timestamp")))
+            self.obj.get_since_date("timestamp_active")))
 
