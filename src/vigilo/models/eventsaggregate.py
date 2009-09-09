@@ -15,7 +15,7 @@ __all__ = ('EventsAggregate', )
 EVENTS_EVENTSAGGREGATE_TABLE = Table(
     bdd_basename + 'eventsaggregates2events', metadata,
     Column('idevent', Unicode(255), ForeignKey(
-                bdd_basename + 'events.idevent',
+                bdd_basename + 'event.idevent',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
     Column('idaggregate', Integer, ForeignKey(
@@ -51,7 +51,7 @@ class EventsAggregate(DeclarativeBase, object):
 
     idcause = Column(
         Unicode(255),
-        ForeignKey(bdd_basename + 'events.idevent'))
+        ForeignKey(bdd_basename + 'event.idevent'))
 
     impact = Column(
         Integer,
@@ -72,7 +72,7 @@ class EventsAggregate(DeclarativeBase, object):
     # Date de XXX à quoi correspond cette date ???
     timestamp_active = Column(DateTime(timezone=False))
 
-    events = relation('Events', secondary=EVENTS_EVENTSAGGREGATE_TABLE,
+    events = relation('Event', secondary=EVENTS_EVENTSAGGREGATE_TABLE,
         lazy='dynamic')
 
 

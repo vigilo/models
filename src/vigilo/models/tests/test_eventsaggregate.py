@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for EventsAggregate class"""
-from vigilo.models import EventsAggregate, Events, Service, Host
+from vigilo.models import EventsAggregate, Event, Service, Host
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true
@@ -36,7 +36,7 @@ class TestEventsAggregate(ModelTest):
             port=u'1234',
             ))
         DBSession.flush()
-        DBSession.add(Events(
+        DBSession.add(Event(
             idevent=u'foo',
             timestamp=datetime.now(),
             hostname=u'monhost',

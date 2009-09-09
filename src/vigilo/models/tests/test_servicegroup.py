@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Test suite for ServiceGroups class"""
-from vigilo.models import Service, Groups, ServiceGroups
+"""Test suite for ServiceGroup class"""
+from vigilo.models import Service, Group, ServiceGroup
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
-class TestServiceGroups(ModelTest):
-    """Test de la table servicegroups"""
+class TestServiceGroup(ModelTest):
+    """Test de la table ServiceGroup"""
 
-    klass = ServiceGroups
+    klass = ServiceGroup
     attrs = {}
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
 
         DBSession.add(Service(name = u"monservice"))
-        DBSession.add(Groups(name = u"mongroupe"))
+        DBSession.add(Group(name = u"mongroupe"))
         DBSession.flush()
         return dict(servicename = u"monservice", groupname = u"mongroupe")
 

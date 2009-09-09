@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for EventHistory class"""
-from vigilo.models import EventHistory, Host, Service, Events
+from vigilo.models import EventHistory, Host, Service, Event
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from datetime import datetime
@@ -33,7 +33,7 @@ class TestEventHistory(ModelTest):
             command=u'halt',
             ))
         DBSession.flush()
-        DBSession.add(Events(
+        DBSession.add(Event(
             idevent=u'foo',
             timestamp=datetime.now(),
             hostname=u'monhost',
@@ -43,5 +43,5 @@ class TestEventHistory(ModelTest):
             message=u'Foo',
             ))
         DBSession.flush()
-        return dict(idevent = DBSession.query(Events.idevent)[0].idevent)
+        return dict(idevent = DBSession.query(Event.idevent)[0].idevent)
 

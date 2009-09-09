@@ -3,24 +3,24 @@
 """BdD Vigiboard"""
 
 __all__ = (
-        'EventHistory', 'Events', 'EventsAggregate', 'Groups',
-        'GraphGroups', 'Graph', 'HostGroups', 'Host', 'PerfDataSource',
-        'ServiceGroups', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
+        'EventHistory', 'Event', 'EventsAggregate', 'Group',
+        'GraphGroup', 'Graph', 'HostGroup', 'Host', 'PerfDataSource',
+        'ServiceGroup', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
         )
 
 
 from .eventhistory import EventHistory
-from .events import Events
+from .event import Event
 from .eventsaggregate import EventsAggregate
-from .graphgroups import GraphGroups
+from .graphgroup import GraphGroup
 from .graph import Graph
-from .groups import Groups
-from .hostgroups import HostGroups
+from .group import Group
+from .hostgroup import HostGroup
 from .host import Host
 from .perfdatasource import PerfDataSource
-from .servicegroups import ServiceGroups
+from .servicegroup import ServiceGroup
 from .servicehautniveau import ServiceHautNiveau
 from .service import Service
 from .servicetopo import ServiceTopo

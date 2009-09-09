@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table Groups"""
+"""Modèle pour la table Group"""
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey, Table
@@ -13,7 +13,7 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 GROUP_PERMISSION_TABLE = Table(
     bdd_basename + 'grouppermissions', metadata,
     Column('groupname', UnicodeText, ForeignKey(
-                bdd_basename + 'groups.name',
+                bdd_basename + 'group.name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
     Column('idpermission', Integer, ForeignKey(
@@ -22,9 +22,9 @@ GROUP_PERMISSION_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
-class Groups(DeclarativeBase, object):
+class Group(DeclarativeBase, object):
     """Gère les groupes (récursifs) d'hôtes/services.'"""
-    __tablename__ = bdd_basename + 'groups'
+    __tablename__ = bdd_basename + 'group'
 
     name = Column(
         UnicodeText(),
@@ -33,11 +33,11 @@ class Groups(DeclarativeBase, object):
 
     _parent = Column(
         'parent', UnicodeText(),
-        ForeignKey(bdd_basename + 'groups.name'),
+        ForeignKey(bdd_basename + 'group.name'),
         index=True,
         info={'rum': {'field': 'Text'}})
 
-    children = relation('Groups', backref=backref('parent', remote_side=[name]))
+    children = relation('Group', backref=backref('parent', remote_side=[name]))
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
                     backref='groups')

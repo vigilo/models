@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table HostGroups"""
+"""Modèle pour la table HostGroup"""
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
@@ -9,10 +9,11 @@ from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
+__all__ = ('HostGroup', )
 
-class HostGroups(DeclarativeBase, object):
+class HostGroup(DeclarativeBase, object):
 
-    __tablename__ = bdd_basename + 'hostgroups'
+    __tablename__ = bdd_basename + 'hostgroup'
 
     hostname = Column(
         Unicode(255),
@@ -22,13 +23,12 @@ class HostGroups(DeclarativeBase, object):
 
     groupname = Column(
         Unicode(255),
-        ForeignKey(bdd_basename + u'groups.name'),
+        ForeignKey(bdd_basename + u'group.name'),
         primary_key=True, nullable=False,
         info={'rum': {'field': 'Text'}})
 
-
 #    host = relation('Host', backref='host_groups')
-#    group = relation('Groups', backref='hosts')
+#    group = relation('Group', backref='hosts')
 
     def __init__(self, **kwargs):
         """Initialise un groupe d'hôtes."""

@@ -8,9 +8,7 @@ from sqlalchemy.types import UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-
-
-
+__all__ = ('GraphToGroups', )
 
 class GraphToGroups(DeclarativeBase):
     __tablename__ = bdd_basename + 'graphtogroups'
@@ -22,6 +20,6 @@ class GraphToGroups(DeclarativeBase):
     groupname = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + \
-                'graphgroups.name'),
+                'graphgroup.name'),
         primary_key=True, nullable=False)
 

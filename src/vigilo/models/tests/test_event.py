@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """Test suite for Event class"""
-from vigilo.models import Events, Host, Service
+from vigilo.models import Event, Host, Service
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true
 import re
 from datetime import datetime
 
-class TestEvents(ModelTest):
-    """Test de la table Events"""
+class TestEvent(ModelTest):
+    """Test de la table Event"""
 
-    klass = Events
+    klass = Event
     attrs = {
         'idevent': u'foo',
         'timestamp': datetime.now(),

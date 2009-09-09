@@ -38,7 +38,7 @@ class EventHistory(DeclarativeBase, object):
     idevent = Column(
         Unicode(255),
         ForeignKey(
-            bdd_basename + 'events.idevent'
+            bdd_basename + 'event.idevent'
         ),
         index=True, nullable=False)
 

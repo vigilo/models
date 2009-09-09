@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table Events"""
+"""Modèle pour la table Event"""
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
@@ -13,7 +13,7 @@ from datetime import datetime
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 
-class Events(DeclarativeBase, object):
+class Event(DeclarativeBase, object):
     """
     Evènement brut ou corrélé.
 
@@ -28,7 +28,7 @@ class Events(DeclarativeBase, object):
     @ivar message: Le message transmis par Nagios avec l'évènement.
     """
 
-    __tablename__ = bdd_basename + 'events'
+    __tablename__ = bdd_basename + 'event'
 
     idevent = Column(
         Unicode(255),
