@@ -17,7 +17,7 @@ buildclean: clean
 apidoc: doc/apidoc/index.html
 doc/apidoc/index.html: src/vigilo/$(NAME)
 	rm -rf $(CURDIR)/doc/apidoc/*
-	PYTHONPATH=$(BUILDENV):src $(PYTHON) "$$(which epydoc)" -o $(dir $@) -v \
+	PYTHONPATH=src $(PYTHON) "$$(which epydoc)" -o $(dir $@) -v \
 		   --name Vigilo --url http://www.projet-vigilo.org \
 		   --docformat=epytext vigilo.$(NAME)
 
@@ -27,8 +27,8 @@ lint: $(PYTHON) src/vigilo/$(NAME)
 
 PYLINT := $(shell [ -f $(BUILDENV)/bin/pylint ] && echo $(BUILDENV)/bin/pylint || echo $(PYTHON) /usr/bin/pylint)
 tests: $(PYTHON)
-	VIGILO_SETTINGS_MODULE=settings_tests \
-		PYTHONPATH=$(BUILDENV) $(BUILDENV)/bin/runtests-$(NAME)
+	VIGILO_SETTINGS=settings_tests.py \
+		$(BUILDENV)/bin/runtests-$(NAME)
 
 .PHONY: all clean buildclean apidoc lint tests
 
