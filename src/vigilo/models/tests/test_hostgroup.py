@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Test suite for HostGroups class"""
+"""Test suite for HostGroup class"""
 from vigilo.models import HostGroup, Host, Group
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession

@@ -8,7 +8,7 @@ import re
 from datetime import datetime
 
 class TestEventsAggregate(ModelTest):
-    """Test de la table Events"""
+    """Test de la table Event"""
 
     klass = EventsAggregate
     attrs = {

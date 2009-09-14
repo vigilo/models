@@ -67,12 +67,12 @@ class Group(DeclarativeBase, object):
         """
         Renvoie le groupe dont le nom est C{groupname}.
 
-        @param cls: La classe à utiliser, c'est-à-dire L{Groups}.
+        @param cls: La classe à utiliser, c'est-à-dire L{Group}.
         @type cls: C{class}
         @param groupname: Le nom du groupe que l'on souhaite récupérer.
         @type groupname: C{str}
         @return: Le groupe demandé.
-        @rtype: Une instance de la classe L{Groups}
+        @rtype: Une instance de la classe L{Group}
         """
         return DBSession.query(cls).filter(cls.name == groupname).first()
 
