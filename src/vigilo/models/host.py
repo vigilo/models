@@ -7,6 +7,7 @@ from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
+from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 from .session import DBSession
@@ -18,11 +19,10 @@ class Host(DeclarativeBase):
 
     name = Column(
         Unicode(255),
-        index=True, primary_key=True, nullable=False,
-        info={'rum': {'field': 'Text'}})
+        index=True, primary_key=True, nullable=False)
 
     checkhostcmd = Column(
-        UnicodeText(),
+        UnicodeText,
         nullable=False)
 
     community = Column(
@@ -41,11 +41,11 @@ class Host(DeclarativeBase):
         Unicode(15),
         nullable=False)
 
-    port = Column(Integer(), nullable=False)
+    port = Column(Integer, nullable=False)
 
-    snmpoidsperpdu = Column(Integer())
+    snmpoidsperpdu = Column(Integer)
 
-    snmpversion = Column(UnicodeText())
+    snmpversion = Column(Unicode(255))
 
     groups = association_proxy('host_groups', 'groups')
 
@@ -76,4 +76,53 @@ class Host(DeclarativeBase):
         @rtype: L{Host}
         """
         return DBSession.query(cls).filter(cls.name == hostname).first()
+
+
+# Rum metadata.
+from rum import fields
+from .tag import Tag
+
+fields.FieldFactory.fields(
+    Host, (
+        fields.Unicode('name',
+            searchable=True, sortable=True, required=True,
+            label=l_('Hostname')),
+
+        fields.UnicodeText('checkhostcmd',
+            searchable=True, sortable=True, required=True,
+            label=l_('Command to check host')),
+
+        fields.Unicode('fqhn',
+            searchable=True, sortable=True, required=True,
+            label=l_('Fully qualified hostname')),
+
+        fields.Unicode('hosttpl',
+            searchable=True, sortable=True, required=True,
+            label=l_('Template')),
+
+        fields.Unicode('mainip',
+            searchable=True, sortable=True, required=True,
+            label=l_('Main IP address')),
+
+        fields.Integer('port',
+            searchable=True, sortable=True, required=True,
+            range=range(0, 65535),
+            label=l_('Port')),
+
+        fields.Unicode('community',
+            searchable=True, sortable=True, required=True,
+            label=l_('SNMP community')),
+
+        fields.Unicode('snmpversion',
+            searchable=True, sortable=True,
+            label=l_('SNMP version')),
+
+        fields.Integer('snmpoidsperpdu',
+            searchable=True, sortable=True,
+            label=l_('SNMP OIDs per PDU')),
+
+        fields.Collection('tags', other=Tag, remote_name='name',
+            label=l_('Tags')),
+    )
+)
 

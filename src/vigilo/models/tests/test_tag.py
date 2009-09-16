@@ -11,7 +11,8 @@ class TestEvents(ModelTest):
 
     klass = Tag
     attrs = {
-        'content': u'Foo bar baz',
+        'name': u'test',
+        'value': u'Foo bar baz',
     }
 
     def __init__(self):

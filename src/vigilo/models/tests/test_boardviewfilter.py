@@ -9,10 +9,11 @@ class TestBoardViewFilter(ModelTest):
 
     klass = BoardViewFilter
     attrs = {
+        'filtername': u'monfiltre',
         'username': u'manager',
         'hostname': u'monhost',
         'servicename': u'monservice',
-        'output': u'WARNING2: SNMP error: No response from remote host',
+        'message': u'WARNING2: SNMP error: No response from remote host',
         'trouble_ticket': u'42',
     }
 

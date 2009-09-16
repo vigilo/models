@@ -19,11 +19,12 @@ class Event(DeclarativeBase, object):
 
     @ivar idevent: Identifiant de l'évènement, tel que fourni par Nagios
         ou généré par le corrélateur.
-    @ivar timestamp: Date de ??? XXX à quoi sert ce champ ?
+    @ivar timestamp: Date de la 1ère occurence de l'évènement.
     @ivar hostname: Identifiant de l'hôte concerné par l'évènement.
     @ivar servicename: Identifiant du service concerné par l'évènement.
         Vaut None si l'évènement concerne directement l'hôte.
-    @ivar active: ??? XXX à quoi sert ce champ ?
+    @ivar active: Indique si l'évènement est actif. Seuls les évènements
+        actifs apparaissent dans Vigiboard.
     @ivar state: L'état du service/hôte, tel que transmis par Nagios.
     @ivar message: Le message transmis par Nagios avec l'évènement.
     """
@@ -35,7 +36,6 @@ class Event(DeclarativeBase, object):
         primary_key=True,
         nullable=False)
 
-    # XXX à quoi correspond cette date ???
     timestamp = Column(DateTime(timezone=False))
 
     hostname = Column(
@@ -48,7 +48,7 @@ class Event(DeclarativeBase, object):
         index=True, nullable=True)
 
     servicename = Column(
-        UnicodeText(),
+        UnicodeText,
         ForeignKey(bdd_basename + 'service.name'),
         index=True, nullable=True)
 

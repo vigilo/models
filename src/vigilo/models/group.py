@@ -4,15 +4,18 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey, Table
-from sqlalchemy.types import UnicodeText, Integer
+from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation, backref
-from .session import DBSession
+from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .session import DBSession
+
+__all__ = ('Group', )
 
 GROUP_PERMISSION_TABLE = Table(
     bdd_basename + 'grouppermissions', metadata,
-    Column('groupname', UnicodeText, ForeignKey(
+    Column('groupname', Unicode, ForeignKey(
                 bdd_basename + 'group.name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
@@ -22,20 +25,19 @@ GROUP_PERMISSION_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
+
 class Group(DeclarativeBase, object):
     """Gère les groupes (récursifs) d'hôtes/services.'"""
     __tablename__ = bdd_basename + 'group'
 
     name = Column(
-        UnicodeText(),
-        primary_key=True, nullable=False,
-        info={'rum': {'field': 'Text'}})
+        Unicode(255),
+        primary_key=True, nullable=False)
 
     _parent = Column(
-        'parent', UnicodeText(),
+        'parent', Unicode(255),
         ForeignKey(bdd_basename + 'group.name'),
-        index=True,
-        info={'rum': {'field': 'Text'}})
+        index=True)
 
     children = relation('Group', backref=backref('parent', remote_side=[name]))
 
@@ -75,4 +77,25 @@ class Group(DeclarativeBase, object):
         @rtype: Une instance de la classe L{Group}
         """
         return DBSession.query(cls).filter(cls.name == groupname).first()
+
+
+# Rum metadata.
+from rum import fields
+from .permission import Permission
+
+fields.FieldFactory.fields(
+    Group, (
+        fields.Unicode('name',
+            required=True, searchable=True, sortable=True,
+            label=l_('Group name')),
+
+        fields.Collection('children',
+            other=Group, remote_name='children',
+            label=l_('Children')),
+
+        fields.Collection('permissions',
+            other=Permission, remote_name='permission_name',
+            label=l_('Permissions')),
+    )
+)
 

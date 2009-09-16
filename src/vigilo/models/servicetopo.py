@@ -21,6 +21,6 @@ class ServiceTopo(DeclarativeBase):
 
     function = Column(
         UnicodeText(),
-        default='',
+        default=u'',
         nullable=False)
 

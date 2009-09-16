@@ -4,8 +4,9 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.types import Integer, Unicode
+from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
+from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 
@@ -15,8 +16,8 @@ HOST_TAG_TABLE = Table(
                 bdd_basename + 'host.name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
-    Column('idtag', Integer, ForeignKey(
-                bdd_basename + 'tag.idtag',
+    Column('name', Unicode(255), ForeignKey(
+                bdd_basename + 'tag.name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True)
 )
@@ -27,8 +28,8 @@ SERVICE_TAG_TABLE = Table(
                 bdd_basename + 'service.name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
-    Column('idtag', Integer, ForeignKey(
-                bdd_basename + 'tag.idtag',
+    Column('name', Unicode(255), ForeignKey(
+                bdd_basename + 'tag.name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True)
 )
@@ -45,11 +46,11 @@ class Tag(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'tag'
 
-    idtag = Column(
-        Integer,
-        primary_key=True, autoincrement=True)
+    name = Column(
+        Unicode(255),
+        primary_key=True, index=True)
 
-    content = Column(
+    value = Column(
         Unicode(255),
         unique=True, nullable=False, index=True)
 
@@ -60,14 +61,9 @@ class Tag(DeclarativeBase, object):
         backref='tags', lazy='dynamic')
 
 
-    def __init__(self, content):
-        """
-        Initialise un tag.
-        
-        @param content: Contenu du tag.
-        @type content: C{unicode}
-        """
-        DeclarativeBase.__init__(self, content=content)
+    def __init__(self, **kwargs):
+        """Initialise un tag."""
+        DeclarativeBase.__init__(self, **kwargs)
 
     def __unicode__(self):
         """
@@ -77,4 +73,30 @@ class Tag(DeclarativeBase, object):
         @rtype: C{unicode}
         """
         return self.content
+
+
+# Rum metadata.
+from rum import fields
+from .host import Host
+from .service import Service
+
+fields.FieldFactory.fields(
+    Tag, (
+        fields.Unicode('name',
+            required=True, searchable=True, sortable=True,
+            label=l_('Tag name')),
+
+        fields.Unicode('value',
+            required=True, searchable=True, sortable=True,
+            label=l_('Tag value')),
+
+        fields.Collection('hosts',
+            other=Host, remote_name='name',
+            label=l_('Tagged hosts')),
+
+        fields.Collection('services',
+            other=Service, remote_name='name',
+            label=l_('Tagged services')),
+    )
+)
 

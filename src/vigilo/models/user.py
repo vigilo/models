@@ -3,9 +3,11 @@
 """Modèle pour la table User"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import synonym, relation
+from sqlalchemy.orm import synonym, relation, mapper
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, UnicodeText
+from sqlalchemy.sql.expression import ClauseElement
+from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
@@ -18,7 +20,7 @@ class User(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'user'
 
-    # TG2 expects this name.
+    # XXX Faut-il renommer ce champ ?
     user_name = Column(
         Unicode(255),
         unique=True,
@@ -39,17 +41,10 @@ class User(DeclarativeBase, object):
         nullable=True,
         default=None)
 
-    # We don't actually store the password in the database,
-    # but we need to define it for Rum to be able to "see" it.
-    _password = Column(
-        'password', Unicode(0),
-        nullable=True, default=None,
-        info={'rum': {'field': 'Password'}})
-
-
+    # XXX Rum ne supporte pas encore très bien le lazy loading de SQLAlchemy
+    # Cf. http://python-rum.org/ticket/107
     customgraphviews = relation('CustomGraphView', cascade='delete',
-        backref='user', lazy='dynamic')
-
+        backref='user', )#lazy='dynamic')
 
 
     def __init__(self, **kwargs):
@@ -162,8 +157,9 @@ class User(DeclarativeBase, object):
         """
         return password == '42'
 
-    password = synonym('_password', descriptor=property(_get_password,
-                                                        _set_password))
+#    password = synonym('_password', descriptor=property(_get_password,
+#                                                        _set_password))
+    password = property(None, _set_password)
 
     def _set_language(self, language):
         """
@@ -193,4 +189,37 @@ class User(DeclarativeBase, object):
 
     language = synonym('_language', descriptor=property(_get_language,
                                                         _set_language))
+
+
+# Rum metadata.
+from rum import fields
+from .customgraphview import CustomGraphView
+from .usergroup import UserGroup
+
+fields.FieldFactory.fields(
+    User, (
+        fields.Unicode('user_name',
+            searchable=True, sortable=True, required=True,
+            label=l_('Username')),
+
+        fields.Password('password', required=True,
+            label=l_('Password')),
+
+        fields.Email('email',
+            searchable=True, sortable=True, required=True,
+            label=l_('Email')),
+
+        fields.Unicode('language',
+            searchable=True, sortable=True, required=True,
+            label=l_('Language')),
+
+        fields.Collection('customgraphviews', other=CustomGraphView,
+            remote_name='viewname',
+            label=l_('Custom graph views')),
+
+        fields.Collection('usergroups', other=UserGroup,
+            remote_name='usergroups',
+            label=l_('User groups')),
+    )
+)
 

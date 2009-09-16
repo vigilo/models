@@ -4,11 +4,12 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, DefaultClause, ForeignKey, Table
-from sqlalchemy.types import Integer, Unicode, UnicodeText, DateTime
+from sqlalchemy.types import Integer, Unicode, DateTime
 from sqlalchemy.orm import relation
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .event import Event
 
 __all__ = ('EventsAggregate', )
 
@@ -40,7 +41,8 @@ class EventsAggregate(DeclarativeBase, object):
     @ivar occurrences: Compteur d'occurrences de l'agrégat. Il est incrémenté
         chaque fois que l'état de l'évènement oscille alors que l'opérateur
         n'est pas encore intervenu.
-    @ivar timestamp_active: Date de ??? XXX à quoi correspond cette date ?
+    @ivar timestamp_active: Date de la dernière occurence de l'évènement ou
+        de sa dernière modification.
     """
 
     __tablename__ = bdd_basename + 'eventsaggregate'
@@ -53,27 +55,25 @@ class EventsAggregate(DeclarativeBase, object):
         Unicode(255),
         ForeignKey(bdd_basename + 'event.idevent'))
 
-    impact = Column(
-        Integer,
-        autoincrement=False)
+    impact = Column(Integer)
 
-    severity = Column(
-        Integer,
-        autoincrement=False)
+    severity = Column(Integer)
 
-    trouble_ticket = Column(UnicodeText())
+    trouble_ticket = Column(Unicode(255))
     
     status = Column(Unicode(16),
         nullable=False,
         server_default=DefaultClause('None', for_update=False))
 
-    occurrences = Column(Integer())
+    occurrences = Column(Integer)
 
-    # Date de XXX à quoi correspond cette date ???
     timestamp_active = Column(DateTime(timezone=False))
 
-    events = relation('Event', secondary=EVENTS_EVENTSAGGREGATE_TABLE,
-        lazy='dynamic')
+    events = relation('Event', lazy='dynamic',
+        secondary=EVENTS_EVENTSAGGREGATE_TABLE)
+
+    cause = relation('Event',
+        primaryjoin=idcause == Event.idevent)
 
 
     def __init__(self, **kwargs):
@@ -117,4 +117,5 @@ class EventsAggregate(DeclarativeBase, object):
         minutes, seconds = divmod(date.seconds, 60)
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
+
 

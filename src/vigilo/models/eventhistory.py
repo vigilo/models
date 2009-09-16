@@ -8,9 +8,10 @@ from sqlalchemy.types import Integer, UnicodeText, Unicode, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
 from datetime import datetime
+
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-
+__all__ = ('EventHistory', )
 
 class EventHistory(DeclarativeBase, object):
     """
@@ -48,7 +49,7 @@ class EventHistory(DeclarativeBase, object):
 
     timestamp = Column(DateTime(timezone=False), default=datetime.now())
 
-    username = Column(UnicodeText())
+    username = Column(Unicode(255))
 
 
     def __init__(self, **kwargs):

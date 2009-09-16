@@ -8,19 +8,26 @@ from os import path, environ
 import sys
 import nose
 
-__all__ = ['ModelTest']
+__all__ = ['ModelTest', 'setup_db', 'teardown_db']
 
 metadata.bind = DBSession.bind
 
 #Create an empty database before we start our tests for this module
-def setup():
+def setup_db():
     """Function called by nose on module load"""
     metadata.create_all()
     
 #Teardown that database 
-def teardown():
+def teardown_db():
     """Function called by nose after all tests in this module ran"""
     metadata.drop_all()
+
+
+def setup():
+    setup_db()
+
+def teardown():
+    teardown_db()
 
 class ModelTest(object):
     """Base unit test case for the models."""
