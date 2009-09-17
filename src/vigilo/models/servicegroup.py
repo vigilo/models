@@ -25,11 +25,11 @@ class ServiceGroup(DeclarativeBase, object):
         ForeignKey(bdd_basename + u'group.name'),
         primary_key=True, nullable=False)
 
-#    services = relation('Service', backref='servicegroups', uselist=True,
-#        primaryjoin='ServiceGroup.hostname == Service.name')
+    services = relation('Service', backref='servicegroups', uselist=True,
+        primaryjoin='ServiceGroup.servicename == Service.name')
 
-#    groups = relation('Group', backref='servicegroups', uselist=True,
-#        primaryjoin='ServiceGroup.groupname == Group.name')
+    groups = relation('Group', backref='servicegroups', uselist=True,
+        primaryjoin='ServiceGroup.groupname == Group.name')
 
 
     def __init__(self, **kwargs):

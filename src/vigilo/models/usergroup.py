@@ -34,8 +34,10 @@ class UserGroup(DeclarativeBase, object):
         Unicode(255),
         primary_key=True)
 
+    # XXX Rum ne supporte pas encore très bien le lazy loading de SQLAlchemy
+    # Cf. http://python-rum.org/ticket/107
     users = relation('User', secondary=USER_GROUP_TABLE,
-        backref='usergroups', lazy='dynamic')
+        backref='usergroups', )#lazy='dynamic')
 
     def __init__(self, **kwargs):
         DeclarativeBase.__init__(self, **kwargs)

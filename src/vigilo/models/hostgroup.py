@@ -25,11 +25,11 @@ class HostGroup(DeclarativeBase, object):
         ForeignKey(bdd_basename + u'group.name'),
         primary_key=True, nullable=False)
 
-#    hosts = relation('Host', backref='hostgroups', uselist=True,
-#        primaryjoin='HostGroup.hostname == Host.name')
+    hosts = relation('Host', backref='hostgroups', uselist=True,
+        primaryjoin='HostGroup.hostname == Host.name')
 
-#    groups = relation('Group', backref='hostgroups', uselist=True,
-#        primaryjoin='HostGroup.groupname == Group.name')
+    groups = relation('Group', backref='hostgroups', uselist=True,
+        primaryjoin='HostGroup.groupname == Group.name')
 
 
     def __init__(self, **kwargs):
