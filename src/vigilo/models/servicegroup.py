@@ -6,7 +6,6 @@ from __future__ import absolute_import
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
-from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -26,8 +25,12 @@ class ServiceGroup(DeclarativeBase, object):
         ForeignKey(bdd_basename + u'group.name'),
         primary_key=True, nullable=False)
 
-#    service = relation('Service', backref='service_groups')
-#    group = relation('Group', backref='services')
+#    services = relation('Service', backref='servicegroups', uselist=True,
+#        primaryjoin='ServiceGroup.hostname == Service.name')
+
+#    groups = relation('Group', backref='servicegroups', uselist=True,
+#        primaryjoin='ServiceGroup.groupname == Group.name')
+
 
     def __init__(self, **kwargs):
         """Initialise un groupe de services."""
@@ -35,22 +38,4 @@ class ServiceGroup(DeclarativeBase, object):
 
     def __unicode__(self):
         return u'%s - %s' % (self.groupname, self.servicename)
-
-
-# Rum metadata.
-from rum import fields
-from .service import Service
-from .group import Group
-
-fields.FieldFactory.fields(
-    ServiceGroup, (
-        fields.Relation('groupname', Group, 'groupname',
-            required=True, searchable=True, sortable=True,
-            label=l_('Group name')),
-
-        fields.Relation('servicename', Service, 'servicename',
-            required=True, searchable=True, sortable=True,
-            label=l_('Service name')),
-    )
-)
 

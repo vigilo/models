@@ -6,7 +6,6 @@ from __future__ import absolute_import
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
-from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 from .session import DBSession
@@ -48,26 +47,4 @@ class UserGroup(DeclarativeBase, object):
     def by_group_name(cls, group_name):
         """Return the group object whose group name is ``group_name``."""
         return DBSession.query(cls).filter(cls.group_name == group_name).first()
-
-
-# Rum metadata.
-from rum import fields
-from .user import User
-from .permission import Permission
-
-fields.FieldFactory.fields(
-    UserGroup, (
-        fields.Unicode('group_name',
-            required=True, searchable=True, sortable=True,
-            label=l_('Usergroup name')),
-
-        fields.Collection('users',
-            other=User, remote_name='user_name',
-            label=l_('Users')),
-
-        fields.Collection('permissions',
-            other=Permission, remote_name='permission_name',
-            label=l_('Permissions')),
-    )
-)
 

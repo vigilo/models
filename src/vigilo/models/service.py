@@ -7,7 +7,6 @@ from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import UnicodeText, Unicode
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
-from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 from .session import DBSession
@@ -61,28 +60,4 @@ class Service(DeclarativeBase):
         @rtype: L{Service}
         """
         return DBSession.query(cls).filter(cls.name == servicename).first()
-
-
-# Rum metadata.
-from rum import fields
-from .tag import Tag
-
-fields.FieldFactory.fields(
-    Service, (
-        fields.Unicode('name',
-            required=True, searchable=True, sortable=True,
-            label=l_('Service name')),
-
-        fields.Unicode('servicetype',
-            required=True, searchable=True, sortable=True,
-            label=l_('Service type')),
-
-        fields.UnicodeText('command',
-            required=True, searchable=True,
-            label=l_('Command to check service')),
-
-        fields.List('tags', Tag, 'name',
-            label=l_('Tags'))
-    )
-)
 

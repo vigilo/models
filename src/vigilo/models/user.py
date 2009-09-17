@@ -7,7 +7,6 @@ from sqlalchemy.orm import synonym, relation, mapper
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, UnicodeText
 from sqlalchemy.sql.expression import ClauseElement
-from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
@@ -189,37 +188,4 @@ class User(DeclarativeBase, object):
 
     language = synonym('_language', descriptor=property(_get_language,
                                                         _set_language))
-
-
-# Rum metadata.
-from rum import fields
-from .customgraphview import CustomGraphView
-from .usergroup import UserGroup
-
-fields.FieldFactory.fields(
-    User, (
-        fields.Unicode('user_name',
-            searchable=True, sortable=True, required=True,
-            label=l_('Username')),
-
-        fields.Password('password', required=True,
-            label=l_('Password')),
-
-        fields.Email('email',
-            searchable=True, sortable=True, required=True,
-            label=l_('Email')),
-
-        fields.Unicode('language',
-            searchable=True, sortable=True, required=True,
-            label=l_('Language')),
-
-        fields.Collection('customgraphviews', other=CustomGraphView,
-            remote_name='viewname',
-            label=l_('Custom graph views')),
-
-        fields.Collection('usergroups', other=UserGroup,
-            remote_name='usergroups',
-            label=l_('User groups')),
-    )
-)
 

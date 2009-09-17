@@ -6,7 +6,6 @@ from __future__ import absolute_import
 from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation, backref
-from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 from .session import DBSession
@@ -77,25 +76,4 @@ class Group(DeclarativeBase, object):
         @rtype: Une instance de la classe L{Group}
         """
         return DBSession.query(cls).filter(cls.name == groupname).first()
-
-
-# Rum metadata.
-from rum import fields
-from .permission import Permission
-
-fields.FieldFactory.fields(
-    Group, (
-        fields.Unicode('name',
-            required=True, searchable=True, sortable=True,
-            label=l_('Group name')),
-
-        fields.Collection('children',
-            other=Group, remote_name='children',
-            label=l_('Children')),
-
-        fields.Collection('permissions',
-            other=Permission, remote_name='permission_name',
-            label=l_('Permissions')),
-    )
-)
 

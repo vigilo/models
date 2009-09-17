@@ -6,7 +6,6 @@ from __future__ import absolute_import
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
-from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 
@@ -73,30 +72,4 @@ class Tag(DeclarativeBase, object):
         @rtype: C{unicode}
         """
         return self.content
-
-
-# Rum metadata.
-from rum import fields
-from .host import Host
-from .service import Service
-
-fields.FieldFactory.fields(
-    Tag, (
-        fields.Unicode('name',
-            required=True, searchable=True, sortable=True,
-            label=l_('Tag name')),
-
-        fields.Unicode('value',
-            required=True, searchable=True, sortable=True,
-            label=l_('Tag value')),
-
-        fields.Collection('hosts',
-            other=Host, remote_name='name',
-            label=l_('Tagged hosts')),
-
-        fields.Collection('services',
-            other=Service, remote_name='name',
-            label=l_('Tagged services')),
-    )
-)
 

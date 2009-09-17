@@ -6,7 +6,6 @@ from __future__ import absolute_import
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
-from pylons.i18n import lazy_ugettext as l_
 
 from .session import DBSession
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
@@ -58,24 +57,4 @@ class Permission(DeclarativeBase, object):
         """Return the permission object whose name is ``perm_name``."""
         return DBSession.query(cls).filter(
             cls.permission_name == perm_name).first()
-
-
-# Rum metadata.
-from rum import fields
-from .usergroup import UserGroup
-from .group import Group
-
-fields.FieldFactory.fields(
-    Permission, (
-        fields.Unicode('permission_name',
-            required=True, searchable=True, sortable=True,
-            label=l_('Permission name')),
-
-        fields.Collection('usergroups', UserGroup, 'group_name',
-            label=l_('Usergroups')),
-
-        fields.Collection('groups', Group, 'name',
-            label=l_('Groups of hosts/services')),
-    )
-)
 

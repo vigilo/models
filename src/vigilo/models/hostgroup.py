@@ -6,7 +6,6 @@ from __future__ import absolute_import
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
-from pylons.i18n import lazy_ugettext as l_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -26,8 +25,12 @@ class HostGroup(DeclarativeBase, object):
         ForeignKey(bdd_basename + u'group.name'),
         primary_key=True, nullable=False)
 
-#    host = relation('Host', backref='host_groups')
-#    group = relation('Group', backref='hosts')
+#    hosts = relation('Host', backref='hostgroups', uselist=True,
+#        primaryjoin='HostGroup.hostname == Host.name')
+
+#    groups = relation('Group', backref='hostgroups', uselist=True,
+#        primaryjoin='HostGroup.groupname == Group.name')
+
 
     def __init__(self, **kwargs):
         """Initialise un groupe d'hôtes."""
@@ -35,22 +38,4 @@ class HostGroup(DeclarativeBase, object):
 
     def __unicode__(self):
         return u'%s - %s' % (self.groupname, self.hostname)
-
-
-# Rum metadata.
-from rum import fields
-from .host import Host
-from .group import Group
-
-fields.FieldFactory.fields(
-    HostGroup, (
-        fields.Relation('groupname', Group, 'name',
-            required=True, searchable=True, sortable=True,
-            label=l_('Group name')),
-
-        fields.Relation('hostname', Host, 'name',
-            required=True, searchable=True, sortable=True,
-            label=l_('Hostname')),
-    )
-)
 

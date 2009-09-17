@@ -14,13 +14,11 @@ class ServiceTopo(DeclarativeBase):
     __tablename__ = bdd_basename + 'servicetopo'
 
     servicename = Column(
-        UnicodeText(),
-        ForeignKey(bdd_basename + \
-                u'service.name'),
+        UnicodeText,
+        ForeignKey(bdd_basename + u'service.name'),
         primary_key=True, nullable=False)
 
     function = Column(
-        UnicodeText(),
-        default=u'',
-        nullable=False)
+        UnicodeText,
+        default=u'', nullable=False)
 
