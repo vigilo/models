@@ -21,10 +21,6 @@ setup(name='vigilo-models',
             # I'd like to prevent the zope stuff from leaking in, but couldn't.
             'zope.sqlalchemy',
             'vigilo-common',
-            # For pylons.i18n used in rum form metadata
-            'Pylons',
-            # The rum form metadata should be moved, too.
-            'rum',
             ],
         extras_require ={
             'tests': tests_require
