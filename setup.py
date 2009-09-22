@@ -17,6 +17,8 @@ setup(name='vigilo-models',
         license='http://www.gnu.org/licenses/gpl-2.0.html',
         long_description='Definition of the vigilo data model, db access.',
         install_requires=[
+            'setuptools',
+            'psycopg2',
             'SQLAlchemy',
             # I'd like to prevent the zope stuff from leaking in, but couldn't.
             'zope.sqlalchemy',
