@@ -72,7 +72,7 @@ class ModelTest(object):
         for key, value in self.attrs.iteritems():
             assert_equals(getattr(obj, key), value)
 
-def runtests():
+def runtests(args=[]):
     """This is the method called when running unit tests."""
     # XXX hard-coded path.
     sys.argv[1:0] = ['--cover-inclusive',
