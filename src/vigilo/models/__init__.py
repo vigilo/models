@@ -21,9 +21,11 @@ from .hostgroup import HostGroup
 from .host import Host
 from .perfdatasource import PerfDataSource
 from .servicegroup import ServiceGroup
-from .servicehautniveau import ServiceHautNiveau
+from .highlevelservice import HighLevelService
+from .highlevelservicedep import HighLevelServiceDepLowLevel, \
+                                HighLevelServiceDepHighLevel
+from .serviceweight import ServiceWeight
 from .service import Service
-from .servicetopo import ServiceTopo
 from .graphtogroups import GraphToGroups
 from .version import Version
 from .state import State

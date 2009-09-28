@@ -14,6 +14,9 @@ from .session import DBSession
 __all__ = ('Service', )
 
 class Service(DeclarativeBase):
+    """
+    Service de bas niveau (service technique).
+    """
 
     __tablename__ = bdd_basename + 'service'
 
@@ -23,15 +26,18 @@ class Service(DeclarativeBase):
 
     servicetype = Column(
         Unicode(255),
-        default=u'0',
-        nullable=False)
+        default=u'0', nullable=False)
 
     command = Column(
-        UnicodeText(),
-        default=u'',
-        nullable=False)
+        UnicodeText,
+        default=u'', nullable=False)
 
     groups = association_proxy('service_groups', 'groups')
+
+    @property
+    def dependancies(self):
+        return []
+
 
 
     def __init__(self, **kwargs):
@@ -57,7 +63,7 @@ class Service(DeclarativeBase):
         @param servicename: Nom du service voulu.
         @type servicename: C{unicode}
         @return: Le service demandé.
-        @rtype: L{Service}
+        @rtype: L{Service} ou None
         """
         return DBSession.query(cls).filter(cls.name == servicename).first()
 
