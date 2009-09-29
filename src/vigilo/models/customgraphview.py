@@ -4,10 +4,8 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation
 
 from vigilo.models.vigilo_bdd_config import bdd_basename, DeclarativeBase
-from vigilo.models.session import DBSession
 
 __all__ = ('CustomGraphView', )
 
@@ -51,5 +49,5 @@ class CustomGraphView(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Initialise une vue."""   
-        DeclarativeBase.__init__(self, **kwargs)
+        super(CustomGraphView, self).__init__(**kwargs)
 

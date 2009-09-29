@@ -62,7 +62,7 @@ class Tag(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Initialise un tag."""
-        DeclarativeBase.__init__(self, **kwargs)
+        super(Tag, self).__init__(**kwargs)
 
     def __unicode__(self):
         """

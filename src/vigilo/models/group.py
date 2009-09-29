@@ -38,6 +38,7 @@ class Group(DeclarativeBase, object):
         ForeignKey(bdd_basename + 'group.name'),
         index=True)
 
+    # XXX We should make sure it's impossible to build cyclic graphs.
     children = relation('Group', backref=backref('parent', remote_side=[name]))
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
@@ -51,7 +52,7 @@ class Group(DeclarativeBase, object):
         @param kwargs: Un dictionnaire contenant les informations sur le groupe.
         @type kwargs: C{dict}
         """
-        DeclarativeBase.__init__(self, **kwargs)
+        super(Group, self).__init__(**kwargs)
 
     def __unicode__(self):
         """

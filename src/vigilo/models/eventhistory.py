@@ -15,13 +15,13 @@ __all__ = ('EventHistory', )
 
 class EventHistory(DeclarativeBase, object):
     """
-    @param type_action: Le type d'action effectué, peut être 'Nagios update state',
-                        'Acknowlegement change state', 'New occurence', 'User comment', 'Ticket change',
-                        'Oncall' ou 'Forced state'
-    @param idevent: Identifiant de l'évènement
-    @param value: Nouvelle sévérité
-    @param text: Commentaire sur l'action effectuée
-    @param username: Nom d'utilisateur de la personne effectuant l'action
+    @ivar type_action: Le type d'action effectue, peut etre
+        'Nagios update state', 'Acknowlegement change state', 'New occurence',
+        'User comment', 'Ticket change', 'Oncall' ou 'Forced state'.
+    @ivar idevent: Identifiant de l'evenement.
+    @ivar value: Nouvelle severite.
+    @ivar text: Commentaire sur l'action effectuee.
+    @ivar username: Nom d'utilisateur de la personne effectuant l'action.
     """
 
     __tablename__ = bdd_basename + 'event_history'
@@ -54,5 +54,5 @@ class EventHistory(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Initialise un évènement de l'historique des modifications."""
-        DeclarativeBase.__init__(self, **kwargs)
+        super(EventHistory, self).__init__(**kwargs)
 

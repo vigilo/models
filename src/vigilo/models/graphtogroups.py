@@ -10,7 +10,7 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 __all__ = ('GraphToGroups', )
 
-class GraphToGroups(DeclarativeBase):
+class GraphToGroups(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'graphtogroups'
 
     graphname = Column(
@@ -22,4 +22,7 @@ class GraphToGroups(DeclarativeBase):
         ForeignKey(bdd_basename + \
                 'graphgroup.name'),
         primary_key=True, nullable=False)
+
+    def __init__(self, **kwargs):
+        super(GraphToGroups, self).__init__(**kwargs)
 

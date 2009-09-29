@@ -46,5 +46,5 @@ class BoardViewFilter(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Initialise un filtre."""
-        DeclarativeBase.__init__(self, **kwargs)
+        super(BoardViewFilter, self).__init__(**kwargs)
 

@@ -102,7 +102,7 @@ class HighLevelService(DeclarativeBase, object):
 
 
     def __init__(self, **kwargs):
-        DeclarativeBase.__init__(self, **kwargs)
+        super(HighLevelService, self).__init__(**kwargs)
 
     def __unicode__(self):
         """Représentation plus sympathique de l'objet."""

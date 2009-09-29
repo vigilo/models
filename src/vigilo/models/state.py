@@ -52,5 +52,5 @@ class State(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Intiialise un état."""
-        DeclarativeBase.__init__(self, **kwargs)
+        super(State, self).__init__(**kwargs)
 

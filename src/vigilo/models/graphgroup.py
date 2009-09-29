@@ -10,11 +10,14 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 __all__ = ('GraphGroup', )
 
-class GraphGroup(DeclarativeBase):
+class GraphGroup(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'graphgroup'
 
     name = Column(
             UnicodeText,
             primary_key=True)
     parent = Column(Integer, nullable=True)
+
+    def __init__(self, **kwargs):
+        super(GraphGroup, self).__init__(**kwargs)
 

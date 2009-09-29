@@ -56,7 +56,7 @@ class ModelTest(object):
         """Tear down the fixture used to test the model."""
         del self.obj
         DBSession.rollback()
-        DBSession.clear()
+        DBSession.expunge_all()
 
     def do_get_dependencies(self):
         """

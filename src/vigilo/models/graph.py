@@ -27,7 +27,7 @@ class Graph(DeclarativeBase, object):
 
 
     def __init__(self, **kwargs):
-        DeclarativeBase.__init__(self, **kwargs)
+        super(Graph, self).__init__(**kwargs)
 
     def __unicode__(self):
         return self.name

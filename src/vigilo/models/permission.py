@@ -47,7 +47,7 @@ class Permission(DeclarativeBase, object):
                       backref='permissions', lazy='dynamic')
 
     def __init__(self, **kwargs):
-        DeclarativeBase.__init__(self, **kwargs)
+        super(Permission, self).__init__(**kwargs)
 
     def __unicode__(self):
         return self.permission_name

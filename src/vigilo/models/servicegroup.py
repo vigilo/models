@@ -34,7 +34,7 @@ class ServiceGroup(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Initialise un groupe de services."""
-        DeclarativeBase.__init__(self, **kwargs)
+        super(ServiceGroup, self).__init__(**kwargs)
 
     def __unicode__(self):
         return u'%s - %s' % (self.groupname, self.servicename)

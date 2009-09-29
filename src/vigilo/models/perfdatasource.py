@@ -8,8 +8,9 @@ from sqlalchemy.types import Unicode, UnicodeText, Float
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
+__all__ = ('PerfDataSource', )
 
-class PerfDataSource(DeclarativeBase):
+class PerfDataSource(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'perfdatasource'
 
@@ -40,4 +41,6 @@ class PerfDataSource(DeclarativeBase):
         Float(precision=None, asdecimal=False),
         default=0.0, nullable=False)
 
+    def __init__(self, **kwargs):
+        super(PerfDataSource, self).__init__(**kwargs)
 

@@ -8,9 +8,9 @@ from sqlalchemy.types import Integer, UnicodeText
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
+__all__ = ('Version', )
 
-
-class Version(DeclarativeBase):
+class Version(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'version'
 
     name = Column(
@@ -21,6 +21,6 @@ class Version(DeclarativeBase):
             nullable=False)
 
     def __init__(self, **kwargs):
-        DeclarativeBase.__init__(self, **kwargs)
+        super(Version, self).__init__(**kwargs)
 
 

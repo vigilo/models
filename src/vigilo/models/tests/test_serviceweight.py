@@ -3,7 +3,6 @@
 from vigilo.models import ServiceWeight, Host, Service
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
-from nose.tools import assert_true
 
 class TestServiceWeight(ModelTest):
     """

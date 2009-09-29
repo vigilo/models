@@ -4,7 +4,6 @@ from vigilo.models import Tag, Host, Service
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_equals
-import re
 
 class TestEvents(ModelTest):
     """Test de la table Tag"""

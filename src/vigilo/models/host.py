@@ -13,7 +13,7 @@ from .session import DBSession
 
 __all__ = ('Host', )
 
-class Host(DeclarativeBase):
+class Host(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'host'
 
     name = Column(
@@ -51,7 +51,7 @@ class Host(DeclarativeBase):
 
     def __init__(self, **kwargs):
         """Initialise un hôte."""
-        DeclarativeBase.__init__(self, **kwargs)
+        super(Host, self).__init__(**kwargs)
 
     def __unicode__(self):
         """

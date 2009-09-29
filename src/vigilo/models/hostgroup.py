@@ -34,7 +34,7 @@ class HostGroup(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Initialise un groupe d'hôtes."""
-        DeclarativeBase.__init__(self, **kwargs)
+        super(HostGroup, self).__init__(**kwargs)
 
     def __unicode__(self):
         return u'%s - %s' % (self.groupname, self.hostname)

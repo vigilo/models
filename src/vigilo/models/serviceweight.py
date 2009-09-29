@@ -40,7 +40,7 @@ class ServiceWeight(DeclarativeBase, object):
     )
 
     def __init__(self, **kwargs):
-        DeclarativeBase.__init__(self, **kwargs)
+        super(ServiceWeight, self).__init__(**kwargs)
 
     @classmethod
     def by_host_service_name(cls, hostname, servicename):
