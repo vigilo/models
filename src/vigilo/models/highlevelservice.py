@@ -3,8 +3,8 @@
 """Modèle pour la table HighLevelService."""
 from __future__ import absolute_import
 
-from sqlalchemy import ForeignKey, Column
-from sqlalchemy.orm import relation
+from sqlalchemy import Column
+from sqlalchemy.orm import relation, aliased
 from sqlalchemy.types import Unicode, UnicodeText, Integer
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -12,7 +12,8 @@ from vigilo.models.session import DBSession
 
 __all__ = ('HighLevelService', )
 
-from .highlevelservicedep import HighLevelServiceDep
+from .highlevelservicedep import HighLevelServiceDep, \
+                                    HighLevelServiceDepHighLevel
 
 class HighLevelService(DeclarativeBase, object):
     """
@@ -41,18 +42,8 @@ class HighLevelService(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'highlevelservice'
 
-    hostname = Column(
-        Unicode(255),
-        ForeignKey(
-            bdd_basename + u'host.name'
-        ),
-        primary_key=True, nullable=False)
-
     servicename = Column(
         Unicode(255),
-        ForeignKey(
-            bdd_basename + u'service.name'
-        ),
         primary_key=True)
 
     message = Column(
@@ -72,12 +63,45 @@ class HighLevelService(DeclarativeBase, object):
 
     dependancies = relation('HighLevelServiceDep',
         primaryjoin= \
-            hostname == HighLevelServiceDep.hostname and \
             servicename == HighLevelServiceDep.servicename,
         uselist=True)
 
     @property
+    def higher_services(self):
+        """
+        Renvoie la liste des L{HighLevelService} qui dépendent de nous.
+        
+        @return: Services de haut niveau qui dépendent de cette instance.
+        @rtype: Liste de L{HighLevelService}.
+        """
+        local = aliased(HighLevelService)
+        distant = aliased(HighLevelService)
+        higher = DBSession.query(distant) \
+                    .join(
+                        (
+                            HighLevelServiceDepHighLevel,
+                            HighLevelServiceDepHighLevel.servicename == \
+                            distant.servicename
+                        ),
+                        (
+                            local,
+                            local.servicename == \
+                            HighLevelServiceDepHighLevel.service_dep
+                        ),
+                    ) \
+                    .filter(HighLevelServiceDepHighLevel.service_dep == \
+                            self.servicename)
+        return higher.all()
+
+    @property
     def weight(self):
+        """
+        Renvoie le poids courant de ce service de haut niveau.
+        Le poids est calculé en fonction des poids courants des dépendances.
+
+        @return: Poids courant de l'instance.
+        @rtype: C{int}
+        """
         # Opération '+' : le poids vaut la somme des poids des dépendances.
         if self.op_dep == u'+':
             result = 0
@@ -109,20 +133,17 @@ class HighLevelService(DeclarativeBase, object):
         return self.servicename
 
     @classmethod
-    def by_host_service_name(cls, hostname, servicename):
+    def by_service_name(cls, servicename):
         """
-        Renvoie le L{HighLevelService} dont le nom d'hôte virtuel
-        est L{hostname} et le nom de service virtuel est L{servicename}.
-        
-        @param hostname: Nom de l'hôte virtuel voulu.
-        @type hostname: C{unicode}
+        Renvoie le L{HighLevelService} appelé L{servicename}.
+
         @param servicename: Nom du service virtuel voulu.
         @type servicename: C{unicode}
         @return: Le service demandé.
         @rtype: L{Service} ou None
         """
-        return DBSession.query(cls).filter(cls.hostname == hostname) \
-            .filter(cls.servicename == servicename).first()
+        return DBSession.query(cls).filter(
+            cls.servicename == servicename).first()
 
     def get_error_message(self):
         """

@@ -20,7 +20,6 @@ class TestHighLevelServiceDepLowLevel(ModelTest):
         """Generate some data for the test"""
         # Le service de haut niveau pour lequel on ajoute une dépendance.
         hls = HighLevelService(
-            hostname=u'virtual',
             servicename=u'virtual',
             message=u'ouch!',
             seuil=3,
@@ -51,7 +50,6 @@ class TestHighLevelServiceDepLowLevel(ModelTest):
         DBSession.flush()
 
         return dict(
-            hostname=hls.hostname,
             servicename=hls.servicename,
             host_dep=host.name,
             service_dep=service.name)
@@ -70,7 +68,6 @@ class TestHighLevelServiceDepHighLevel(ModelTest):
         """Generate some data for the test"""
         # Le service de haut niveau pour lequel on ajoute une dépendance.
         hls1 = HighLevelService(
-            hostname=u'virtual',
             servicename=u'virtual',
             message=u'ouch!',
             seuil=3,
@@ -80,7 +77,6 @@ class TestHighLevelServiceDepHighLevel(ModelTest):
 
         # La dépendance en question.
         hls2 = HighLevelService(
-            hostname=u'virtual_dep',
             servicename=u'virtual_dep',
             message=u'ouch!',
             seuil=3,
@@ -89,9 +85,7 @@ class TestHighLevelServiceDepHighLevel(ModelTest):
         DBSession.flush()
 
         return dict(
-            hostname=hls1.hostname,
             servicename=hls1.servicename,
-            host_dep=hls2.hostname,
             service_dep=hls2.servicename)
 
     def __init__(self):

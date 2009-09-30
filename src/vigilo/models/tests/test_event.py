@@ -12,7 +12,6 @@ class TestEvent(ModelTest):
 
     klass = Event
     attrs = {
-        'idevent': u'foo',
         'timestamp': datetime.now(),
         'hostname': u'monhost',
         'active': True,

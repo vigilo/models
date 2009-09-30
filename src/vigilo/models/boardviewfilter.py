@@ -6,7 +6,6 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, UnicodeText
 
 from vigilo.models.vigilo_bdd_config import bdd_basename, DeclarativeBase
-from vigilo.models.session import DBSession
 
 __all__ = ('BoardViewFilter', )
 

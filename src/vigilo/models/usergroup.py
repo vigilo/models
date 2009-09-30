@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.types import Unicode
-from sqlalchemy.orm import relation
+from sqlalchemy.orm import relation, backref
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
 from .session import DBSession
@@ -34,13 +34,12 @@ class UserGroup(DeclarativeBase, object):
         Unicode(255),
         primary_key=True)
 
-    # XXX Rum ne supporte pas encore très bien le lazy loading de SQLAlchemy
-    # Cf. http://python-rum.org/ticket/107
     users = relation('User', secondary=USER_GROUP_TABLE,
-        backref='usergroups', )#lazy='dynamic')
+        backref='usergroups')
+#        backref=backref('usergroups', lazy='dynamic'), lazy='dynamic')
 
     def __init__(self, **kwargs):
-        DeclarativeBase.__init__(self, **kwargs)
+        super(UserGroup, self).__init__(**kwargs)
 
     def __unicode__(self):
         return self.group_name

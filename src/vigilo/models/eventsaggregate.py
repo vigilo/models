@@ -15,14 +15,25 @@ __all__ = ('EventsAggregate', )
 
 EVENTS_EVENTSAGGREGATE_TABLE = Table(
     bdd_basename + 'eventsaggregates2events', metadata,
-    Column('idevent', Unicode(255), ForeignKey(
+    Column('idevent', Integer, ForeignKey(
                 bdd_basename + 'event.idevent',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
     Column('idaggregate', Integer, ForeignKey(
                 bdd_basename + 'eventsaggregate.idaggregate',
                 onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True)
+            primary_key=True, autoincrement=False),
+)
+
+EVENTSAGGREGATE_HLS_TABLE = Table(
+    bdd_basename + 'eventsaggregate2hls', metadata,
+    Column('hls_servicename', Unicode(255),
+            ForeignKey(bdd_basename + 'highlevelservice.servicename'),
+            primary_key=True),
+    Column('idaggregate', Integer, ForeignKey(
+                bdd_basename + 'eventsaggregate.idaggregate',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False),
 )
 
 
@@ -52,15 +63,20 @@ class EventsAggregate(DeclarativeBase, object):
         primary_key=True, autoincrement=True)
 
     idcause = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + 'event.idevent'))
+        Integer,
+        ForeignKey(
+            bdd_basename + 'event.idevent',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        autoincrement=False, nullable=False
+    )
 
     impact = Column(Integer)
 
     severity = Column(Integer)
 
     trouble_ticket = Column(Unicode(255))
-    
+
     status = Column(Unicode(16),
         nullable=False,
         server_default=DefaultClause('None', for_update=False))
@@ -69,20 +85,21 @@ class EventsAggregate(DeclarativeBase, object):
 
     timestamp_active = Column(DateTime(timezone=False))
 
-    events = relation('Event', lazy='dynamic',
+    events = relation('Event', #lazy='dynamic',
         secondary=EVENTS_EVENTSAGGREGATE_TABLE)
 
     cause = relation('Event',
         primaryjoin=idcause == Event.idevent)
+
+    highlevel = relation('HighLevelService', #lazy='dynamic',
+        secondary=EVENTSAGGREGATE_HLS_TABLE)
 
 
     def __init__(self, **kwargs):
         """
         Initialise un agrégat d'évènements.
         """
-        # Empêche la création d'un agrégat lorsque tous les champs
-        # obligatoires ne sont pas remplis.
-        DeclarativeBase.__init__(self, **kwargs)
+        super(EventsAggregate, self).__init__(**kwargs)
 
     def get_date(self, element):
         """

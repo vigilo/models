@@ -27,14 +27,15 @@ class TestEventHistory(ModelTest):
             mainip=u'127.0.0.1',
             port=u'1234',
             ))
+
         DBSession.add(Service(
             name=u'monservice',
             servicetype=u'foo',
             command=u'halt',
             ))
         DBSession.flush()
+
         DBSession.add(Event(
-            idevent=u'foo',
             timestamp=datetime.now(),
             hostname=u'monhost',
             servicename=u'monservice',
@@ -43,5 +44,6 @@ class TestEventHistory(ModelTest):
             message=u'Foo',
             ))
         DBSession.flush()
+
         return dict(idevent = DBSession.query(Event.idevent)[0].idevent)
 

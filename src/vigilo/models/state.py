@@ -5,9 +5,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, DefaultClause, ForeignKey
-from sqlalchemy.types import Integer, UnicodeText, Text, DateTime, Unicode
-
-from datetime import datetime
+from sqlalchemy.types import Integer, Text, DateTime, Unicode
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -32,7 +30,7 @@ class State(DeclarativeBase, object):
 
     ip = Column(Unicode(15))
 
-    timestamp = Column(DateTime(timezone=False))
+    timestamp = Column(DateTime(timezone=False), nullable=False)
 
     statename = Column(
         Unicode(16),

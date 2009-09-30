@@ -4,14 +4,15 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import Unicode, UnicodeText, Text, DateTime
-
+from sqlalchemy.types import Unicode, UnicodeText, Text, DateTime, Integer
 from sqlalchemy.databases.mysql import MSBoolean
 
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from .session import DBSession
 
+__all__ = ('Event', )
 
 class Event(DeclarativeBase, object):
     """
@@ -32,9 +33,10 @@ class Event(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'event'
 
     idevent = Column(
-        Unicode(255),
+        Integer,
         primary_key=True,
-        nullable=False)
+        nullable=False,
+        autoincrement=True)
 
     timestamp = Column(DateTime(timezone=False))
 
@@ -48,11 +50,11 @@ class Event(DeclarativeBase, object):
         index=True, nullable=True)
 
     servicename = Column(
-        UnicodeText,
+        Unicode(255),
         ForeignKey(bdd_basename + 'service.name'),
         index=True, nullable=True)
 
-    active = Column(MSBoolean(), default='True', nullable=False)
+    active = Column(MSBoolean, default='True', nullable=False)
 
     state = Column(Unicode(16))
 
@@ -60,14 +62,11 @@ class Event(DeclarativeBase, object):
         Text(length=None, convert_unicode=True, assert_unicode=None),
         nullable=False)
 
-
     def __init__(self, **kwargs):
         """
         Initialise un évènement brut ou corrélé.
         """
-        # On empêche la création d'un évènement dans lequel les champs
-        # obligatoires ne seraient pas renseignés.
-        DeclarativeBase.__init__(self, **kwargs)
+        super(Event, self).__init__(**kwargs)
 
     def get_date(self, element):
         """

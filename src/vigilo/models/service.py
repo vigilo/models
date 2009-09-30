@@ -3,9 +3,8 @@
 """Modèle pour la table Service"""
 from __future__ import absolute_import
 
-from sqlalchemy import Table, Column, ForeignKey
+from sqlalchemy import Table, Column
 from sqlalchemy.types import UnicodeText, Unicode
-from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
@@ -13,7 +12,7 @@ from .session import DBSession
 
 __all__ = ('Service', )
 
-class Service(DeclarativeBase):
+class Service(DeclarativeBase, object):
     """
     Service de bas niveau (service technique).
     """
@@ -36,13 +35,21 @@ class Service(DeclarativeBase):
 
     @property
     def dependancies(self):
-        return []
+        """
+        Renvoie la liste des dépendances de ce service.
 
+        Pour un L{Service} technique (de bas niveau), il n'y a jamais de
+        dépendances, donc cette méthode renvoie une liste vide.
+        Cette méthode existe afin de permettre d'appeler C{obj.dependancies}
+        sur un service quelconque (de bas ou de haut niveau) sans provoquer
+        d'erreurs.
+        """
+        return []
 
 
     def __init__(self, **kwargs):
         """Initialise un service."""
-        DeclarativeBase.__init__(self, **kwargs)
+        super(Service, self).__init__(**kwargs)
 
     def __unicode__(self):
         """

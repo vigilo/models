@@ -26,6 +26,7 @@ class TestEventsAggregate(ModelTest):
             servicetype=u'foo',
             command=u'halt',
             ))
+
         DBSession.add(Host(
             name=u'monhost',
             checkhostcmd=u'halt -f',
@@ -36,8 +37,8 @@ class TestEventsAggregate(ModelTest):
             port=u'1234',
             ))
         DBSession.flush()
+
         DBSession.add(Event(
-            idevent=u'foo',
             timestamp=datetime.now(),
             hostname=u'monhost',
             servicename=u'monservice',
@@ -46,6 +47,7 @@ class TestEventsAggregate(ModelTest):
             message=u'Foo',
             ))
         DBSession.flush()
+
         return dict(idcause=u'foo')
 
     def test_get_date(self):

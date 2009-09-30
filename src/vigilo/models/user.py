@@ -3,10 +3,9 @@
 """Modèle pour la table User"""
 from __future__ import absolute_import
 
-from sqlalchemy.orm import synonym, relation, mapper
+from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, UnicodeText
-from sqlalchemy.sql.expression import ClauseElement
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
@@ -40,10 +39,10 @@ class User(DeclarativeBase, object):
         nullable=True,
         default=None)
 
-    # XXX Rum ne supporte pas encore très bien le lazy loading de SQLAlchemy
-    # Cf. http://python-rum.org/ticket/107
-    customgraphviews = relation('CustomGraphView', cascade='delete',
-        backref='user', )#lazy='dynamic')
+    # XXX En attendant que certains problèmes dans Rum soient résolus,
+    # le lazy loading devrait être évité.
+    customgraphviews = relation('CustomGraphView', cascade='delete',)
+        #backref=backref('user', lazy='dynamic'), lazy='dynamic')
 
 
     def __init__(self, **kwargs):
@@ -54,7 +53,7 @@ class User(DeclarativeBase, object):
             l'utilisateur.
         @type kwargs: C{dict}
         """
-        DeclarativeBase.__init__(self, **kwargs)
+        super(User, self).__init__(**kwargs)
 
     def __unicode__(self):
         """
