@@ -87,7 +87,8 @@ class TestHighLevelServiceEvenHigherServices(ModelTest):
     attrs = {
         'servicename': u'low',
         'message': u'ouch!',
-        'seuil': 3,
+        'seuil_warning': 60,
+        'seuil_critical': 80,
         'op_dep': u'+',
     }
 
@@ -127,7 +128,8 @@ class TestHighLevelServicePlus(ModelTest):
     attrs = {
         'servicename': u'virtual',
         'message': u'ouch!',
-        'seuil': 3,
+        'seuil_warning': 60,
+        'seuil_critical': 80,
         'op_dep': u'+',
     }
 
@@ -156,7 +158,8 @@ class TestHighLevelServiceOr(TestHighLevelServicePlus):
     attrs = {
         'servicename': u'virtual',
         'message': u'ouch!',
-        'seuil': 3,
+        'seuil_warning': 60,
+        'seuil_critical': 80,
         'op_dep': u'ou',
     }
 
@@ -182,7 +185,8 @@ class TestHighLevelServiceAnd(TestHighLevelServicePlus):
     attrs = {
         'servicename': u'virtual',
         'message': u'ouch!',
-        'seuil': 3,
+        'seuil_warning': 60,
+        'seuil_critical': 80,
         'op_dep': u'et',
     }
 

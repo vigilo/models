@@ -15,11 +15,11 @@ __all__ = ('EventsAggregate', )
 
 EVENTS_EVENTSAGGREGATE_TABLE = Table(
     bdd_basename + 'eventsaggregates2events', metadata,
-    Column('idevent', Integer, ForeignKey(
+    Column('idevent', Unicode(40), ForeignKey(
                 bdd_basename + 'event.idevent',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
-    Column('idaggregate', Integer, ForeignKey(
+    Column('idaggregate', Unicode(40), ForeignKey(
                 bdd_basename + 'eventsaggregate.idaggregate',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
@@ -30,7 +30,7 @@ EVENTSAGGREGATE_HLS_TABLE = Table(
     Column('hls_servicename', Unicode(255),
             ForeignKey(bdd_basename + 'highlevelservice.servicename'),
             primary_key=True),
-    Column('idaggregate', Integer, ForeignKey(
+    Column('idaggregate', Unicode(40), ForeignKey(
                 bdd_basename + 'eventsaggregate.idaggregate',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
@@ -59,16 +59,19 @@ class EventsAggregate(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'eventsaggregate'
 
     idaggregate = Column(
-        Integer,
-        primary_key=True, autoincrement=True)
+        Unicode(40),
+        primary_key=True,
+#        autoincrement=True,
+    )
 
     idcause = Column(
-        Integer,
+        Unicode(40),
         ForeignKey(
             bdd_basename + 'event.idevent',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        autoincrement=False, nullable=False
+#        autoincrement=False,
+        nullable=False,
     )
 
     impact = Column(Integer)
@@ -91,7 +94,8 @@ class EventsAggregate(DeclarativeBase, object):
     cause = relation('Event',
         primaryjoin=idcause == Event.idevent)
 
-    highlevel = relation('HighLevelService', #lazy='dynamic',
+    high_level_services = relation('HighLevelService',
+        #lazy='dynamic',
         secondary=EVENTSAGGREGATE_HLS_TABLE)
 
 

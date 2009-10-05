@@ -36,6 +36,7 @@ class TestEventHistory(ModelTest):
         DBSession.flush()
 
         DBSession.add(Event(
+            idevent=u'foo',
             timestamp=datetime.now(),
             hostname=u'monhost',
             servicename=u'monservice',

@@ -33,7 +33,7 @@ class Event(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'event'
 
     idevent = Column(
-        Integer,
+        Unicode(40),
         primary_key=True,
         nullable=False,
         autoincrement=True)

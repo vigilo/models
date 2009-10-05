@@ -12,6 +12,7 @@ class TestEventsAggregate(ModelTest):
 
     klass = EventsAggregate
     attrs = {
+        'idaggregate': u'bar',
         'status': u'OK',
         'timestamp_active': datetime.now(),
     }
@@ -39,6 +40,7 @@ class TestEventsAggregate(ModelTest):
         DBSession.flush()
 
         DBSession.add(Event(
+            idevent=u'foo',
             timestamp=datetime.now(),
             hostname=u'monhost',
             servicename=u'monservice',

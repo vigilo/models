@@ -37,7 +37,9 @@ class State(DeclarativeBase, object):
         nullable=False,
         server_default=DefaultClause('OK', for_update=False))
 
-    statetype = Column(Unicode(8),
+    # 'SOFT' ou 'HARD'
+    statetype = Column(
+        Unicode(8),
         nullable=False,
         server_default=DefaultClause('SOFT', for_update=False))
 

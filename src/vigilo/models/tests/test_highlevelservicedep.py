@@ -22,7 +22,8 @@ class TestHighLevelServiceDepLowLevel(ModelTest):
         hls = HighLevelService(
             servicename=u'virtual',
             message=u'ouch!',
-            seuil=3,
+            seuil_warning=60,
+            seuil_critical=80,
             op_dep=u'+')
         DBSession.add(hls)
         DBSession.flush()
@@ -70,7 +71,8 @@ class TestHighLevelServiceDepHighLevel(ModelTest):
         hls1 = HighLevelService(
             servicename=u'virtual',
             message=u'ouch!',
-            seuil=3,
+            seuil_warning=60,
+            seuil_critical=80,
             op_dep=u'+')
         DBSession.add(hls1)
         DBSession.flush()
@@ -79,7 +81,8 @@ class TestHighLevelServiceDepHighLevel(ModelTest):
         hls2 = HighLevelService(
             servicename=u'virtual_dep',
             message=u'ouch!',
-            seuil=3,
+            seuil_warning=60,
+            seuil_critical=80,
             op_dep=u'+')
         DBSession.add(hls2)
         DBSession.flush()
