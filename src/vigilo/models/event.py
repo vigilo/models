@@ -46,7 +46,8 @@ class Event(DeclarativeBase, object):
         index=True, nullable=False)
 
     ip = Column(
-        Unicode(15),
+        Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
+                        # sous forme canonique. On arrondit à 40 caractères.
         index=True, nullable=True)
 
     servicename = Column(

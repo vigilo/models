@@ -28,7 +28,10 @@ class State(DeclarativeBase, object):
         ForeignKey(bdd_basename + 'service.name'),
         index=True)
 
-    ip = Column(Unicode(15))
+    ip = Column(
+        Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
+                        # sous forme canonique. On arrondit à 40 caractères.
+    )
 
     timestamp = Column(DateTime(timezone=False), nullable=False)
 

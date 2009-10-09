@@ -36,7 +36,8 @@ class Host(DeclarativeBase, object):
         nullable=False)
 
     mainip = Column(
-        Unicode(15),
+        Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
+                        # sous forme canonique. On arrondit à 40 caractères.
         nullable=False)
 
     port = Column(Integer, nullable=False)
