@@ -9,6 +9,7 @@ from sqlalchemy.orm import relation
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from vigilo.common.conf import settings
 from .event import Event
 
 __all__ = ('EventsAggregate', )
@@ -46,7 +47,6 @@ class EventsAggregate(DeclarativeBase, object):
         et identifié comme cause primaire de l'ensemble des évènements
         de l'agrégat.
     @ivar impact: Nombre d'hôtes impactés par l'agrégat.
-    @ivar severity: Gravité du problème.
     @ivar trouble_ticket: URL du ticket d'incident se rapportant à l'agrégat.
     @ivar status: Statut de la prise en compte de cet agrégat.
     @ivar occurrences: Compteur d'occurrences de l'agrégat. Il est incrémenté
@@ -76,17 +76,35 @@ class EventsAggregate(DeclarativeBase, object):
 
     impact = Column(Integer)
 
-    severity = Column(Integer)
+    initial_severity = Column(
+        Integer,
+        default=settings.get('UNKNOWN_SEVERITY_VALUE', 1),
+    )
+
+    current_severity = Column(
+        Integer,
+        default=settings.get('UNKNOWN_SEVERITY_VALUE', 1),
+    )
+
+    peak_severity = Column(
+        Integer,
+        default=settings.get('UNKNOWN_SEVERITY_VALUE', 1),
+    )
 
     trouble_ticket = Column(Unicode(255))
 
+    # État d'acquittement: None, Acknowleged ou AAClosed
+    # (Acknowleged And Closed).
     status = Column(Unicode(16),
         nullable=False,
         server_default=DefaultClause('None', for_update=False))
 
-    occurrences = Column(Integer)
+    occurrence = Column(Integer)
 
-    timestamp_active = Column(DateTime(timezone=False))
+    timestamp_active = Column(
+        DateTime(timezone=False),
+        nullable=False,
+    )
 
     events = relation('Event', #lazy='dynamic',
         secondary=EVENTS_EVENTSAGGREGATE_TABLE)

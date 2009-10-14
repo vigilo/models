@@ -13,8 +13,7 @@ __all__ = ('ServiceWeight', )
 
 class ServiceWeight(DeclarativeBase, object):
     """
-    Service de haut niveau.
-
+    Associe des informations à un couple hôte/service.
     """
 
     __tablename__ = bdd_basename + 'serviceweight'
@@ -22,14 +21,16 @@ class ServiceWeight(DeclarativeBase, object):
     hostname = Column(
         Unicode(255),
         ForeignKey(
-            bdd_basename + u'host.name'
+            bdd_basename + u'host.name',
+            onupdate="CASCADE", ondelete="CASCADE",
         ),
         primary_key=True, nullable=False)
 
     servicename = Column(
         Unicode(255),
         ForeignKey(
-            bdd_basename + u'service.name'
+            bdd_basename + u'service.name',
+            onupdate="CASCADE", ondelete="CASCADE",
         ),
         primary_key=True)
 

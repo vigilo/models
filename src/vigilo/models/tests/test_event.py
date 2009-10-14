@@ -15,7 +15,6 @@ class TestEvent(ModelTest):
         'idevent': u'foo',
         'timestamp': datetime.now(),
         'hostname': u'monhost',
-        'active': True,
         'state': u'OK',
         'message': u'Foo',
     }

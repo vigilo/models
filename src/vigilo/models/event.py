@@ -5,7 +5,6 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, UnicodeText, Text, DateTime, Integer
-from sqlalchemy.databases.mysql import MSBoolean
 
 from datetime import datetime
 
@@ -34,34 +33,39 @@ class Event(DeclarativeBase, object):
 
     idevent = Column(
         Unicode(40),
-        primary_key=True,
-        nullable=False,
-        autoincrement=True)
+        primary_key=True, nullable=False, #autoincrement=True
+    )
 
     timestamp = Column(DateTime(timezone=False))
 
     hostname = Column(
         Unicode(255),
         ForeignKey(bdd_basename +'host.name'),
-        index=True, nullable=False)
+        index=True, nullable=False
+    )
 
     ip = Column(
         Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
                         # sous forme canonique. On arrondit à 40 caractères.
-        index=True, nullable=True)
+        index=True, nullable=True
+    )
 
     servicename = Column(
         Unicode(255),
         ForeignKey(bdd_basename + 'service.name'),
-        index=True, nullable=True)
+        index=True, nullable=True
+    )
 
-    active = Column(MSBoolean, default='True', nullable=False)
-
+    # Un état de Nagios. L'état peut porter :
+    # - sur un hôte (ex: 'UP', 'UNREACHABLE', etc.)
+    # - sur un service (ex: 'OK', 'WARNING', 'UNKNOWN', etc.)
     state = Column(Unicode(16))
 
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None),
-        nullable=False)
+        nullable=False
+    )
+
 
     def __init__(self, **kwargs):
         """
