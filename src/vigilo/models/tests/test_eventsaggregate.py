@@ -44,7 +44,6 @@ class TestEventsAggregate(ModelTest):
             timestamp=datetime.now(),
             hostname=u'monhost',
             servicename=u'monservice',
-            active=True,
             state=u'OK',
             message=u'Foo',
             ))
