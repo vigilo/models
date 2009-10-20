@@ -6,9 +6,11 @@ from __future__ import absolute_import
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
+from .secondary_tables import HOST_TAG_TABLE
 
 __all__ = ('Host', )
 
@@ -46,7 +48,12 @@ class Host(DeclarativeBase, object):
 
     snmpversion = Column(Unicode(255))
 
-    groups = association_proxy('host_groups', 'groups')
+    hostgroups = relation('HostGroup', back_populates='hosts', uselist=True, )
+
+#    groups = association_proxy('hostgroups', 'groups')
+
+    tags = relation('Tag', secondary=HOST_TAG_TABLE,
+        back_populates='hosts', lazy='dynamic')
 
 
     def __init__(self, **kwargs):

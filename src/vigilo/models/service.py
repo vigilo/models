@@ -3,12 +3,14 @@
 """Modèle pour la table Service"""
 from __future__ import absolute_import
 
-from sqlalchemy import Table, Column
+from sqlalchemy import Column
 from sqlalchemy.types import UnicodeText, Unicode
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
+from .secondary_tables import SERVICE_TAG_TABLE
 
 __all__ = ('Service', )
 
@@ -31,7 +33,12 @@ class Service(DeclarativeBase, object):
         UnicodeText,
         default=u'', nullable=False)
 
-    groups = association_proxy('service_groups', 'groups')
+    servicegroups = relation('ServiceGroup', back_populates='services', uselist=True, )
+
+#    groups = association_proxy('servicegroups', 'groups')
+
+    tags = relation('Tag', secondary=SERVICE_TAG_TABLE,
+        back_populates='services', lazy='dynamic')
 
     @property
     def dependancies(self):

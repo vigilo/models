@@ -3,27 +3,15 @@
 """Modèle pour la table Group"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation, backref
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
+from .secondary_tables import GROUP_PERMISSION_TABLE
 
 __all__ = ('Group', )
-
-GROUP_PERMISSION_TABLE = Table(
-    bdd_basename + 'grouppermissions', metadata,
-    Column('groupname', Unicode, ForeignKey(
-                bdd_basename + 'group.name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idpermission', Integer, ForeignKey(
-                bdd_basename + 'permission.idpermission',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
-)
-
 
 class Group(DeclarativeBase, object):
     """Gère les groupes (récursifs) d'hôtes/services.'"""
@@ -42,7 +30,13 @@ class Group(DeclarativeBase, object):
     children = relation('Group', backref=backref('parent', remote_side=[name]))
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
-                    backref='groups')
+                    back_populates='groups')
+
+    servicegroups = relation('ServiceGroup', back_populates='groups', uselist=True,
+        )
+
+    hostgroups = relation('HostGroup', back_populates='groups', uselist=True,
+        )
 
 
     def __init__(self, **kwargs):

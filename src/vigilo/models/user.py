@@ -10,6 +10,7 @@ from sqlalchemy.types import Unicode, UnicodeText
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
 from vigilo.common.conf import settings
+from .secondary_tables import USER_GROUP_TABLE
 
 __all__ = ('User', )
 
@@ -43,6 +44,9 @@ class User(DeclarativeBase, object):
     # le lazy loading devrait être évité.
     customgraphviews = relation('CustomGraphView', cascade='delete',)
         #backref=backref('user', lazy='dynamic'), lazy='dynamic')
+
+    usergroups = relation('UserGroup', secondary=USER_GROUP_TABLE,
+        back_populates='users')
 
 
     def __init__(self, **kwargs):

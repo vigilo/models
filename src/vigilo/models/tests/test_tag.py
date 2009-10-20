@@ -33,7 +33,7 @@ class TestEvents(ModelTest):
         DBSession.flush()
 
         hote = Host.by_host_name(u'monhost')
-        assert_equals(1, len(hote.tags))
+        assert_equals(1, hote.tags.count())
         assert_equals(self.obj, hote.tags[0])
 
     def test_service_and_tag_association(self):
@@ -44,6 +44,6 @@ class TestEvents(ModelTest):
         DBSession.flush()
 
         service = Service.by_service_name(u'monservice')
-        assert_equals(1, len(service.tags))
+        assert_equals(1, service.tags.count())
         assert_equals(self.obj, service.tags[0])
 

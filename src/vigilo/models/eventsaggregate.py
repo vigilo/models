@@ -3,40 +3,18 @@
 """Modèle pour la table EventsAggregate"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column, DefaultClause, ForeignKey, Table
+from sqlalchemy import Column, DefaultClause, ForeignKey
 from sqlalchemy.types import Integer, Unicode, DateTime
 from sqlalchemy.orm import relation
 from datetime import datetime
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from vigilo.common.conf import settings
 from .event import Event
+from .secondary_tables import EVENTS_EVENTSAGGREGATE_TABLE, \
+                                EVENTSAGGREGATE_HLS_TABLE
 
 __all__ = ('EventsAggregate', )
-
-EVENTS_EVENTSAGGREGATE_TABLE = Table(
-    bdd_basename + 'eventsaggregates2events', metadata,
-    Column('idevent', Unicode(40), ForeignKey(
-                bdd_basename + 'event.idevent',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idaggregate', Unicode(40), ForeignKey(
-                bdd_basename + 'eventsaggregate.idaggregate',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-)
-
-EVENTSAGGREGATE_HLS_TABLE = Table(
-    bdd_basename + 'eventsaggregate2hls', metadata,
-    Column('hls_servicename', Unicode(255),
-            ForeignKey(bdd_basename + 'highlevelservice.servicename'),
-            primary_key=True),
-    Column('idaggregate', Unicode(40), ForeignKey(
-                bdd_basename + 'eventsaggregate.idaggregate',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-)
-
 
 class EventsAggregate(DeclarativeBase, object):
     """

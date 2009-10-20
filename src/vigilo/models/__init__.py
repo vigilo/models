@@ -7,7 +7,7 @@ __all__ = (
         'GraphGroup', 'Graph', 'HostGroup', 'Host', 'PerfDataSource',
         'ServiceGroup', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
-        'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
+        'User', 'BoardViewFilter', 'CustomGraphView', 'Tag', 'Access',
         )
 
 
@@ -35,4 +35,5 @@ from .user import User
 from .boardviewfilter import BoardViewFilter
 from .customgraphview import CustomGraphView
 from .tag import Tag
+from .access import Access
 

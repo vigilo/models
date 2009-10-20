@@ -19,7 +19,7 @@ class EventHistory(DeclarativeBase, object):
         'Nagios update state', 'Acknowlegement change state', 'New occurence',
         'User comment', 'Ticket change', 'Oncall' ou 'Forced state'.
     @ivar idevent: Identifiant de l'evenement.
-    @ivar value: Nouvelle severite.
+    @ivar value: Valeur associee a l'action.
     @ivar text: Commentaire sur l'action effectuee.
     @ivar username: Nom d'utilisateur de la personne effectuant l'action.
     """

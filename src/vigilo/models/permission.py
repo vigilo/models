@@ -3,26 +3,16 @@
 """Modèle pour la table Permissions"""
 from __future__ import absolute_import
 
-from sqlalchemy import Table, Column, ForeignKey
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 
 from .session import DBSession
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from .secondary_tables import USERGROUP_PERMISSION_TABLE, \
+                                GROUP_PERMISSION_TABLE
 
 __all__ = ('Permission', )
-
-USERGROUP_PERMISSION_TABLE = Table(
-    bdd_basename + 'usergrouppermissions', metadata,
-    Column('groupname', Unicode(255), ForeignKey(
-                bdd_basename + 'usergroup.group_name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idpermission', Integer, ForeignKey(
-                bdd_basename + 'permission.idpermission',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True)
-)
 
 class Permission(DeclarativeBase, object):
     """
@@ -44,7 +34,11 @@ class Permission(DeclarativeBase, object):
         nullable=False)
 
     usergroups = relation('UserGroup', secondary=USERGROUP_PERMISSION_TABLE,
-                      backref='permissions', lazy='dynamic')
+                      back_populates='permissions', lazy='dynamic')
+
+    groups = relation('Group', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='permissions')
+
 
     def __init__(self, **kwargs):
         super(Permission, self).__init__(**kwargs)

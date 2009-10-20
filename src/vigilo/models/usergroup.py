@@ -3,26 +3,15 @@
 """Modèle pour la table UserGroup"""
 from __future__ import absolute_import
 
-from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.types import Unicode
+from sqlalchemy import Column
+from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation, backref
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase, metadata
+from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
+from .secondary_tables import USERGROUP_PERMISSION_TABLE, USER_GROUP_TABLE
 
 __all__ = ('UserGroup', )
-
-USER_GROUP_TABLE = Table(
-    bdd_basename + 'usertousergroups', metadata,
-    Column('username', Unicode(255), ForeignKey(
-                bdd_basename + 'user.user_name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('groupname', Unicode(255), ForeignKey(
-                bdd_basename + 'usergroup.group_name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True)
-)
 
 class UserGroup(DeclarativeBase, object):
     """User groups, used eg. to organize users by services, privileges, etc."""
@@ -34,9 +23,11 @@ class UserGroup(DeclarativeBase, object):
         Unicode(255),
         primary_key=True)
 
+    permissions = relation('Permission', secondary=USERGROUP_PERMISSION_TABLE,
+                      back_populates='usergroups', lazy='dynamic')
+
     users = relation('User', secondary=USER_GROUP_TABLE,
-        backref='usergroups')
-#        backref=backref('usergroups', lazy='dynamic'), lazy='dynamic')
+        back_populates='usergroups')
 
     def __init__(self, **kwargs):
         super(UserGroup, self).__init__(**kwargs)
