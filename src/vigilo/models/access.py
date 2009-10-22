@@ -5,7 +5,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, DateTime, UnicodeText
+from sqlalchemy.types import Integer, DateTime, UnicodeText, Unicode
 from datetime import datetime
 import transaction
 
@@ -28,17 +28,21 @@ class Access(DeclarativeBase, object):
 
     message = Column(UnicodeText)
 
+    ip = Column(Unicode(40), nullable=False)
+
 
     def __init__(self, **kwargs):
         """Initialise une entrée des logs des accès."""
         super(Access, self).__init__(**kwargs)
 
     @classmethod
-    def add_login(cls, username, application):
+    def add_login(cls, username, ip, application):
         message = u"User '%s' logged in (%s)." % (username, application)
+        ip = u'' + ip
         access = cls(
             timestamp=datetime.now(),
             message=message,
+            ip=ip,
         )
         DBSession.add(access)
         try:
@@ -50,11 +54,13 @@ class Access(DeclarativeBase, object):
             transaction.commit()
 
     @classmethod
-    def add_logout(cls, username, application):
+    def add_logout(cls, username, ip, application):
         message = u"User '%s' logged out (%s)." % (username, application)
+        ip = u'' + ip
         access = cls(
             timestamp=datetime.now(),
             message=message,
+            ip=ip,
         )
         DBSession.add(access)
         try:

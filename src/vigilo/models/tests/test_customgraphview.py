@@ -13,8 +13,8 @@ class TestCustomGraphView(ModelTest):
         'username': u'manager',
         'hostname': u'monhost',
         'graphname': u'mongraph',
-        'pos_x': 1337,
-        'pos_y': 42,
+        'x_pos': 1337,
+        'y_pos': 42,
     }
 
     def __init__(self):
@@ -22,7 +22,11 @@ class TestCustomGraphView(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-        DBSession.add(User(user_name=u'manager'))
+        DBSession.add(User(
+            user_name=u'manager',
+            fullname=u'Manager',
+            email=u'foo@b.ar',
+        ))
         DBSession.add(Host(
             name=u'monhost',
             checkhostcmd=u'halt -f',

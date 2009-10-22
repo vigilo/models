@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
+from sqlalchemy.orm import synonym
 from sqlalchemy.types import Unicode, Integer
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -38,6 +39,23 @@ class HostServiceData(DeclarativeBase, object):
         Integer,
         nullable=False,
     )
+
+    _priority = Column(
+        'priority', Integer,
+        nullable=False,
+    )
+
+    def _get_priority(self):
+        return self._priority
+
+    # XXX on devrait s'assurer que la priorité est bornée.
+    # Ceci permettra aussi de définir les limites pour Rum (Vigicore).
+    def _set_priority(self, priority):
+        self._priority = priority
+
+    priority = synonym('_priority',
+        descriptor=property(_get_priority, _set_priority))
+
 
     def __init__(self, **kwargs):
         super(HostServiceData, self).__init__(**kwargs)

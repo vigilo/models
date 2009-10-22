@@ -22,9 +22,10 @@ class TestHighLevelServiceDepLowLevel(ModelTest):
         hls = HighLevelService(
             servicename=u'virtual',
             message=u'ouch!',
-            seuil_warning=60,
-            seuil_critical=80,
-            op_dep=u'+')
+            warning_threshold=60,
+            critical_threshold=80,
+            op_dep=u'+'
+        )
         DBSession.add(hls)
         DBSession.flush()
 
@@ -37,7 +38,7 @@ class TestHighLevelServiceDepLowLevel(ModelTest):
             hosttpl=u'foo',
             mainip=u'127.0.0.1',
             port=42,
-            )
+        )
         DBSession.add(host)
         DBSession.flush()
 
@@ -46,7 +47,7 @@ class TestHighLevelServiceDepLowLevel(ModelTest):
             name=u'physical',
             servicetype=u'foo',
             command=u'halt',
-            )
+        )
         DBSession.add(service)
         DBSession.flush()
 
@@ -71,9 +72,10 @@ class TestHighLevelServiceDepHighLevel(ModelTest):
         hls1 = HighLevelService(
             servicename=u'virtual',
             message=u'ouch!',
-            seuil_warning=60,
-            seuil_critical=80,
-            op_dep=u'+')
+            warning_threshold=60,
+            critical_threshold=80,
+            op_dep=u'+',
+        )
         DBSession.add(hls1)
         DBSession.flush()
 
@@ -81,9 +83,10 @@ class TestHighLevelServiceDepHighLevel(ModelTest):
         hls2 = HighLevelService(
             servicename=u'virtual_dep',
             message=u'ouch!',
-            seuil_warning=60,
-            seuil_critical=80,
-            op_dep=u'+')
+            warning_threshold=60,
+            critical_threshold=80,
+            op_dep=u'+',
+        )
         DBSession.add(hls2)
         DBSession.flush()
 

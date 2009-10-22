@@ -39,11 +39,11 @@ class CustomGraphView(DeclarativeBase, object):
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True, nullable=False, primary_key=True)
 
-    pos_x = Column(
+    x_pos = Column(
         Integer,
         nullable=False)
 
-    pos_y = Column(
+    y_pos = Column(
         Integer,
         nullable=False)
 

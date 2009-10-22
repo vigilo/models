@@ -15,6 +15,7 @@ class TestAccess(ModelTest):
     attrs = {
         'message': u'This is a test',
         'timestamp': datetime.now(),
+        'ip': u'127.0.0.1',
     }
 
     def __init__(self):
@@ -33,7 +34,7 @@ class TestAccessFunc(unittest.TestCase):
     def test_add_login(self):
         """Vérifie que l'enregistrement des connexions fonctionne."""
 
-        Access.add_login(u'foo', u'app1')
+        Access.add_login(u'foo', u'127.0.0.1', u'app1')
         count = DBSession.query(Access).filter(
             Access.message == u"User 'foo' logged in (app1).").count()
         self.assertEquals(1, count,
@@ -42,7 +43,7 @@ class TestAccessFunc(unittest.TestCase):
     def test_add_logout(self):
         """Vérifie que l'enregistrement des déconnexions fonctionne."""
 
-        Access.add_logout(u'bar', u'app2')
+        Access.add_logout(u'bar', u'127.0.0.1', u'app2')
         count = DBSession.query(Access).filter(
             Access.message == u"User 'bar' logged out (app2).").count()
         self.assertEquals(1, count,

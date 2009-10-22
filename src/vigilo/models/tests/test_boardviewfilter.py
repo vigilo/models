@@ -22,7 +22,11 @@ class TestBoardViewFilter(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-        DBSession.add(User(user_name=u'manager'))
+        DBSession.add(User(
+            user_name=u'manager',
+            fullname=u'Manager',
+            email=u'foo@b.ar',
+        ))
         DBSession.add(Host(
             name=u'monhost',
             checkhostcmd=u'halt -f',

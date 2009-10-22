@@ -19,6 +19,7 @@ class TestHostServiceData(ModelTest):
     klass = HostServiceData
     attrs = {
         'weight': 100,
+        'priority': 1,
     }
 
     def do_get_dependencies(self):
@@ -32,7 +33,7 @@ class TestHostServiceData(ModelTest):
             hosttpl=u'foo',
             mainip=u'127.0.0.1',
             port=42,
-            )
+        )
         DBSession.add(host)
         DBSession.flush()
 
@@ -41,7 +42,7 @@ class TestHostServiceData(ModelTest):
             name=u'physical',
             servicetype=u'foo',
             command=u'halt',
-            )
+        )
         DBSession.add(service)
         DBSession.flush()
 

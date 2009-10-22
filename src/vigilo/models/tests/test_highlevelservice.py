@@ -39,15 +39,21 @@ def create_hls_dependancies():
     weight1 = HostServiceData(
         hostname=u'physical',
         servicename=u'service1',
-        weight=1)
+        weight=1,
+        priority=1,
+    )
     weight2 = HostServiceData(
         hostname=u'physical',
         servicename=u'service2',
-        weight=2)
+        weight=2,
+        priority=1,
+    )
     weight3 = HostServiceData(
         hostname=u'physical',
         servicename=u'service3',
-        weight=3)
+        weight=3,
+        priority=1,
+    )
 
     DBSession.add(weight1)
     DBSession.add(weight2)
@@ -87,8 +93,8 @@ class TestHighLevelServiceEvenHigherServices(ModelTest):
     attrs = {
         'servicename': u'low',
         'message': u'ouch!',
-        'seuil_warning': 60,
-        'seuil_critical': 80,
+        'warning_threshold': 60,
+        'critical_threshold': 80,
         'op_dep': u'+',
     }
 
@@ -128,8 +134,8 @@ class TestHighLevelServicePlus(ModelTest):
     attrs = {
         'servicename': u'virtual',
         'message': u'ouch!',
-        'seuil_warning': 60,
-        'seuil_critical': 80,
+        'warning_threshold': 60,
+        'critical_threshold': 80,
         'op_dep': u'+',
     }
 
@@ -158,8 +164,8 @@ class TestHighLevelServiceOr(TestHighLevelServicePlus):
     attrs = {
         'servicename': u'virtual',
         'message': u'ouch!',
-        'seuil_warning': 60,
-        'seuil_critical': 80,
+        'warning_threshold': 60,
+        'critical_threshold': 80,
         'op_dep': u'ou',
     }
 
@@ -185,8 +191,8 @@ class TestHighLevelServiceAnd(TestHighLevelServicePlus):
     attrs = {
         'servicename': u'virtual',
         'message': u'ouch!',
-        'seuil_warning': 60,
-        'seuil_critical': 80,
+        'warning_threshold': 60,
+        'critical_threshold': 80,
         'op_dep': u'et',
     }
 
