@@ -10,7 +10,7 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from vigilo.models.session import DBSession
 
 from .state import State
-from .serviceweight import ServiceWeight
+from .hostservicedata import HostServiceData
 
 __all__ = ('HighLevelServiceDepHighLevel', 'HighLevelServiceDepLowLevel', )
 
@@ -120,7 +120,7 @@ class HighLevelServiceDepLowLevel(HighLevelServiceDep):
             last_state.statename != 'OK' and \
             last_state.statename != 'UP':
             return 0
-        return ServiceWeight.by_host_service_name(
+        return HostServiceData.by_host_service_name(
             hostname=self.host_dep, servicename=self.service_dep).weight
 
     def __init__(self, **kwargs):

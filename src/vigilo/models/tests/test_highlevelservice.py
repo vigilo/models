@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for HighLevelService class"""
-from vigilo.models import Service, State, Host, ServiceWeight, \
+from vigilo.models import Service, State, Host, HostServiceData, \
                             HighLevelService, HighLevelServiceDepLowLevel, \
                             HighLevelServiceDepHighLevel
 from vigilo.models.tests import ModelTest
@@ -35,16 +35,16 @@ def create_hls_dependancies():
     DBSession.add(service3)
     DBSession.flush()
 
-    # Affectation de poids aux couples (hôte, service).
-    weight1 = ServiceWeight(
+    # Affectation de données aux couples (hôte, service).
+    weight1 = HostServiceData(
         hostname=u'physical',
         servicename=u'service1',
         weight=1)
-    weight2 = ServiceWeight(
+    weight2 = HostServiceData(
         hostname=u'physical',
         servicename=u'service2',
         weight=2)
-    weight3 = ServiceWeight(
+    weight3 = HostServiceData(
         hostname=u'physical',
         servicename=u'service3',
         weight=3)

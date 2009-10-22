@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
-"""Test suite for ServiceWeight class"""
-from vigilo.models import ServiceWeight, Host, Service
+"""Test suite for HostServiceData class"""
+from vigilo.models import HostServiceData, Host, Service
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
-class TestServiceWeight(ModelTest):
+class TestHostServiceData(ModelTest):
     """
-    Teste l'affectation de "poids" à un couple (L{Host}, L{Service}).
+    Teste l'affectation de données à un couple (L{Host}, L{Service}).
 
+    Par exemple, on teste l'affectation d'un "poids" au couple.
     Plus le poids de ce couple est élevé, plus il est critique
     pour l'infrastructure supervisée.
-    L'unité du poids est choisie par l'organisme qui effectue la supervision.
+    L'unité utilisée pour représenter le poids est choisie par
+    l'organisme qui effectue la supervision.
     Il peut être déterminé par des SLA, etc.
     """
 
-    klass = ServiceWeight
+    klass = HostServiceData
     attrs = {
         'weight': 100,
     }

@@ -8,6 +8,7 @@ __all__ = (
         'ServiceGroup', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User', 'BoardViewFilter', 'CustomGraphView', 'Tag', 'Access',
+        'HostServiceData',
         )
 
 
@@ -24,7 +25,7 @@ from .servicegroup import ServiceGroup
 from .highlevelservice import HighLevelService
 from .highlevelservicedep import HighLevelServiceDepLowLevel, \
                                 HighLevelServiceDepHighLevel
-from .serviceweight import ServiceWeight
+from .hostservicedata import HostServiceData
 from .service import Service
 from .graphtogroups import GraphToGroups
 from .version import Version

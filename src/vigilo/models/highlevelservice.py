@@ -51,12 +51,12 @@ class HighLevelService(DeclarativeBase, object):
         nullable=False,
     )
 
-    seuil_warning = Column(
+    warning_threadshold = Column(
         Integer,
         nullable=False,
     )
 
-    seuil_critical = Column(
+    critical_threadshold = Column(
         Integer,
         nullable=False,
     )

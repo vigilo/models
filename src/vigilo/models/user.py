@@ -24,12 +24,22 @@ class User(DeclarativeBase, object):
         Unicode(255),
         unique=True,
         primary_key=True,
-        info={'rum': {'field': 'Text'}})
+    )
+
+    fullname = Column(
+        Unicode(255),
+        nullable=False,
+    )
 
     email = Column(
         Unicode(255),
-        unique=True,
-        info={'rum': {'field': 'Email'}})
+        unique=True, nullable=False,
+    )
+
+    _password = Column(
+        'password', Unicode(64),
+        nullable=True,
+    )
 
     # Language code using the format from RFC 4646.
     # See also http://www.ietf.org/rfc/rfc4646.txt
@@ -38,7 +48,8 @@ class User(DeclarativeBase, object):
         # from RFC 4646 (4.3.1).
         'language', Unicode(42),
         nullable=True,
-        default=None)
+        default=None,
+    )
 
     # XXX En attendant que certains problèmes dans Rum soient résolus,
     # le lazy loading devrait être évité.
@@ -116,8 +127,6 @@ class User(DeclarativeBase, object):
         return DBSession.query(cls).filter(cls.user_name == username).first()
 
 
-
-    # @TODO adapt this method to set the password remotely.
     def _set_password(self, password):
         """
         Attribue le mot de passe donné à l'utilisateur.
@@ -129,22 +138,8 @@ class User(DeclarativeBase, object):
         @param password: Le nouveau mot de passe de l'utilisateur.
         @type password: C{str}
         """
-        pass
+        self._password = self._hash_password(password)
 
-    def _get_password(self):
-        """
-        Retourne une constante en guise de mot de passe.
-
-        Dans Vigilo, le mot de passe de l'utilisateur n'est pas stocké en base
-        de données. À la place, il est stocké dans une source quelconque
-        et n'est pas accessible en lecture.
-
-        @return: La constante "[Hidden]".
-        @rtype: C{str}
-        """
-        return '[Hidden]'
-
-    # @TODO adapt this method to authenticate against a remote source.
     def validate_password(self, password):
         """
         Teste si le mot de passe proposé correspond au mot de passe de
@@ -157,11 +152,21 @@ class User(DeclarativeBase, object):
         @rtype: C{bool}
 
         """
-        return password == '42'
+        if settings['USE_KERBEROS']:
+            return True
+        # Petite précaution
+        if self._password is None:
+            return False
+        return self._hash_password(password) == self._password
 
-#    password = synonym('_password', descriptor=property(_get_password,
-#                                                        _set_password))
-    password = property(None, _set_password)
+    @staticmethod
+    def _hash_password(password):
+        """Applique une fonction de hachage au mot de passe."""
+        # XXX définir une vraie fonction de hachage (ex: SHA1)
+        return password
+
+    password = synonym('_password', descriptor=property(None,
+                                                        _set_password))
 
     def _set_language(self, language):
         """

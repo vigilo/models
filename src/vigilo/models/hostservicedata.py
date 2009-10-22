@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table ServiceWeight."""
+"""Modèle pour la table HostServiceData."""
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
@@ -9,14 +9,14 @@ from sqlalchemy.types import Unicode, Integer
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from vigilo.models.session import DBSession
 
-__all__ = ('ServiceWeight', )
+__all__ = ('HostServiceData', )
 
-class ServiceWeight(DeclarativeBase, object):
+class HostServiceData(DeclarativeBase, object):
     """
     Associe des informations à un couple hôte/service.
     """
 
-    __tablename__ = bdd_basename + 'serviceweight'
+    __tablename__ = bdd_basename + 'hostservicedata'
 
     hostname = Column(
         Unicode(255),
@@ -40,7 +40,7 @@ class ServiceWeight(DeclarativeBase, object):
     )
 
     def __init__(self, **kwargs):
-        super(ServiceWeight, self).__init__(**kwargs)
+        super(HostServiceData, self).__init__(**kwargs)
 
     @classmethod
     def by_host_service_name(cls, hostname, servicename):
