@@ -28,7 +28,7 @@ class Access(DeclarativeBase, object):
 
     message = Column(UnicodeText)
 
-    ip = Column(Unicode(40), nullable=False)
+    ip = Column(Unicode(40))
 
 
     def __init__(self, **kwargs):
@@ -38,7 +38,8 @@ class Access(DeclarativeBase, object):
     @classmethod
     def add_login(cls, username, ip, application):
         message = u"User '%s' logged in (%s)." % (username, application)
-        ip = u'' + ip
+        if not ip is None:
+            ip = u'' + ip
         access = cls(
             timestamp=datetime.now(),
             message=message,
@@ -56,7 +57,8 @@ class Access(DeclarativeBase, object):
     @classmethod
     def add_logout(cls, username, ip, application):
         message = u"User '%s' logged out (%s)." % (username, application)
-        ip = u'' + ip
+        if not ip is None:
+            ip = u'' + ip
         access = cls(
             timestamp=datetime.now(),
             message=message,
