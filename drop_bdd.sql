@@ -11,6 +11,7 @@ DROP TABLE perfdatasource CASCADE;
 DROP TABLE permission CASCADE;
 DROP TABLE service CASCADE;
 DROP TABLE servicegroup CASCADE;
+DROP TABLE hostservicedata CASCADE;
 DROP TABLE highlevelservice CASCADE;
 DROP TABLE highlevelservicedep CASCADE;
 DROP TABLE state CASCADE;
@@ -27,4 +28,5 @@ DROP TABLE tags2hosts CASCADE;
 DROP TABLE tags2services CASCADE;
 DROP TABLE boardviewfilter CASCADE;
 DROP TABLE customgraphview CASCADE;
+DROP TABLE "access" CASCADE;
 

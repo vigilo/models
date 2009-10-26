@@ -37,6 +37,19 @@ class Access(DeclarativeBase, object):
 
     @classmethod
     def add_login(cls, username, ip, application):
+        """
+        Enregistre une déconnexion.
+
+        @param cls: La classe qui servira à enregistrer la connexion.
+        @type cls: C{class}
+        @param username: Le nom de l'utilisateur qui se connecte.
+        @type username: C{str}
+        @param ip: L'adresse IP (v4 ou v6) de cet utilisateur.
+        @type ip: C{str} ou C{None}
+        @param application: Le nom de l'application dans laquelle
+            la connexion survient.
+        """
+
         message = u"User '%s' logged in (%s)." % (username, application)
         if not ip is None:
             ip = u'' + ip
@@ -56,6 +69,19 @@ class Access(DeclarativeBase, object):
 
     @classmethod
     def add_logout(cls, username, ip, application):
+        """
+        Enregistre une déconnexion.
+
+        @param cls: La classe qui servira à enregistrer la déconnexion.
+        @type cls: C{class}
+        @param username: Le nom de l'utilisateur qui se déconnecte.
+        @type username: C{str}
+        @param ip: L'adresse IP (v4 ou v6) de cet utilisateur.
+        @type ip: C{str} ou C{None}
+        @param application: Le nom de l'application dans laquelle
+            la déconnexion survient.
+        """
+
         message = u"User '%s' logged out (%s)." % (username, application)
         if not ip is None:
             ip = u'' + ip

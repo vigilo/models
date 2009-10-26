@@ -54,19 +54,9 @@ class EventsAggregate(DeclarativeBase, object):
 
     impact = Column(Integer)
 
-    initial_severity = Column(
+    priority = Column(
         Integer,
-        default=settings.get('UNKNOWN_SEVERITY_VALUE', 1),
-    )
-
-    current_severity = Column(
-        Integer,
-        default=settings.get('UNKNOWN_SEVERITY_VALUE', 1),
-    )
-
-    peak_severity = Column(
-        Integer,
-        default=settings.get('UNKNOWN_SEVERITY_VALUE', 1),
+        default=settings.get('UNKNOWN_PRIORITY_VALUE', 1),
     )
 
     trouble_ticket = Column(Unicode(255))
