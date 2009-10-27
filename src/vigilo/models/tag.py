@@ -14,9 +14,10 @@ class Tag(DeclarativeBase, object):
     """
     Un tag associé soit à un hôte, soit à un service.
     
-    @ival content: Contenu du tag.
-    @ival hosts: Liste des hôtes auxquels ce tag est associé.
-    @ival services: Liste des services auxquels ce tag est associé.
+    @ivar name: Nom du tag.
+    @ivar value: Valeur associée au tag.
+    @ivar hosts: Liste des hôtes auxquels ce tag est associé.
+    @ivar services: Liste des services auxquels ce tag est associé.
     """
 
     __tablename__ = bdd_basename + 'tag'
@@ -44,8 +45,8 @@ class Tag(DeclarativeBase, object):
         """
         Représentation unicode du tag.
         
-        @return: Le contenu du tag.
+        @return: Le nom du tag.
         @rtype: C{unicode}
         """
-        return self.content
+        return self.name
 

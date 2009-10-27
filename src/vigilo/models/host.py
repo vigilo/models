@@ -15,6 +15,23 @@ from .secondary_tables import HOST_TAG_TABLE
 __all__ = ('Host', )
 
 class Host(DeclarativeBase, object):
+    """
+    Informations sur un hôte du parc informatique.
+    
+    @ivar name: Nom de l'hôte.
+    @ivar checkhostcmd: Commande à exécuter pour vérifier l'état de l'hôte.
+    @ivar fqhn: Nom complet de l'hôte (Fully Qualified Host Name).
+    @ivar hosttpl: ???.
+    @todo: documenter l'attribut hosttpl.
+    @ivar mainip: Adresse IP (v4 ou v6) principale de cet hôte.
+    @ivar snmpcommunity: Nom de la communauté SNMP auquel l'hôte appartient.
+    @ivar snmpport: Port à utiliser pour le protocole SNMP.
+    @ivar snmpoidsperpdu: Nombre d'OIDs à transmettre par PDU.
+    @ivar snmpversion: Version du protocole SNMP à utiliser.
+    @ivar nagiosjid: JID du serveur Nagios responsable de cet hôte.
+    @ivar hostgroups: Liste des groupes d'hôtes auxquels cet hôte appartient.
+    @ivar tags: Liste des libellés attachés à cet hôte.
+    """
     __tablename__ = bdd_basename + 'host'
 
     name = Column(
@@ -23,10 +40,6 @@ class Host(DeclarativeBase, object):
 
     checkhostcmd = Column(
         UnicodeText,
-        nullable=False)
-
-    community = Column(
-        Unicode(255),
         nullable=False)
 
     fqhn = Column(
@@ -42,7 +55,11 @@ class Host(DeclarativeBase, object):
                         # sous forme canonique. On arrondit à 40 caractères.
         nullable=False)
 
-    port = Column(Integer, nullable=False)
+    snmpcommunity = Column(
+        Unicode(255),
+        nullable=False)
+
+    snmpport = Column(Integer, nullable=False)
 
     snmpoidsperpdu = Column(Integer)
 

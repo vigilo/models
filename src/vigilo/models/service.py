@@ -17,6 +17,16 @@ __all__ = ('Service', )
 class Service(DeclarativeBase, object):
     """
     Service de bas niveau (service technique).
+    
+    @ivar name: Nom du service.
+    @ivar servicetype: ???.
+    @todo: documenter l'attribut servicetype.
+    @ivar command: Commande à exécuter pour vérifier l'état du service.
+    @ivar servicegrops: Liste des groupes de services auxquels
+        ce service appartient.
+    @ivar tags: Liste des libellés associés à ce service.
+    @ivar dependancies: Liste des services dont ce service dépend.
+        Pour les services techniques, cette liste est toujours vide.
     """
 
     __tablename__ = bdd_basename + 'service'
