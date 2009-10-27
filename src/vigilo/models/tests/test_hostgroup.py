@@ -19,11 +19,11 @@ class TestHostGroups(ModelTest):
         DBSession.add(Host(
             name=u'monhost',
             checkhostcmd=u'halt -f',
-            community=u'public',
+            snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
-            port=u'1234',
+            snmpport=1234,
             ))
         DBSession.add(Group(name = u"mongroup"))
         DBSession.flush()

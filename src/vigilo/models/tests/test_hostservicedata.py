@@ -28,11 +28,11 @@ class TestHostServiceData(ModelTest):
         host = Host(
             name=u'physical',
             checkhostcmd=u'halt',
-            community=u'public',
+            snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
             hosttpl=u'foo',
             mainip=u'127.0.0.1',
-            port=42,
+            snmpport=42,
         )
         DBSession.add(host)
         DBSession.flush()

@@ -39,26 +39,26 @@ SELECT pg_catalog.setval('state_idstate_seq', 47, true);
 -- Data for Name: host; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
 
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('ajc.fw.1', 'check1', 'com1', 'fqhn1', 'tpl1', '192.168.0.1', 1, 1, '1');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('ajc.linux1', 'check2', 'com2', 'fqhn2', 'tpl2', '192.168.0.2', 2, 2, '2');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('ajc.sw.1', 'check3', 'com3', 'fqhn3', 'tpl3', '192.168.0.3', 3, 3, '3');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('bdx.fw.1', 'check4', 'com4', 'fqhn4', 'tpl4', '192.168.0.4', 4, 4, '4');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('bdx.linux1', 'check5', 'com5', 'fqhn5', 'tpl5', '192.168.0.5', 5, 5, '5');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('brouteur', 'check6', 'com6', 'fqhn6', 'tpl6', '192.168.0.6', 6, 6, '6');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('bst.fw.1', 'check7', 'com7', 'fqhn7', 'tpl7', '192.168.0.7', 7, 7, '7');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('bst.unix0', 'check8', 'com8', 'fqhn8', 'tpl8', '192.168.0.8', 8, 8, '8');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('bst.unix1', 'check9', 'com9', 'fqhn9', 'tpl9', '192.168.0.9', 9, 9, '9');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('bst.win0', 'check10', 'com10', 'fqhn10', 'tpl10', '192.168.0.10', 10, 10, '10');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('messagerie', 'check11', 'com11', 'fqhn11', 'tpl11', '192.168.0.11', 11, 11, '11');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('par.fw.1', 'check12', 'com12', 'fqhn12', 'tpl12', '192.168.0.12', 12, 12, '12');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('par.linux0', 'check13', 'com13', 'fqhn13', 'tpl13', '192.168.0.13', 13, 13, '13');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('par.linux1', 'check14', 'com14', 'fqhn14', 'tpl14', '192.168.0.14', 14, 14, '14');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('par.unix0', 'check15', 'com15', 'fqhn15', 'tpl15', '192.168.0.15', 15, 15, '15');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('proto4', 'check16', 'com16', 'fqhn16', 'tpl16', '192.168.0.16', 16, 16, '16');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('server.mails', 'check17', 'com17', 'fqhn17', 'tpl17', '192.168.0.17', 17, 17, '17');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('testaix', 'check18', 'com18', 'fqhn18', 'tpl18', '192.168.0.18', 18, 18, '18');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('testnortel', 'check19', 'com19', 'fqhn19', 'tpl19', '192.168.0.19', 19, 19, '19');
-INSERT INTO host (name, checkhostcmd, community, fqhn, hosttpl, mainip, port, snmpoidsperpdu, snmpversion) VALUES ('testsolaris', 'check20', 'com20', 'fqhn20', 'tpl20', '192.168.0.20', 20, 20, '20');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('ajc.fw.1', 'check1', 'com1', 'fqhn1', 'tpl1', '192.168.0.1', 1, 1, '1');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('ajc.linux1', 'check2', 'com2', 'fqhn2', 'tpl2', '192.168.0.2', 2, 2, '2');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('ajc.sw.1', 'check3', 'com3', 'fqhn3', 'tpl3', '192.168.0.3', 3, 3, '3');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('bdx.fw.1', 'check4', 'com4', 'fqhn4', 'tpl4', '192.168.0.4', 4, 4, '4');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('bdx.linux1', 'check5', 'com5', 'fqhn5', 'tpl5', '192.168.0.5', 5, 5, '5');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('brouteur', 'check6', 'com6', 'fqhn6', 'tpl6', '192.168.0.6', 6, 6, '6');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('bst.fw.1', 'check7', 'com7', 'fqhn7', 'tpl7', '192.168.0.7', 7, 7, '7');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('bst.unix0', 'check8', 'com8', 'fqhn8', 'tpl8', '192.168.0.8', 8, 8, '8');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('bst.unix1', 'check9', 'com9', 'fqhn9', 'tpl9', '192.168.0.9', 9, 9, '9');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('bst.win0', 'check10', 'com10', 'fqhn10', 'tpl10', '192.168.0.10', 10, 10, '10');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('messagerie', 'check11', 'com11', 'fqhn11', 'tpl11', '192.168.0.11', 11, 11, '11');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('par.fw.1', 'check12', 'com12', 'fqhn12', 'tpl12', '192.168.0.12', 12, 12, '12');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('par.linux0', 'check13', 'com13', 'fqhn13', 'tpl13', '192.168.0.13', 13, 13, '13');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('par.linux1', 'check14', 'com14', 'fqhn14', 'tpl14', '192.168.0.14', 14, 14, '14');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('par.unix0', 'check15', 'com15', 'fqhn15', 'tpl15', '192.168.0.15', 15, 15, '15');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('proto4', 'check16', 'com16', 'fqhn16', 'tpl16', '192.168.0.16', 16, 16, '16');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('server.mails', 'check17', 'com17', 'fqhn17', 'tpl17', '192.168.0.17', 17, 17, '17');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('testaix', 'check18', 'com18', 'fqhn18', 'tpl18', '192.168.0.18', 18, 18, '18');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('testnortel', 'check19', 'com19', 'fqhn19', 'tpl19', '192.168.0.19', 19, 19, '19');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('testsolaris', 'check20', 'com20', 'fqhn20', 'tpl20', '192.168.0.20', 20, 20, '20');
 
 --
 -- Data for Name: service; Type: TABLE DATA; Schema: public; Owner: vigiboard
