@@ -70,7 +70,7 @@ EVENTSAGGREGATE_HLS_TABLE = Table(
 
 GROUP_PERMISSION_TABLE = Table(
     bdd_basename + 'grouppermissions', metadata,
-    Column('groupname', Unicode, ForeignKey(
+    Column('groupname', Unicode(255), ForeignKey(
                 bdd_basename + 'group.name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
@@ -91,4 +91,55 @@ USER_GROUP_TABLE = Table(
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True)
 )
+
+SEGMENT_NODE_TABLE = Table(
+    bdd_basename + 'segmentnodetable', metadata,
+    Column('idsegment', Integer, ForeignKey(
+                bdd_basename + 'segment.idsegment',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False),
+    Column('idnodemap', Integer, ForeignKey(
+                bdd_basename + 'nodemap.idnodemap',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+
+MAP_GROUP_PERMISSION_TABLE = Table(
+    bdd_basename + 'mapgrouppermissions', metadata,
+    Column('mapgroupname', Unicode(255), ForeignKey(
+                bdd_basename + 'mapgroup.name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
+    Column('idpermission', Integer, ForeignKey(
+                bdd_basename + 'permission.idpermission',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+
+MAP_GROUP_MAP_TABLE = Table(
+    bdd_basename + 'mapgroupmaptable', metadata,
+    Column('mapgroupname', Unicode(255), ForeignKey(
+                bdd_basename + 'mapgroup.name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
+    Column('mapname', Unicode(255), ForeignKey(
+                bdd_basename + 'map.name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)                           
+)
+
+"""
+MAP_LINK_TABLE = Table(
+    bdd_basename + 'maplinktable', metadata,
+    Column('groupname', Unicode, ForeignKey(
+                bdd_basename + 'group.name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
+    Column('idpermission', Integer, ForeignKey(
+                bdd_basename + 'permission.idpermission',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+"""
+
 

@@ -10,7 +10,8 @@ from sqlalchemy.orm import relation
 from .session import DBSession
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .secondary_tables import USERGROUP_PERMISSION_TABLE, \
-                                GROUP_PERMISSION_TABLE
+                                GROUP_PERMISSION_TABLE, \
+                                MAP_GROUP_PERMISSION_TABLE
 
 __all__ = ('Permission', )
 
@@ -37,6 +38,9 @@ class Permission(DeclarativeBase, object):
                       back_populates='permissions', lazy='dynamic')
 
     groups = relation('Group', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='permissions')
+    
+    mapgroups = relation('MapGroup', secondary=MAP_GROUP_PERMISSION_TABLE,
                     back_populates='permissions')
 
 
