@@ -128,6 +128,18 @@ MAP_GROUP_MAP_TABLE = Table(
             primary_key=True, autoincrement=False)                           
 )
 
+SUB_MAP_NODE_MAP_TABLE= Table(
+    bdd_basename + 'submapnodemaptable', metadata,
+    Column('nodemapid', Integer, ForeignKey(
+                bdd_basename + 'nodemap.idnodemap',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
+    Column('mapname', Unicode(255), ForeignKey(
+                bdd_basename + 'map.name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True)                           
+)
+
 """
 MAP_LINK_TABLE = Table(
     bdd_basename + 'maplinktable', metadata,

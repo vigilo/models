@@ -38,7 +38,7 @@ from .customgraphview import CustomGraphView
 from .tag import Tag
 from .access import Access
 from .mapgroup import MapGroup
-from .nodemap import NodeMap
+from .nodemap import NodeMap, NodeMapHost, NodeMapService
 from .segment import Segment
 from .map import Map
 from .link import Link 

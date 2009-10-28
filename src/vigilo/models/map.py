@@ -3,7 +3,7 @@
 """Modèle pour la table Map"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, UnicodeText, DateTime
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relation
@@ -25,15 +25,35 @@ class Map(DeclarativeBase, object):
         nullable=False)
     
     dat = Column(DateTime(timezone=False))
-
+    
+    title = Column(
+        Unicode(255),nullable=False
+        )
+    
+    background_color = Column(
+        Unicode(255)
+    )
+    
+    background_image = Column(
+        Unicode(255)
+    )
+    
+    """nodeforsubmap = Column(
+        Integer,
+        ForeignKey(
+            bdd_basename + 'nodemap.idnodemap'),
+        nullable=True)
+    """
+    
     mapgroups = relation('MapGroup', secondary=MAP_GROUP_MAP_TABLE, back_populates='maps', lazy='dynamic')
 
     links = relation('Link',
         back_populates='maps', uselist=True)
     #, secondary=MAP_LINK_TABLE, lazy='dynamic'
     
-    nodes = relation('NodeMap', back_populates='maps', 
+    nodes = relation('NodeMap', back_populates='map', 
                     uselist=True)
+    
     
     segments = relation('Segment',
         back_populates='maps', uselist=True)
