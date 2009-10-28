@@ -152,7 +152,7 @@ class User(DeclarativeBase, object):
         @rtype: C{bool}
 
         """
-        if settings['USE_KERBEROS']:
+        if settings.get('USE_KERBEROS', False):
             return True
         # Petite précaution
         if self._password is None:
