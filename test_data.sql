@@ -59,7 +59,9 @@ INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmp
 INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('testaix', 'check18', 'com18', 'fqhn18', 'tpl18', '192.168.0.18', 18, 18, '18');
 INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('testnortel', 'check19', 'com19', 'fqhn19', 'tpl19', '192.168.0.19', 19, 19, '19');
 INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('testsolaris', 'check20', 'com20', 'fqhn20', 'tpl20', '192.168.0.20', 20, 20, '20');
-
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('host1.example.com', 'check21', 'com21', 'fqhn21', 'tpl21', '192.168.0.21', 21, 21,'21');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('host2.example.com', 'check22', 'com22', 'fqhn22', 'tpl22', '192.168.0.22', 22, 22,'22');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('host3.example.com', 'check23', 'com23', 'fqhn23', 'tpl23', '192.168.0.23', 23, 23,'23');
 --
 -- Data for Name: service; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
@@ -83,7 +85,11 @@ INSERT INTO service (name, servicetype, command) VALUES ('TCP connections', '16'
 INSERT INTO service (name, servicetype, command) VALUES ('Temperature mb_p0_t_core', '17', 'cmd17');
 INSERT INTO service (name, servicetype, command) VALUES ('UpTime', '18', 'cmd18');
 INSERT INTO service (name, servicetype, command) VALUES ('Ventilateur mb_p0_f0_rs', '19', 'cmd19');
-INSERT INTO service (name, servicetype, command) VALUES ('Load', '', 'halt');
+INSERT INTO service (name, servicetype, command) VALUES ('Load', '20', 'cmd19');
+INSERT INTO service (name, servicetype, command) VALUES ('HTTPD', '21', 'cmd19');
+INSERT INTO service (name, servicetype, command) VALUES ('Interface eth0', '22', 'cmd19');
+INSERT INTO service (name, servicetype, command) VALUES ('Interface eth1', '23', 'cmd19');
+INSERT INTO service (name, servicetype, command) VALUES ('Interface eth2', '24', 'cmd19');
 
 --
 -- Data for Name: groups; Type: TABLE DATA; Schema: public; Owner: vigiboard
@@ -126,6 +132,9 @@ INSERT INTO hostgroup (hostname, groupname) VALUES ('server.mails', 'bla2');
 INSERT INTO hostgroup (hostname, groupname) VALUES ('testaix', 'bla2');
 INSERT INTO hostgroup (hostname, groupname) VALUES ('testnortel', 'bla2');
 INSERT INTO hostgroup (hostname, groupname) VALUES ('testsolaris', 'bla2');
+INSERT INTO hostgroup (hostname, groupname) VALUES ('host1.example.com', 'bla2');
+INSERT INTO hostgroup (hostname, groupname) VALUES ('host2.example.com', 'bla2');
+INSERT INTO hostgroup (hostname, groupname) VALUES ('host3.example.com', 'bla2');
 
 
 --
@@ -159,7 +168,11 @@ INSERT INTO servicegroup (servicename, groupname) VALUES ('TCP connections', 'bl
 INSERT INTO servicegroup (servicename, groupname) VALUES ('Temperature mb_p0_t_core', 'bla1');
 INSERT INTO servicegroup (servicename, groupname) VALUES ('UpTime', 'bla1');
 INSERT INTO servicegroup (servicename, groupname) VALUES ('Ventilateur mb_p0_f0_rs', 'bla1');
-
+INSERT INTO servicegroup (servicename, groupname) VALUES ('Load', 'bla1');
+INSERT INTO servicegroup (servicename, groupname) VALUES ('HTTPD', 'bla1');
+INSERT INTO servicegroup (servicename, groupname) VALUES ('Interface eth0', 'bla1');
+INSERT INTO servicegroup (servicename, groupname) VALUES ('Interface eth1', 'bla1');
+INSERT INTO servicegroup (servicename, groupname) VALUES ('Interface eth2', 'bla1');
 
 --
 -- Data for Name: state; Type: TABLE DATA; Schema: public; Owner: vigiboard
@@ -176,12 +189,31 @@ INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, s
 INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, statetype, attempt, message) VALUES (45, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 'WARNING', 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
 INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, statetype, attempt, message) VALUES (46, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 'WARNING', 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
 INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, statetype, attempt, message) VALUES (47, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 'WARNING', 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, statetype, attempt, message) VALUES (48, 'host1.example.com', 'Load', '192.168.0.21', '2009-04-07 13:33:26', 'OK', 'SOFT', 2, 'Load is OK');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, statetype, attempt, message) VALUES (49, 'host1.example.com', 'HTTPD', '192.168.0.21', '2009-04-07 13:33:26', 'OK', 'SOFT', 2, 'Appache is OK');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, statetype, attempt, message) VALUES (50, 'host1.example.com', 'Interface eth0', '192.168.0.21', '2009-04-07 13:33:26', 'OK', 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, statetype, attempt, message) VALUES (51, 'host2.example.com', 'Interface eth1', '192.168.0.21', '2009-04-07 13:33:26', 'OK', 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", statename, statetype, attempt, message) VALUES (52, 'host3.example.com', 'Interface eth1', '192.168.0.21', '2009-04-07 13:33:26', 'OK', 'SOFT', 2, 'eth0 is up');
+
+
+--
+-- Data for Name: serviceweight; Type: TABLE DATA; Schema: public; Owner: vigiboard
+--
+
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host1.example.com','Load', 1, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host1.example.com','HTTPD', 1, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host1.example.com','Interface eth0', 1, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host2.example.com','Interface eth1', 1, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host2.example.com','Interface eth2', 1, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host3.example.com','Interface eth1', 1, 1);
+
 
 
 --
 --
 -- Data for Name: version; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
+
 
 INSERT INTO version (name, version) VALUES ('vigiboard', '0.1');
 
