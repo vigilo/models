@@ -102,7 +102,7 @@ class NodeMapHost(NodeMap):
     __mapper_args__ = {'polymorphic_identity': u'host'}
     #__mapper_args__ = {'concrete':True}
     
-    idnodemap = Column(
+    idnodemaphost = Column(
         Integer,
         ForeignKey(
             bdd_basename + 'nodemap.idnodemap',
