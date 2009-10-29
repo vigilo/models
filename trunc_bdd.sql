@@ -39,6 +39,7 @@ TRUNCATE TABLE segmentnodetable CASCADE;
 TRUNCATE TABLE mapgrouppermissions CASCADE;
 TRUNCATE TABLE mapgroupmaptable CASCADE;
 TRUNCATE TABLE submapnodemaptable CASCADE;
+TRUNCATE TABLE legend CASCADE;
 
 
 

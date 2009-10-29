@@ -39,3 +39,4 @@ DROP TABLE segmentnodetable CASCADE;
 DROP TABLE mapgrouppermissions CASCADE;
 DROP TABLE mapgroupmaptable CASCADE;
 DROP TABLE submapnodemaptable CASCADE;
+DROP TABLE legend CASCADE;
