@@ -36,8 +36,7 @@ DROP TABLE eventsaggregates2events CASCADE;
 DROP TABLE eventsaggregate2hls CASCADE;
 DROP TABLE grouppermissions CASCADE;
 DROP TABLE usertousergroups CASCADE;
-DROP TABLE segmentnodetable;
-DROP TABLE mapgrouppermissions;
-DROP TABLE mapgroupmaptable;
-DROP TABLE submapnodemaptable;
-
+DROP TABLE segmentnodetable CASCADE;
+DROP TABLE mapgrouppermissions CASCADE;
+DROP TABLE mapgroupmaptable CASCADE;
+DROP TABLE submapnodemaptable CASCADE;
