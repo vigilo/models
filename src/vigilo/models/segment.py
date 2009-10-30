@@ -12,7 +12,7 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
 from .secondary_tables import SEGMENT_NODE_TABLE
 
-__all__ = ('Link', )
+__all__ = ('Segment', )
 
 class Segment(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'segment'
@@ -46,11 +46,11 @@ class Segment(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Initialise une liaison."""
-        super(Link, self).__init__(**kwargs)
+        super(Segment, self).__init__(**kwargs)
 
     def __unicode__(self):
         """
-        Formatte un C{Link} pour l'afficher dans les formulaires.
+        Formatte un C{Segment} pour l'afficher dans les formulaires.
 
         Le nom de la liaison est utilisé pour la représenter dans les formulaires.
 
@@ -67,7 +67,7 @@ class Segment(DeclarativeBase, object):
         @param linkname: Nom de la liasion voulue.
         @type linkname: C{unicode}
         @return: La liaison demandée.
-        @rtype: L{Link}
+        @rtype: L{Segment}
         """
         return DBSession.query(cls).filter(cls.name == linkname).first()
 

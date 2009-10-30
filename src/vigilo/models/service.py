@@ -50,6 +50,8 @@ class Service(DeclarativeBase, object):
     tags = relation('Tag', secondary=SERVICE_TAG_TABLE,
         back_populates='services', lazy='dynamic')
 
+    # TODO: le service n'est pas lie a un hote ? Il devrait... (relation n-n)
+
     @property
     def dependancies(self):
         """

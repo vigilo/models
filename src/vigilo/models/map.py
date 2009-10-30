@@ -24,19 +24,16 @@ class Map(DeclarativeBase, object):
         index=True, primary_key=True, 
         nullable=False)
     
-    dat = Column(DateTime(timezone=False))
+    mtime = Column(DateTime(timezone=False))
     
     title = Column(
         Unicode(255),nullable=False
-        )
-    
-    background_color = Column(
-        Unicode(255)
     )
     
-    background_image = Column(
-        Unicode(255)
-    )
+    background_color = Column(Unicode(255))
+    background_image = Column(Unicode(255))
+    background_position = Column(Unicode(255))
+    background_repeat = Column(Unicode(255))
     
     """nodeforsubmap = Column(
         Integer,
@@ -54,9 +51,9 @@ class Map(DeclarativeBase, object):
     nodes = relation('NodeMap', back_populates='map', 
                     uselist=True)
     
-    
     segments = relation('Segment',
         back_populates='maps', uselist=True)
+
 
     def __init__(self, **kwargs):
         """Initialise une carte."""

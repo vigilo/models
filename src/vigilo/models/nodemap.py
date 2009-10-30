@@ -58,8 +58,7 @@ class NodeMap(DeclarativeBase, object):
     map = relation('Map', back_populates='nodes')
     #primaryjoin='NodeMap.mapadress==Map.name'
     
-    submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE, 
-                    uselist=True)
+    submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
     #, primaryjoin='NodeMap.idnodemap==Map.nodeforsubmap'
     
     segments = relation('Segment', back_populates='nodemaps', secondary=SEGMENT_NODE_TABLE, lazy='dynamic', 
