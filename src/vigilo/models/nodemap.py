@@ -152,11 +152,19 @@ class NodeMapService(NodeMap):
         nullable=False
     )
     
-    name = Column(
+    hostname = Column(
+        Unicode(255),
+        ForeignKey(bdd_basename + 'host.name',
+        ondelete='CASCADE', onupdate='CASCADE'),
+        nullable=False
+    )
+
+    servicename = Column(
         Unicode(255),
         ForeignKey(bdd_basename + 'service.name',
         ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False)
+        nullable=False
+    )
     #index=True,
         
     serviceicon = Column(
