@@ -26,9 +26,7 @@ class Tag(DeclarativeBase, object):
         Unicode(255),
         primary_key=True, index=True)
 
-    value = Column(
-        Unicode(255),
-        unique=True, nullable=False, index=True)
+    value = Column(Unicode(255), nullable=True)
 
     hosts = relation('Host', secondary=HOST_TAG_TABLE,
         back_populates='tags', lazy='dynamic')

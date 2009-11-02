@@ -23,13 +23,11 @@ class Legend(DeclarativeBase, object):
     """
     __tablename__ = bdd_basename + 'legend'
 
-    idlegend = Column(
-        Integer,
-        primary_key=True, nullable=False, autoincrement=True)
-
     minthreshold = Column(
-        Integer,
-        nullable=False)
+            Integer,
+            primary_key=True,
+            autoincrement=False
+    )
 
     fillcolor = Column(
         Unicode(16),

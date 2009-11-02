@@ -4,6 +4,8 @@
 
 from __future__ import absolute_import
 
+import datetime
+
 from sqlalchemy import Column, DefaultClause, ForeignKey
 from sqlalchemy.orm import synonym, interfaces
 from sqlalchemy.ext.declarative import comparable_property
@@ -35,22 +37,31 @@ class State(DeclarativeBase, object):
                         # sous forme canonique. On arrondit à 40 caractères.
     )
 
-    timestamp = Column(DateTime(timezone=False), nullable=False)
+    timestamp = Column(
+            DateTime(timezone=False),
+            nullable=False,
+            default=datetime.datetime.now,
+    )
 
     statename = Column(
         Unicode(16),
         nullable=False,
-        server_default=DefaultClause('OK', for_update=False))
+        default=u"OK",
+    )
 
     # 'SOFT' ou 'HARD'
     statetype = Column(
         Unicode(8),
         nullable=False,
-        server_default=DefaultClause('SOFT', for_update=False))
+        default=u"SOFT",
+    )
 
     attempt = Column(
         Integer,
-        nullable=False, autoincrement=False)
+        nullable=False,
+        autoincrement=False,
+        default=1,
+    )
 
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None))
