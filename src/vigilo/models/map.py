@@ -19,16 +19,16 @@ __all__ = ('Map', )
 class Map(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'map'
 
-    name = Column(
-        Unicode(255),
-        index=True, primary_key=True, 
-        nullable=False)
+    idmap = Column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+        nullable=False,
+    )
     
     mtime = Column(DateTime(timezone=False))
     
-    title = Column(
-        Unicode(255),nullable=False
-    )
+    title = Column(Unicode(255), nullable=False)
     
     background_color = Column(Unicode(255))
     background_image = Column(Unicode(255))
@@ -38,21 +38,19 @@ class Map(DeclarativeBase, object):
     """nodeforsubmap = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'nodemap.idnodemap'),
+            bdd_basename + 'mapnode.idmapnode'),
         nullable=True)
     """
     
-    mapgroups = relation('MapGroup', secondary=MAP_GROUP_MAP_TABLE, back_populates='maps', lazy='dynamic')
+    groups = relation('MapGroup', secondary=MAP_GROUP_MAP_TABLE,
+                         back_populates='maps', lazy='dynamic')
 
-    links = relation('Link',
-        back_populates='maps', uselist=True)
+    links = relation('Link', back_populates='maps', uselist=True)
     #, secondary=MAP_LINK_TABLE, lazy='dynamic'
     
-    nodes = relation('NodeMap', back_populates='map', 
-                    uselist=True)
+    nodes = relation('MapNode', back_populates='map', uselist=True)
     
-    segments = relation('Segment',
-        back_populates='maps', uselist=True)
+    segments = relation('Segment', back_populates='maps', uselist=True)
 
 
     def __init__(self, **kwargs):

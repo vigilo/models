@@ -25,21 +25,17 @@ class Link(DeclarativeBase, object):
     from_node = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'nodemap.idnodemap',
+            bdd_basename + 'mapnode.idmapnode',
             ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
     
     to_node = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'nodemap.idnodemap',
+            bdd_basename + 'mapnode.idmapnode',
             ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
 
-    x_pos = Column(Integer)
-    
-    y_pos = Column(Integer)    
-    
     refhost = Column(
         Unicode(255),
         ForeignKey(
@@ -54,10 +50,10 @@ class Link(DeclarativeBase, object):
             ondelete='CASCADE', onupdate='CASCADE')
             ) 
     
-    mapadress = Column(
-        Unicode(255),
+    idmap = Column(
+        Integer,
         ForeignKey(
-            bdd_basename + 'map.name',
+            bdd_basename + 'map.idmap',
             onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False)
 

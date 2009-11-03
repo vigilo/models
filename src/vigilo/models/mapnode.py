@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """
-Modèle pour la table NodeMap
+Modèle pour la table MapNode
 
-    @ival idnodemap: Identifiant du modèle de noeud (séquence) 
+    @ival idmapnode: Identifiant du modèle de noeud (séquence) 
     @ival label: Label du noeud.
 """
 from __future__ import absolute_import
@@ -18,32 +18,26 @@ from .session import DBSession
 
 from .secondary_tables import SEGMENT_NODE_TABLE, SUB_MAP_NODE_MAP_TABLE
 
-__all__ = ('NodeMapHost', 'NodeMapService', 'NodeMapPerformance')
+__all__ = ('MapNodeHost', 'MapNodeService', 'MapNodePerformance')
 
-class NodeMap(DeclarativeBase, object):
-    __tablename__ = bdd_basename + 'nodemap'
+class MapNode(DeclarativeBase, object):
+    __tablename__ = bdd_basename + 'mapnode'
     
     
     #id = Column(Integer, primary_key=True)
 
     
-    idnodemap = Column(
+    idmapnode = Column(
         Integer,
         primary_key=True, autoincrement=True, nullable=False,
     )
     
-    label = Column(
-    Unicode(255)               
-    )
+    label = Column(Unicode(255))
 
-    isvisiblename = Column(Boolean)
-    
-    isvisibleinventory = Column(Boolean)
-    
-    mapadress = Column(
-        Unicode(255),
+    idmap = Column(
+        Integer,
         ForeignKey(
-            bdd_basename + 'map.name',
+            bdd_basename + 'map.idmap',
             onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False)
     
@@ -53,22 +47,19 @@ class NodeMap(DeclarativeBase, object):
     
     hidelabel = Column(
         Boolean, 
-        default = False, nullable = False)
+        default = False,
+        nullable = False)
 
     map = relation('Map', back_populates='nodes')
-    #primaryjoin='NodeMap.mapadress==Map.name'
+    #primaryjoin='MapNode.mapadress==Map.name'
     
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
-    #, primaryjoin='NodeMap.idnodemap==Map.nodeforsubmap'
+    #, primaryjoin='MapNode.idmapnode==Map.nodeforsubmap'
     
-    segments = relation('Segment', back_populates='nodemaps', secondary=SEGMENT_NODE_TABLE, lazy='dynamic', 
+    segments = relation('Segment', back_populates='nodes', secondary=SEGMENT_NODE_TABLE, lazy='dynamic', 
                         uselist=True)
     
-    
-    type_node = Column(
-        'type_node',
-        Unicode(16),
-        nullable=False)
+    type_node = Column('type_node', Unicode(16), nullable=False)
 
     __mapper_args__ = {'polymorphic_on': type_node}
     
@@ -78,7 +69,7 @@ class NodeMap(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
          """Initialise un node."""
-         super(NodeMap, self).__init__(**kwargs)
+         super(MapNode, self).__init__(**kwargs)
 
     def __unicode__(self):
         """
@@ -92,19 +83,19 @@ class NodeMap(DeclarativeBase, object):
         return self.name
 
 
-class NodeMapHost(NodeMap):
+class MapNodeHost(MapNode):
     """
     Classe chargée de la représentation graphique d'un hôte dans vigimap 
 
     """
-    __tablename__ = 'nodemaphost'
+    __tablename__ = 'mapnodehost'
     __mapper_args__ = {'polymorphic_identity': u'host'}
     #__mapper_args__ = {'concrete':True}
     
-    idnodemaphost = Column(
+    idmapnodehost = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'nodemap.idnodemap',
+            bdd_basename + 'mapnode.idmapnode',
             onupdate='CASCADE', ondelete='CASCADE'),
         primary_key=True,
         nullable=False
@@ -130,23 +121,23 @@ class NodeMapHost(NodeMap):
     
     
     def __init__(self, **kwargs):
-        super(NodeMapHost, self).__init__(**kwargs)
+        super(MapNodeHost, self).__init__(**kwargs)
         #self.type_node = u'host'
         
         
-class NodeMapService(NodeMap):
+class MapNodeService(MapNode):
     """
     Classe chargée de la représentation graphique d'un service dans vigimap 
 
     """
-    __tablename__ = 'nodemapservice'
+    __tablename__ = 'mapnodeservice'
     __mapper_args__ = {'polymorphic_identity': u'service'}
     #__mapper_args__ = {'concrete':True}
     
-    idnodemap = Column(
+    idmapnode = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'nodemap.idnodemap',
+            bdd_basename + 'mapnode.idmapnode',
             onupdate='CASCADE', ondelete='CASCADE'), 
         primary_key=True,
         nullable=False
@@ -177,11 +168,11 @@ class NodeMapService(NodeMap):
 
     
     def __init__(self, **kwargs):
-        super(NodeMapService, self).__init__(**kwargs)
+        super(MapNodeService, self).__init__(**kwargs)
         #self.type_node = u'service'
 
 """        
-class NodeMapPerformance(NodeMap):
+class MapNodePerformance(MapNode):
     
     Classe chargée de la représentation graphique d'un modèle Performance dans vigimap 
 
@@ -200,7 +191,7 @@ class NodeMapPerformance(NodeMap):
     
     
     def __init__(self, **kwargs):
-        super(NodeMapService, self).__init__(**kwargs)
+        super(MapNodeService, self).__init__(**kwargs)
         self.type_node = u'performance'
 """        
 

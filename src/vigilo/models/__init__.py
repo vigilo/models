@@ -8,7 +8,7 @@ __all__ = (
         'ServiceGroup', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User', 'BoardViewFilter', 'CustomGraphView', 'Tag', 'Access',
-        'HostServiceData', 'MapGroup', 'NodeMap','Segment', 'Map', 'Link',
+        'HostServiceData', 'MapGroup', 'MapNode','Segment', 'Map', 'Link',
         'Legend'
         )
 
@@ -39,7 +39,7 @@ from .customgraphview import CustomGraphView
 from .tag import Tag
 from .access import Access
 from .mapgroup import MapGroup
-from .nodemap import NodeMap, NodeMapHost, NodeMapService
+from .mapnode import MapNode, MapNodeHost, MapNodeService
 from .segment import Segment
 from .map import Map
 from .link import Link

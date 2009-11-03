@@ -17,14 +17,18 @@ class MapGroup(DeclarativeBase, object):
     """Gère les groupes (récursifs) d'hôtes/services.'"""
     __tablename__ = bdd_basename + 'mapgroup'
 
-    name = Column(
-        Unicode(255),
-        primary_key=True, nullable=False)    
+    idmapgroup = Column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+        nullable=False,
+    )
     
+    name = Column(Unicode(255), nullable=False)    
 
     _parent = Column(
-        'parent', Unicode(255),
-        ForeignKey(bdd_basename + 'mapgroup.name'),
+        'parent', Integer,
+        ForeignKey(bdd_basename + 'mapgroup.idmapgroup'),
         index=True)
 
     # XXX We should make sure it's impossible to build cyclic graphs.
@@ -33,7 +37,7 @@ class MapGroup(DeclarativeBase, object):
     permissions = relation('Permission', secondary=MAP_GROUP_PERMISSION_TABLE,
                     back_populates='mapgroups')
 
-    maps = relation('Map', secondary=MAP_GROUP_MAP_TABLE, back_populates='mapgroups', 
+    maps = relation('Map', secondary=MAP_GROUP_MAP_TABLE, back_populates='groups', 
                     uselist=True,    
             )
 

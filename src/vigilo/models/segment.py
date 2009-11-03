@@ -19,12 +19,10 @@ class Segment(DeclarativeBase, object):
     
     idsegment = Column(
         Integer,
-        primary_key=True, autoincrement=True, nullable=False,
+        primary_key=True,
+        autoincrement=True,
+        nullable=False,
     )
-
-    name = Column(
-        Unicode(255),
-        index=True, nullable=False)
 
     color = Column(
         Unicode(255),
@@ -32,14 +30,14 @@ class Segment(DeclarativeBase, object):
     
     thickness = Column(Integer)
     
-    mapadress = Column(
-        Unicode(255),
+    idmap = Column(
+        Integer,
         ForeignKey(
-            bdd_basename + 'map.name',
+            bdd_basename + 'map.idmap',
             onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False)
     
-    nodemaps = relation('NodeMap', secondary=SEGMENT_NODE_TABLE, back_populates='segments', uselist=True )
+    nodes = relation('MapNode', secondary=SEGMENT_NODE_TABLE, back_populates='segments', uselist=True)
     
     maps = relation('Map', back_populates='segments')
 
