@@ -1,27 +1,21 @@
 # vim: set fileencoding=utf-8 sw=4 ts=4 et :
-
 """
-A session class.
+Gère les sessions d'accès à la BDD utilisées par les différents
+composants de Vigilo.
 
-Update: two, due to the zodb's leaky abstraction.
+On dispose de 2 types de session :
 
-Thread-local, autoflush, no autocommit.
+-   DBSession correspond à une session utilisant l'extension
+    ZopeTransactionExtension. Il s'agit du type de session à utiliser de
+    préférence dans les applications TurboGears. L'extension utilisée permet
+    de faire un COMMIT des transactions automatiquement à la fin des requêtes
+    HTTP (lorsque la requête a pu être traitée correctement, c'est-à-dire
+    lorsque le code de retour vaut 200).
 
-Turbogears components have their own in the vigiboard package
-and shouldn't use this.
-
-We have a dilemma when writing model methods: should those use the raw session,
-always available but less featureful and bypassing zope transactions,
-or the ZTE transaction?
-
-I'll go with the ZTE one. Because otherwise we might be bypassing
-the ZTE session context. Also models shouldn't need to commit.
-
-Because of that I'm forced to use the ZTE variant everywhere,
-and to use the zope way to commit transactions.
-
-Or I could move the DBSession-using models to a different package,
-to ensure that there is no dependency that pulls them.
+-   RawDBSession correspond à une session brute, stockée dans la mémoire du
+    thread, effectuant automatiquement les flush mais pas les COMMIT.
+    Ce type de session sera utilisé dans les composants de Vigilo qui ne
+    traitent pas des requêtes HTTP (ex: corrélateur, connecteurs, etc.).
 """
 
 from sqlalchemy.engine import engine_from_config
@@ -31,25 +25,24 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 from vigilo.common.conf import settings
 
-__all__ = ( 'DBSession', )
+__all__ = ( 'RawDBSession', 'DBSession', )
 
-"""
-Raw session.
-
-We can commit on it and stuff.
-"""
+# Raw session.
+# We can commit on it and stuff.
 RawDBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False))
 RawDBSession.bind = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
 
-"""
-ZTE session.
+def get_raw_session():
+    RawDBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False))
+    RawDBSession.bind = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
+    return RawDBSession
 
-We must go through transaction (a zodb extraction) to commit, rollback.
-There's also a session context to hold managed data, and the
-ZopeTransactionExtension makes that mostly transparent.
-The ZopeTransactionExtension prevents us
-from committing, etc, the session directly.
-"""
+# ZTE session.
+# We must go through transaction (a zodb extraction) to commit, rollback.
+# There's also a session context to hold managed data, and the
+# ZopeTransactionExtension makes that mostly transparent.
+# The ZopeTransactionExtension prevents us
+# from committing, etc, the session directly.
 ZTEDBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False,
     extension=ZopeTransactionExtension()))
 ZTEDBSession.bind = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')

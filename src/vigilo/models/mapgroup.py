@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation, backref
+from sqlalchemy.orm import relation#, backref
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
@@ -32,14 +32,14 @@ class MapGroup(DeclarativeBase, object):
         index=True)
 
     # XXX We should make sure it's impossible to build cyclic graphs.
-    #children = relation('MapGroup', backref=backref('parent', remote_side=[name]))
+    #children = relation('MapGroup',
+    #    backref=backref('parent', remote_side=[name]))
 
     permissions = relation('Permission', secondary=MAP_GROUP_PERMISSION_TABLE,
-                    back_populates='mapgroups')
+                            back_populates='mapgroups')
 
-    maps = relation('Map', secondary=MAP_GROUP_MAP_TABLE, back_populates='groups', 
-                    uselist=True,    
-            )
+    maps = relation('Map', secondary=MAP_GROUP_MAP_TABLE,
+                    back_populates='groups', uselist=True, )
 
     def __init__(self, **kwargs):
         """

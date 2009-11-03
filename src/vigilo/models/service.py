@@ -3,9 +3,8 @@
 """Modèle pour la table Service"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column
-from sqlalchemy.types import UnicodeText, Unicode
-from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.types import UnicodeText, Unicode, Integer
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -16,13 +15,14 @@ __all__ = ('Service', )
 
 class Service(DeclarativeBase, object):
     """
-    Service de bas niveau (service technique).
+    Service générique.
     
     @ivar name: Nom du service.
-    @ivar servicetype: ???.
-    @todo: documenter l'attribut servicetype.
-    @ivar command: Commande à exécuter pour vérifier l'état du service.
-    @ivar servicegrops: Liste des groupes de services auxquels
+    @ivar op_dep: Le type d'opération à appliquer aux dépendances de ce
+        service de haut niveau ('+', '&' ou '|').
+    @ivar servicetype: Indique le type de service. Vaut soit 'highlevel' pour
+        un L{ServiceHighLevel}, soit 'lowlevel' pour un L{ServiceLowLevel}.
+    @ivar servicegroups: Liste des groupes de services auxquels
         ce service appartient.
     @ivar tags: Liste des libellés associés à ce service.
     @ivar dependancies: Liste des services dont ce service dépend.
@@ -31,19 +31,28 @@ class Service(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'service'
 
+    _idservice = Column(
+        'idservice', Integer,
+        autoincrement=True, primary_key=True,
+    )
+
     name = Column(
         Unicode(255),
-        index=True, primary_key=True, nullable=False)
+        index=True, unique=True, nullable=False,
+    )
+
+    op_dep = Column(
+        Unicode(1),
+        nullable=False,
+    )
 
     servicetype = Column(
-        Unicode(255),
-        default=u'0', nullable=False)
+        Unicode(16),
+        nullable=False,
+    )
 
-    command = Column(
-        UnicodeText,
-        default=u'', nullable=False)
-
-    servicegroups = relation('ServiceGroup', back_populates='services', uselist=True, )
+    servicegroups = relation('ServiceGroup',
+        back_populates='services', uselist=True, )
 
 #    groups = association_proxy('servicegroups', 'groups')
 
@@ -64,6 +73,8 @@ class Service(DeclarativeBase, object):
         d'erreurs.
         """
         return []
+
+    __mapper_args__ = {'polymorphic_on': servicetype}
 
 
     def __init__(self, **kwargs):
@@ -92,4 +103,78 @@ class Service(DeclarativeBase, object):
         @rtype: L{Service} ou None
         """
         return DBSession.query(cls).filter(cls.name == servicename).first()
+
+
+class ServiceLowLevel(Service):
+    """
+    Service de bas niveau (service technique).
+
+    @ivar command: Commande à exécuter pour vérifier l'état du service.
+    """
+    __tablename__ = bdd_basename + 'servicelowlevel'
+    __mapper_args__ = {'polymorphic_identity': u'lowlevel'}
+
+    _idservice = Column(
+        'idservice', Integer,
+        ForeignKey(
+            bdd_basename + 'service.idservice',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        autoincrement=False, primary_key=True,
+    )
+
+    command = Column(
+        UnicodeText,
+        default=u'', nullable=False,
+    )
+
+    def __init__(self, **kwargs):
+        super(ServiceLowLevel, self).__init__(**kwargs)
+
+
+class ServiceHighLevel(Service):
+    """
+    Service de haut niveau.
+
+    @ivar message: Message à afficher dans Vigiboard lorsque le service
+        passe dans un état autre que OK.
+    @ivar warning_threshold: Seuil à partir duquel le service passe de
+        l'état OK à l'état WARNING.
+    @ivar critical_threshold: Seuil à partir duquel le service passe de
+        l'état WARNING à l'état CRITICAL.
+    """
+    __tablename__ = bdd_basename + 'servicehighlevel'
+    __mapper_args__ = {'polymorphic_identity': u'highlevel'}
+
+    _idservice = Column(
+        'idservice', Integer,
+        ForeignKey(
+            bdd_basename + 'service.idservice',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        autoincrement=False, primary_key=True,
+    )
+
+    message = Column(
+        UnicodeText,
+        nullable=False,
+    )
+
+    warning_threshold = Column(
+        Integer,
+        nullable=False,
+    )
+
+    critical_threshold = Column(
+        Integer,
+        nullable=False,
+    )
+
+    weight = Column(
+        Integer,
+        nullable=True,
+    )
+
+    def __init__(self, **kwargs):
+        super(ServiceHighLevel, self).__init__(**kwargs)
 

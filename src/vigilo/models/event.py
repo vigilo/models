@@ -5,12 +5,11 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import synonym
-from sqlalchemy.types import Unicode, UnicodeText, Text, DateTime, Integer
+from sqlalchemy.types import Unicode, Text, DateTime, Integer
 
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
 from .state import state_proxy
 
 __all__ = ('Event', )
@@ -33,8 +32,8 @@ class Event(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'event'
 
     idevent = Column(
-        Unicode(40),
-        primary_key=True, nullable=False, #autoincrement=True
+        Integer,
+        primary_key=True, nullable=False, autoincrement=True
     )
 
     timestamp = Column(DateTime(timezone=False))
@@ -85,7 +84,7 @@ class Event(DeclarativeBase, object):
         self._numeric_current_state = value
     numeric_current_state = synonym('_numeric_current_state',
         descriptor=property(_get_numeric_state, _set_numeric_state))
-    state = state_proxy('numeric_current_state', 'state')
+    current_state = state_proxy('numeric_current_state')
 
     # Puis, l'état initial.
     # Cet attribut est en lecture seule une fois l'évènement créé.
@@ -97,7 +96,7 @@ class Event(DeclarativeBase, object):
         return self._numeric_initial_state
     numeric_initial_state = synonym('_numeric_initial_state',
         descriptor=property(_get_numeric_initial_state, None))
-    initial_state = state_proxy('numeric_initial_state', 'initial_state')
+    initial_state = state_proxy('numeric_initial_state')
 
     # Et enfin, l'état maximal.
     # Cet attribut est en lecture seule une fois l'évènement créé.
@@ -109,7 +108,7 @@ class Event(DeclarativeBase, object):
         return self._numeric_peak_state
     numeric_peak_state = synonym('_numeric_peak_state',
         descriptor=property(_get_numeric_peak_state, None))
-    peak_state = state_proxy('numeric_peak_state', 'peak_state')
+    peak_state = state_proxy('numeric_peak_state')
 
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None),
@@ -153,7 +152,7 @@ class Event(DeclarativeBase, object):
         """
 
         date = datetime.now() - self.__dict__[element]
-        minutes, seconds = divmod(date.seconds, 60)
+        minutes = divmod(date.seconds, 60)[0]
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
 

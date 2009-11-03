@@ -2,7 +2,7 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Test suite for Access class"""
 from vigilo.models import Access
-from vigilo.models.tests import ModelTest, setup_db, teardown_db
+from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from datetime import datetime
 import unittest

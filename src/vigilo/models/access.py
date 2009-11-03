@@ -6,6 +6,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, DateTime, UnicodeText, Unicode
+from sqlalchemy.exc import InvalidRequestError, IntegrityError
 from datetime import datetime
 import transaction
 
@@ -61,7 +62,7 @@ class Access(DeclarativeBase, object):
         DBSession.add(access)
         try:
             DBSession.flush()
-        except:
+        except (InvalidRequestError, IntegrityError):
             # XXX log error before we pass.
             pass
         else:
@@ -93,7 +94,7 @@ class Access(DeclarativeBase, object):
         DBSession.add(access)
         try:
             DBSession.flush()
-        except:
+        except (InvalidRequestError, IntegrityError):
             # XXX log error before we pass.
             pass
         else:

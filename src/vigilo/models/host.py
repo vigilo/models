@@ -5,7 +5,6 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
-from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -28,7 +27,6 @@ class Host(DeclarativeBase, object):
     @ivar snmpport: Port à utiliser pour le protocole SNMP.
     @ivar snmpoidsperpdu: Nombre d'OIDs à transmettre par PDU.
     @ivar snmpversion: Version du protocole SNMP à utiliser.
-    @ivar nagiosjid: JID du serveur Nagios responsable de cet hôte.
     @ivar hostgroups: Liste des groupes d'hôtes auxquels cet hôte appartient.
     @ivar tags: Liste des libellés attachés à cet hôte.
     """
@@ -70,7 +68,7 @@ class Host(DeclarativeBase, object):
 #    groups = association_proxy('hostgroups', 'groups')
 
     tags = relation('Tag', secondary=HOST_TAG_TABLE,
-        back_populates='hosts', lazy='dynamic')
+        back_populates='hosts', )
 
 
     def __init__(self, **kwargs):

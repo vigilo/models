@@ -14,19 +14,21 @@ metadata.bind = DBSession.bind
 
 #Create an empty database before we start our tests for this module
 def setup_db():
-    """Function called by nose on module load"""
+    """Crée toutes les tables du modèle dans la BDD."""
     metadata.create_all()
     
 #Teardown that database 
 def teardown_db():
-    """Function called by nose after all tests in this module ran"""
+    """Supprime toutes les tables du modèle de la BDD."""
     metadata.drop_all()
 
 
 def setup():
+    """Fonction appelée par nose au début des tests."""
     setup_db()
 
 def teardown():
+    """Fonction appelée par nose à la fin des tests."""
     teardown_db()
 
 class ModelTest(object):
@@ -36,7 +38,9 @@ class ModelTest(object):
     attrs = {}
 
     def __init__(self):
+        """Initialise une suite de tests sur un object du modèle."""
         object.__init__(self)
+        self.obj = None
 
     def setup(self):
         """Set up the fixture used to test the model."""
@@ -66,16 +70,17 @@ class ModelTest(object):
         return {}
 
     def test_create_obj(self):
+        """Teste la création de l'objet."""
         pass
 
     def test_query_obj(self):
+        """Vérifie les données insérées."""
         obj = DBSession.query(self.klass).one()
         for key, value in self.attrs.iteritems():
             assert_equals(getattr(obj, key), value)
 
-def runtests(args=[]):
+def runtests(*args):
     """This is the method called when running unit tests."""
-    # XXX hard-coded path.
     sys.argv[1:0] = ['--cover-inclusive',
                      '--cover-erase', '--cover-package', 'models',
                      'vigilo.models.tests']

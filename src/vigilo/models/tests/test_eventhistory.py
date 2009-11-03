@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for EventHistory class"""
-from vigilo.models import EventHistory, Host, Service, Event
+from vigilo.models import EventHistory, Host, ServiceLowLevel, Event
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from datetime import datetime
@@ -9,8 +9,13 @@ class TestEventHistory(ModelTest):
     """Test de la table EventHistory"""
 
     klass = EventHistory
-    attrs = dict(type_action = u'Nagios update state', value = u'',
-            text = u'', username = u'manager')
+    attrs = {
+        'type_action': u'Nagios update state',
+        'value': u'',
+        'text': u'',
+        'username': u'manager',
+        'timestamp': datetime.now(),
+    }
 
     def __init__(self):
         ModelTest.__init__(self)
@@ -28,19 +33,20 @@ class TestEventHistory(ModelTest):
             snmpport=1234,
             ))
 
-        DBSession.add(Service(
+        DBSession.add(ServiceLowLevel(
             name=u'monservice',
             servicetype=u'foo',
             command=u'halt',
+            op_dep=u'+',
             ))
         DBSession.flush()
 
         DBSession.add(Event(
-            idevent=u'foo',
+            idevent=42,
             timestamp=datetime.now(),
             hostname=u'monhost',
             servicename=u'monservice',
-            state=u'OK',
+            current_state=u'OK',
             message=u'Foo',
             ))
         DBSession.flush()

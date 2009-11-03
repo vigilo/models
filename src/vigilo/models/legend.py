@@ -4,12 +4,9 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, Unicode, UnicodeText
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy.orm import relation
+from sqlalchemy.types import Integer, Unicode
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
 
 __all__ = ('Legend', )
 
@@ -36,7 +33,6 @@ class Legend(DeclarativeBase, object):
     strokecolor = Column(
         Unicode(16),
         nullable=False)
-
 
 
     def __init__(self, **kwargs):

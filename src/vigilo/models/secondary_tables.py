@@ -47,22 +47,22 @@ SERVICE_TAG_TABLE = Table(
 
 EVENTS_EVENTSAGGREGATE_TABLE = Table(
     bdd_basename + 'eventsaggregates2events', metadata,
-    Column('idevent', Unicode(40), ForeignKey(
+    Column('idevent', Integer, ForeignKey(
                 bdd_basename + 'event.idevent',
                 onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idaggregate', Unicode(40), ForeignKey(
+            primary_key=True, autoincrement=False),
+    Column('idaggregate', Integer, ForeignKey(
                 bdd_basename + 'eventsaggregate.idaggregate',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
 )
 
 EVENTSAGGREGATE_HLS_TABLE = Table(
-    bdd_basename + 'eventsaggregate2hls', metadata,
+    bdd_basename + 'eventsaggregates2hls', metadata,
     Column('hls_servicename', Unicode(255),
-            ForeignKey(bdd_basename + 'highlevelservice.servicename'),
+            ForeignKey(bdd_basename + 'service.name'),
             primary_key=True),
-    Column('idaggregate', Unicode(40), ForeignKey(
+    Column('idaggregate', Integer, ForeignKey(
                 bdd_basename + 'eventsaggregate.idaggregate',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
@@ -128,7 +128,7 @@ MAP_GROUP_MAP_TABLE = Table(
             primary_key=True, autoincrement=False)                           
 )
 
-SUB_MAP_NODE_MAP_TABLE= Table(
+SUB_MAP_NODE_MAP_TABLE = Table(
     bdd_basename + 'submapmapnodetable', metadata,
     Column('mapnodeid', Integer, ForeignKey(
                 bdd_basename + 'mapnode.idmapnode',
@@ -140,18 +140,15 @@ SUB_MAP_NODE_MAP_TABLE= Table(
             primary_key=True)                           
 )
 
-"""
-MAP_LINK_TABLE = Table(
-    bdd_basename + 'maplinktable', metadata,
-    Column('groupname', Unicode, ForeignKey(
-                bdd_basename + 'group.name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idpermission', Integer, ForeignKey(
-                bdd_basename + 'permission.idpermission',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
-)
-"""
-
+#MAP_LINK_TABLE = Table(
+#    bdd_basename + 'maplinktable', metadata,
+#    Column('groupname', Unicode, ForeignKey(
+#                bdd_basename + 'group.name',
+#                onupdate="CASCADE", ondelete="CASCADE"),
+#            primary_key=True),
+#    Column('idpermission', Integer, ForeignKey(
+#                bdd_basename + 'permission.idpermission',
+#                onupdate="CASCADE", ondelete="CASCADE"),
+#            primary_key=True, autoincrement=False)
+#)
 

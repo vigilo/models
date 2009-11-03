@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """Test suite for HostServiceData class"""
-from vigilo.models import HostServiceData, Host, Service
+from vigilo.models import HostServiceData, Host, ServiceLowLevel
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
 class TestHostServiceData(ModelTest):
     """
-    Teste l'affectation de données à un couple (L{Host}, L{Service}).
+    Teste l'affectation de données à un couple (L{Host}, L{ServiceLowLevel}).
 
     Par exemple, on teste l'affectation d'un "poids" au couple.
     Plus le poids de ce couple est élevé, plus il est critique
@@ -38,10 +38,11 @@ class TestHostServiceData(ModelTest):
         DBSession.flush()
 
         # Création du service physique sur lequel portera la dépendance.
-        service = Service(
+        service = ServiceLowLevel(
             name=u'physical',
             servicetype=u'foo',
             command=u'halt',
+            op_dep=u'+',
         )
         DBSession.add(service)
         DBSession.flush()

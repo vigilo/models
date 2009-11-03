@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation, backref
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -32,18 +32,18 @@ class Group(DeclarativeBase, object):
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='groups')
 
-    servicegroups = relation('ServiceGroup', back_populates='groups', uselist=True,
-        )
+    servicegroups = relation('ServiceGroup',
+        back_populates='groups', uselist=True, )
 
-    hostgroups = relation('HostGroup', back_populates='groups', uselist=True,
-        )
+    hostgroups = relation('HostGroup',
+        back_populates='groups', uselist=True, )
 
 
     def __init__(self, **kwargs):
         """
         Initialise l'instance avec les informations du groupe.
         
-        @param kwargs: Un dictionnaire contenant les informations sur le groupe.
+        @param kwargs: Un dictionnaire avec les informations sur le groupe.
         @type kwargs: C{dict}
         """
         super(Group, self).__init__(**kwargs)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for PerfDataSource class"""
-from vigilo.models import Host, Service, Graph, PerfDataSource
+from vigilo.models import Host, ServiceLowLevel, Graph, PerfDataSource
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -25,10 +25,11 @@ class TestPerfDataSource(ModelTest):
             mainip=u'127.0.0.1',
             snmpport=u'1234',
             ))
-        DBSession.add(Service(
+        DBSession.add(ServiceLowLevel(
             name=u'monservice',
             servicetype=u'foo',
             command=u'halt',
+            op_dep=u'+',
             ))
         DBSession.add(Graph(name = u"mongraph"))
         DBSession.flush()

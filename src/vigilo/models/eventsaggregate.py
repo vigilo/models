@@ -30,25 +30,24 @@ class EventsAggregate(DeclarativeBase, object):
     @ivar occurrences: Compteur d'occurrences de l'agrégat. Il est incrémenté
         chaque fois que l'état de l'évènement oscille alors que l'opérateur
         n'est pas encore intervenu.
-    @ivar timestamp_active: Date de la dernière occurence de l'évènement ou
-        de sa dernière modification.
+    @ivar timestamp_active: Date de dernière ouverture de l'évènement.
     """
 
     __tablename__ = bdd_basename + 'eventsaggregate'
 
     idaggregate = Column(
-        Unicode(40),
+        Integer,
         primary_key=True,
-#        autoincrement=True,
+        autoincrement=True,
     )
 
     idcause = Column(
-        Unicode(40),
+        Integer,
         ForeignKey(
             bdd_basename + 'event.idevent',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-#        autoincrement=False,
+        autoincrement=False,
         nullable=False,
     )
 
@@ -74,14 +73,14 @@ class EventsAggregate(DeclarativeBase, object):
         nullable=False,
     )
 
-    events = relation('Event', #lazy='dynamic',
+    events = relation('Event', lazy='dynamic',
         secondary=EVENTS_EVENTSAGGREGATE_TABLE)
 
     cause = relation('Event',
-        primaryjoin=idcause == Event.idevent)
+        primaryjoin=idcause == Event.idevent, lazy='dynamic')
 
-    high_level_services = relation('HighLevelService',
-        #lazy='dynamic',
+    high_level_services = relation('Service',
+        lazy='dynamic',
         secondary=EVENTSAGGREGATE_HLS_TABLE)
 
 
@@ -121,7 +120,7 @@ class EventsAggregate(DeclarativeBase, object):
         """
 
         date = datetime.now() - getattr(self, element)
-        minutes, seconds = divmod(date.seconds, 60)
+        minutes = divmod(date.seconds, 60)[0]
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
 

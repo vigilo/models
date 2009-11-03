@@ -7,14 +7,30 @@ from __future__ import absolute_import
 import datetime
 
 from sqlalchemy import Column, DefaultClause, ForeignKey
-from sqlalchemy.orm import synonym, interfaces
-from sqlalchemy.ext.declarative import comparable_property
+from sqlalchemy.orm import synonym
+#from sqlalchemy.orm import interfaces
+#from sqlalchemy.ext.declarative import comparable_property
 from sqlalchemy.types import Integer, Text, DateTime, Unicode
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 
 class State(DeclarativeBase, object):
+    """
+    Stocke un état transmis par Nagios.
+
+    @ivar idstate: Identifiant de l'état, autogénéré.
+    @ivar hostname: Nom de l'hôte concerné. Vaut None pour les services
+        de haut niveau.
+    @ivar servicename: Nom du service concerné. Vaut None lorsque l'état
+        concerne directement l'hôte.
+    @ivar ip: Adresse IP (v4 ou v6) de l'hôte.
+    @ivar timestamp: Horodattage de l'état.
+    @ivar statename: Valeur de l'état (OK, WARNING, UP, DOWN, etc.).
+    @ivar statetype: Type d'état (cf. Nagios). Vaut soit 'SOFT', soit 'HARD'.
+    @ivar attempt: Nombre de tentatives effectuées par Nagios.
+    @ivar message: Message d'état transmis par Nagios.
+    """
 
     __tablename__ = bdd_basename + 'state'
 
@@ -25,16 +41,19 @@ class State(DeclarativeBase, object):
     hostname = Column(
         Unicode(255),
         ForeignKey(bdd_basename +'host.name'),
-        index=True, nullable=False)
+        index=True, nullable=True,
+    )
 
     servicename = Column(
         Unicode(255),
         ForeignKey(bdd_basename + 'service.name'),
-        index=True)
+        index=True, nullable=True,
+    )
 
     ip = Column(
         Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
                         # sous forme canonique. On arrondit à 40 caractères.
+        nullable=True,
     )
 
     timestamp = Column(
@@ -58,9 +77,8 @@ class State(DeclarativeBase, object):
 
     attempt = Column(
         Integer,
-        nullable=False,
+        nullable=True,
         autoincrement=False,
-        default=1,
     )
 
     message = Column(
@@ -68,6 +86,10 @@ class State(DeclarativeBase, object):
 
     @staticmethod
     def names_mapping():
+        """
+        Définit une relation entre le nom de l'état dans Nagios
+        et une valeur numérique stockée en base de données.
+        """
         return [
             'OK',           # 0
             'UNKNOWN',
@@ -84,7 +106,7 @@ class State(DeclarativeBase, object):
         super(State, self).__init__(**kwargs)
 
 
-def state_proxy(num_state, text_state):
+def state_proxy(num_state):
     """
     Permet de lier entre elles la représentation textuelle
     et la représentation numérique d'un état.
@@ -96,33 +118,35 @@ def state_proxy(num_state, text_state):
         'current_state', Integer,
         autoincrement=False, nullable=False,
     )
-    state = state_proxy('numeric_current_state', 'state')
+    state = state_proxy('numeric_current_state')
 
     @param num_state: Le nom de l'attribut dans la classe contenant
         la représentation numérique de l'état.
     @type num_state: C{str}
-    @param text_state: Le nom de l'attribut dans la classe contentant
-        la représentation textuelle de l'état. Il s'agira généralement
-        du nom de la variable dans laquelle la valeur de retour de cette
-        fonction sera stockée.
-    @type text_state: C{str}
     @return: Un attribut utilisable avec les mécanismes de SQLAlchemy.
     @rtype: C{SynonymProperty}
     """
 
     def getter(self):
+        """Renvoie la valeur textuelle de l'état."""
         return State.names_mapping()[self.__getattribute__(num_state)]
 
     def setter(self, value):
+        """
+        Modifié la valeur de l'état à partir de sa
+        représentation textuelle.
+        """
         self.__setattr__(num_state,
             State.names_mapping().index(value.upper()))
 
-#    class comparator(interfaces.PropComparator):
+#    class Comparator(interfaces.PropComparator):
+#        """Comparateur entre 2 valeurs textuelles d'un état."""
 #        def __eq__(self, other):
+#            """Opération de comparaison."""
 #            return self.__getattr__(num_state) == \
 #                other.__getattr__(num_state)
 
     attribute = synonym(num_state, descriptor=property(getter, setter))
-#    attribute = comparable_property(comparator, attribute.descriptor)
+#    attribute = comparable_property(Comparator, attribute.descriptor)
     return attribute
 

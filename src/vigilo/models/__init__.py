@@ -5,11 +5,12 @@
 __all__ = (
         'EventHistory', 'Event', 'EventsAggregate', 'Group',
         'GraphGroup', 'Graph', 'HostGroup', 'Host', 'PerfDataSource',
-        'ServiceGroup', 'ServiceHautNiveau', 'Service', 'ServiceTopo',
+        'ServiceGroup', 'ServiceLowLevel', 'ServiceHighLevel',
+        'ServiceDepHighOnHigh', 'ServiceDepHighOnLow', 'ServiceDepLowOnLow',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User', 'BoardViewFilter', 'CustomGraphView', 'Tag', 'Access',
         'HostServiceData', 'MapGroup', 'MapNode','Segment', 'Map', 'Link',
-        'Legend'
+        'Legend',
         )
 
 
@@ -23,11 +24,10 @@ from .hostgroup import HostGroup
 from .host import Host
 from .perfdatasource import PerfDataSource
 from .servicegroup import ServiceGroup
-from .highlevelservice import HighLevelService
-from .highlevelservicedep import HighLevelServiceDepLowLevel, \
-                                HighLevelServiceDepHighLevel
 from .hostservicedata import HostServiceData
-from .service import Service
+from .service import ServiceLowLevel, ServiceHighLevel
+from .servicedephigh import ServiceDepHighOnHigh, ServiceDepHighOnLow
+from .servicedeplow import ServiceDepLowOnLow
 from .graphtogroups import GraphToGroups
 from .version import Version
 from .state import State

@@ -7,7 +7,6 @@ from sqlalchemy import ForeignKey, Column
 from sqlalchemy.types import Integer, UnicodeText, Unicode, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
-from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -24,30 +23,33 @@ class EventHistory(DeclarativeBase, object):
     @ivar username: Nom d'utilisateur de la personne effectuant l'action.
     """
 
-    __tablename__ = bdd_basename + 'event_history'
+    __tablename__ = bdd_basename + 'eventhistory'
 
     idhistory = Column(
         Integer,
-        primary_key=True, nullable=False, autoincrement=True)
+        primary_key=True, nullable=False, autoincrement=True,
+    )
 
     type_action = Column(
         MSEnum('Nagios update state', 'Acknowlegement change state',
             'New occurence', 'User comment', 'Ticket change', 'Oncall',
             'Forced state'),
-        nullable=False)
+        nullable=False,
+    )
 
     idevent = Column(
-        Unicode(40),
+        Integer,
         ForeignKey(
             bdd_basename + 'event.idevent'
         ),
-        index=True, nullable=False)
+        index=True, nullable=False, autoincrement=False,
+    )
 
     value = Column(UnicodeText)
 
     text = Column(Text(length=None, convert_unicode=True, assert_unicode=None))
 
-    timestamp = Column(DateTime(timezone=False), default=datetime.now())
+    timestamp = Column(DateTime(timezone=False), nullable=False)
 
     username = Column(Unicode(255))
 

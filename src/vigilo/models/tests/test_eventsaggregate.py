@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for EventsAggregate class"""
-from vigilo.models import EventsAggregate, Event, Service, Host
+from vigilo.models import EventsAggregate, Event, ServiceLowLevel, Host
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true
@@ -12,7 +12,7 @@ class TestEventsAggregate(ModelTest):
 
     klass = EventsAggregate
     attrs = {
-        'idaggregate': u'bar',
+        'idaggregate': 42,
         'status': u'OK',
         'timestamp_active': datetime.now(),
     }
@@ -22,10 +22,11 @@ class TestEventsAggregate(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-        DBSession.add(Service(
+        DBSession.add(ServiceLowLevel(
             name=u'monservice',
             servicetype=u'foo',
             command=u'halt',
+            op_dep=u'+',
             ))
 
         DBSession.add(Host(
@@ -40,16 +41,16 @@ class TestEventsAggregate(ModelTest):
         DBSession.flush()
 
         DBSession.add(Event(
-            idevent=u'foo',
+            idevent=42,
             timestamp=datetime.now(),
             hostname=u'monhost',
             servicename=u'monservice',
-            state=u'OK',
+            current_state=u'OK',
             message=u'Foo',
             ))
         DBSession.flush()
 
-        return dict(idcause=u'foo')
+        return dict(idcause=u'42')
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""

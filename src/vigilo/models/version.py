@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, UnicodeText
+from sqlalchemy.types import Unicode
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -14,10 +14,10 @@ class Version(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'version'
 
     name = Column(
-            UnicodeText(),
+            Unicode(64),
             index=True, primary_key=True, nullable=False)
     version = Column(
-            UnicodeText(),
+            Unicode(64),
             nullable=False)
 
     def __init__(self, **kwargs):

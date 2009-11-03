@@ -3,7 +3,7 @@
 """Modèle pour la table Permissions"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 

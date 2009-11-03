@@ -5,7 +5,8 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
-from sqlalchemy.types import Unicode, UnicodeText
+from sqlalchemy.types import Unicode
+import hashlib
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
@@ -161,9 +162,27 @@ class User(DeclarativeBase, object):
 
     @staticmethod
     def _hash_password(password):
-        """Applique une fonction de hachage au mot de passe."""
-        # XXX définir une vraie fonction de hachage (ex: SHA1)
-        return password
+        """
+        Applique une fonction de hachage au mot de passe.
+        
+        @param password: Mot de passe à hacher.
+        @type password: C{str}
+        @return: Hash correspondant au mot de passe donné.
+        @rtype: 
+        @note: Si la variable HASH_FUNCTION a été définie dans la configuration,
+            la méthode correspondante du module C{hashlib} est utilisée.
+            Si la variable n'existe pas ou ne correspond pas à une classe
+            valide du module hashlib, alors le mot de passe est stocké en clair.
+        """
+        hash_method = settings.get('HASH_FUNCTION')
+        if not hash_method is None:
+            hash_method = hashlib.__dict__.get(hash_method)
+            if not callable(hash_method):
+                hash_method = None
+
+        if hash_method is None:
+            return password
+        return hash_method(password).hexdigest()
 
     password = synonym('_password', descriptor=property(None,
                                                         _set_password))

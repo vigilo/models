@@ -3,16 +3,14 @@
 """Modèle pour la table Map"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import Integer, Unicode, UnicodeText, DateTime
-from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy import Column
+from sqlalchemy.types import Unicode, DateTime, Integer
 from sqlalchemy.orm import relation
-from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-#from .secondary_tables import MAP_LINK_TABLE
-from .secondary_tables import MAP_GROUP_PERMISSION_TABLE, MAP_GROUP_MAP_TABLE
+#from .secondary_tables import MAP_LINK_TABLE, MAP_GROUP_PERMISSION_TABLE
+from .secondary_tables import MAP_GROUP_MAP_TABLE
 
 __all__ = ('Map', )
 

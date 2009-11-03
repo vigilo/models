@@ -46,11 +46,13 @@ class HostServiceData(DeclarativeBase, object):
     )
 
     def _get_priority(self):
+        """Renvoie la priorité associée à un couple hôte/service."""
         return self._priority
 
     # XXX on devrait s'assurer que la priorité est bornée.
     # Ceci permettra aussi de définir les limites pour Rum (Vigicore).
     def _set_priority(self, priority):
+        """Modifie la priorité associée à un couple hôte/service."""
         self._priority = priority
 
     priority = synonym('_priority',
@@ -58,6 +60,7 @@ class HostServiceData(DeclarativeBase, object):
 
 
     def __init__(self, **kwargs):
+        """Initialise les informations sur un couple hôte/service."""
         super(HostServiceData, self).__init__(**kwargs)
 
     @classmethod

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-from __future__ import absolute_import
-
 """
 BdD Vigilo Config
 """
