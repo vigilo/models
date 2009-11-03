@@ -45,7 +45,7 @@ class MapNode(DeclarativeBase, object):
     
     y_pos = Column(Integer, nullable=False)
     
-    hidelabel = Column(
+    minimize = Column(
         Boolean, 
         default = False,
         nullable = False)
