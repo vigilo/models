@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode
-from sqlalchemy.orm import relation, backref
+from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
@@ -21,13 +21,13 @@ class Group(DeclarativeBase, object):
         Unicode(255),
         primary_key=True, nullable=False)
 
-    _parent = Column(
+    parent = Column(
         'parent', Unicode(255),
         ForeignKey(bdd_basename + 'group.name'),
         index=True)
 
     # XXX We should make sure it's impossible to build cyclic graphs.
-    children = relation('Group', backref=backref('parent', remote_side=[name]))
+    children = relation('Group')
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='groups')
