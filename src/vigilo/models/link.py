@@ -49,6 +49,13 @@ class Link(DeclarativeBase, object):
             ondelete='CASCADE', onupdate='CASCADE')
             ) 
     
+    graph = Column(
+        Unicode(255),
+        ForeignKey(
+            bdd_basename + 'graph.name',
+            ondelete='CASCADE', onupdate='CASCADE')
+        ) 
+
     idmap = Column(
         Integer,
         ForeignKey(
@@ -59,6 +66,7 @@ class Link(DeclarativeBase, object):
     maps = relation('Map',
         back_populates='links')
     
+    graph
     #, secondary=MAP_LINK_TABLE, lazy='dynamic'
 
 
