@@ -26,6 +26,9 @@ class MapNode(DeclarativeBase, object):
     @ivar minimize: Booléen indiquant l'action à effectuer.
     @ivar type_node: Le type de noeud, peut etre
         'host', 'service',  ou 'performance'.
+    @ivar idmap: Référence vers un identifiant de carte.
+    @ivar map: Relation vers la carte du noeud.
+    @ivar submaps: Liste des sous-cartes associées au noeud.
     """
     __tablename__ = bdd_basename + 'mapnode'
 
@@ -65,7 +68,7 @@ class MapNode(DeclarativeBase, object):
     
 
     def __init__(self, **kwargs):
-         """Initialise un node."""
+         """Initialise un noeud."""
          super(MapNode, self).__init__(**kwargs)
 
     def __unicode__(self):
@@ -91,7 +94,6 @@ class MapNodeHost(MapNode):
     """
     __tablename__ = 'mapnodehost'
     __mapper_args__ = {'polymorphic_identity': u'host'}
-    #__mapper_args__ = {'concrete':True}
     
     idmapnodehost = Column(
         Integer,
@@ -118,9 +120,6 @@ class MapNodeHost(MapNode):
         )
     
     
-
-    
-    
     def __init__(self, **kwargs):
         super(MapNodeHost, self).__init__(**kwargs)
         #self.type_node = u'host'
@@ -129,11 +128,12 @@ class MapNodeHost(MapNode):
 class MapNodeService(MapNode):
     """
     Classe chargée de la représentation graphique d'un service dans vigimap 
-
-    @ivar idmapnodehost: Identifiant du modèle de l'hôte (séquence). 
-    @ivar name: Nom de l'hôte.
-    @ivar hosticon: Nom de l'icône de l'hôte. 
-    @ivar hoststateicon: Etat de l'icône de l'hôte.
+    La représentation d'un service dans une carte se caractérise par un couple hôte-service.
+    @ivar idmapnode: Identifiant du modèle de service (séquence). 
+    @ivar hostname: Nom de l'hôte du noeud.
+    @ivar servicename: Nom du service du noeud. 
+    @ivar serviceicon: Nom de l'icône du service.
+    @ivar servicestateicon: Etat de l'icône du service.
     """
     __tablename__ = 'mapnodeservice'
     __mapper_args__ = {'polymorphic_identity': u'service'}
@@ -176,27 +176,32 @@ class MapNodeService(MapNode):
         super(MapNodeService, self).__init__(**kwargs)
         #self.type_node = u'service'
 
-"""        
+"""
+TODO: Classe en préparation
 class MapNodePerformance(MapNode):
     
     Classe chargée de la représentation graphique d'un modèle Performance dans vigimap 
 
+    __mapper_args__ = {'polymorphic_identity': u'performance'}
     
-    __mapper_args__ = {'concrete':True}
-    TODO: Foreighkey inexistante pour l'instant
+    idmapnode = Column(
+        Integer,
+        ForeignKey(
+            bdd_basename + 'mapnode.idmapnode',
+            onupdate='CASCADE', ondelete='CASCADE'), 
+        primary_key=True,
+        nullable=False
+    )
+    
     name = Column(
         Unicode(255),
-        index=True, ForeignKey(bdd_basename + 'service.name'),
+        index=True, ForeignKey(bdd_basename + 'performance.name'),
         ondelete='CASCADE', onupdate='CASCADE',
-        nullable=False)
-        
-    graphe = Column(
-        Unicode(255),
-        nullable=False)
+        nullable=False)     
     
     
     def __init__(self, **kwargs):
         super(MapNodeService, self).__init__(**kwargs)
-        self.type_node = u'performance'
+        #self.type_node = u'performance'
 """        
 

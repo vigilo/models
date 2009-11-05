@@ -140,15 +140,4 @@ SUB_MAP_NODE_MAP_TABLE = Table(
             primary_key=True)                           
 )
 
-#MAP_LINK_TABLE = Table(
-#    bdd_basename + 'maplinktable', metadata,
-#    Column('groupname', Unicode, ForeignKey(
-#                bdd_basename + 'group.name',
-#                onupdate="CASCADE", ondelete="CASCADE"),
-#            primary_key=True),
-#    Column('idpermission', Integer, ForeignKey(
-#                bdd_basename + 'permission.idpermission',
-#                onupdate="CASCADE", ondelete="CASCADE"),
-#            primary_key=True, autoincrement=False)
-#)
 

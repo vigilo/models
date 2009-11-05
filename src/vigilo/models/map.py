@@ -16,6 +16,7 @@ __all__ = ('Map', )
 
 class Map(DeclarativeBase, object):
     """
+    Informations sur une carte.
     @ivar idmap: Identifiant de la carte.
     @ivar title: Titre de la carte.
     @ivar background_color: Couleur d'arrière-plan 

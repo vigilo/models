@@ -9,11 +9,21 @@ from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-#from .secondary_tables import MAP_LINK_TABLE
 
 __all__ = ('Link', )
 
 class Link(DeclarativeBase, object):
+    """
+    Informations sur un lien de carte.
+    @ivar idlink: Identifiant du lien.
+    @ivar from_node: Noeud de départ du lien.
+    @ivar to_node: Noeud d'arrivée du lien.
+    @ivar refhost: Référence vers l'hôte associé au lien.
+    @ivar refservice: Référence vers le service associé au lien.
+    @ivar graph: Référence vers le graphe associé au lien.
+    @ivar idmap: Référence vers l'identifiant de carte du lien.
+    @ivar maps: Relation vers la carte. 
+    """
     __tablename__ = bdd_basename + 'link'
 
     idlink = Column(
@@ -65,9 +75,6 @@ class Link(DeclarativeBase, object):
 
     maps = relation('Map',
         back_populates='links')
-    
-    graph
-    #, secondary=MAP_LINK_TABLE, lazy='dynamic'
 
 
     def __init__(self, **kwargs):

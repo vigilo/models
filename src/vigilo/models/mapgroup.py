@@ -14,7 +14,16 @@ from .secondary_tables import MAP_GROUP_PERMISSION_TABLE, MAP_GROUP_MAP_TABLE
 __all__ = ('Group', )
 
 class MapGroup(DeclarativeBase, object):
-    """Gère les groupes (récursifs) d'hôtes/services.'"""
+    """
+    Gère les groupes (récursifs) de cartes.
+    
+    @ivar idmapgroup: Identifiant du groupe de cartes.
+    @ivar name: Nom du groupe de cartes.
+    @ivar parent: Référence vers le groupe de cartes 'parent'.
+    @ivar subgroups: Liste des sous-groupes de cartes associées au groupe.
+    @ivar permissions: Liste des permissions d'accés au groupe.
+    @ivar maps: Liste des cartes associées au groupe.
+    """
     __tablename__ = bdd_basename + 'mapgroup'
 
     idmapgroup = Column(

@@ -15,6 +15,15 @@ from .secondary_tables import SEGMENT_NODE_TABLE
 __all__ = ('Segment', )
 
 class Segment(DeclarativeBase, object):
+    """
+    Informations sur un segment de carte.
+    @ivar idsegment: Identifiant du segment.
+    @ivar color: Couleur du segment.
+    @ivar thickness: Epaisseur de trait du segment.
+    @ivar idmap: Référence vers l'identifiant de la carte associée.
+    @ivar nodes: Liste des noeuds associés au segment.
+    @ivar maps: Relation vers la carte associée au segment.
+    """
     __tablename__ = bdd_basename + 'segment'
     
     idsegment = Column(
