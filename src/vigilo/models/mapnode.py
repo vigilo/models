@@ -95,7 +95,7 @@ class MapNodeHost(MapNode):
     __tablename__ = 'mapnodehost'
     __mapper_args__ = {'polymorphic_identity': u'host'}
     
-    idmapnodehost = Column(
+    idmapnode = Column(
         Integer,
         ForeignKey(
             bdd_basename + 'mapnode.idmapnode',
