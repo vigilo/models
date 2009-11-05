@@ -2,9 +2,6 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """
 Modèle pour la table MapNode
-
-    @ival idmapnode: Identifiant du modèle de noeud (séquence) 
-    @ival label: Label du noeud.
 """
 from __future__ import absolute_import
 
@@ -21,12 +18,17 @@ from .secondary_tables import SEGMENT_NODE_TABLE, SUB_MAP_NODE_MAP_TABLE
 __all__ = ('MapNodeHost', 'MapNodeService', 'MapNodePerformance')
 
 class MapNode(DeclarativeBase, object):
+    """
+    @ivar idmapnode: Identifiant du modèle de noeud (séquence). 
+    @ivar label: Label du noeud.
+    @ivar x_pos: Position X.
+    @ivar y_pos: Position Y.
+    @ivar minimize: Booléen indiquant l'action à effectuer.
+    @ivar type_node: Le type de noeud, peut etre
+        'host', 'service',  ou 'performance'.
+    """
     __tablename__ = bdd_basename + 'mapnode'
-    
-    
-    #id = Column(Integer, primary_key=True)
 
-    
     idmapnode = Column(
         Integer,
         primary_key=True, autoincrement=True, nullable=False,
@@ -51,10 +53,8 @@ class MapNode(DeclarativeBase, object):
         nullable = False)
 
     map = relation('Map', back_populates='nodes')
-    #primaryjoin='MapNode.mapadress==Map.name'
     
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
-    #, primaryjoin='MapNode.idmapnode==Map.nodeforsubmap'
     
     segments = relation('Segment', back_populates='nodes', secondary=SEGMENT_NODE_TABLE, lazy='dynamic', 
                         uselist=True)
@@ -63,9 +63,6 @@ class MapNode(DeclarativeBase, object):
 
     __mapper_args__ = {'polymorphic_on': type_node}
     
-    #pour le moment on teste l'héritage en tables concretes
-    # __mapper_args__ = {'polymorphic_on': type_node}
-
 
     def __init__(self, **kwargs):
          """Initialise un node."""
@@ -85,8 +82,12 @@ class MapNode(DeclarativeBase, object):
 
 class MapNodeHost(MapNode):
     """
-    Classe chargée de la représentation graphique d'un hôte dans vigimap 
-
+    Classe chargée de la représentation graphique d'un hôte dans vigimap
+    
+    @ivar idmapnodehost: Identifiant du modèle de l'hôte (séquence). 
+    @ivar name: Nom de l'hôte.
+    @ivar hosticon: Nom de l'icône de l'hôte. 
+    @ivar hoststateicon: Etat de l'icône de l'hôte.
     """
     __tablename__ = 'mapnodehost'
     __mapper_args__ = {'polymorphic_identity': u'host'}
@@ -129,6 +130,10 @@ class MapNodeService(MapNode):
     """
     Classe chargée de la représentation graphique d'un service dans vigimap 
 
+    @ivar idmapnodehost: Identifiant du modèle de l'hôte (séquence). 
+    @ivar name: Nom de l'hôte.
+    @ivar hosticon: Nom de l'icône de l'hôte. 
+    @ivar hoststateicon: Etat de l'icône de l'hôte.
     """
     __tablename__ = 'mapnodeservice'
     __mapper_args__ = {'polymorphic_identity': u'service'}

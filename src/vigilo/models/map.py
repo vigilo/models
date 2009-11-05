@@ -15,6 +15,15 @@ from .secondary_tables import MAP_GROUP_MAP_TABLE
 __all__ = ('Map', )
 
 class Map(DeclarativeBase, object):
+    """
+    @ivar idmap: Identifiant de la carte.
+    @ivar title: Titre de la carte.
+    @ivar background_color: Couleur d'arrière-plan 
+        (valeur de la propriété CSS background-color).
+    @ivar background_image: Image d'arrière-plan (propriété CSS).
+    @ivar background_position: Position d'arrière-plan (propriété CSS).
+    @ivar background_repeat: Répétition d'arrière-plan (propriété CSS). 
+    """
     __tablename__ = bdd_basename + 'map'
 
     idmap = Column(
