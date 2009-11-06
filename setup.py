@@ -16,6 +16,7 @@ setup(name='vigilo-models',
         description='vigilo models',
         license='http://www.gnu.org/licenses/gpl-2.0.html',
         long_description='Definition of the vigilo data model, db access.',
+        zip_safe=False,
         install_requires=[
             'setuptools',
             'psycopg2',
@@ -31,6 +32,7 @@ setup(name='vigilo-models',
             'vigilo',
             ],
         packages=[
+            'vigilo',
             'vigilo.models',
             ],
         entry_points={
