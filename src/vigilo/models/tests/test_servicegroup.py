@@ -16,7 +16,9 @@ class TestServiceGroup(ModelTest):
         DBSession.add(ServiceLowLevel(name=u"monservice", op_dep=u'+'))
         DBSession.add(Group(name=u"mongroupe"))
         DBSession.flush()
-        return dict(servicename=u"monservice", groupname=u"mongroupe")
+
+        group = Group.by_group_name(u'mongroupe')
+        return dict(servicename=u"monservice", idgroup=group.idgroup)
 
     def __init__(self):
         ModelTest.__init__(self)

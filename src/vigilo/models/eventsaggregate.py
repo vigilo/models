@@ -18,7 +18,7 @@ __all__ = ('EventsAggregate', )
 
 class EventsAggregate(DeclarativeBase, object):
     """
-    Informations sur un ensemble (aggrégat) d'évènements,
+    Informations sur un ensemble (agrégat) d'évènements,
     corrélés entre eux.
     
     @ivar idcause: Référence à l'évènement faisant partie de L{Event}

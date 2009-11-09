@@ -34,7 +34,7 @@ class User(DeclarativeBase, object):
 
     email = Column(
         Unicode(255),
-        unique=True, nullable=False,
+        unique=True, index=True, nullable=False,
     )
 
     _password = Column(
@@ -97,11 +97,11 @@ class User(DeclarativeBase, object):
     @property
     def groups(self):
         """
-        Renvoie un ensemble de chaînes de caractères indiquant les groupes
+        Renvoie l'ensemble des identifiants des groupes
         d'hôtes / services auxquels l'utilisateur a accès.
 
         @return: Les groupes auxquels l'utilisateur a accès.
-        @rtype: C{set} of C{str}
+        @rtype: C{set} of C{int}
         """
         groups = set()
         for ug in self.usergroups:
@@ -109,7 +109,7 @@ class User(DeclarativeBase, object):
                 for g in p.groups:
                     node = g
                     while not node is None:
-                        groups = groups | set([node.name])
+                        groups = groups | set([node.idgroup])
                         node = node.parent
         return groups
 

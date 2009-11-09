@@ -17,7 +17,7 @@ class TestHostGroups(ModelTest):
         """Generate some data for the test"""
 
         DBSession.add(Host(
-            name=u'monhost',
+            name=u'host',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
@@ -25,7 +25,9 @@ class TestHostGroups(ModelTest):
             mainip=u'127.0.0.1',
             snmpport=1234,
             ))
-        DBSession.add(Group(name = u"mongroup"))
+        DBSession.add(Group(name = u"group"))
         DBSession.flush()
-        return dict(hostname = u"monhost", groupname = u"mongroup")
+
+        group = Group.by_group_name(u'group')
+        return dict(hostname = u"host", idgroup=group.idgroup)
 

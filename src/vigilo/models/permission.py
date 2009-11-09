@@ -25,14 +25,14 @@ class Permission(DeclarativeBase, object):
 
     idpermission = Column(
         Integer,
-        autoincrement=True,
-        primary_key=True)
+        autoincrement=True, primary_key=True, unique=True,
+    )
 
     # XXX Faut-il renommer ce champ ?
     permission_name = Column(
         Unicode(255),
-        unique=True,
-        nullable=False)
+        unique=True, index=True, nullable=False,
+    )
 
     usergroups = relation('UserGroup', secondary=USERGROUP_PERMISSION_TABLE,
                       back_populates='permissions', lazy='dynamic')

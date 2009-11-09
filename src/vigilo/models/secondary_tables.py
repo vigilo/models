@@ -11,8 +11,8 @@ from .vigilo_bdd_config import bdd_basename, metadata
 
 USERGROUP_PERMISSION_TABLE = Table(
     bdd_basename + 'usergrouppermissions', metadata,
-    Column('groupname', Unicode(255), ForeignKey(
-                bdd_basename + 'usergroup.group_name',
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'usergroup.idgroup',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
     Column('idpermission', Integer, ForeignKey(
@@ -70,10 +70,10 @@ EVENTSAGGREGATE_HLS_TABLE = Table(
 
 GROUP_PERMISSION_TABLE = Table(
     bdd_basename + 'grouppermissions', metadata,
-    Column('groupname', Unicode(255), ForeignKey(
-                bdd_basename + 'group.name',
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'group.idgroup',
                 onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
+            primary_key=True, autoincrement=False),
     Column('idpermission', Integer, ForeignKey(
                 bdd_basename + 'permission.idpermission',
                 onupdate="CASCADE", ondelete="CASCADE"),
@@ -86,8 +86,8 @@ USER_GROUP_TABLE = Table(
                 bdd_basename + 'user.user_name',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
-    Column('groupname', Unicode(255), ForeignKey(
-                bdd_basename + 'usergroup.group_name',
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'usergroup.idgroup',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True)
 )

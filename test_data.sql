@@ -111,8 +111,9 @@ INSERT INTO servicedephighonlow (iddep, host_dep, service_dep) VALUES(3, 'host2.
 -- Data for Name: groups; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
 
-INSERT INTO "group" (name, parent) VALUES ('bla1', NULL);
-INSERT INTO "group" (name, parent) VALUES ('bla2', 'bla1');
+INSERT INTO "group" (name, idparent) VALUES ('Serveurs', NULL);
+INSERT INTO "group" (name, idparent) VALUES ('Serveurs Linux', 1);
+INSERT INTO "group" (name, idparent) VALUES ('Serveurs Windows', 1);
 
 
 
@@ -120,37 +121,37 @@ INSERT INTO "group" (name, parent) VALUES ('bla2', 'bla1');
 -- Data for Name: grouppermissions; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
 
-INSERT INTO grouppermissions (groupname, idpermission) VALUES ('bla1', 2);
-INSERT INTO grouppermissions (groupname, idpermission) VALUES ('bla2', 1);
+INSERT INTO grouppermissions (idgroup, idpermission) VALUES (1, 2);
+INSERT INTO grouppermissions (idgroup, idpermission) VALUES (2, 1);
 
 
 --
 -- Data for Name: hostgroups; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
 
-INSERT INTO hostgroup (hostname, groupname) VALUES ('ajc.fw.1', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('ajc.linux1', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('ajc.sw.1', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('bdx.fw.1', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('bdx.linux1', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('brouteur', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('bst.fw.1', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('bst.unix0', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('bst.unix1', 'bla1');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('bst.win0', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('messagerie', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('par.fw.1', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('par.linux0', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('par.linux1', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('par.unix0', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('proto4', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('server.mails', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('testaix', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('testnortel', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('testsolaris', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('host1.example.com', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('host2.example.com', 'bla2');
-INSERT INTO hostgroup (hostname, groupname) VALUES ('host3.example.com', 'bla2');
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('ajc.fw.1', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('ajc.linux1', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('ajc.sw.1', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('bdx.fw.1', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('bdx.linux1', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('brouteur', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('bst.fw.1', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('bst.unix0', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('bst.unix1', 1);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('bst.win0', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('messagerie', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('par.fw.1', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('par.linux0', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('par.linux1', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('par.unix0', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('proto4', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('server.mails', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('testaix', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('testnortel', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('testsolaris', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('host1.example.com', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('host2.example.com', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('host3.example.com', 2);
 
 
 --
@@ -165,30 +166,30 @@ INSERT INTO hostgroup (hostname, groupname) VALUES ('host3.example.com', 'bla2')
 -- Data for Name: servicegroups; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
 
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Charge 01', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Charge 05', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Charge 15', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Collector', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('CPU', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Entrees / Sorties', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('FakeSNMPVal', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('FakeSNMPVal2', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Partition Donnees', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Partition Fausse part', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Partition Root', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Processes', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Processus: cleanup', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Processus: pop3d', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Synchro NTP', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('TCP connections', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Temperature mb_p0_t_core', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('UpTime', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Ventilateur mb_p0_f0_rs', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Load', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('HTTPD', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Interface eth0', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Interface eth1', 'bla1');
-INSERT INTO servicegroup (servicename, groupname) VALUES ('Interface eth2', 'bla1');
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Charge 01', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Charge 05', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Charge 15', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Collector', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('CPU', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Entrees / Sorties', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('FakeSNMPVal', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('FakeSNMPVal2', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Partition Donnees', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Partition Fausse part', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Partition Root', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Processes', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Processus: cleanup', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Processus: pop3d', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Synchro NTP', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('TCP connections', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Temperature mb_p0_t_core', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('UpTime', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Ventilateur mb_p0_f0_rs', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Load', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('HTTPD', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Interface eth0', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Interface eth1', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('Interface eth2', 1);
 
 --
 -- Data for Name: state; Type: TABLE DATA; Schema: public; Owner: vigiboard
@@ -239,8 +240,9 @@ INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('me
 -- Data for Name: version; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
 
-
-INSERT INTO version (name, version) VALUES ('vigiboard', '0.1');
+-- On va plutut stocker un numero de version pour le modele dans la table,
+-- au lieu d'un numero de version par application.
+-- INSERT INTO version (name, version) VALUES ('vigiboard', '0.1');
 
 
 

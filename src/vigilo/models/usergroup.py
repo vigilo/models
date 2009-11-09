@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column
-from sqlalchemy.types import Unicode
+from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -18,10 +18,16 @@ class UserGroup(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'usergroup'
 
+    idgroup = Column(
+        Integer,
+        primary_key=True, autoincrement=True,
+    )
+
     # XXX Faut-il renommer ce champ ?
     group_name = Column(
         Unicode(255),
-        primary_key=True)
+        unique=True, index=True,
+    )
 
     permissions = relation('Permission', secondary=USERGROUP_PERMISSION_TABLE,
                       back_populates='usergroups', lazy='dynamic')

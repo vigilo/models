@@ -4,8 +4,8 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import Unicode
-from sqlalchemy.orm import relation
+from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.orm import relation, backref
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
@@ -17,17 +17,24 @@ class Group(DeclarativeBase, object):
     """Gère les groupes (récursifs) d'hôtes/services.'"""
     __tablename__ = bdd_basename + 'group'
 
+    idgroup = Column(
+        Integer,
+        primary_key=True, autoincrement=True,
+    )
+
     name = Column(
         Unicode(255),
-        primary_key=True, nullable=False)
+        unique=True, index=True,
+        nullable=False,
+    )
 
-    parent = Column(
-        'parent', Unicode(255),
-        ForeignKey(bdd_basename + 'group.name'),
-        index=True)
+    idparent = Column(
+        'idparent', Integer,
+        ForeignKey(bdd_basename + 'group.idgroup'),
+    )
 
     # XXX We should make sure it's impossible to build cyclic graphs.
-    children = relation('Group')
+    children = relation('Group', backref=backref('parent', remote_side=[idgroup]))
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='groups')
