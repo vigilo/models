@@ -6,8 +6,7 @@ Modèle pour la table MapNode
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import Integer, Unicode, UnicodeText, Boolean
-from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.types import Integer, Unicode, Boolean
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -68,8 +67,8 @@ class MapNode(DeclarativeBase, object):
     
 
     def __init__(self, **kwargs):
-         """Initialise un noeud."""
-         super(MapNode, self).__init__(**kwargs)
+        """Initialise un noeud."""
+        super(MapNode, self).__init__(**kwargs)
 
     def __unicode__(self):
         """

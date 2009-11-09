@@ -5,7 +5,7 @@ from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_equals
 
-class TestEvents(ModelTest):
+class TestTag(ModelTest):
     """Test de la table Tag"""
 
     klass = Tag

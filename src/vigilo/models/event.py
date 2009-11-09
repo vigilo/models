@@ -25,7 +25,18 @@ class Event(DeclarativeBase, object):
     @ivar hostname: Identifiant de l'hote concerne par l'evenement.
     @ivar servicename: Identifiant du service concerne par l'evenement.
         Vaut None si l'evenement concerne directement l'hote.
-    @ivar state: L'etat du service/hote, tel que transmis par Nagios.
+    @ivar numeric_current_state: L'etat courant du service/hote,
+        tel que transmis par Nagios, sous forme numérique.
+    @ivar current_state: L'etat courant du service/hote,
+        tel que transmis par Nagios, sous forme textuelle.
+    @ivar numeric_initial_state: L'etat initial du service/hote,
+        tel que transmis par Nagios, sous forme numérique.
+    @ivar initial_state: L'etat initial du service/hote,
+        tel que transmis par Nagios, sous forme textuelle.
+    @ivar numeric_peak_state: L'etat maximal du service/hote,
+        tel que transmis par Nagios, sous forme textuelle.
+    @ivar peak_state: L'etat du service/hote, tel que transmis
+        par Nagios, sous forme textuelle.
     @ivar message: Le message transmis par Nagios avec l'evenement.
     """
 

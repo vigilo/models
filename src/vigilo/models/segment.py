@@ -3,9 +3,8 @@
 """Modèle pour la table Segment"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column,ForeignKey
-from sqlalchemy.types import Integer, Unicode, UnicodeText
-from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
