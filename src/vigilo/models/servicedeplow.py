@@ -33,7 +33,7 @@ class ServiceDepLowOnLow(DeclarativeBase, object):
             bdd_basename + 'host.name',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        primary_key=True, nullable=True,
+        primary_key=True, index=True, nullable=True,
     )
 
     servicename = Column(
@@ -42,7 +42,7 @@ class ServiceDepLowOnLow(DeclarativeBase, object):
             bdd_basename + 'service.name',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        primary_key=True, nullable=False,
+        primary_key=True, index=True, nullable=False,
     )
 
     host_dep = Column(
@@ -51,7 +51,7 @@ class ServiceDepLowOnLow(DeclarativeBase, object):
             bdd_basename + 'host.name',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        index=True, nullable=False,
+        primary_key=True, index=True, nullable=False,
     )
 
     service_dep = Column(
@@ -60,7 +60,7 @@ class ServiceDepLowOnLow(DeclarativeBase, object):
             bdd_basename + 'service.name',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        index=True, nullable=False,
+        primary_key=True, index=True, nullable=False,
     )    
 
     def __init__(self, **kwargs):
