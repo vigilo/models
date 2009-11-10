@@ -140,4 +140,15 @@ SUB_MAP_NODE_MAP_TABLE = Table(
             primary_key=True)                           
 )
 
+HOST_HOSTCLASS_TABLE = Table(
+    bdd_basename + 'host2hostclass', metadata,
+    Column('hostname', Unicode(255), ForeignKey(
+                bdd_basename + 'host.name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
+    Column('idclass', Integer, ForeignKey(
+                bdd_basename + 'hostclass.idclass',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
 

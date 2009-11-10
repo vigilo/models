@@ -21,9 +21,12 @@ class TestState(ModelTest):
     }
 
     def __init__(self):
+        """Initialise le test."""
         ModelTest.__init__(self)
 
     def do_get_dependencies(self):
+        """Génère les dépendances de cette instance."""
+
         host = Host(
             name=u'monhost',
             checkhostcmd=u'halt -f',
@@ -47,6 +50,9 @@ class TestState(ModelTest):
         return dict(servicename=service.name, hostname=host.name)
 
     def test_get_by_statename(self):
+        """Teste si le filtrage sur la valeur textuelle d'un état fonctionne.
+        Permet de valider le comportement de state_proxy.
+        """
         state = DBSession.query(State).filter(
             State.statename == u'WARNING').first()
         assert_equals(self.obj, state)

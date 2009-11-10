@@ -4,7 +4,7 @@
 
 __all__ = (
         'EventHistory', 'Event', 'EventsAggregate', 'Group',
-        'GraphGroup', 'Graph', 'HostGroup', 'Host', 'PerfDataSource',
+        'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass', 'PerfDataSource',
         'ServiceGroup', 'ServiceLowLevel', 'ServiceHighLevel',
         'ServiceDepHighOnHigh', 'ServiceDepHighOnLow', 'ServiceDepLowOnLow',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
@@ -22,6 +22,7 @@ from .graph import Graph
 from .group import Group
 from .hostgroup import HostGroup
 from .host import Host
+from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
 from .servicegroup import ServiceGroup
 from .hostservicedata import HostServiceData
@@ -44,3 +45,4 @@ from .segment import Segment
 from .map import Map
 from .link import Link
 from .legend import Legend
+

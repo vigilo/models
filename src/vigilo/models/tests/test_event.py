@@ -61,21 +61,6 @@ class TestEvent(ModelTest):
         assert_equal(u'WARNING', self.obj.peak_state,
             "The peak state should have been 'WARNING'.")
 
-    def test_state_change(self):
-        """Vérifie que les changements d'états sont bien pris en compte."""
-        # On vérifie qu'en passant de WARNING à CRITICAL,
-        # l'état maximal est bien mis à jour.
-        self.obj.current_state = u'CRITICAL'
-        assert_equal(u'CRITICAL', self.obj.peak_state,
-            "The peak state should have been 'CRITICAL'.")
-
-        # On modifie l'état en utilisant les nombres plutôt que les noms.
-        # 0 = u'OK' (cf. State.names_mapping).
-        self.obj.numeric_current_state = 0
-        assert_equal(u'OK', self.obj.current_state,
-            "The current state should have been 'OK', but we got %r." %
-            self.obj.current_state)
-
     def test_read_only_states(self):
         """Les états initiaux/maximaux ne sont accessibles qu'en lecture."""
         # Tente de modifier l'état initial.

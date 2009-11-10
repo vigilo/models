@@ -9,7 +9,7 @@ from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-from .secondary_tables import HOST_TAG_TABLE
+from .secondary_tables import HOST_TAG_TABLE, HOST_HOSTCLASS_TABLE
 
 __all__ = ('Host', )
 
@@ -69,6 +69,9 @@ class Host(DeclarativeBase, object):
 
     tags = relation('Tag', secondary=HOST_TAG_TABLE,
         back_populates='hosts', )
+
+    hostclasses = relation('HostClass', secondary=HOST_HOSTCLASS_TABLE,
+        back_populates='hosts', lazy='dynamic')
 
 
     def __init__(self, **kwargs):

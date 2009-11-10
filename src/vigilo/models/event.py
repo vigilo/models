@@ -10,7 +10,7 @@ from sqlalchemy.types import Unicode, Text, DateTime, Integer
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .state import state_proxy
+from .state import State
 
 __all__ = ('Event', )
 
@@ -25,15 +25,9 @@ class Event(DeclarativeBase, object):
     @ivar hostname: Identifiant de l'hote concerne par l'evenement.
     @ivar servicename: Identifiant du service concerne par l'evenement.
         Vaut None si l'evenement concerne directement l'hote.
-    @ivar numeric_current_state: L'etat courant du service/hote,
-        tel que transmis par Nagios, sous forme numérique.
     @ivar current_state: L'etat courant du service/hote,
         tel que transmis par Nagios, sous forme textuelle.
-    @ivar numeric_initial_state: L'etat initial du service/hote,
-        tel que transmis par Nagios, sous forme numérique.
     @ivar initial_state: L'etat initial du service/hote,
-        tel que transmis par Nagios, sous forme textuelle.
-    @ivar numeric_peak_state: L'etat maximal du service/hote,
         tel que transmis par Nagios, sous forme textuelle.
     @ivar peak_state: L'etat du service/hote, tel que transmis
         par Nagios, sous forme textuelle.
@@ -71,55 +65,49 @@ class Event(DeclarativeBase, object):
     # Un état peut porter :
     # - sur un hôte (ex: 'UP', 'UNREACHABLE', etc.)
     # - sur un service (ex: 'OK', 'WARNING', 'UNKNOWN', etc.)
-    # Les attributs commençant par "numeric" correspondent à une valeur
-    # numérique associée à l'état, tandis que la variante sans le "numeric"
-    # correspond à la valeur textuelle.
-    # Les transformations nombre <-> texte sont automatiques.
 
     # L'état courant de l'évènement.
     # L'état maximal (cf. ci-dessous) est automatiquement
     # mis à jour lorsque l'état courant devient supérieur.
     # L'état initial est automatiquement initialisé.
-    _numeric_current_state = Column(
-        'current_state', Integer,
-        autoincrement=False, nullable=False,
+    _current_state = Column(
+        'current_state', Unicode(16),
+        index=True, nullable=False,
     )
-    def _get_numeric_state(self):
-        return self._numeric_current_state
-    def _set_numeric_state(self, value):
-        if self._numeric_peak_state is None:
-            self._numeric_peak_state = value
-            self._numeric_initial_state = value
-        elif value > self._numeric_peak_state:
-            self._numeric_peak_state = value
-        self._numeric_current_state = value
-    numeric_current_state = synonym('_numeric_current_state',
-        descriptor=property(_get_numeric_state, _set_numeric_state))
-    current_state = state_proxy('numeric_current_state')
+    def _get_current_state(self):
+        return self._current_state
+    def _set_current_state(self, value):
+        if self._peak_state is None:
+            self._peak_state = value
+            self._initial_state = value
+        elif State.statename_to_value(value) > \
+            State.statename_to_value(self._peak_state):
+            self._peak_state = value
+        self._current_state = value
+    current_state = synonym('_numeric_current_state',
+        descriptor=property(_get_current_state, _set_current_state))
 
     # Puis, l'état initial.
     # Cet attribut est en lecture seule une fois l'évènement créé.
-    _numeric_initial_state = Column(
-        'initial_state', Integer,
-        autoincrement=False, nullable=False,
+    _initial_state = Column(
+        'initial_state', Unicode(16),
+        index=True, nullable=False,
     )
-    def _get_numeric_initial_state(self):
-        return self._numeric_initial_state
-    numeric_initial_state = synonym('_numeric_initial_state',
-        descriptor=property(_get_numeric_initial_state, None))
-    initial_state = state_proxy('numeric_initial_state')
+    def _get_initial_state(self):
+        return self._initial_state
+    initial_state = synonym('_initial_state',
+        descriptor=property(_get_initial_state, None))
 
     # Et enfin, l'état maximal.
     # Cet attribut est en lecture seule une fois l'évènement créé.
-    _numeric_peak_state = Column(
-        'peak_state', Integer,
-        autoincrement=False, nullable=False,
+    _peak_state = Column(
+        'peak_state', Unicode(16),
+        index=True, nullable=False,
     )
-    def _get_numeric_peak_state(self):
-        return self._numeric_peak_state
-    numeric_peak_state = synonym('_numeric_peak_state',
-        descriptor=property(_get_numeric_peak_state, None))
-    peak_state = state_proxy('numeric_peak_state')
+    def _get_peak_state(self):
+        return self._peak_state
+    peak_state = synonym('_peak_state',
+        descriptor=property(_get_peak_state, None))
 
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None),
