@@ -18,19 +18,19 @@ __all__ = ('EventsAggregate', )
 
 class EventsAggregate(DeclarativeBase, object):
     """
-    Informations sur un ensemble (agrégat) d'évènements,
+    Informations sur un ensemble (agrégat) d'événements,
     corrélés entre eux.
     
-    @ivar idcause: Référence à l'évènement faisant partie de L{Event}
-        et identifié comme cause primaire de l'ensemble des évènements
+    @ivar idcause: Référence à l'événement faisant partie de L{Event}
+        et identifié comme cause primaire de l'ensemble des événements
         de l'agrégat.
     @ivar impact: Nombre d'hôtes impactés par l'agrégat.
     @ivar trouble_ticket: URL du ticket d'incident se rapportant à l'agrégat.
     @ivar status: Statut de la prise en compte de cet agrégat.
     @ivar occurrences: Compteur d'occurrences de l'agrégat. Il est incrémenté
-        chaque fois que l'état de l'évènement oscille alors que l'opérateur
+        chaque fois que l'état de l'événement oscille alors que l'opérateur
         n'est pas encore intervenu.
-    @ivar timestamp_active: Date de dernière ouverture de l'évènement.
+    @ivar timestamp_active: Date de dernière ouverture de l'événement.
     """
 
     __tablename__ = bdd_basename + 'eventsaggregate'
@@ -86,7 +86,7 @@ class EventsAggregate(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """
-        Initialise un agrégat d'évènements.
+        Initialise un agrégat d'événements.
         """
         super(EventsAggregate, self).__init__(**kwargs)
 

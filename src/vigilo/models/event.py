@@ -66,7 +66,7 @@ class Event(DeclarativeBase, object):
     # - sur un hôte (ex: 'UP', 'UNREACHABLE', etc.)
     # - sur un service (ex: 'OK', 'WARNING', 'UNKNOWN', etc.)
 
-    # L'état courant de l'évènement.
+    # L'état courant de l'événement.
     # L'état maximal (cf. ci-dessous) est automatiquement
     # mis à jour lorsque l'état courant devient supérieur.
     # L'état initial est automatiquement initialisé.
@@ -88,7 +88,7 @@ class Event(DeclarativeBase, object):
         descriptor=property(_get_current_state, _set_current_state))
 
     # Puis, l'état initial.
-    # Cet attribut est en lecture seule une fois l'évènement créé.
+    # Cet attribut est en lecture seule une fois l'événement créé.
     _initial_state = Column(
         'initial_state', Unicode(16),
         index=True, nullable=False,
@@ -99,7 +99,7 @@ class Event(DeclarativeBase, object):
         descriptor=property(_get_initial_state, None))
 
     # Et enfin, l'état maximal.
-    # Cet attribut est en lecture seule une fois l'évènement créé.
+    # Cet attribut est en lecture seule une fois l'événement créé.
     _peak_state = Column(
         'peak_state', Unicode(16),
         index=True, nullable=False,
@@ -117,7 +117,7 @@ class Event(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """
-        Initialise un évènement brut ou corrélé.
+        Initialise un événement brut ou corrélé.
         """
         super(Event, self).__init__(**kwargs)
 

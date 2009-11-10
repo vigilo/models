@@ -55,6 +55,6 @@ class EventHistory(DeclarativeBase, object):
 
 
     def __init__(self, **kwargs):
-        """Initialise un évènement de l'historique des modifications."""
+        """Initialise un événement de l'historique des modifications."""
         super(EventHistory, self).__init__(**kwargs)
 
