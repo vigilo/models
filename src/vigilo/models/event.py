@@ -4,13 +4,15 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.orm import synonym
+from sqlalchemy.orm import synonym, aliased
 from sqlalchemy.types import Unicode, Text, DateTime, Integer
 
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .state import State
+from .statename import Statename
+from .session import DBSession
 
 __all__ = ('Event', )
 
@@ -26,11 +28,11 @@ class Event(DeclarativeBase, object):
     @ivar servicename: Identifiant du service concerne par l'evenement.
         Vaut None si l'evenement concerne directement l'hote.
     @ivar current_state: L'etat courant du service/hote,
-        tel que transmis par Nagios, sous forme textuelle.
+        tel que transmis par Nagios, sous forme numérique.
     @ivar initial_state: L'etat initial du service/hote,
-        tel que transmis par Nagios, sous forme textuelle.
+        tel que transmis par Nagios, sous forme numérique.
     @ivar peak_state: L'etat du service/hote, tel que transmis
-        par Nagios, sous forme textuelle.
+        par Nagios, sous forme numérique.
     @ivar message: Le message transmis par Nagios avec l'evenement.
     """
 
@@ -71,41 +73,67 @@ class Event(DeclarativeBase, object):
     # mis à jour lorsque l'état courant devient supérieur.
     # L'état initial est automatiquement initialisé.
     _current_state = Column(
-        'current_state', Unicode(16),
-        index=True, nullable=False,
+        'current_state', Integer,
+        ForeignKey(bdd_basename + 'statename.idstatename'),
+        nullable=False,
     )
+
     def _get_current_state(self):
+        """Renvoie la valeur textuelle de l'état courant."""
         return self._current_state
+
     def _set_current_state(self, value):
+        """Modifie la valeur textuelle de l'état courant."""
         if self._peak_state is None:
             self._peak_state = value
             self._initial_state = value
-        elif State.statename_to_value(value) > \
-            State.statename_to_value(self._peak_state):
-            self._peak_state = value
+
+        else:
+            statename = aliased(Statename)
+            statename2 = aliased(Statename)
+            higher =    DBSession.query(
+                            statename.idstatename,
+                            statename2.idstatename,
+                        ).filter(statename.idstatename == self._peak_state
+                        ).filter(statename2.idstatename == value
+                        ).filter(statename2.order > statename.order
+                        ).all()
+
+            print higher
+            if higher:
+                self._peak_state = value
         self._current_state = value
-    current_state = synonym('_numeric_current_state',
+
+    current_state = synonym('_current_state',
         descriptor=property(_get_current_state, _set_current_state))
 
     # Puis, l'état initial.
     # Cet attribut est en lecture seule une fois l'événement créé.
     _initial_state = Column(
-        'initial_state', Unicode(16),
-        index=True, nullable=False,
+        'initial_state', Integer,
+        ForeignKey(bdd_basename + 'statename.idstatename'),
+        nullable=False,
     )
+
     def _get_initial_state(self):
+        """Renvoie la valeur textuelle de l'état initial."""
         return self._initial_state
+
     initial_state = synonym('_initial_state',
         descriptor=property(_get_initial_state, None))
 
     # Et enfin, l'état maximal.
     # Cet attribut est en lecture seule une fois l'événement créé.
     _peak_state = Column(
-        'peak_state', Unicode(16),
-        index=True, nullable=False,
+        'peak_state', Integer,
+        ForeignKey(bdd_basename + 'statename.idstatename'),
+        nullable=False,
     )
+
     def _get_peak_state(self):
+        """Renvoie la valeur textuelle de l'état maximal."""
         return self._peak_state
+
     peak_state = synonym('_peak_state',
         descriptor=property(_get_peak_state, None))
 

@@ -10,7 +10,7 @@ __all__ = (
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User', 'BoardViewFilter', 'CustomGraphView', 'Tag', 'Access',
         'HostServiceData', 'MapGroup', 'MapNode','Segment', 'Map', 'Link',
-        'Legend',
+        'Legend', 'Statename',
         )
 
 
@@ -32,6 +32,7 @@ from .servicedeplow import ServiceDepLowOnLow
 from .graphtogroups import GraphToGroups
 from .version import Version
 from .state import State
+from .statename import Statename
 from .permission import Permission
 from .usergroup import UserGroup
 from .user import User

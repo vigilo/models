@@ -34,7 +34,7 @@ class HostClass(DeclarativeBase, object):
 
     name = Column(
         Unicode(255),
-        unique=True, index=True,
+        unique=True, index=True, nullable=False,
     )
 
     hosts = relation('Host', secondary=HOST_HOSTCLASS_TABLE,

@@ -39,7 +39,7 @@ class State(DeclarativeBase, object):
 
     hostname = Column(
         Unicode(255),
-        ForeignKey(bdd_basename +'host.name'),
+        ForeignKey(bdd_basename + 'host.name'),
         index=True, nullable=True,
     )
 
@@ -61,9 +61,10 @@ class State(DeclarativeBase, object):
             default=datetime.datetime.now,
     )
 
-    statename = Column(
-        'state', Unicode(16),
-        nullable=False, index=True,
+    state = Column(
+        'state', Integer,
+        ForeignKey(bdd_basename + 'statename.idstatename'),
+        nullable=False,
     )
 
     # 'SOFT' ou 'HARD'
@@ -81,31 +82,6 @@ class State(DeclarativeBase, object):
 
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None))
-
-    @staticmethod
-    def _names_mapping():
-        """
-        Définit une relation entre le nom de l'état dans Nagios
-        et une valeur numérique stockée en base de données.
-        """
-        return [
-            'OK',           # 0
-            'UNKNOWN',
-            'WARNING',
-            'CRITICAL',
-
-            'UP',           # 4
-            'DOWN',
-            'UNREACHABLE',
-        ]
-
-    @classmethod
-    def statename_to_value(cls, name):
-        return cls._names_mapping().index(name.upper())
-
-    @classmethod
-    def value_to_statename(cls, value):
-        return cls._names_mapping()[value]
 
     def __init__(self, **kwargs):
         """Initialise un état."""

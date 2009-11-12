@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for State class"""
-from vigilo.models import State, Host, ServiceLowLevel
+from vigilo.models import State, Statename, Host, ServiceLowLevel
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -13,7 +13,10 @@ class TestState(ModelTest):
     klass = State
     attrs = {
         'ip': u'127.0.0.1',
-        'statename': u'WARNING',
+        # On ne peut pas utiliser Statename.statename_to_value ici
+        # car le modèle n'est pas encore créé lorsque ce code est
+        # exécuté.
+        'state': 3, # = WARNING
         'statetype': u'SOFT',
         'attempt': 42,
         'timestamp': datetime.now(),
@@ -26,6 +29,8 @@ class TestState(ModelTest):
 
     def do_get_dependencies(self):
         """Génère les dépendances de cette instance."""
+        # Insère les noms d'états dans la base de données.
+        ModelTest.do_get_dependencies(self)
 
         host = Host(
             name=u'monhost',
@@ -54,6 +59,6 @@ class TestState(ModelTest):
         Permet de valider le comportement de state_proxy.
         """
         state = DBSession.query(State).filter(
-            State.statename == u'WARNING').first()
+            State.state == Statename.statename_to_value(u'WARNING')).first()
         assert_equals(self.obj, state)
 
