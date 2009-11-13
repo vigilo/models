@@ -12,7 +12,7 @@ from sqlalchemy.orm import relation
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
 
-from .secondary_tables import SEGMENT_NODE_TABLE, SUB_MAP_NODE_MAP_TABLE
+from .secondary_tables import SUB_MAP_NODE_MAP_TABLE
 
 __all__ = ('MapNodeHost', 'MapNodeService', 'MapNodePerformance')
 
@@ -57,9 +57,6 @@ class MapNode(DeclarativeBase, object):
     map = relation('Map', back_populates='nodes')
     
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
-    
-    segments = relation('Segment', back_populates='nodes', secondary=SEGMENT_NODE_TABLE, lazy='dynamic', 
-                        uselist=True)
     
     type_node = Column('type_node', Unicode(16), nullable=False)
 

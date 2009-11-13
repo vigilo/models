@@ -92,18 +92,6 @@ USER_GROUP_TABLE = Table(
             primary_key=True)
 )
 
-SEGMENT_NODE_TABLE = Table(
-    bdd_basename + 'segmentnodetable', metadata,
-    Column('idsegment', Integer, ForeignKey(
-                bdd_basename + 'segment.idsegment',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('idmapnode', Integer, ForeignKey(
-                bdd_basename + 'mapnode.idmapnode',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
-)
-
 MAP_GROUP_PERMISSION_TABLE = Table(
     bdd_basename + 'mapgrouppermissions', metadata,
     Column('idmapgroup', Integer, ForeignKey(
