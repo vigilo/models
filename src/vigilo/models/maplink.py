@@ -156,9 +156,7 @@ class MapSegment(MapLink):
         nullable=False
         )
     
-    color = Column(
-        Unicode(255),
-        nullable=False)
+    color = Column(Unicode(255))
     
     thickness = Column(Integer)
     

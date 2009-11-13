@@ -42,6 +42,7 @@ class Statename(DeclarativeBase, object):
                             cls.idstatename,
                             cls.statename,
                         )
+            # TODO: est-ce que ca marche si les cles primaires ne commencent pas a 1 ? J'en doute
             mapping = list(dict(query.all()).values())
             mapping.insert(0, None)
 
