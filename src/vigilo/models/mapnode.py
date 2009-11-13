@@ -83,7 +83,7 @@ class MapNodeHost(MapNode):
     """
     Classe chargée de la représentation graphique d'un hôte dans vigimap
     
-    @ivar idmapnodehost: Identifiant du modèle de l'hôte (séquence). 
+    @ivar idmapnode: Identifiant du modèle de l'hôte (séquence). 
     @ivar name: Nom de l'hôte.
     @ivar hosticon: Nom de l'icône de l'hôte. 
     @ivar hoststateicon: Etat de l'icône de l'hôte.
