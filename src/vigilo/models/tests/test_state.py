@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for State class"""
-from vigilo.models import State, Statename, Host, ServiceLowLevel
+from vigilo.models import State, StateName, Host, ServiceLowLevel
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -13,7 +13,7 @@ class TestState(ModelTest):
     klass = State
     attrs = {
         'ip': u'127.0.0.1',
-        # On ne peut pas utiliser Statename.statename_to_value ici
+        # On ne peut pas utiliser StateName.statename_to_value ici
         # car le modèle n'est pas encore créé lorsque ce code est
         # exécuté.
         'state': 3, # = WARNING
@@ -59,6 +59,6 @@ class TestState(ModelTest):
         Permet de valider le comportement de state_proxy.
         """
         state = DBSession.query(State).filter(
-            State.state == Statename.statename_to_value(u'WARNING')).first()
+            State.state == StateName.statename_to_value(u'WARNING')).first()
         assert_equals(self.obj, state)
 

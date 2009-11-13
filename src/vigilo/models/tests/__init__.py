@@ -3,7 +3,7 @@
 from nose.tools import assert_equals
 from vigilo.models.vigilo_bdd_config import metadata
 from vigilo.models.session import DBSession
-from vigilo.models.statename import Statename
+from vigilo.models.statename import StateName
 
 from os import path, environ
 import sys
@@ -68,10 +68,10 @@ class ModelTest(object):
         Use this method to pull in other objects that need to be created
         for this object to be build properly
         """
-        DBSession.add(Statename(statename=u'OK', order=0))
-        DBSession.add(Statename(statename=u'UNKNOWN', order=1))
-        DBSession.add(Statename(statename=u'WARNING', order=2))
-        DBSession.add(Statename(statename=u'CRITICAL', order=3))
+        DBSession.add(StateName(statename=u'OK', order=0))
+        DBSession.add(StateName(statename=u'UNKNOWN', order=1))
+        DBSession.add(StateName(statename=u'WARNING', order=2))
+        DBSession.add(StateName(statename=u'CRITICAL', order=3))
         DBSession.flush()
         return {}
 

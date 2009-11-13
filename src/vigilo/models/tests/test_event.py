@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for Event class"""
-from vigilo.models import Event, Host, ServiceLowLevel, Statename
+from vigilo.models import Event, Host, ServiceLowLevel, StateName
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true, assert_equal
@@ -15,7 +15,7 @@ class TestEvent(ModelTest):
         'idevent': 42,
         'timestamp': datetime.now(),
         'hostname': u'monhost',
-        # On ne peut pas utiliser Statename.statename_to_value ici
+        # On ne peut pas utiliser StateName.statename_to_value ici
         # car le modèle n'est pas encore créé lorsque ce code est
         # exécuté.
         'current_state': 3, # = WARNING
@@ -63,35 +63,35 @@ class TestEvent(ModelTest):
     def test_initial_states(self):
         """Vérifie que l'état initial est celui attendu."""
         assert_equal(u'WARNING',
-            Statename.value_to_statename(self.obj.initial_state),
+            StateName.value_to_statename(self.obj.initial_state),
             "The initial state should have been 'WARNING', got %r." %
-            Statename.value_to_statename(self.obj.initial_state))
+            StateName.value_to_statename(self.obj.initial_state))
 
         assert_equal(u'WARNING',
-            Statename.value_to_statename(self.obj.peak_state),
+            StateName.value_to_statename(self.obj.peak_state),
             "The peak state should have been 'WARNING', got %r." %
-            Statename.value_to_statename(self.obj.peak_state))
+            StateName.value_to_statename(self.obj.peak_state))
 
     def test_read_only_states(self):
         """Les états initiaux/maximaux ne sont accessibles qu'en lecture."""
         # Tente de modifier l'état initial.
         try:
             self.obj.initial_state = \
-                Statename.statename_to_value(u'CRITICAL')
+                StateName.statename_to_value(u'CRITICAL')
         except AttributeError:
             pass
-        state = Statename.value_to_statename(self.obj.initial_state)
+        state = StateName.value_to_statename(self.obj.initial_state)
         assert_equal(u'WARNING', state,
             "Expected initial state = 'WARNING', got %r." % state)
 
         # Force l'état maximal à 'CRITICAL'.
-        self.obj.current_state = Statename.statename_to_value(u'CRITICAL')
+        self.obj.current_state = StateName.statename_to_value(u'CRITICAL')
         # Tente de repasser l'état maximal à 'UNKNOWN'.
         try:
-            self.obj.peak_state = Statename.statename_to_value(u'UNKNOWN')
+            self.obj.peak_state = StateName.statename_to_value(u'UNKNOWN')
         except AttributeError:
             pass
-        state = Statename.value_to_statename(self.obj.peak_state)
+        state = StateName.value_to_statename(self.obj.peak_state)
         assert_equal(u'CRITICAL', state,
             "Expected peak state = 'CRITICAL', got %r." % state)
 

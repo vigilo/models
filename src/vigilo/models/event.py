@@ -11,7 +11,7 @@ from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .state import State
-from .statename import Statename
+from .statename import StateName
 from .session import DBSession
 
 __all__ = ('Event', )
@@ -89,8 +89,8 @@ class Event(DeclarativeBase, object):
             self._initial_state = value
 
         else:
-            statename = aliased(Statename)
-            statename2 = aliased(Statename)
+            statename = aliased(StateName)
+            statename2 = aliased(StateName)
             higher =    DBSession.query(
                             statename.idstatename,
                             statename2.idstatename,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table Statename"""
+"""Modèle pour la table StateName"""
 from __future__ import absolute_import
 
 from sqlalchemy import Column
@@ -9,13 +9,15 @@ from sqlalchemy.types import Integer, Unicode
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
 
-__all__ = ('Statename', )
+__all__ = ('StateName', )
 
-class Statename(DeclarativeBase, object):
+class StateName(DeclarativeBase, object):
     """
     @ivar idstatename: Identifiant (auto-généré) de la classe.
     @ivar statename: Le nom de l'état (ex: "UP", "UNKNOWN", "OK", etc.).
-    @ivar order: L'importance de l'état.
+    @ivar order: L'importance de l'état. Plus ce nombre est élevé,
+        plus l'état a d'importance et devrait apapraître en premier
+        dans un tableau par exemple.
     """
     __tablename__ = bdd_basename + 'statename'
 
@@ -37,30 +39,35 @@ class Statename(DeclarativeBase, object):
 
     @classmethod
     def __statename_mapping(cls):
+        """Renvoie un dictionnaire avec les associations id <-> nom."""
         def inner():
+            """Renvoie un itérateur sur le dictionnaire des associations."""
             query =   DBSession.query(
                             cls.idstatename,
                             cls.statename,
                         )
-            # TODO: est-ce que ca marche si les cles primaires ne commencent pas a 1 ? J'en doute
-            mapping = list(dict(query.all()).values())
-            mapping.insert(0, None)
-
+            mapping = dict(query.all())
             while True:
                 yield mapping
         return inner().next
 
     @classmethod
     def statename_to_value(cls, name):
-        return cls.__statename_mapping()().index(name.upper())
+        """Permet d'obtenir l'identifiant associé à un nom d'état donné."""
+        mapping = cls.__statename_mapping()()
+        for k in mapping:
+            if mapping[k] == name:
+                return k
+        raise KeyError, ("No such statename '%s'" % name)
 
     @classmethod
     def value_to_statename(cls, value):
+        """Permet d'obtenir le nom d'état associé à un identifiant donné."""
         return cls.__statename_mapping()()[value]
 
     def __init__(self, **kwargs):
         """Initialise un nom d'état."""
-        super(Statename, self).__init__(**kwargs)
+        super(StateName, self).__init__(**kwargs)
 
     def __unicode__(self):
         """Renvoie la représentation unicode du nom d'état."""
