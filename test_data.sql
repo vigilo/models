@@ -12,7 +12,7 @@ SET search_path = public, pg_catalog;
 
 
 SELECT pg_catalog.setval('state_idstate_seq', 52, true);
-SELECT pg_catalog.setval('service_idservice_seq', 25, true);
+SELECT pg_catalog.setval('service_idservice_seq', 26, true);
 SELECT pg_catalog.setval('statename_idstatename_seq', 7, true);
 
 
@@ -72,6 +72,7 @@ INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (22, 'Interfac
 INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (23, 'Interface eth1',            '&', 'lowlevel');
 INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (24, 'Interface eth2',            '&', 'lowlevel');
 INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (25, 'Connexion',                 '+', 'highlevel');
+INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (26, 'Portail web',               '&', 'highlevel');
 
 INSERT INTO servicelowlevel (idservice, command) VALUES (1, 'halt');
 INSERT INTO servicelowlevel (idservice, command) VALUES (2, 'halt');
@@ -99,6 +100,7 @@ INSERT INTO servicelowlevel (idservice, command) VALUES (23, 'halt');
 INSERT INTO servicelowlevel (idservice, command) VALUES (24, 'halt');
 
 INSERT INTO servicehighlevel (idservice, message, warning_threshold, critical_threshold, weight) VALUES (25, 'Ouch', 300, 150, NULL);
+INSERT INTO servicehighlevel (idservice, message, warning_threshold, critical_threshold, weight) VALUES (26, 'Ouch', 300, 150, NULL);
 
 INSERT INTO servicedephigh (iddep, servicename, type_dep) VALUES (1, 'Connexion', 'lowlevel');
 INSERT INTO servicedephighonlow (iddep, host_dep, service_dep) VALUES(1, 'host2.example.com', 'Interface eth0');
@@ -107,6 +109,10 @@ INSERT INTO servicedephighonlow (iddep, host_dep, service_dep) VALUES(2, 'host2.
 INSERT INTO servicedephigh (iddep, servicename, type_dep) VALUES (3, 'Connexion', 'lowlevel');
 INSERT INTO servicedephighonlow (iddep, host_dep, service_dep) VALUES(3, 'host2.example.com', 'Interface eth2');
 
+INSERT INTO servicedephigh (iddep, servicename, type_dep) VALUES (4, 'Portail web', 'lowlevel');
+INSERT INTO servicedephighonlow (iddep, host_dep, service_dep) VALUES(4, 'host2.example.com', 'HTTPD');
+INSERT INTO servicedephigh (iddep, servicename, type_dep) VALUES (5, 'Portail web', 'highlevel');
+INSERT INTO servicedephighonhigh (iddep, service_dep) VALUES(5, 'Connexion');
 
 --
 -- Data for Name: groups; Type: TABLE DATA; Schema: public; Owner: vigiboard
@@ -236,6 +242,7 @@ INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('ho
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host2.example.com','Interface eth0', 100, 4);
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host2.example.com','Interface eth1', 120, 4);
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host2.example.com','Interface eth2', 130, 4);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host2.example.com','HTTPD', 200, 1);
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host3.example.com','Interface eth1', 1, 4);
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('proto4', 'Processes', 100, 2);
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('proto4', 'UpTime', 100, 2);

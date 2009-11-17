@@ -29,8 +29,6 @@ DROP TABLE mapnodehost CASCADE;
 DROP TABLE mapnodeservice CASCADE;
 DROP TABLE perfdatasource CASCADE;
 DROP TABLE permission CASCADE;
-DROP TABLE segment CASCADE;
-DROP TABLE segmentnodetable CASCADE;
 DROP TABLE service CASCADE;
 DROP TABLE servicedephigh CASCADE;
 DROP TABLE servicedephighonhigh CASCADE;
