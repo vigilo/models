@@ -45,9 +45,9 @@ class MapNode(DeclarativeBase, object):
             onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False)
     
-    x_pos = Column(Integer, nullable=False)
+    x_pos = Column(Integer, nullable=True)
     
-    y_pos = Column(Integer, nullable=False)
+    y_pos = Column(Integer, nullable=True)
     
     minimize = Column(
         Boolean, 
