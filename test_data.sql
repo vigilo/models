@@ -43,6 +43,12 @@ INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmp
 INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('host1.example.com', 'check21', 'com21', 'fqhn21', 'tpl21', '192.168.0.21', 21, 21,'21');
 INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('host2.example.com', 'check22', 'com22', 'fqhn22', 'tpl22', '192.168.0.22', 22, 22,'22');
 INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('host3.example.com', 'check23', 'com23', 'fqhn23', 'tpl23', '192.168.0.23', 23, 23,'23');
+
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('routeur1', 'check24', 'com24', 'fqhn24', 'tpl24', '192.168.0.24', 24, 24,'24');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('routeur2', 'check25', 'com25', 'fqhn25', 'tpl25', '192.168.0.25', 25, 25,'25');
+INSERT INTO host (name, checkhostcmd, snmpcommunity, fqhn, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion) VALUES ('firewall', 'check26', 'com26', 'fqhn26', 'tpl26', '192.168.0.26', 26, 26,'26');
+
+
 --
 -- Data for Name: service; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
@@ -73,6 +79,8 @@ INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (23, 'Interfac
 INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (24, 'Interface eth2',            '&', 'lowlevel');
 INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (25, 'Connexion',                 '+', 'highlevel');
 INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (26, 'Portail web',               '&', 'highlevel');
+INSERT INTO service (idservice, name, op_dep, servicetype) VALUES (27, 'RAM',                       '&', 'lowlevel');
+
 
 INSERT INTO servicelowlevel (idservice, command) VALUES (1, 'halt');
 INSERT INTO servicelowlevel (idservice, command) VALUES (2, 'halt');
@@ -98,6 +106,8 @@ INSERT INTO servicelowlevel (idservice, command) VALUES (21, 'halt');
 INSERT INTO servicelowlevel (idservice, command) VALUES (22, 'halt');
 INSERT INTO servicelowlevel (idservice, command) VALUES (23, 'halt');
 INSERT INTO servicelowlevel (idservice, command) VALUES (24, 'halt');
+INSERT INTO servicelowlevel (idservice, command) VALUES (27, 'halt');
+
 
 INSERT INTO servicehighlevel (idservice, message, warning_threshold, critical_threshold, weight) VALUES (25, 'Ouch', 300, 150, NULL);
 INSERT INTO servicehighlevel (idservice, message, warning_threshold, critical_threshold, weight) VALUES (26, 'Ouch', 300, 150, NULL);
@@ -108,11 +118,32 @@ INSERT INTO servicedephigh (iddep, servicename, type_dep) VALUES (2, 'Connexion'
 INSERT INTO servicedephighonlow (iddep, host_dep, service_dep) VALUES(2, 'host2.example.com', 'Interface eth1');
 INSERT INTO servicedephigh (iddep, servicename, type_dep) VALUES (3, 'Connexion', 'lowlevel');
 INSERT INTO servicedephighonlow (iddep, host_dep, service_dep) VALUES(3, 'host2.example.com', 'Interface eth2');
-
 INSERT INTO servicedephigh (iddep, servicename, type_dep) VALUES (4, 'Portail web', 'lowlevel');
 INSERT INTO servicedephighonlow (iddep, host_dep, service_dep) VALUES(4, 'host2.example.com', 'HTTPD');
 INSERT INTO servicedephigh (iddep, servicename, type_dep) VALUES (5, 'Portail web', 'highlevel');
 INSERT INTO servicedephighonhigh (iddep, service_dep) VALUES(5, 'Connexion');
+
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('messagerie', 'Processes', 'messagerie', 'CPU');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('messagerie', 'Processes', 'messagerie', 'RAM');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('messagerie', 'CPU', 'messagerie', 'Interface eth0');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('messagerie', 'RAM', 'messagerie', 'Interface eth0');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('messagerie', 'Interface eth0', 'routeur1', 'Interface eth1');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('messagerie', 'Interface eth0', 'routeur2', 'Interface eth1');
+
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('host1.example.com', 'Processes', 'host1.example.com', 'CPU');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('host1.example.com', 'Processes', 'host1.example.com', 'RAM');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('host1.example.com', 'CPU', 'host1.example.com', 'Interface eth0');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('host1.example.com', 'RAM', 'host1.example.com', 'Interface eth0');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('host1.example.com', 'Interface eth0', 'firewall', 'Interface eth1');
+
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('firewall', 'Interface eth1', 'firewall', 'Interface eth0');
+
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('firewall', 'Interface eth0', 'routeur1', 'Interface eth1');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('firewall', 'Interface eth0', 'routeur2', 'Interface eth1');
+
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('routeur1', 'Interface eth1', 'routeur1', 'Interface eth0');
+INSERT INTO servicedeplowonlow (hostname, servicename, host_dep, service_dep) VALUES ('routeur2', 'Interface eth1', 'routeur2', 'Interface eth0');
+
 
 --
 -- Data for Name: groups; Type: TABLE DATA; Schema: public; Owner: vigiboard
@@ -121,7 +152,6 @@ INSERT INTO servicedephighonhigh (iddep, service_dep) VALUES(5, 'Connexion');
 INSERT INTO "group" (name, idparent) VALUES ('Serveurs', NULL);
 INSERT INTO "group" (name, idparent) VALUES ('Serveurs Linux', 1);
 INSERT INTO "group" (name, idparent) VALUES ('Serveurs Windows', 1);
-
 
 
 --
@@ -159,6 +189,8 @@ INSERT INTO hostgroup (hostname, idgroup) VALUES ('testsolaris', 2);
 INSERT INTO hostgroup (hostname, idgroup) VALUES ('host1.example.com', 2);
 INSERT INTO hostgroup (hostname, idgroup) VALUES ('host2.example.com', 2);
 INSERT INTO hostgroup (hostname, idgroup) VALUES ('host3.example.com', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('routeur1', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('routeur2', 2);
 
 
 --
@@ -178,6 +210,7 @@ INSERT INTO servicegroup (servicename, idgroup) VALUES ('Charge 05', 1);
 INSERT INTO servicegroup (servicename, idgroup) VALUES ('Charge 15', 1);
 INSERT INTO servicegroup (servicename, idgroup) VALUES ('Collector', 1);
 INSERT INTO servicegroup (servicename, idgroup) VALUES ('CPU', 1);
+INSERT INTO servicegroup (servicename, idgroup) VALUES ('RAM', 1);
 INSERT INTO servicegroup (servicename, idgroup) VALUES ('Entrees / Sorties', 1);
 INSERT INTO servicegroup (servicename, idgroup) VALUES ('FakeSNMPVal', 1);
 INSERT INTO servicegroup (servicename, idgroup) VALUES ('FakeSNMPVal2', 1);
@@ -231,6 +264,21 @@ INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, state
 INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (51, 'host2.example.com', 'Interface eth1', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
 INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (52, 'host3.example.com', 'Interface eth1', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth2 is up');
 
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (53, 'host1.example.com', 'Processes', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Processes are not responding');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (54, 'host1.example.com', 'CPU', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: CPU is overloaded');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (55, 'host1.example.com', 'RAM', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: RAM is overloaded');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (56, 'messagerie', 'Interface eth0', '192.168.0.11', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (57, 'messagerie', 'Processes', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Processes are not responding');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (58, 'messagerie', 'CPU', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: CPU is overloaded');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (59, 'messagerie', 'RAM', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: RAM is overloaded');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (60, 'firewall', 'Interface eth0', '192.168.0.26', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (61, 'firewall', 'Interface eth1', '192.168.0.26', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (62, 'routeur1', 'Interface eth0', '192.168.0.24', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'eth0 is down');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (63, 'routeur1', 'Interface eth1', '192.168.0.24', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (64, 'routeur2', 'Interface eth0', '192.168.0.25', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (65, 'routeur2', 'Interface eth1', '192.168.0.25', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'eth1 is down');
+
+
 
 --
 -- Data for Name: serviceweight; Type: TABLE DATA; Schema: public; Owner: vigiboard
@@ -253,6 +301,16 @@ INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('br
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('messagerie', 'Processes', 100, 1);
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('messagerie', 'UpTime', 100, 2);
 INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('messagerie', 'CPU', 100, 3);
+
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('messagerie', 'Interface eth0', 100, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host1.example.com', 'Processes', 100, 2);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('host1.example.com', 'CPU', 100, 2);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('firewall', 'Interface eth0', 100, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('firewall', 'Interface eth1', 100, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('routeur1', 'Interface eth0', 100, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('routeur1', 'Interface eth1', 100, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('routeur2', 'Interface eth0', 100, 1);
+INSERT INTO hostservicedata(hostname, servicename, weight, priority) VALUES ('routeur2', 'Interface eth1', 100, 1);
 
 
 --
