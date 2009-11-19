@@ -191,6 +191,7 @@ INSERT INTO hostgroup (hostname, idgroup) VALUES ('host2.example.com', 2);
 INSERT INTO hostgroup (hostname, idgroup) VALUES ('host3.example.com', 2);
 INSERT INTO hostgroup (hostname, idgroup) VALUES ('routeur1', 2);
 INSERT INTO hostgroup (hostname, idgroup) VALUES ('routeur2', 2);
+INSERT INTO hostgroup (hostname, idgroup) VALUES ('firewall', 2);
 
 
 --
