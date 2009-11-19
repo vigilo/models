@@ -10,7 +10,8 @@ __all__ = (
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User', 'BoardViewFilter', 'CustomGraphView', 'Tag', 'Access',
         'HostServiceData', 'MapGroup', 'MapLink', 'MapNode','MapSegment', 'Map', 'MapServiceLink',
-        'Legend', 'Service', 'StateName',
+        'Legend', 'Service', 'StateName', 'Host_Vigiloserver_Appgroup',
+        'VigiloServer', 'AppGroup',
         )
 
 
@@ -45,4 +46,7 @@ from .mapnode import MapNode, MapNodeHost, MapNodeService
 from .map import Map
 from .maplink import MapLink, MapServiceLink, MapSegment
 from .legend import Legend
+from .host_vigiloserver_appgroup import Host_Vigiloserver_Appgroup
+from .vigiloserver import VigiloServer
+from .appgroup import AppGroup
 
