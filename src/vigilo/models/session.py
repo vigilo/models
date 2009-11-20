@@ -32,11 +32,6 @@ __all__ = ( 'RawDBSession', 'DBSession', )
 RawDBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False))
 RawDBSession.bind = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
 
-def get_raw_session():
-    RawDBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False))
-    RawDBSession.bind = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
-    return RawDBSession
-
 # ZTE session.
 # We must go through transaction (a zodb extraction) to commit, rollback.
 # There's also a session context to hold managed data, and the
@@ -45,7 +40,7 @@ def get_raw_session():
 # from committing, etc, the session directly.
 ZTEDBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False,
     extension=ZopeTransactionExtension()))
-ZTEDBSession.bind = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
+ZTEDBSession.bind = RawDBSession.bind
 
 DBSession = ZTEDBSession
 

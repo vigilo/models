@@ -46,8 +46,8 @@ class Service(DeclarativeBase, object):
         nullable=False,
     )
 
-    servicetype = Column(
-        Unicode(16),
+    _servicetype = Column(
+        'servicetype', Unicode(16),
         nullable=False,
     )
 
@@ -74,7 +74,7 @@ class Service(DeclarativeBase, object):
         """
         return []
 
-    __mapper_args__ = {'polymorphic_on': servicetype}
+    __mapper_args__ = {'polymorphic_on': _servicetype}
 
 
     def __init__(self, **kwargs):

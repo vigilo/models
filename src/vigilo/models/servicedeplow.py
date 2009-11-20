@@ -7,10 +7,6 @@ from sqlalchemy import ForeignKey, Column
 from sqlalchemy.types import Unicode
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from vigilo.models.session import DBSession
-
-from .state import State
-from .hostservicedata import HostServiceData
 
 __all__ = ('ServiceDepLowOnLow', )
 
