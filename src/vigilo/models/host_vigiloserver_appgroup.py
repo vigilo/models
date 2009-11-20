@@ -4,13 +4,13 @@
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
-from sqlalchemy.types import UnicodeText
+from sqlalchemy.types import UnicodeText, Integer
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
 __all__ = ('host_vigiloserver_appgroup', )
 
-class Host_Vigiloserver_Appgroup(DeclarativeBase, object):
+class Host_VigiloServer_AppGroup(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'host_vigiloserver_appgroup'
 
     hostname = Column(
@@ -18,11 +18,11 @@ class Host_Vigiloserver_Appgroup(DeclarativeBase, object):
         ForeignKey(bdd_basename + 'host.name'),
         primary_key=True, nullable=False)
     idsrv = Column(
-        UnicodeText(),
+        Integer,
         ForeignKey(bdd_basename + 'vigiloserver.idsrv'),
         primary_key=True, nullable=False)
     idappgroup = Column(
-        UnicodeText(),
+        Integer,
         ForeignKey(bdd_basename + 'appgroup.idappgroup'),
         primary_key=True, nullable=False)
 
