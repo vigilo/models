@@ -35,7 +35,6 @@ class TestEventHistory(ModelTest):
 
         DBSession.add(ServiceLowLevel(
             name=u'monservice',
-            servicetype=u'foo',
             command=u'halt',
             op_dep=u'+',
             ))

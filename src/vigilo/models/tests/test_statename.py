@@ -2,10 +2,6 @@
 """Test suite for StateName class"""
 from vigilo.models import StateName
 from vigilo.models.tests import ModelTest
-from vigilo.models.session import DBSession
-
-from nose.tools import assert_equals
-from datetime import datetime
 
 class TestStateName(ModelTest):
     """Test de la table StateName."""

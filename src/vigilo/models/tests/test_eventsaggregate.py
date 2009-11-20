@@ -24,7 +24,6 @@ class TestEventsAggregate(ModelTest):
         """Generate some data for the test"""
         DBSession.add(ServiceLowLevel(
             name=u'monservice',
-            servicetype=u'foo',
             command=u'halt',
             op_dep=u'+',
             ))
