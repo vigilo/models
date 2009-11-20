@@ -4,12 +4,14 @@
 
 __all__ = (
         'EventHistory', 'Event', 'EventsAggregate', 'Group',
-        'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass', 'PerfDataSource',
-        'ServiceGroup', 'ServiceLowLevel', 'ServiceHighLevel',
+        'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass',
+        'PerfDataSource', 'ServiceGroup',
+        'ServiceLowLevel', 'ServiceHighLevel',
         'ServiceDepHighOnHigh', 'ServiceDepHighOnLow', 'ServiceDepLowOnLow',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User', 'BoardViewFilter', 'CustomGraphView', 'Tag', 'Access',
-        'HostServiceData', 'MapGroup', 'MapLink', 'MapNode','MapSegment', 'Map', 'MapServiceLink',
+        'HostServiceData', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
+        'Map', 'MapServiceLink',
         'Legend', 'Service', 'StateName', 'Host_VigiloServer_AppGroup',
         'VigiloServer', 'AppGroup',
         )

@@ -10,7 +10,6 @@ from sqlalchemy.types import Unicode, Text, DateTime, Integer
 from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .state import State
 from .statename import StateName
 from .session import DBSession
 
@@ -99,7 +98,6 @@ class Event(DeclarativeBase, object):
                         ).filter(statename2.order > statename.order
                         ).all()
 
-            print higher
             if higher:
                 self._peak_state = value
         self._current_state = value

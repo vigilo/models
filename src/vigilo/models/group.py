@@ -34,7 +34,8 @@ class Group(DeclarativeBase, object):
     )
 
     # XXX We should make sure it's impossible to build cyclic graphs.
-    children = relation('Group', backref=backref('parent', remote_side=[idgroup]))
+    children = relation('Group', backref=backref('parent',
+                    remote_side=[idgroup]))
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='groups')
