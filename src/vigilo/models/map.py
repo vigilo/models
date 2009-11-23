@@ -9,8 +9,7 @@ from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-#from .secondary_tables import MAP_LINK_TABLE, MAP_GROUP_PERMISSION_TABLE
-from .secondary_tables import MAP_GROUP_MAP_TABLE
+from .secondary_tables import MAP_GROUP_MAP_TABLE, MAP_PERMISSION_TABLE
 
 __all__ = ('Map', )
 
@@ -59,6 +58,9 @@ class Map(DeclarativeBase, object):
     nodes = relation('MapNode', back_populates='map', uselist=True)
     
     segments = relation('MapSegment', back_populates='map', uselist=True)
+    
+    permissions = relation('Permission', secondary=MAP_PERMISSION_TABLE,
+                            back_populates='maps')
 
 
     def __init__(self, **kwargs):

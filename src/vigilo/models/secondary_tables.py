@@ -104,6 +104,18 @@ MAP_GROUP_PERMISSION_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
+MAP_PERMISSION_TABLE = Table(
+    bdd_basename + 'mappermissions', metadata,
+    Column('idmap', Integer, ForeignKey(
+                bdd_basename + 'map.idmap',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
+    Column('idpermission', Integer, ForeignKey(
+                bdd_basename + 'permission.idpermission',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+
 MAP_GROUP_MAP_TABLE = Table(
     bdd_basename + 'mapgroupmaptable', metadata,
     Column('idmapgroup', Integer, ForeignKey(
