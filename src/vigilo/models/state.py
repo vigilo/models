@@ -6,10 +6,8 @@ from __future__ import absolute_import
 
 import datetime
 
-from sqlalchemy import Column, DefaultClause, ForeignKey
-from sqlalchemy.orm import synonym, interfaces, ComparableProperty, composite
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Text, DateTime, Unicode
-from sqlalchemy.sql.expression import literal_column
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -33,20 +31,16 @@ class State(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'state'
 
-    idstate = Column(
-        Integer,
-        primary_key=True, nullable=False, autoincrement=True)
-
     hostname = Column(
         Unicode(255),
         ForeignKey(bdd_basename + 'host.name'),
-        index=True, nullable=True,
+        index=True, primary_key=True,
     )
 
     servicename = Column(
         Unicode(255),
         ForeignKey(bdd_basename + 'service.name'),
-        index=True, nullable=True,
+        index=True, primary_key=True,
     )
 
     ip = Column(

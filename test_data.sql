@@ -11,9 +11,18 @@ SET escape_string_warning = off;
 SET search_path = public, pg_catalog;
 
 
-SELECT pg_catalog.setval('state_idstate_seq', 52, true);
-SELECT pg_catalog.setval('service_idservice_seq', 26, true);
-SELECT pg_catalog.setval('statename_idstatename_seq', 7, true);
+SELECT pg_catalog.setval('event_idevent_seq', 1, false);
+SELECT pg_catalog.setval('eventhistory_idhistory_seq', 1, false);
+SELECT pg_catalog.setval('eventsaggregate_idaggregate_seq', 1, false);
+SELECT pg_catalog.setval('group_idgroup_seq', 1, false);
+SELECT pg_catalog.setval('hostclass_idclass_seq', 1, false);
+SELECT pg_catalog.setval('map_idmap_seq', 1, false);
+SELECT pg_catalog.setval('mapgroup_idmapgroup_seq', 1, false);
+SELECT pg_catalog.setval('maplink_idmaplink_seq', 1, false);
+SELECT pg_catalog.setval('mapnode_idmapnode_seq', 1, false);
+SELECT pg_catalog.setval('service_idservice_seq', 1, false);
+SELECT pg_catalog.setval('statename_idstatename_seq', 1, false);
+SELECT pg_catalog.setval('vigiloserver_idsrv_seq', 1, false);
 
 
 --
@@ -248,36 +257,26 @@ INSERT INTO statename (idstatename, statename, "order") VALUES (6, 'DOWN', 3);
 -- Data for Name: state; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
 
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (36, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (37, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (38, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (39, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (41, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (42, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (43, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (44, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (45, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (46, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (47, 'ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (48, 'host1.example.com', 'Load', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'Load is OK');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (49, 'host1.example.com', 'HTTPD', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'Apache is OK');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (50, 'host1.example.com', 'Interface eth0', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (51, 'host2.example.com', 'Interface eth1', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (52, 'host3.example.com', 'Interface eth1', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth2 is up');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('ajc.fw.1', 'Processes', '192.168.1.1', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Charge 01 average is above 4 (4.5)');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('host1.example.com', 'Load', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'Load is OK');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('host1.example.com', 'HTTPD', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'Apache is OK');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('host1.example.com', 'Interface eth0', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('host2.example.com', 'Interface eth1', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('host3.example.com', 'Interface eth1', '192.168.0.21', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth2 is up');
 
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (53, 'host1.example.com', 'Processes', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Processes are not responding');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (54, 'host1.example.com', 'CPU', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: CPU is overloaded');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (55, 'host1.example.com', 'RAM', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: RAM is overloaded');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (56, 'messagerie', 'Interface eth0', '192.168.0.11', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (57, 'messagerie', 'Processes', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Processes are not responding');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (58, 'messagerie', 'CPU', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: CPU is overloaded');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (59, 'messagerie', 'RAM', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: RAM is overloaded');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (60, 'firewall', 'Interface eth0', '192.168.0.26', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (61, 'firewall', 'Interface eth1', '192.168.0.26', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (62, 'routeur1', 'Interface eth0', '192.168.0.24', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'eth0 is down');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (63, 'routeur1', 'Interface eth1', '192.168.0.24', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (64, 'routeur2', 'Interface eth0', '192.168.0.25', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
-INSERT INTO state (idstate, hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES (65, 'routeur2', 'Interface eth1', '192.168.0.25', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'eth1 is down');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('host1.example.com', 'Processes', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Processes are not responding');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('host1.example.com', 'CPU', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: CPU is overloaded');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('host1.example.com', 'RAM', '192.168.0.21', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: RAM is overloaded');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('messagerie', 'Interface eth0', '192.168.0.11', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('messagerie', 'Processes', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: Processes are not responding');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('messagerie', 'CPU', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: CPU is overloaded');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('messagerie', 'RAM', '192.168.0.11', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'WARNING: RAM is overloaded');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('firewall', 'Interface eth0', '192.168.0.26', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('firewall', 'Interface eth1', '192.168.0.26', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('routeur1', 'Interface eth0', '192.168.0.24', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'eth0 is down');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('routeur1', 'Interface eth1', '192.168.0.24', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth1 is up');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('routeur2', 'Interface eth0', '192.168.0.25', '2009-04-07 13:33:26', 1, 'SOFT', 2, 'eth0 is up');
+INSERT INTO state (hostname, servicename, ip, "timestamp", state, statetype, attempt, message) VALUES ('routeur2', 'Interface eth1', '192.168.0.25', '2009-04-07 13:33:26', 3, 'SOFT', 2, 'eth1 is down');
 
 
 
