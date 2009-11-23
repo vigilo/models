@@ -79,7 +79,7 @@ class EventsAggregate(DeclarativeBase, object):
     cause = relation('Event',
         primaryjoin=idcause == Event.idevent, lazy='dynamic')
 
-    high_level_services = relation('Service',
+    high_level_services = relation('ServiceHighLevel',
         lazy='dynamic',
         secondary=EVENTSAGGREGATE_HLS_TABLE)
 

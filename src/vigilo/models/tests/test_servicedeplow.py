@@ -13,16 +13,9 @@ class TestServiceDepLowOnLow(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-        # Le service de bas niveau pour lequel on ajoute une dépendance.
-        low_dependent = ServiceLowLevel(
-            name=u'low_dependent',
-            op_dep=u'+',
-        )
-        DBSession.add(low_dependent)
-
-        # Création de l'hôte physique sur lequel portera la dépendance.
+        # Création de l'hôte physique qui contiendra les services techniques.
         host = Host(
-            name=u'physical',
+            hostname=u'physical',
             checkhostcmd=u'halt',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
@@ -32,20 +25,31 @@ class TestServiceDepLowOnLow(ModelTest):
         )
         DBSession.add(host)
 
-        # Création du service physique sur lequel portera la dépendance.
-        low_dependency = ServiceLowLevel(
-            name=u'low_dependency',
+        # Le service de bas niveau pour lequel on ajoute une dépendance.
+        low_dependent = ServiceLowLevel(
+            hostname=u'physical',
+            servicename=u'low_dependent',
             command=u'halt',
             op_dep=u'+',
+            priority=1,
+        )
+        DBSession.add(low_dependent)
+
+        # Création du service physique sur lequel portera la dépendance.
+        low_dependency = ServiceLowLevel(
+            hostname=u'physical',
+            servicename=u'low_dependency',
+            command=u'halt',
+            op_dep=u'+',
+            priority=1,
         )
         DBSession.add(low_dependency)
 
         DBSession.flush()
         return dict(
-            hostname=host.name,
-            servicename=low_dependent.name,
-            host_dep=host.name,
-            service_dep=low_dependency.name)
+            service=low_dependent,
+            service_dep=low_dependency,
+        )
 
     def __init__(self):
         ModelTest.__init__(self)

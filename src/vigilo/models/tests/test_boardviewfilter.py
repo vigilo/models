@@ -11,8 +11,6 @@ class TestBoardViewFilter(ModelTest):
     attrs = {
         'filtername': u'monfiltre',
         'username': u'manager',
-        'hostname': u'monhost',
-        'servicename': u'monservice',
         'message': u'WARNING2: SNMP error: No response from remote host',
         'trouble_ticket': u'42',
     }
@@ -27,20 +25,26 @@ class TestBoardViewFilter(ModelTest):
             fullname=u'Manager',
             email=u'foo@b.ar',
         ))
+
         DBSession.add(Host(
-            name=u'monhost',
+            hostname=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
-            ))
-        DBSession.add(ServiceLowLevel(
-            name=u'monservice',
+        ))
+
+        service = ServiceLowLevel(
+            hostname=u'myhost',
+            servicename=u'myservice',
             command=u'halt',
             op_dep=u'+',
-            ))
+            priority=1,
+        )
+        DBSession.add(service)
+
         DBSession.flush()
-        return {}
+        return dict(service=service)
 

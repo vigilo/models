@@ -4,7 +4,8 @@
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
-from sqlalchemy.types import Unicode, UnicodeText, Float
+from sqlalchemy.orm import relation
+from sqlalchemy.types import Integer, UnicodeText, Float
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -14,20 +15,21 @@ class PerfDataSource(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'perfdatasource'
 
-    hostname = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + u'host.name'),
-        primary_key=True, nullable=False)
+    idperfdatasource = Column(
+        Integer,
+        primary_key=True, autoincrement=True,
+    )
 
-    servicename = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + u'service.name'),
-        index=True, primary_key=True, nullable=False)
+    _idservice = Column(
+        'idservice', Integer,
+        ForeignKey(
+            bdd_basename + 'servicelowlevel.idservice',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        nullable=False,
+    )
 
-    graphname = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + u'graph.name'),
-        index=True, nullable=False)
+    service = relation('ServiceLowLevel')
 
     type = Column(
         UnicodeText,

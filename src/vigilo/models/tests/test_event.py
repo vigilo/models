@@ -14,7 +14,6 @@ class TestEvent(ModelTest):
     attrs = {
         'idevent': 42,
         'timestamp': datetime.now(),
-        'hostname': u'monhost',
         # On ne peut pas utiliser StateName.statename_to_value ici
         # car le modèle n'est pas encore créé lorsque ce code est
         # exécuté.
@@ -31,21 +30,25 @@ class TestEvent(ModelTest):
         ModelTest.do_get_dependencies(self)
 
         DBSession.add(Host(
-            name=u'monhost',
+            hostname=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=1234,
-            ))
-        DBSession.add(ServiceLowLevel(
-            name=u'monservice',
+        ))
+
+        service = ServiceLowLevel(
+            hostname=u'myhost',
+            servicename=u'myservice',
             command=u'halt',
             op_dep=u'+',
-            ))
+            priority=1,
+        )
+        DBSession.add(service)
         DBSession.flush()
-        return dict(hostname=u"monhost", servicename=u"monservice")
+        return dict(service=service)
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""

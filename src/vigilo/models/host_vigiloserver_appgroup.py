@@ -15,12 +15,14 @@ class Host_VigiloServer_AppGroup(DeclarativeBase, object):
 
     hostname = Column(
         UnicodeText(),
-        ForeignKey(bdd_basename + 'host.name'),
+        ForeignKey(bdd_basename + 'host.hostname'),
         primary_key=True, nullable=False)
+
     idsrv = Column(
         Integer,
         ForeignKey(bdd_basename + 'vigiloserver.idsrv'),
         primary_key=True, nullable=False)
+
     idappgroup = Column(
         Integer,
         ForeignKey(bdd_basename + 'appgroup.idappgroup'),

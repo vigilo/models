@@ -24,7 +24,7 @@ USERGROUP_PERMISSION_TABLE = Table(
 HOST_TAG_TABLE = Table(
     bdd_basename + 'tags2hosts', metadata,
     Column('hostname', Unicode(255), ForeignKey(
-                bdd_basename + 'host.name',
+                bdd_basename + 'host.hostname',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
     Column('name', Unicode(255), ForeignKey(
@@ -35,10 +35,10 @@ HOST_TAG_TABLE = Table(
 
 SERVICE_TAG_TABLE = Table(
     bdd_basename + 'tags2services', metadata,
-    Column('servicename', Unicode(255), ForeignKey(
-                bdd_basename + 'service.name',
+    Column('service', Integer, ForeignKey(
+                bdd_basename + 'service.idservice',
                 onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
+            primary_key=True, autoincrement=False),
     Column('name', Unicode(255), ForeignKey(
                 bdd_basename + 'tag.name',
                 onupdate="CASCADE", ondelete="CASCADE"),
@@ -59,9 +59,9 @@ EVENTS_EVENTSAGGREGATE_TABLE = Table(
 
 EVENTSAGGREGATE_HLS_TABLE = Table(
     bdd_basename + 'eventsaggregates2hls', metadata,
-    Column('hls_servicename', Unicode(255),
-            ForeignKey(bdd_basename + 'service.name'),
-            primary_key=True),
+    Column('hls_servicename', Integer,
+            ForeignKey(bdd_basename + 'servicehighlevel.idservice'),
+            primary_key=True, autoincrement=False),
     Column('idaggregate', Integer, ForeignKey(
                 bdd_basename + 'eventsaggregate.idaggregate',
                 onupdate="CASCADE", ondelete="CASCADE"),
@@ -143,7 +143,7 @@ SUB_MAP_NODE_MAP_TABLE = Table(
 HOST_HOSTCLASS_TABLE = Table(
     bdd_basename + 'host2hostclass', metadata,
     Column('hostname', Unicode(255), ForeignKey(
-                bdd_basename + 'host.name',
+                bdd_basename + 'host.hostname',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True),
     Column('idclass', Integer, ForeignKey(

@@ -24,31 +24,33 @@ class TestEventHistory(ModelTest):
         """Generate some data for the test"""
 
         DBSession.add(Host(
-            name=u'monhost',
+            hostname=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=1234,
-            ))
+        ))
 
-        DBSession.add(ServiceLowLevel(
-            name=u'monservice',
+        service = ServiceLowLevel(
+            hostname=u'myhost',
+            servicename=u'monservice',
             command=u'halt',
             op_dep=u'+',
-            ))
+            priority=1,
+        )
+        DBSession.add(service)
         DBSession.flush()
 
         DBSession.add(Event(
             idevent=42,
             timestamp=datetime.now(),
-            hostname=u'monhost',
-            servicename=u'monservice',
+            service=service,
             current_state=u'OK',
             message=u'Foo',
             ))
         DBSession.flush()
 
-        return dict(idevent = DBSession.query(Event.idevent)[0].idevent)
+        return dict(idevent=DBSession.query(Event.idevent)[0].idevent)
 

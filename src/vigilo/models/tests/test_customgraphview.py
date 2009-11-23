@@ -9,10 +9,10 @@ class TestCustomGraphView(ModelTest):
 
     klass = CustomGraphView
     attrs = {
-        'viewname': u'mavue',
+        'viewname': u'myview',
         'username': u'manager',
-        'hostname': u'monhost',
-        'graphname': u'mongraph',
+        'hostname': u'myhost',
+        'graphname': u'mygraph',
         'x_pos': 1337,
         'y_pos': 42,
     }
@@ -28,7 +28,7 @@ class TestCustomGraphView(ModelTest):
             email=u'foo@b.ar',
         ))
         DBSession.add(Host(
-            name=u'monhost',
+            hostname=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
@@ -36,7 +36,7 @@ class TestCustomGraphView(ModelTest):
             mainip=u'127.0.0.1',
             snmpport=u'1234',
             ))
-        DBSession.add(Graph(name=u"mongraph", template=u"", vlabel=u""))
+        DBSession.add(Graph(name=u"mygraph", template=u"", vlabel=u""))
         DBSession.flush()
         return {}
 

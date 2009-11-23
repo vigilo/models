@@ -56,7 +56,7 @@ class TestServiceDepHighOnLow(ModelTest):
 
         # Le service de haut niveau pour lequel on ajoute une dépendance.
         hls = ServiceHighLevel(
-            name=u'virtual',
+            servicename=u'virtual',
             message=u'ouch!',
             warning_threshold=60,
             critical_threshold=80,
@@ -66,7 +66,7 @@ class TestServiceDepHighOnLow(ModelTest):
 
         # Création de l'hôte physique sur lequel portera la dépendance.
         host = Host(
-            name=u'physical',
+            hostname=u'physical',
             checkhostcmd=u'halt',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
@@ -78,18 +78,17 @@ class TestServiceDepHighOnLow(ModelTest):
 
         # Création du service physique sur lequel portera la dépendance.
         service = ServiceLowLevel(
-            name=u'physical',
+            hostname=u'physical',
+            servicename=u'physical',
             command=u'halt',
             op_dep=u'+',
+            priority=1,
         )
         DBSession.add(service)
 
         DBSession.flush()
 
-        return dict(
-            servicename=hls.name,
-            host_dep=host.name,
-            service_dep=service.name)
+        return dict(servicename=hls.servicename, service_dep=service)
 
     def __init__(self):
         ModelTest.__init__(self)

@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, Unicode
+from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
 from .session import DBSession
@@ -33,6 +33,10 @@ class Permission(DeclarativeBase, object):
     permission_name = Column(
         Unicode(255),
         unique=True, index=True, nullable=False,
+    )
+
+    description = Column(
+        UnicodeText
     )
 
     usergroups = relation('UserGroup', secondary=USERGROUP_PERMISSION_TABLE,

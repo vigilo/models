@@ -17,7 +17,7 @@ class HostGroup(DeclarativeBase, object):
 
     hostname = Column(
         Unicode(255),
-        ForeignKey(bdd_basename + u'host.name'),
+        ForeignKey(bdd_basename + u'host.hostname'),
         primary_key=True, nullable=False)
 
     idgroup = Column(

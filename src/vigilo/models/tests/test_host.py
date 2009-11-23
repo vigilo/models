@@ -8,7 +8,7 @@ class TestHost(ModelTest):
 
     klass = Host
     attrs = {
-        'name': u'monhost',
+        'hostname': u'myhost',
         'checkhostcmd': u'halt -f',
         'snmpcommunity': u'public',
         'fqhn': u'localhost.localdomain',

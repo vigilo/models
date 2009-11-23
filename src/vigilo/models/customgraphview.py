@@ -35,7 +35,7 @@ class CustomGraphView(DeclarativeBase, object):
     hostname = Column(
         Unicode(255),
         ForeignKey(
-            bdd_basename + 'host.name',
+            bdd_basename + 'host.hostname',
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True, nullable=False, primary_key=True)
 

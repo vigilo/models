@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.orm import synonym, aliased
+from sqlalchemy.orm import synonym, relation, aliased
 from sqlalchemy.types import Unicode, Text, DateTime, Integer
 
 from datetime import datetime
@@ -44,21 +44,20 @@ class Event(DeclarativeBase, object):
 
     timestamp = Column(DateTime(timezone=False))
 
-    hostname = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename +'host.name'),
-        index=True, nullable=False,
+    _idservice = Column(
+        Integer,
+        ForeignKey(
+            bdd_basename + 'servicelowlevel.idservice',
+            onupdate='CASCADE', ondelete='CASCADE',
+        ),
+        nullable=False,
     )
+
+    service = relation('ServiceLowLevel')
 
     ip = Column(
         Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
                         # sous forme canonique. On arrondit à 40 caractères.
-        index=True, nullable=True,
-    )
-
-    servicename = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + 'service.name'),
         index=True, nullable=True,
     )
 

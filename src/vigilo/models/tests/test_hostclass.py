@@ -18,7 +18,7 @@ class TestHostClass(ModelTest):
     def do_get_dependencies(self):
         """Generate some data for the test"""
         host =  Host(
-                    name=u'monhost',
+                    hostname=u'myhost',
                     checkhostcmd=u'halt -f',
                     snmpcommunity=u'public',
                     fqhn=u'localhost.localdomain',

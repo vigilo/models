@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
-from sqlalchemy.types import Unicode
+from sqlalchemy.types import Unicode, DateTime
 import hashlib
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -50,6 +50,12 @@ class User(DeclarativeBase, object):
         'language', Unicode(42),
         nullable=True,
         default=None,
+    )
+
+    # XXX Rendre cet attribute obligatoire (nullable=False).
+    last_changed = Column(
+        DateTime(timezone=False),
+#        nullable=False,
     )
 
     # XXX En attendant que certains problèmes dans Rum soient résolus,

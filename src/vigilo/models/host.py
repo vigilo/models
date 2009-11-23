@@ -32,7 +32,7 @@ class Host(DeclarativeBase, object):
     """
     __tablename__ = bdd_basename + 'host'
 
-    name = Column(
+    hostname = Column(
         Unicode(255),
         index=True, primary_key=True, nullable=False)
 
@@ -99,5 +99,5 @@ class Host(DeclarativeBase, object):
         @return: L'hôte demandé.
         @rtype: L{Host}
         """
-        return DBSession.query(cls).filter(cls.name == hostname).first()
+        return DBSession.query(cls).filter(cls.hostname == hostname).first()
 

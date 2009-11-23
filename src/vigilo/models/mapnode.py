@@ -103,10 +103,11 @@ class MapNodeHost(MapNode):
     name = Column(
         Unicode(255), 
         ForeignKey(
-            bdd_basename + 'host.name',
+            bdd_basename + 'host.hostname',
             onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False)
     #index=True,    
+
     hosticon = Column(
         Unicode(255)
         )
@@ -143,22 +144,18 @@ class MapNodeService(MapNode):
         primary_key=True,
         nullable=False
     )
-    
-    hostname = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + 'host.name',
-        ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False
+
+    _idservice = Column(
+        Integer,
+        ForeignKey(
+            bdd_basename + 'servicelowlevel.idservice',
+            onupdate='CASCADE', ondelete='CASCADE',
+        ),
+        nullable=False,
     )
 
-    servicename = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + 'service.name',
-        ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False
-    )
-    #index=True,
-        
+    service = relation('ServiceLowLevel')
+
     serviceicon = Column(
         Unicode(255)
         )

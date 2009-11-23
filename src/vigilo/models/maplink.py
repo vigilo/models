@@ -105,21 +105,18 @@ class MapServiceLink(MapLink):
         primary_key=True,
         nullable=False
         )
-    
-    refhost = Column(
-        Unicode(255),
+
+    _idref = Column(
+        Integer,
         ForeignKey(
-            bdd_basename + 'host.name',
-            ondelete='CASCADE', onupdate='CASCADE')
-        )
-    
-    refservice = Column(
-        Unicode(255),
-        ForeignKey(
-            bdd_basename + 'service.name',
-            ondelete='CASCADE', onupdate='CASCADE')
-        ) 
-    
+            bdd_basename + 'servicelowlevel.idservice',
+            onupdate='CASCADE', ondelete='CASCADE',
+        ),
+        nullable=False,
+    )
+
+    reference = relation('ServiceLowLevel')
+
     graph = Column(
         Unicode(255),
         ForeignKey(

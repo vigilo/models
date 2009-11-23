@@ -10,7 +10,7 @@ __all__ = (
         'ServiceDepHighOnHigh', 'ServiceDepHighOnLow', 'ServiceDepLowOnLow',
         'GraphToGroups', 'Version', 'State', 'Permission', 'UserGroup',
         'User', 'BoardViewFilter', 'CustomGraphView', 'Tag', 'Access',
-        'HostServiceData', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
+        'MapGroup', 'MapLink', 'MapNode','MapSegment',
         'Map', 'MapServiceLink',
         'Legend', 'Service', 'StateName', 'Host_VigiloServer_AppGroup',
         'VigiloServer', 'AppGroup',
@@ -28,7 +28,6 @@ from .host import Host
 from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
 from .servicegroup import ServiceGroup
-from .hostservicedata import HostServiceData
 from .service import ServiceLowLevel, ServiceHighLevel, Service
 from .servicedephigh import ServiceDepHighOnHigh, ServiceDepHighOnLow
 from .servicedeplow import ServiceDepLowOnLow

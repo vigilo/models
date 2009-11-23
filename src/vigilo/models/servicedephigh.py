@@ -5,6 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -37,7 +38,7 @@ class ServiceDepHigh(DeclarativeBase, object):
     servicename = Column(
         Unicode(255),
         ForeignKey(
-            bdd_basename + 'service.name',
+            bdd_basename + 'service.servicename',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
@@ -82,7 +83,7 @@ class ServiceDepHighOnHigh(ServiceDepHigh):
     service_dep = Column(
         Unicode(255),
         ForeignKey(
-            bdd_basename + 'service.name',
+            bdd_basename + 'service.servicename',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         index=True, nullable=False,
@@ -117,23 +118,16 @@ class ServiceDepHighOnLow(ServiceDepHigh):
         primary_key=True,
     )
 
-    host_dep = Column(
-        Unicode(255),
+    _iddepservice = Column(
+        'iddepservice', Integer,
         ForeignKey(
-            bdd_basename + 'host.name',
+            bdd_basename + 'servicelowlevel.idservice',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        index=True, nullable=False,
+        nullable=False,
     )
 
-    service_dep = Column(
-        Unicode(255),
-        ForeignKey(
-            bdd_basename + 'service.name',
-            ondelete='CASCADE', onupdate='CASCADE',
-        ),
-        index=True, nullable=False,
-    )    
+    service_dep = relation('ServiceLowLevel')
 
     def __init__(self, **kwargs):
         super(ServiceDepHighOnLow, self).__init__(**kwargs)

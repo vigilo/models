@@ -22,28 +22,30 @@ class TestEventsAggregate(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-        DBSession.add(ServiceLowLevel(
-            name=u'monservice',
-            command=u'halt',
-            op_dep=u'+',
-            ))
-
         DBSession.add(Host(
-            name=u'monhost',
+            hostname=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
-            ))
+        ))
         DBSession.flush()
+
+        service = ServiceLowLevel(
+            hostname=u'myhost',
+            servicename=u'myservice',
+            command=u'halt',
+            op_dep=u'+',
+            priority=1,
+        )
+        DBSession.add(service)
 
         DBSession.add(Event(
             idevent=42,
             timestamp=datetime.now(),
-            hostname=u'monhost',
-            servicename=u'monservice',
+            service=service,
             current_state=u'OK',
             message=u'Foo',
             ))

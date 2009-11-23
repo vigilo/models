@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import UnicodeText, Unicode, Integer
-from sqlalchemy.orm import relation
+from sqlalchemy.orm import synonym, relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
@@ -20,8 +20,6 @@ class Service(DeclarativeBase, object):
     @ivar name: Nom du service.
     @ivar op_dep: Le type d'opération à appliquer aux dépendances de ce
         service de haut niveau ('+', '&' ou '|').
-    @ivar servicetype: Indique le type de service. Vaut soit 'highlevel' pour
-        un L{ServiceHighLevel}, soit 'lowlevel' pour un L{ServiceLowLevel}.
     @ivar servicegroups: Liste des groupes de services auxquels
         ce service appartient.
     @ivar tags: Liste des libellés associés à ce service.
@@ -31,12 +29,12 @@ class Service(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'service'
 
-    _idservice = Column(
+    idservice = Column(
         'idservice', Integer,
         autoincrement=True, primary_key=True,
     )
 
-    name = Column(
+    servicename = Column(
         Unicode(255),
         index=True, unique=True, nullable=False,
     )
@@ -92,17 +90,17 @@ class Service(DeclarativeBase, object):
         """
         return self.name
 
-    @classmethod
-    def by_service_name(cls, servicename):
-        """
-        Renvoie le service dont le nom est L{servicename}.
-        
-        @param servicename: Nom du service voulu.
-        @type servicename: C{unicode}
-        @return: Le service demandé.
-        @rtype: L{Service} ou None
-        """
-        return DBSession.query(cls).filter(cls.name == servicename).first()
+#    @classmethod
+#    def by_service_name(cls, servicename):
+#        """
+#        Renvoie le service dont le nom est L{servicename}.
+#        
+#        @param servicename: Nom du service voulu.
+#        @type servicename: C{unicode}
+#        @return: Le service demandé.
+#        @rtype: L{Service} ou None
+#        """
+#        return DBSession.query(cls).filter(cls.name == servicename).first()
 
 
 class ServiceLowLevel(Service):
@@ -114,7 +112,7 @@ class ServiceLowLevel(Service):
     __tablename__ = bdd_basename + 'servicelowlevel'
     __mapper_args__ = {'polymorphic_identity': u'lowlevel'}
 
-    _idservice = Column(
+    idservice = Column(
         'idservice', Integer,
         ForeignKey(
             bdd_basename + 'service.idservice',
@@ -123,13 +121,61 @@ class ServiceLowLevel(Service):
         autoincrement=False, primary_key=True,
     )
 
+    hostname = Column(
+        Unicode,
+        ForeignKey(
+            bdd_basename + 'host.hostname',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        nullable=False,
+    )
+
     command = Column(
         UnicodeText,
         default=u'', nullable=False,
     )
 
+    weight = Column(
+        Integer,
+        nullable=True,
+    )
+
+    _priority = Column(
+        'priority', Integer,
+        nullable=False,
+    )
+
+    def _get_priority(self):
+        """Renvoie la priorité associée à un couple hôte/service."""
+        return self._priority
+
+    # XXX on devrait s'assurer que la priorité est bornée.
+    # Ceci permettra aussi de définir les limites pour Rum (Vigicore).
+    def _set_priority(self, priority):
+        """Modifie la priorité associée à un couple hôte/service."""
+        self._priority = priority
+
+    priority = synonym('_priority',
+        descriptor=property(_get_priority, _set_priority))
+
     def __init__(self, **kwargs):
         super(ServiceLowLevel, self).__init__(**kwargs)
+
+    @classmethod
+    def by_host_service_name(cls, hostname, servicename):
+        """
+        Renvoie le service de bas niveau dont le nom d'hôte
+        est L{hostname} et le nom de service est L{servicename}.
+        
+        @param hostname: Nom de l'hôte auquel est rattaché le service.
+        @type hostname: C{unicode}
+        @param servicename: Nom du service voulu.
+        @type servicename: C{unicode}
+        @return: Le service de bas niveau demandé.
+        @rtype: L{ServiceLowLevel} ou None
+        """
+        return DBSession.query(cls).filter(cls.hostname == hostname) \
+            .filter(cls.servicename == servicename).first()
 
 
 class ServiceHighLevel(Service):
@@ -146,7 +192,7 @@ class ServiceHighLevel(Service):
     __tablename__ = bdd_basename + 'servicehighlevel'
     __mapper_args__ = {'polymorphic_identity': u'highlevel'}
 
-    _idservice = Column(
+    idservice = Column(
         'idservice', Integer,
         ForeignKey(
             bdd_basename + 'service.idservice',
@@ -177,4 +223,17 @@ class ServiceHighLevel(Service):
 
     def __init__(self, **kwargs):
         super(ServiceHighLevel, self).__init__(**kwargs)
+
+    @classmethod
+    def by_service_name(cls, servicename):
+        """
+        Renvoie le service de haut niveau dont le nom est L{servicename}.
+        
+        @param servicename: Nom du service de haut niveau voulu.
+        @type servicename: C{unicode}
+        @return: Le service de haut niveau demandé.
+        @rtype: L{ServiceHighLevel} ou None
+        """
+        return DBSession.query(cls).filter(
+            cls.servicename == servicename).first()
 

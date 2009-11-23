@@ -4,9 +4,11 @@
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
-from sqlalchemy.types import Unicode
+from sqlalchemy.orm import relation
+from sqlalchemy.types import Unicode, Integer
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from .service import ServiceLowLevel
 
 __all__ = ('ServiceDepLowOnLow', )
 
@@ -23,41 +25,29 @@ class ServiceDepLowOnLow(DeclarativeBase, object):
     """
     __tablename__ = bdd_basename + 'servicedeplowonlow'
 
-    hostname = Column(
-        Unicode(255),
+    _idservice = Column(
+        'idservice', Integer,
         ForeignKey(
-            bdd_basename + 'host.name',
+            bdd_basename + 'servicelowlevel.idservice',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        primary_key=True, index=True, nullable=True,
+        primary_key=True, autoincrement=False,
     )
 
-    servicename = Column(
-        Unicode(255),
+    service = relation('ServiceLowLevel', foreign_keys=[_idservice],
+                primaryjoin=ServiceLowLevel.idservice == _idservice)
+
+    _iddep = Column(
+        'iddep', Integer,
         ForeignKey(
-            bdd_basename + 'service.name',
+            bdd_basename + 'servicelowlevel.idservice',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        primary_key=True, index=True, nullable=False,
+        primary_key=True, autoincrement=False,
     )
 
-    host_dep = Column(
-        Unicode(255),
-        ForeignKey(
-            bdd_basename + 'host.name',
-            ondelete='CASCADE', onupdate='CASCADE',
-        ),
-        primary_key=True, index=True, nullable=False,
-    )
-
-    service_dep = Column(
-        Unicode(255),
-        ForeignKey(
-            bdd_basename + 'service.name',
-            ondelete='CASCADE', onupdate='CASCADE',
-        ),
-        primary_key=True, index=True, nullable=False,
-    )    
+    service_dep = relation('ServiceLowLevel', foreign_keys=[_iddep],
+                    primaryjoin=ServiceLowLevel.idservice == _iddep)
 
     def __init__(self, **kwargs):
         super(ServiceDepLowOnLow, self).__init__(**kwargs)

@@ -33,25 +33,27 @@ class TestState(ModelTest):
         ModelTest.do_get_dependencies(self)
 
         host = Host(
-            name=u'monhost',
+            hostname=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
-            )
+        )
         DBSession.add(host)
 
         service = ServiceLowLevel(
-            name=u'monservice',
+            hostname=u'myhost',
+            servicename=u'myservice',
             command=u'halt',
             op_dep=u'+',
+            priority=1,
         )
         DBSession.add(service)
 
         DBSession.flush()
-        return dict(servicename=service.name, hostname=host.name)
+        return dict(hostname=service.hostname, servicename=service.servicename)
 
     def test_get_by_statename(self):
         """Teste si le filtrage sur la valeur textuelle d'un état fonctionne.

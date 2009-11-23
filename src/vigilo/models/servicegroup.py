@@ -16,14 +16,16 @@ class ServiceGroup(DeclarativeBase, object):
     __tablename__ = bdd_basename + 'servicegroup'
 
     servicename = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + u'service.name'),
-        primary_key=True, nullable=False)
+        Integer,
+        ForeignKey(bdd_basename + u'service.idservice'),
+        primary_key=True, nullable=False, autoincrement=False,
+    )
 
     idgroup = Column(
         Integer,
         ForeignKey(bdd_basename + u'group.idgroup'),
-        primary_key=True, nullable=False, autoincrement=False)
+        primary_key=True, nullable=False, autoincrement=False,
+    )
 
     services = relation('Service', back_populates='servicegroups', uselist=True,
         )

@@ -15,9 +15,8 @@ class TestHostGroups(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-
         DBSession.add(Host(
-            name=u'host',
+            hostname=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             fqhn=u'localhost.localdomain',
@@ -25,9 +24,9 @@ class TestHostGroups(ModelTest):
             mainip=u'127.0.0.1',
             snmpport=1234,
             ))
-        DBSession.add(Group(name = u"group"))
+        DBSession.add(Group(name=u"group"))
         DBSession.flush()
 
         group = Group.by_group_name(u'group')
-        return dict(hostname = u"host", idgroup=group.idgroup)
+        return dict(hostname=u"host", idgroup=group.idgroup)
 

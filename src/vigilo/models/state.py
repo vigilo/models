@@ -33,13 +33,13 @@ class State(DeclarativeBase, object):
 
     hostname = Column(
         Unicode(255),
-        ForeignKey(bdd_basename + 'host.name'),
+        ForeignKey(bdd_basename + 'host.hostname'),
         index=True, primary_key=True,
     )
 
     servicename = Column(
         Unicode(255),
-        ForeignKey(bdd_basename + 'service.name'),
+        ForeignKey(bdd_basename + 'service.servicename'),
         index=True, primary_key=True,
     )
 

@@ -3,7 +3,8 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import Unicode, UnicodeText
+from sqlalchemy.orm import relation
+from sqlalchemy.types import Unicode, UnicodeText, Integer
 
 from vigilo.models.vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -25,19 +26,16 @@ class BoardViewFilter(DeclarativeBase, object):
             onupdate="CASCADE", ondelete="CASCADE"),
         primary_key=True, index=True, nullable=False)
 
-    hostname = Column(
-        UnicodeText,
+    _idservice = Column(
+        Integer,
         ForeignKey(
-            bdd_basename + 'host.name',
-            onupdate="CASCADE", ondelete="CASCADE"),
-        index=True, nullable=False)
+            bdd_basename + 'servicelowlevel.idservice',
+            onupdate='CASCADE', ondelete='CASCADE',
+        ),
+        nullable=False,
+    )
 
-    servicename = Column(
-        UnicodeText,
-        ForeignKey(
-            bdd_basename + 'service.name',
-            onupdate="CASCADE", ondelete="CASCADE"),
-        index=True, nullable=False)
+    service = relation('ServiceLowLevel')
 
     message = Column(UnicodeText)
 
