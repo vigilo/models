@@ -7,6 +7,7 @@ from __future__ import absolute_import
 import datetime
 
 from sqlalchemy import Column, ForeignKey
+from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, Text, DateTime, Unicode
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
@@ -31,17 +32,16 @@ class State(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'state'
 
-    hostname = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + 'host.hostname'),
-        index=True, primary_key=True,
+    _idservice = Column(
+        'idservice', Integer,
+        ForeignKey(
+            bdd_basename + 'service.idservice',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        primary_key=True, autoincrement=False,
     )
 
-    servicename = Column(
-        Unicode(255),
-        ForeignKey(bdd_basename + 'service.servicename'),
-        index=True, primary_key=True,
-    )
+    service = relation('Service')
 
     ip = Column(
         Unicode(40),    # 39 caractères sont requis pour stocker une IPv6

@@ -15,7 +15,7 @@ class Host_VigiloServer_AppGroup(DeclarativeBase, object):
 
     hostname = Column(
         UnicodeText(),
-        ForeignKey(bdd_basename + 'host.hostname'),
+        ForeignKey(bdd_basename + 'host.name'),
         primary_key=True, nullable=False)
 
     idsrv = Column(

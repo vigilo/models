@@ -33,10 +33,10 @@ class TestState(ModelTest):
         ModelTest.do_get_dependencies(self)
 
         host = Host(
-            hostname=u'myhost',
+            name=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
-            fqhn=u'localhost.localdomain',
+            description=u'My Host',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
@@ -53,7 +53,7 @@ class TestState(ModelTest):
         DBSession.add(service)
 
         DBSession.flush()
-        return dict(hostname=service.hostname, servicename=service.servicename)
+        return dict(service=service)
 
     def test_get_by_statename(self):
         """Teste si le filtrage sur la valeur textuelle d'un état fonctionne.

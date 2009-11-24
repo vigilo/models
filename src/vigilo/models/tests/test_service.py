@@ -22,10 +22,10 @@ class TestServiceLowLevel(ModelTest):
         """Generate some data for the test"""
         # Création de l'hôte physique sur lequel portera la dépendance.
         host = Host(
-            hostname=u'myhost',
+            name=u'myhost',
             checkhostcmd=u'halt',
             snmpcommunity=u'public',
-            fqhn=u'localhost.localdomain',
+            description=u'My Host',
             hosttpl=u'foo',
             mainip=u'127.0.0.1',
             snmpport=42,

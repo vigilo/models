@@ -15,10 +15,10 @@ class TestServiceDepLowOnLow(ModelTest):
         """Generate some data for the test"""
         # Création de l'hôte physique qui contiendra les services techniques.
         host = Host(
-            hostname=u'physical',
+            name=u'physical',
             checkhostcmd=u'halt',
             snmpcommunity=u'public',
-            fqhn=u'localhost.localdomain',
+            description=u'My Host',
             hosttpl=u'foo',
             mainip=u'127.0.0.1',
             snmpport=42,

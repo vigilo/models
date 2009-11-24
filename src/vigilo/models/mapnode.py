@@ -103,7 +103,7 @@ class MapNodeHost(MapNode):
     name = Column(
         Unicode(255), 
         ForeignKey(
-            bdd_basename + 'host.hostname',
+            bdd_basename + 'host.name',
             onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False)
     #index=True,    

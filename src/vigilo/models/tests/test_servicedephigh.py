@@ -66,10 +66,10 @@ class TestServiceDepHighOnLow(ModelTest):
 
         # Création de l'hôte physique sur lequel portera la dépendance.
         host = Host(
-            hostname=u'physical',
+            name=u'physical',
             checkhostcmd=u'halt',
             snmpcommunity=u'public',
-            fqhn=u'localhost.localdomain',
+            description=u'A physical host for our tests',
             hosttpl=u'foo',
             mainip=u'127.0.0.1',
             snmpport=42,

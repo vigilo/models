@@ -15,7 +15,7 @@ class ServiceGroup(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'servicegroup'
 
-    servicename = Column(
+    idservice = Column(
         Integer,
         ForeignKey(bdd_basename + u'service.idservice'),
         primary_key=True, nullable=False, autoincrement=False,

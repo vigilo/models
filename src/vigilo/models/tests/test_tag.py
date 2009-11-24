@@ -20,10 +20,10 @@ class TestTag(ModelTest):
     def test_host_and_tag_association(self):
         """Il doit être possible d'associer un tag à un hôte."""
         host = Host(
-            hostname=u'myhost',
+            name=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
-            fqhn=u'localhost.localdomain',
+            description=u'My Host',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
@@ -39,10 +39,10 @@ class TestTag(ModelTest):
     def test_service_and_tag_association(self):
         """Il doit être possible d'associer un tag à un service."""
         host = Host(
-            hostname=u'myhost',
+            name=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
-            fqhn=u'localhost.localdomain',
+            description=u'My Host',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',

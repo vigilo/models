@@ -24,10 +24,10 @@ class TestEventHistory(ModelTest):
         """Generate some data for the test"""
 
         DBSession.add(Host(
-            hostname=u'myhost',
+            name=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
-            fqhn=u'localhost.localdomain',
+            description=u'My Host',
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=1234,

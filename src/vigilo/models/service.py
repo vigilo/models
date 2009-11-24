@@ -36,7 +36,7 @@ class Service(DeclarativeBase, object):
 
     servicename = Column(
         Unicode(255),
-        index=True, unique=True, nullable=False,
+        index=True, nullable=False,
     )
 
     op_dep = Column(
@@ -124,7 +124,7 @@ class ServiceLowLevel(Service):
     hostname = Column(
         Unicode,
         ForeignKey(
-            bdd_basename + 'host.hostname',
+            bdd_basename + 'host.name',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
