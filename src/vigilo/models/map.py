@@ -9,7 +9,7 @@ from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-from .secondary_tables import MAP_GROUP_MAP_TABLE, MAP_PERMISSION_TABLE
+from .secondary_tables import MAP_GROUP_TABLE, MAP_PERMISSION_TABLE
 
 __all__ = ('Map', )
 
@@ -49,7 +49,7 @@ class Map(DeclarativeBase, object):
         nullable=True)
     """
     
-    groups = relation('MapGroup', secondary=MAP_GROUP_MAP_TABLE,
+    groups = relation('MapGroup', secondary=MAP_GROUP_TABLE,
                          back_populates='maps', lazy='dynamic')
 
     links = relation('MapServiceLink', back_populates='map', uselist=True)

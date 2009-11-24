@@ -38,13 +38,13 @@ class ServiceDepHigh(DeclarativeBase, object):
     _idservice = Column(
         'idservice', Integer,
         ForeignKey(
-            bdd_basename + 'service.idservice',
+            bdd_basename + 'servicehighlevel.idservice',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
     )
 
-    service = relation('Service')
+    service = relation('ServiceHighLevel')
 
     type_dep = Column(
         Unicode(16),
@@ -85,13 +85,13 @@ class ServiceDepHighOnHigh(ServiceDepHigh):
     _idservice_dep = Column(
         'idservice_dep', Integer,
         ForeignKey(
-            bdd_basename + 'service.idservice',
+            bdd_basename + 'servicehighlevel.idservice',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         index=True, nullable=False,
     )
 
-    service_dep = relation('Service', foreign_keys=[_idservice_dep])
+    service_dep = relation('ServiceHighLevel', foreign_keys=[_idservice_dep])
 
     def __init__(self, **kwargs):
         super(ServiceDepHighOnHigh, self).__init__(**kwargs)

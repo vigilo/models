@@ -9,7 +9,9 @@ from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-from .secondary_tables import HOST_TAG_TABLE, HOST_HOSTCLASS_TABLE
+from .secondary_tables import HOST_TAG_TABLE, \
+                                HOST_HOSTCLASS_TABLE, \
+                                HOST_GROUP_TABLE
 
 __all__ = ('Host', )
 
@@ -63,9 +65,8 @@ class Host(DeclarativeBase, object):
 
     snmpversion = Column(Unicode(255))
 
-    hostgroups = relation('HostGroup', back_populates='hosts', uselist=True, )
-
-#    groups = association_proxy('hostgroups', 'groups')
+    groups = relation('HostGroup', secondary=HOST_GROUP_TABLE,
+                back_populates='hosts')
 
     tags = relation('Tag', secondary=HOST_TAG_TABLE,
         back_populates='hosts', )

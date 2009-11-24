@@ -92,18 +92,6 @@ USER_GROUP_TABLE = Table(
             primary_key=True)
 )
 
-MAP_GROUP_PERMISSION_TABLE = Table(
-    bdd_basename + 'mapgrouppermissions', metadata,
-    Column('idmapgroup', Integer, ForeignKey(
-                bdd_basename + 'mapgroup.idmapgroup',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idpermission', Integer, ForeignKey(
-                bdd_basename + 'permission.idpermission',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
-)
-
 MAP_PERMISSION_TABLE = Table(
     bdd_basename + 'mappermissions', metadata,
     Column('idmap', Integer, ForeignKey(
@@ -116,12 +104,12 @@ MAP_PERMISSION_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
-MAP_GROUP_MAP_TABLE = Table(
-    bdd_basename + 'mapgroupmaptable', metadata,
-    Column('idmapgroup', Integer, ForeignKey(
-                bdd_basename + 'mapgroup.idmapgroup',
+MAP_GROUP_TABLE = Table(
+    bdd_basename + 'mapgroup', metadata,
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'group.idgroup',
                 onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
+            primary_key=True, autoincrement=False),
     Column('idmap', Integer, ForeignKey(
                 bdd_basename + 'map.idmap',
                 onupdate="CASCADE", ondelete="CASCADE"),
@@ -148,6 +136,30 @@ HOST_HOSTCLASS_TABLE = Table(
             primary_key=True),
     Column('idclass', Integer, ForeignKey(
                 bdd_basename + 'hostclass.idclass',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+
+HOST_GROUP_TABLE = Table(
+    bdd_basename + 'hostgroup', metadata,
+    Column('hostname', Unicode(255), ForeignKey(
+                bdd_basename + 'host.name',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True),
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'group.idgroup',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+
+SERVICE_GROUP_TABLE = Table(
+    bdd_basename + 'servicegroup', metadata,
+    Column('idservice', Integer, ForeignKey(
+                bdd_basename + 'service.idservice',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False),
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'group.idgroup',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False)
 )

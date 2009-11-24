@@ -11,7 +11,6 @@ from .session import DBSession
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .secondary_tables import USERGROUP_PERMISSION_TABLE, \
                                 GROUP_PERMISSION_TABLE, \
-                                MAP_GROUP_PERMISSION_TABLE, \
                                 MAP_PERMISSION_TABLE
 
 __all__ = ('Permission', )
@@ -44,10 +43,7 @@ class Permission(DeclarativeBase, object):
 
     groups = relation('Group', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='permissions')
-    
-    mapgroups = relation('MapGroup', secondary=MAP_GROUP_PERMISSION_TABLE,
-                    back_populates='permissions')
-    
+
     maps = relation('Map', secondary=MAP_PERMISSION_TABLE,
                     back_populates='permissions')
 

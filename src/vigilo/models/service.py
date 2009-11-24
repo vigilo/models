@@ -9,7 +9,8 @@ from sqlalchemy.orm import synonym, relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-from .secondary_tables import SERVICE_TAG_TABLE
+from .secondary_tables import SERVICE_TAG_TABLE, \
+                                SERVICE_GROUP_TABLE
 
 __all__ = ('Service', )
 
@@ -48,11 +49,6 @@ class Service(DeclarativeBase, object):
         'servicetype', Unicode(16),
         nullable=False,
     )
-
-    servicegroups = relation('ServiceGroup',
-        back_populates='services', uselist=True, )
-
-#    groups = association_proxy('servicegroups', 'groups')
 
     tags = relation('Tag', secondary=SERVICE_TAG_TABLE,
         back_populates='services', lazy='dynamic')
@@ -157,6 +153,9 @@ class ServiceLowLevel(Service):
 
     priority = synonym('_priority',
         descriptor=property(_get_priority, _set_priority))
+
+    groups = relation('ServiceGroup', secondary=SERVICE_GROUP_TABLE,
+                back_populates='services')
 
     def __init__(self, **kwargs):
         super(ServiceLowLevel, self).__init__(**kwargs)
