@@ -17,9 +17,9 @@ class Host(DeclarativeBase, object):
     """
     Informations sur un hôte du parc informatique.
     
-    @ivar name: Nom de l'hôte.
+    @ivar name: Nom complet (FQDN) de l'hôte.
     @ivar checkhostcmd: Commande à exécuter pour vérifier l'état de l'hôte.
-    @ivar fqhn: Nom complet de l'hôte (Fully Qualified Host Name).
+    @ivar description: Une description intelligible de l'hôte.
     @ivar hosttpl: ???.
     @todo: documenter l'attribut hosttpl.
     @ivar mainip: Adresse IP (v4 ou v6) principale de cet hôte.
