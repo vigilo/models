@@ -15,7 +15,7 @@ from .secondary_tables import GROUP_PERMISSION_TABLE, \
                                 SERVICE_GROUP_TABLE, \
                                 MAP_GROUP_TABLE
 
-__all__ = ('HostGroup', 'ServiceGroup')
+__all__ = ('HostGroup', 'ServiceGroup', 'MapGroup')
 
 class Group(DeclarativeBase, object):
     """Gère les groupes (récursifs) d'hôtes/services.'"""
