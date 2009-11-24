@@ -32,21 +32,9 @@ class State(DeclarativeBase, object):
 
     __tablename__ = bdd_basename + 'state'
 
-    _idservice = Column(
-        'idservice', Integer,
-        ForeignKey(
-            bdd_basename + 'service.idservice',
-            ondelete='CASCADE', onupdate='CASCADE',
-        ),
-        primary_key=True, autoincrement=False,
-    )
-
-    service = relation('Service')
-
-    ip = Column(
-        Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
-                        # sous forme canonique. On arrondit à 40 caractères.
-        nullable=True,
+    _idstate = Column(
+        'idstate', Integer,
+        primary_key=True, autoincrement=True,
     )
 
     timestamp = Column(
@@ -57,7 +45,10 @@ class State(DeclarativeBase, object):
 
     state = Column(
         'state', Integer,
-        ForeignKey(bdd_basename + 'statename.idstatename'),
+        ForeignKey(
+            bdd_basename + 'statename.idstatename',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
         nullable=False,
     )
 
@@ -77,7 +68,62 @@ class State(DeclarativeBase, object):
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None))
 
+    _statetable = Column(
+        'statetable', Unicode(8),
+        index=True, nullable=False,
+    )
+
+    __mapper_args__ = {'polymorphic_on': _statetable}
+
     def __init__(self, **kwargs):
         """Initialise un état."""
         super(State, self).__init__(**kwargs)
+
+class HostState(State):
+    __tablename__ = bdd_basename + 'hoststate'
+    __mapper_args__ = {'polymorphic_identity': u'host'}
+
+    _idstate = Column(
+        'idstate', Integer,
+        ForeignKey(
+            bdd_basename + 'state.idstate',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        primary_key=True, autoincrement=True,
+    )
+
+    _hostname = Column(
+        'hostname', Unicode(255),
+        ForeignKey(
+            bdd_basename + 'host.name',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        unique=True,
+    )
+
+    host = relation('Host')
+
+class ServiceState(State):
+    __tablename__ = bdd_basename + 'servicestate'
+    __mapper_args__ = {'polymorphic_identity': u'service'}
+
+    _idstate = Column(
+        'idstate', Integer,
+        ForeignKey(
+            bdd_basename + 'state.idstate',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        primary_key=True, autoincrement=True,
+    )
+
+    _idservice = Column(
+        'idservice', Integer,
+        ForeignKey(
+            bdd_basename + 'service.idservice',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
+        unique=True, autoincrement=False,
+    )
+
+    service = relation('Service')
 

@@ -31,7 +31,7 @@ from .servicedephigh import ServiceDepHighOnHigh, ServiceDepHighOnLow
 from .servicedeplow import ServiceDepLowOnLow
 from .graphtogroups import GraphToGroups
 from .version import Version
-from .state import State
+from .state import HostState, ServiceState
 from .statename import StateName
 from .permission import Permission
 from .usergroup import UserGroup

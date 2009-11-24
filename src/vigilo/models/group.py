@@ -32,7 +32,7 @@ class Group(DeclarativeBase, object):
 
     _grouptype = Column(
         'grouptype', Unicode(20),
-        index=True,
+        index=True, nullable=False,
     )
 
     name = Column(

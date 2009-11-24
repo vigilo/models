@@ -72,7 +72,10 @@ class Event(DeclarativeBase, object):
     # L'état initial est automatiquement initialisé.
     _current_state = Column(
         'current_state', Integer,
-        ForeignKey(bdd_basename + 'statename.idstatename'),
+        ForeignKey(
+            bdd_basename + 'statename.idstatename',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
         nullable=False,
     )
 
@@ -108,7 +111,10 @@ class Event(DeclarativeBase, object):
     # Cet attribut est en lecture seule une fois l'événement créé.
     _initial_state = Column(
         'initial_state', Integer,
-        ForeignKey(bdd_basename + 'statename.idstatename'),
+        ForeignKey(
+            bdd_basename + 'statename.idstatename',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
         nullable=False,
     )
 
@@ -123,7 +129,10 @@ class Event(DeclarativeBase, object):
     # Cet attribut est en lecture seule une fois l'événement créé.
     _peak_state = Column(
         'peak_state', Integer,
-        ForeignKey(bdd_basename + 'statename.idstatename'),
+        ForeignKey(
+            bdd_basename + 'statename.idstatename',
+            ondelete='CASCADE', onupdate='CASCADE',
+        ),
         nullable=False,
     )
 

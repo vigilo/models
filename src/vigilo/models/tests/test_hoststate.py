@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Test suite for State class"""
-from vigilo.models import State, StateName, Host, ServiceLowLevel
+"""Test suite for HostState class"""
+from vigilo.models import HostState, StateName, Host
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
 from nose.tools import assert_equals
 from datetime import datetime
 
-class TestState(ModelTest):
-    """Test de la table State"""
+class TestServiceState(ModelTest):
+    """Test de la table HostState"""
 
-    klass = State
+    klass = HostState
     attrs = {
-        'ip': u'127.0.0.1',
         # On ne peut pas utiliser StateName.statename_to_value ici
         # car le modèle n'est pas encore créé lorsque ce code est
         # exécuté.
@@ -43,23 +42,6 @@ class TestState(ModelTest):
         )
         DBSession.add(host)
 
-        service = ServiceLowLevel(
-            hostname=u'myhost',
-            servicename=u'myservice',
-            command=u'halt',
-            op_dep=u'+',
-            priority=1,
-        )
-        DBSession.add(service)
-
         DBSession.flush()
-        return dict(service=service)
-
-    def test_get_by_statename(self):
-        """Teste si le filtrage sur la valeur textuelle d'un état fonctionne.
-        Permet de valider le comportement de state_proxy.
-        """
-        state = DBSession.query(State).filter(
-            State.state == StateName.statename_to_value(u'WARNING')).first()
-        assert_equals(self.obj, state)
+        return dict(host=host)
 

@@ -20,3 +20,5 @@ class TestStateName(ModelTest):
         """On surcharge juste la méthode de ModelTest."""
         return {}
 
+    # XXX Tester le comportement de statename_to_value et value_to_statename.
+
