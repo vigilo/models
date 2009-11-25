@@ -41,7 +41,13 @@ class Permission(DeclarativeBase, object):
     usergroups = relation('UserGroup', secondary=USERGROUP_PERMISSION_TABLE,
                       back_populates='permissions', lazy='dynamic')
 
-    groups = relation('Group', secondary=GROUP_PERMISSION_TABLE,
+    hostgroups = relation('HostGroup', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='permissions')
+
+    servicegroups = relation('ServiceGroup', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='permissions')
+
+    mapgroups = relation('MapGroup', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='permissions')
 
     maps = relation('Map', secondary=MAP_PERMISSION_TABLE,

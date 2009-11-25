@@ -50,9 +50,6 @@ class Group(DeclarativeBase, object):
     children = relation('Group', backref=backref('parent',
                     remote_side=[idgroup]))
 
-    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='groups')
-
     __mapper_args__ = {'polymorphic_on': _grouptype}
 
     def __init__(self, **kwargs):
@@ -92,17 +89,26 @@ class Group(DeclarativeBase, object):
 class HostGroup(Group):
     __mapper_args__ = {'polymorphic_identity': u'hostgroup'}
 
+    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='hostgroups')
+
     hosts = relation('Host', secondary=HOST_GROUP_TABLE,
                 back_populates='groups')
 
 class ServiceGroup(Group):
     __mapper_args__ = {'polymorphic_identity': u'servicegroup'}
 
+    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='servicegroups')
+
     services = relation('ServiceLowLevel', secondary=SERVICE_GROUP_TABLE,
                     back_populates='groups')
 
 class MapGroup(Group):
     __mapper_args__ = {'polymorphic_identity': u'mapgroup'}
+
+    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='mapgroups')
 
     subgroups = relation('MapGroup', order_by="MapGroup.name")
 
