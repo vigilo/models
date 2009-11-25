@@ -59,7 +59,7 @@ EVENTS_EVENTSAGGREGATE_TABLE = Table(
 
 EVENTSAGGREGATE_HLS_TABLE = Table(
     bdd_basename + 'eventsaggregates2hls', metadata,
-    Column('hls_servicename', Integer,
+    Column('idservice', Integer,
             ForeignKey(bdd_basename + 'servicehighlevel.idservice'),
             primary_key=True, autoincrement=False),
     Column('idaggregate', Integer, ForeignKey(

@@ -122,8 +122,8 @@ class ServiceDepHighOnLow(ServiceDepHigh):
         primary_key=True,
     )
 
-    _iddepservice = Column(
-        'iddepservice', Integer,
+    _idservice_dep = Column(
+        'idservice_dep', Integer,
         ForeignKey(
             bdd_basename + 'servicelowlevel.idservice',
             ondelete='CASCADE', onupdate='CASCADE',

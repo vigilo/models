@@ -45,7 +45,7 @@ class Event(DeclarativeBase, object):
     timestamp = Column(DateTime(timezone=False))
 
     _idservice = Column(
-        Integer,
+        'idservice', Integer,
         ForeignKey(
             bdd_basename + 'servicelowlevel.idservice',
             onupdate='CASCADE', ondelete='CASCADE',
