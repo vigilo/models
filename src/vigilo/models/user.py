@@ -104,15 +104,30 @@ class User(DeclarativeBase, object):
     def groups(self):
         """
         Renvoie l'ensemble des identifiants des groupes
-        d'hôtes / services auxquels l'utilisateur a accès.
+        d'hôtes / services / cartes auxquels l'utilisateur a accès.
 
         @return: Les groupes auxquels l'utilisateur a accès.
-        @rtype: C{set} of C{int}
+        @rtype: C{set} of C{Group}
         """
         groups = set()
         for ug in self.usergroups:
             for p in ug.permissions:
-                for g in p.groups:
+                # HostGroup
+                for g in p.hostgroups:
+                    node = g
+                    while not node is None:
+                        groups = groups | set([node.idgroup])
+                        node = node.parent
+
+                # MapGroup
+                for g in p.mapgroups:
+                    node = g
+                    while not node is None:
+                        groups = groups | set([node.idgroup])
+                        node = node.parent
+
+                # ServiceGroup
+                for g in p.servicegroups:
                     node = g
                     while not node is None:
                         groups = groups | set([node.idgroup])
