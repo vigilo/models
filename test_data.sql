@@ -127,16 +127,16 @@ INSERT INTO servicehighlevel (idservice, message, warning_threshold, critical_th
 
 
 INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (1, 29, 'lowlevel');
-INSERT INTO servicedephighonlow (iddep, iddepservice) VALUES(1, 2);
+INSERT INTO servicedephighonlow (iddep, idservice_dep) VALUES(1, 2);
 
 INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (2, 29, 'lowlevel');
-INSERT INTO servicedephighonlow (iddep, iddepservice) VALUES(2, 7);
+INSERT INTO servicedephighonlow (iddep, idservice_dep) VALUES(2, 7);
 
 INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (3, 29, 'lowlevel');
-INSERT INTO servicedephighonlow (iddep, iddepservice) VALUES(3, 12);
+INSERT INTO servicedephighonlow (iddep, idservice_dep) VALUES(3, 12);
 
 INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (4, 30, 'lowlevel');
-INSERT INTO servicedephighonlow (iddep, iddepservice) VALUES(4, 26);
+INSERT INTO servicedephighonlow (iddep, idservice_dep) VALUES(4, 26);
 
 INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (5, 30, 'highlevel');
 INSERT INTO servicedephighonhigh (iddep, idservice_dep) VALUES(5, 29);
