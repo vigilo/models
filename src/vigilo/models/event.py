@@ -47,19 +47,13 @@ class Event(DeclarativeBase, object):
     _idservice = Column(
         'idservice', Integer,
         ForeignKey(
-            bdd_basename + 'servicelowlevel.idservice',
+            bdd_basename + 'service.idservice',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
     )
 
-    service = relation('ServiceLowLevel')
-
-    ip = Column(
-        Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
-                        # sous forme canonique. On arrondit à 40 caractères.
-        index=True, nullable=True,
-    )
+    service = relation('Service')
 
     # Informations sur les états de Nagios.
     # Un état peut porter :

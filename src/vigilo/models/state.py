@@ -98,7 +98,7 @@ class HostState(State):
             bdd_basename + 'host.name',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        unique=True,
+        unique=True, index=True,
     )
 
     host = relation('Host')
