@@ -25,12 +25,12 @@ class CustomGraphView(DeclarativeBase, object):
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True, nullable=False, primary_key=True)
 
-    graphname = Column(
-        Unicode(255),
+    idgraph = Column(
+        Integer,
         ForeignKey(
-            bdd_basename + 'graph.name',
+            bdd_basename + 'graph.idgraph',
             onupdate="CASCADE", ondelete="CASCADE"),
-        index=True, nullable=False, primary_key=True)
+        index=True, nullable=False, primary_key=True, autoincrement=False)
 
     hostname = Column(
         Unicode(255),

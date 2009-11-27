@@ -11,9 +11,17 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 __all__ = ('host_vigiloserver_appgroup', )
 
 class Host_VigiloServer_AppGroup(DeclarativeBase, object):
+    """
+    Liaison entre un hôte un serveur de vigilo et un groupe d'applications.
+    
+    @ivar fqdn: Nom complet (FQDN) de l'hôte.
+    @ivar idsrv: Identifiant du serveur associé.
+    @ivar idsrv: Identifiant du groupe d'applications.
+
+    """
     __tablename__ = bdd_basename + 'host_vigiloserver_appgroup'
 
-    hostname = Column(
+    fqdn = Column(
         UnicodeText(),
         ForeignKey(bdd_basename + 'host.name'),
         primary_key=True, nullable=False)

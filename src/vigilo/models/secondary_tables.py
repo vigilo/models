@@ -164,3 +164,15 @@ SERVICE_GROUP_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
+GRAPH_GROUP_TABLE = Table(
+    bdd_basename + 'graphgroup', metadata,
+    Column('idgraph', Integer, ForeignKey(
+                bdd_basename + 'graph.idgraph',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False),
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'group.idgroup',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+

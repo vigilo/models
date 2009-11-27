@@ -12,6 +12,17 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 __all__ = ('PerfDataSource', )
 
 class PerfDataSource(DeclarativeBase, object):
+    """
+    Informations sur une datasource d'un service.
+
+    @ivar idperfdatasource: Identifiant de la datasource, autogénéré.
+    @ivar name: Nom de la datasource.
+    @ivar type: Type de la datasource (COUNTER, DERIVE, ABSOLUTE, GAUGE).
+    @ivar label: Label affiché sur le graphique.
+        (ex name=ineth0 -> label=Données en entrée sur la carte réseau eth0)
+    @ivar factor: Facteur de multiplication pour les valeurs stockés.
+        (ex factor=8 pour conversion octets -> bits)
+    """
 
     __tablename__ = bdd_basename + 'perfdatasource'
 
@@ -31,10 +42,15 @@ class PerfDataSource(DeclarativeBase, object):
 
     service = relation('ServiceLowLevel')
 
+    name = Column(
+        UnicodeText,
+        nullable=False)
+    
+    # GAUGE, COUNTER, ...
     type = Column(
         UnicodeText,
         default=u'', nullable=False)
-
+    # pour l'affichage du nom sur le graphique généré
     label = Column(
         UnicodeText,
         default=u'')

@@ -20,16 +20,14 @@ __all__ = (
 from .eventhistory import EventHistory
 from .event import Event
 from .eventsaggregate import EventsAggregate
-from .graphgroup import GraphGroup
 from .graph import Graph
 from .host import Host
 from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
-from .group import HostGroup, ServiceGroup, MapGroup
+from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup
 from .service import ServiceLowLevel, ServiceHighLevel, Service
 from .servicedephigh import ServiceDepHighOnHigh, ServiceDepHighOnLow
 from .servicedeplow import ServiceDepLowOnLow
-from .graphtogroups import GraphToGroups
 from .version import Version
 from .state import HostState, ServiceState
 from .statename import StateName

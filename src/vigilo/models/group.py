@@ -13,7 +13,8 @@ from .session import DBSession
 from .secondary_tables import GROUP_PERMISSION_TABLE, \
                                 HOST_GROUP_TABLE, \
                                 SERVICE_GROUP_TABLE, \
-                                MAP_GROUP_TABLE
+                                MAP_GROUP_TABLE, \
+                                GRAPH_GROUP_TABLE
 
 __all__ = ('HostGroup', 'ServiceGroup', 'MapGroup')
 
@@ -115,4 +116,14 @@ class MapGroup(Group):
     maps = relation('Map', secondary=MAP_GROUP_TABLE,
                     back_populates='groups',
                     order_by='Map.title')
+
+class GraphGroup(Group):
+    __mapper_args__ = {'polymorphic_identity': u'graphgroup'}
+
+    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='graphgroups')
+
+    graphs = relation('Graph', secondary=GRAPH_GROUP_TABLE,
+                    back_populates='groups')
+    
 
