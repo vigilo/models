@@ -84,7 +84,7 @@ class Service(DeclarativeBase, object):
         @return: Le nom du service.
         @rtype: C{str}
         """
-        return self.name
+        return self.servicename
 
 #    @classmethod
 #    def by_service_name(cls, servicename):
