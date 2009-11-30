@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table EventsAggregate"""
+"""Modèle pour la table CorrEvent"""
 from __future__ import absolute_import
 
 from sqlalchemy import Column, DefaultClause, ForeignKey
@@ -11,31 +11,30 @@ from datetime import datetime
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from vigilo.common.conf import settings
 from .event import Event
-from .secondary_tables import EVENTS_EVENTSAGGREGATE_TABLE, \
-                                EVENTSAGGREGATE_HLS_TABLE
+from .secondary_tables import EVENTSAGGREGATE_TABLE, \
+                                CORREVENTS_HLS_TABLE
 
-__all__ = ('EventsAggregate', )
+__all__ = ('CorrEvent', )
 
-class EventsAggregate(DeclarativeBase, object):
+class CorrEvent(DeclarativeBase, object):
     """
-    Informations sur un ensemble (agrégat) d'événements,
-    corrélés entre eux.
+    Informations sur un événement corrélé.
     
     @ivar idcause: Référence à l'événement faisant partie de L{Event}
-        et identifié comme cause primaire de l'ensemble des événements
-        de l'agrégat.
-    @ivar impact: Nombre d'hôtes impactés par l'agrégat.
-    @ivar trouble_ticket: URL du ticket d'incident se rapportant à l'agrégat.
-    @ivar status: Statut de la prise en compte de cet agrégat.
-    @ivar occurrences: Compteur d'occurrences de l'agrégat. Il est incrémenté
-        chaque fois que l'état de l'événement oscille alors que l'opérateur
-        n'est pas encore intervenu.
+        et identifié comme cause primaire de l'événement corrélé.
+    @ivar impact: Nombre d'hôtes impactés par l'événement corrélé.
+    @ivar trouble_ticket: URL du ticket d'incident se rapportant à l'événement
+        corrélé.
+    @ivar status: Statut de la prise en compte de cet événement corrélé.
+    @ivar occurrences: Compteur d'occurrences de l'événement corrélé.
+        Il est incrémenté chaque fois que l'état de l'événement oscille
+        alors que l'opérateur n'est pas encore intervenu.
     @ivar timestamp_active: Date de dernière ouverture de l'événement.
     """
 
-    __tablename__ = bdd_basename + 'eventsaggregate'
+    __tablename__ = bdd_basename + 'correvent'
 
-    idaggregate = Column(
+    idcorrevent = Column(
         Integer,
         primary_key=True,
         autoincrement=True,
@@ -74,21 +73,21 @@ class EventsAggregate(DeclarativeBase, object):
     )
 
     events = relation('Event', lazy='dynamic',
-        secondary=EVENTS_EVENTSAGGREGATE_TABLE)
+        secondary=EVENTSAGGREGATE_TABLE)
 
     cause = relation('Event',
         primaryjoin=idcause == Event.idevent, lazy='dynamic')
 
     high_level_services = relation('ServiceHighLevel',
         lazy='dynamic',
-        secondary=EVENTSAGGREGATE_HLS_TABLE)
+        secondary=CORREVENTS_HLS_TABLE)
 
 
     def __init__(self, **kwargs):
         """
-        Initialise un agrégat d'événements.
+        Initialise un événement corrélé.
         """
-        super(EventsAggregate, self).__init__(**kwargs)
+        super(CorrEvent, self).__init__(**kwargs)
 
     def get_date(self, element):
         """

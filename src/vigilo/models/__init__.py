@@ -3,7 +3,7 @@
 """BdD Vigiboard"""
 
 __all__ = (
-        'EventHistory', 'Event', 'EventsAggregate',
+        'EventHistory', 'Event', 'CorrEvent',
         'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass',
         'PerfDataSource', 'ServiceGroup',
         'ServiceLowLevel', 'ServiceHighLevel',
@@ -19,7 +19,7 @@ __all__ = (
 
 from .eventhistory import EventHistory
 from .event import Event
-from .eventsaggregate import EventsAggregate
+from .correvent import CorrEvent
 from .graph import Graph
 from .host import Host
 from .hostclass import HostClass

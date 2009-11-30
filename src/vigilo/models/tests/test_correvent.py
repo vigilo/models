@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-"""Test suite for EventsAggregate class"""
-from vigilo.models import EventsAggregate, Event, ServiceLowLevel, Host
+"""Test suite for the CorrEvent class"""
+from vigilo.models import CorrEvent, Event, ServiceLowLevel, Host
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true
 import re
 from datetime import datetime
 
-class TestEventsAggregate(ModelTest):
-    """Test de la table Event"""
+class TestCorrEvent(ModelTest):
+    """Test de la table CorrEvent"""
 
-    klass = EventsAggregate
+    klass = CorrEvent
     attrs = {
-        'idaggregate': 42,
+        'idcorrevent': 42,
         'status': u'OK',
         'timestamp_active': datetime.now(),
     }

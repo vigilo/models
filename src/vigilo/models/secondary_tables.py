@@ -45,25 +45,25 @@ SERVICE_TAG_TABLE = Table(
             primary_key=True)
 )
 
-EVENTS_EVENTSAGGREGATE_TABLE = Table(
-    bdd_basename + 'eventsaggregates2events', metadata,
+EVENTSAGGREGATE_TABLE = Table(
+    bdd_basename + 'eventsaggregate', metadata,
     Column('idevent', Integer, ForeignKey(
                 bdd_basename + 'event.idevent',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
-    Column('idaggregate', Integer, ForeignKey(
-                bdd_basename + 'eventsaggregate.idaggregate',
+    Column('idcorrevent', Integer, ForeignKey(
+                bdd_basename + 'correvent.idcorrevent',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
 )
 
-EVENTSAGGREGATE_HLS_TABLE = Table(
-    bdd_basename + 'eventsaggregates2hls', metadata,
+CORREVENTS_HLS_TABLE = Table(
+    bdd_basename + 'correvent2hls', metadata,
     Column('idservice', Integer,
             ForeignKey(bdd_basename + 'servicehighlevel.idservice'),
             primary_key=True, autoincrement=False),
-    Column('idaggregate', Integer, ForeignKey(
-                bdd_basename + 'eventsaggregate.idaggregate',
+    Column('idcorrevent', Integer, ForeignKey(
+                bdd_basename + 'correvent.idcorrevent',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
 )
