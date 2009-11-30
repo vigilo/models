@@ -130,10 +130,10 @@ HOST_HOSTCLASS_TABLE = Table(
 
 HOST_GROUP_TABLE = Table(
     bdd_basename + 'hostgroup', metadata,
-    Column('hostname', Unicode(255), ForeignKey(
-                bdd_basename + 'host.name',
+    Column('idhost', Integer, ForeignKey(
+                bdd_basename + 'host.idhost',
                 onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
+            primary_key=True, autoincrement=False),
     Column('idgroup', Integer, ForeignKey(
                 bdd_basename + 'group.idgroup',
                 onupdate="CASCADE", ondelete="CASCADE"),
