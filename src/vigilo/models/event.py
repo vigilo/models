@@ -44,16 +44,16 @@ class Event(DeclarativeBase, object):
 
     timestamp = Column(DateTime(timezone=False))
 
-    _idservice = Column(
-        'idservice', Integer,
+    idsupitem = Column(
+        Integer,
         ForeignKey(
-            bdd_basename + 'service.idservice',
+            bdd_basename + 'supitem.idsupitem',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
     )
 
-    service = relation('Service')
+    supitem = relation('SupItem')
 
     # Informations sur les états de Nagios.
     # Un état peut porter :

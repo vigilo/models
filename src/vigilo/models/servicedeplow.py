@@ -35,7 +35,7 @@ class ServiceDepLowOnLow(DeclarativeBase, object):
     )
 
     service = relation('ServiceLowLevel', foreign_keys=[_idservice],
-                primaryjoin=ServiceLowLevel.idservice == _idservice)
+                primaryjoin=ServiceLowLevel.idsupitem == _idservice)
 
     _iddep = Column(
         'iddep', Integer,
@@ -47,7 +47,7 @@ class ServiceDepLowOnLow(DeclarativeBase, object):
     )
 
     service_dep = relation('ServiceLowLevel', foreign_keys=[_iddep],
-                    primaryjoin=ServiceLowLevel.idservice == _iddep)
+                    primaryjoin=ServiceLowLevel.idsupitem == _iddep)
 
     def __init__(self, **kwargs):
         super(ServiceDepLowOnLow, self).__init__(**kwargs)

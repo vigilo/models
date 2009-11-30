@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Service"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import UnicodeText, Unicode, Integer
 from sqlalchemy.orm import synonym, relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
-from .secondary_tables import SERVICE_TAG_TABLE, \
-                                SERVICE_GROUP_TABLE
+from vigilo.models.vigilo_bdd_config import bdd_basename, DeclarativeBase
+from vigilo.models.session import DBSession
+from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
+from vigilo.models.supitem import SupItem
+from vigilo.models.host import Host
 
 __all__ = ('Service', )
 
-class Service(DeclarativeBase, object):
+class Service(SupItem):
     """
     Service générique.
-    
+
     @ivar name: Nom du service.
     @ivar op_dep: Le type d'opération à appliquer aux dépendances de ce
         service de haut niveau ('+', '&' ou '|').
@@ -27,12 +26,15 @@ class Service(DeclarativeBase, object):
     @ivar dependancies: Liste des services dont ce service dépend.
         Pour les services techniques, cette liste est toujours vide.
     """
-
     __tablename__ = bdd_basename + 'service'
 
     idservice = Column(
-        'idservice', Integer,
-        autoincrement=True, primary_key=True,
+        Integer,
+        ForeignKey(
+            bdd_basename + 'supitem.idsupitem',
+            onupdate='CASCADE', ondelete='CASCADE',
+        ),
+        primary_key=True, autoincrement=False,
     )
 
     servicename = Column(
@@ -44,16 +46,6 @@ class Service(DeclarativeBase, object):
         Unicode(1),
         nullable=False,
     )
-
-    _servicetype = Column(
-        'servicetype', Unicode(16),
-        nullable=False,
-    )
-
-    tags = relation('Tag', secondary=SERVICE_TAG_TABLE,
-        back_populates='services', lazy='dynamic')
-
-    # TODO: le service n'est pas lie a un hote ? Il devrait... (relation n-n)
 
     @property
     def dependancies(self):
@@ -67,8 +59,6 @@ class Service(DeclarativeBase, object):
         d'erreurs.
         """
         return []
-
-    __mapper_args__ = {'polymorphic_on': _servicetype}
 
 
     def __init__(self, **kwargs):
@@ -86,18 +76,6 @@ class Service(DeclarativeBase, object):
         """
         return self.servicename
 
-#    @classmethod
-#    def by_service_name(cls, servicename):
-#        """
-#        Renvoie le service dont le nom est L{servicename}.
-#        
-#        @param servicename: Nom du service voulu.
-#        @type servicename: C{unicode}
-#        @return: Le service demandé.
-#        @rtype: L{Service} ou None
-#        """
-#        return DBSession.query(cls).filter(cls.name == servicename).first()
-
 
 class ServiceLowLevel(Service):
     """
@@ -109,7 +87,7 @@ class ServiceLowLevel(Service):
     __mapper_args__ = {'polymorphic_identity': u'lowlevel'}
 
     idservice = Column(
-        'idservice', Integer,
+        Integer,
         ForeignKey(
             bdd_basename + 'service.idservice',
             ondelete='CASCADE', onupdate='CASCADE',
@@ -117,14 +95,17 @@ class ServiceLowLevel(Service):
         autoincrement=False, primary_key=True,
     )
 
-    hostname = Column(
-        Unicode,
+    idhost = Column(
+        Integer,
         ForeignKey(
-            bdd_basename + 'host.name',
+            bdd_basename + 'host.idhost',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
     )
+
+    host = relation('Host', foreign_keys=[idhost],
+        primaryjoin=idhost==Host.idsupitem)
 
     command = Column(
         UnicodeText,
@@ -173,8 +154,11 @@ class ServiceLowLevel(Service):
         @return: Le service de bas niveau demandé.
         @rtype: L{ServiceLowLevel} ou None
         """
-        return DBSession.query(cls).filter(cls.hostname == hostname) \
-            .filter(cls.servicename == servicename).first()
+        return DBSession.query(cls).join(
+                (Host, Host.idsupitem == cls.idhost)
+            ).filter(Host.name == hostname
+            ).filter(cls.servicename == servicename
+            ).first()
 
 
 class ServiceHighLevel(Service):
@@ -192,7 +176,7 @@ class ServiceHighLevel(Service):
     __mapper_args__ = {'polymorphic_identity': u'highlevel'}
 
     idservice = Column(
-        'idservice', Integer,
+        Integer,
         ForeignKey(
             bdd_basename + 'service.idservice',
             ondelete='CASCADE', onupdate='CASCADE',

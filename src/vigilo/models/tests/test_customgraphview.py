@@ -12,7 +12,6 @@ class TestCustomGraphView(ModelTest):
         'viewname': u'myview',
         'username': u'manager',
         'hostname': u'myhost',
-        'graphname': u'mygraph',
         'x_pos': 1337,
         'y_pos': 42,
     }
@@ -36,7 +35,8 @@ class TestCustomGraphView(ModelTest):
             mainip=u'127.0.0.1',
             snmpport=u'1234',
             ))
-        DBSession.add(Graph(name=u"mygraph", template=u"", vlabel=u""))
+        graph = Graph(name=u"mygraph", template=u"", vlabel=u"")
+        DBSession.add(graph)
         DBSession.flush()
-        return {}
+        return dict(idgraph=DBSession.query(Graph).first().idgraph)
 

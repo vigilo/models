@@ -8,7 +8,7 @@ from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .secondary_tables import HOST_TAG_TABLE, SERVICE_TAG_TABLE
+from .secondary_tables import SUPITEM_TAG_TABLE
 
 class Tag(DeclarativeBase, object):
     """
@@ -28,10 +28,7 @@ class Tag(DeclarativeBase, object):
 
     value = Column(Unicode(255), nullable=True)
 
-    hosts = relation('Host', secondary=HOST_TAG_TABLE,
-        back_populates='tags', lazy='dynamic')
-
-    services = relation('Service', secondary=SERVICE_TAG_TABLE,
+    supitems = relation('SupItem', secondary=SUPITEM_TAG_TABLE,
         back_populates='tags', lazy='dynamic')
 
 

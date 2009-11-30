@@ -32,7 +32,7 @@ class TestServiceLowLevel(ModelTest):
         )
         DBSession.add(host)
         DBSession.flush()
-        return dict(hostname=u'myhost')
+        return dict(host=host)
 
 class TestServiceHighLevel(ModelTest):
     """Test de la classe ServiceHighLevel."""

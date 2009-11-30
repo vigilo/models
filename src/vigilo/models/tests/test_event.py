@@ -29,7 +29,7 @@ class TestEvent(ModelTest):
         # Insère les noms d'états dans la base de données.
         ModelTest.do_get_dependencies(self)
 
-        DBSession.add(Host(
+        host = Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
@@ -37,10 +37,11 @@ class TestEvent(ModelTest):
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=1234,
-        ))
+        )
+        DBSession.add(host)
 
         service = ServiceLowLevel(
-            hostname=u'myhost',
+            host=host,
             servicename=u'myservice',
             command=u'halt',
             op_dep=u'+',
@@ -48,7 +49,7 @@ class TestEvent(ModelTest):
         )
         DBSession.add(service)
         DBSession.flush()
-        return dict(service=service)
+        return dict(supitem=service)
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""

@@ -26,7 +26,7 @@ class TestBoardViewFilter(ModelTest):
             email=u'foo@b.ar',
         ))
 
-        DBSession.add(Host(
+        host = Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
@@ -34,10 +34,11 @@ class TestBoardViewFilter(ModelTest):
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
-        ))
+        )
+        DBSession.add(host)
 
         service = ServiceLowLevel(
-            hostname=u'myhost',
+            host=host,
             servicename=u'myservice',
             command=u'halt',
             op_dep=u'+',

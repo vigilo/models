@@ -27,7 +27,7 @@ class TestServiceDepLowOnLow(ModelTest):
 
         # Le service de bas niveau pour lequel on ajoute une dépendance.
         low_dependent = ServiceLowLevel(
-            hostname=u'physical',
+            host=host,
             servicename=u'low_dependent',
             command=u'halt',
             op_dep=u'+',
@@ -37,7 +37,7 @@ class TestServiceDepLowOnLow(ModelTest):
 
         # Création du service physique sur lequel portera la dépendance.
         low_dependency = ServiceLowLevel(
-            hostname=u'physical',
+            host=host,
             servicename=u'low_dependency',
             command=u'halt',
             op_dep=u'+',

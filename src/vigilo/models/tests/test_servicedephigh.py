@@ -78,7 +78,7 @@ class TestServiceDepHighOnLow(ModelTest):
 
         # Création du service physique sur lequel portera la dépendance.
         service = ServiceLowLevel(
-            hostname=u'physical',
+            host=host,
             servicename=u'physical',
             command=u'halt',
             op_dep=u'+',

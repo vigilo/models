@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Test suite for ServiceState class"""
-from vigilo.models import ServiceState, StateName, Host, ServiceLowLevel
+"""Test suite for State class"""
+from vigilo.models import State, StateName, Host, ServiceLowLevel
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -8,9 +8,9 @@ from nose.tools import assert_equals
 from datetime import datetime
 
 class TestServiceState(ModelTest):
-    """Test de la table ServiceState"""
+    """Test de la table State avec un service"""
 
-    klass = ServiceState
+    klass = State
     attrs = {
         # On ne peut pas utiliser StateName.statename_to_value ici
         # car le modèle n'est pas encore créé lorsque ce code est
@@ -43,7 +43,7 @@ class TestServiceState(ModelTest):
         DBSession.add(host)
 
         service = ServiceLowLevel(
-            hostname=u'myhost',
+            host=host,
             servicename=u'myservice',
             command=u'halt',
             op_dep=u'+',
@@ -52,5 +52,5 @@ class TestServiceState(ModelTest):
         DBSession.add(service)
 
         DBSession.flush()
-        return dict(service=service)
+        return dict(supitem=service)
 

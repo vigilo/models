@@ -21,22 +21,10 @@ USERGROUP_PERMISSION_TABLE = Table(
             primary_key=True),
 )
 
-HOST_TAG_TABLE = Table(
-    bdd_basename + 'tags2hosts', metadata,
-    Column('hostname', Unicode(255), ForeignKey(
-                bdd_basename + 'host.name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('name', Unicode(255), ForeignKey(
-                bdd_basename + 'tag.name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True)
-)
-
-SERVICE_TAG_TABLE = Table(
-    bdd_basename + 'tags2services', metadata,
+SUPITEM_TAG_TABLE = Table(
+    bdd_basename + 'tags2supitems', metadata,
     Column('service', Integer, ForeignKey(
-                bdd_basename + 'service.idservice',
+                bdd_basename + 'supitem.idsupitem',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
     Column('name', Unicode(255), ForeignKey(
@@ -155,7 +143,7 @@ HOST_GROUP_TABLE = Table(
 SERVICE_GROUP_TABLE = Table(
     bdd_basename + 'servicegroup', metadata,
     Column('idservice', Integer, ForeignKey(
-                bdd_basename + 'service.idservice',
+                bdd_basename + 'servicelowlevel.idservice',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
     Column('idgroup', Integer, ForeignKey(

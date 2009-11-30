@@ -12,7 +12,6 @@ class TestCorrEvent(ModelTest):
 
     klass = CorrEvent
     attrs = {
-        'idcorrevent': 42,
         'status': u'OK',
         'timestamp_active': datetime.now(),
     }
@@ -22,7 +21,7 @@ class TestCorrEvent(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-        DBSession.add(Host(
+        host = Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
@@ -30,11 +29,12 @@ class TestCorrEvent(ModelTest):
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
-        ))
+        )
+        DBSession.add(host)
         DBSession.flush()
 
         service = ServiceLowLevel(
-            hostname=u'myhost',
+            host=host,
             servicename=u'myservice',
             command=u'halt',
             op_dep=u'+',
@@ -43,15 +43,14 @@ class TestCorrEvent(ModelTest):
         DBSession.add(service)
 
         DBSession.add(Event(
-            idevent=42,
             timestamp=datetime.now(),
-            service=service,
+            supitem=service,
             current_state=u'OK',
             message=u'Foo',
             ))
         DBSession.flush()
 
-        return dict(idcause=u'42')
+        return dict(idcause=DBSession.query(Event).first().idevent)
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""

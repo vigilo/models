@@ -22,8 +22,7 @@ class TestEventHistory(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-
-        DBSession.add(Host(
+        host = Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
@@ -31,10 +30,11 @@ class TestEventHistory(ModelTest):
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=1234,
-        ))
+        )
+        DBSession.add(host)
 
         service = ServiceLowLevel(
-            hostname=u'myhost',
+            host=host,
             servicename=u'monservice',
             command=u'halt',
             op_dep=u'+',
@@ -46,7 +46,7 @@ class TestEventHistory(ModelTest):
         DBSession.add(Event(
             idevent=42,
             timestamp=datetime.now(),
-            service=service,
+            supitem=service,
             current_state=u'OK',
             message=u'Foo',
             ))
