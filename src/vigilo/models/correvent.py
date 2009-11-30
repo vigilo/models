@@ -75,8 +75,8 @@ class CorrEvent(DeclarativeBase, object):
     events = relation('Event', lazy='dynamic',
         secondary=EVENTSAGGREGATE_TABLE)
 
-    cause = relation('Event',
-        primaryjoin=idcause == Event.idevent, lazy='dynamic')
+    cause = relation('Event', lazy='dynamic',
+        primaryjoin='CorrEvent.idcause == Event.idevent')
 
     high_level_services = relation('ServiceHighLevel',
         lazy='dynamic',

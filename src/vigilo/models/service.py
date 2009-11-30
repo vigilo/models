@@ -105,7 +105,7 @@ class ServiceLowLevel(Service):
     )
 
     host = relation('Host', foreign_keys=[idhost],
-        primaryjoin=idhost==Host.idsupitem)
+        primaryjoin='ServiceLowLevel.idhost == Host.idsupitem')
 
     command = Column(
         UnicodeText,
