@@ -81,7 +81,7 @@ class Host(SupItem):
     hostclasses = relation('HostClass', secondary=HOST_HOSTCLASS_TABLE,
         back_populates='hosts', lazy='dynamic')
 
-    services = relation('ServiceLowLevel',
+    services = relation('ServiceLowLevel', lazy='dynamic',
         primaryjoin='Host.idhost == ServiceLowLevel.idhost')
 
     def __init__(self, **kwargs):
