@@ -8,7 +8,7 @@ __all__ = (
         'PerfDataSource', 'ServiceGroup',
         'ServiceLowLevel', 'ServiceHighLevel',
         'ServiceDepHighOnHigh', 'ServiceDepHighOnLow', 'ServiceDepLowOnLow',
-        'GraphToGroups', 'Version', 'State', 'Permission',
+        'Version', 'State', 'Permission',
         'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
         'Access', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
         'Map', 'MapServiceLink',
