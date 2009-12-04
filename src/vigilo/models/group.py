@@ -19,7 +19,25 @@ from .secondary_tables import GROUP_PERMISSION_TABLE, \
 __all__ = ('HostGroup', 'ServiceGroup', 'MapGroup')
 
 class Group(DeclarativeBase, object):
-    """Gère les groupes (récursifs) d'hôtes/services.'"""
+    """
+    Gère des groupes (récursifs).
+    Cette classe est abstraite. Utilisez les classes spécialisées
+    (L{HostGroup}, L{ServiceGroup}, L{MapGroup}, L{GraphGroup}, etc.)
+    pour créer des instances.
+    
+    @ivar idgroup: Identifiant (auto-généré) du groupe.
+    @ivar _grouptype: Discriminant pour savoir le type de groupe manipulé.
+        Note: n'utilisez jamais cet attribut dans votre code pour effectuer
+        un traitement en fonction du type de groupe. A la place, utilisez
+        la fonction isinstance() de Python.
+        Exemple: isinstance(grp, HostGroup).
+    @ivar name: Nom du groupe, unique pour un type de groupe considéré.
+    @ivar idparent: Identifiant du groupe dont le groupe courant est un
+        fils. Vaut None si le groupe courant n'a pas de parent.
+    @ivar parent: Instance de groupe dont ce groupe hérite.
+    @ivar children: Liste des instances de groupes qui héritent du groupe
+        courant.
+    """
     __tablename__ = bdd_basename + 'group'
     __table_args__ = (
         UniqueConstraint('grouptype', 'name'),
@@ -88,6 +106,14 @@ class Group(DeclarativeBase, object):
 
 
 class HostGroup(Group):
+    """
+    Groupe d'hôtes.
+
+    @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
+        groupe d'hôtes.
+    @ivar hosts: Liste d'instances d'L{Host}s contenus dans ce groupe.
+    """
+
     __mapper_args__ = {'polymorphic_identity': u'hostgroup'}
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
@@ -97,6 +123,14 @@ class HostGroup(Group):
                 back_populates='groups')
 
 class ServiceGroup(Group):
+    """
+    Groupe de services.
+
+    @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
+        groupe de services.
+    @ivar services: Liste d'instances de L{Service}s contenus dans ce groupe.
+    """
+
     __mapper_args__ = {'polymorphic_identity': u'servicegroup'}
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
@@ -106,6 +140,14 @@ class ServiceGroup(Group):
                     back_populates='groups')
 
 class MapGroup(Group):
+    """
+    Groupe de cartes.
+
+    @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
+        groupe de cartes.
+    @ivar hosts: Liste d'instances de L{Map}s contenues dans ce groupe.
+    """
+
     __mapper_args__ = {'polymorphic_identity': u'mapgroup'}
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
@@ -118,6 +160,14 @@ class MapGroup(Group):
                     order_by='Map.title')
 
 class GraphGroup(Group):
+    """
+    Groupe de graphes.
+
+    @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
+        groupe de graphes.
+    @ivar hosts: Liste d'instances de L{Graph}es contenus dans ce groupe.
+    """
+
     __mapper_args__ = {'polymorphic_identity': u'graphgroup'}
 
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,

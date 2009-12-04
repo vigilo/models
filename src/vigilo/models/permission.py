@@ -17,8 +17,21 @@ __all__ = ('Permission', )
 
 class Permission(DeclarativeBase, object):
     """
-    Permission definition for :mod:`repoze.what`.
-    Only the ``permission_name`` column is required by :mod:`repoze.what`.
+    Définition des permissions.
+    @ivar idpermission: Identifiant (autogénéré) de la permission.
+    @ivar permission_name: Nom de la permission (ex: "manage").
+    @ivar description: Description intelligible du rôle de la permission.
+    @ivar usergroups: Liste des groupes d'utilisateurs possédant
+        cette permission.
+    @ivar hostgroups: Liste des groupes d'hôtes accessibles grâce à
+        cette permission.
+    @ivar servicegroups: Liste des groupes de services accessibles grâce à
+        cette permission.
+    @ivar mapgroups: Liste des groupes de cartes accessibles grâce à
+        cette permission.
+    @ivar graphgroups: Liste des groupes de graphes accessibles grâce à
+        cette permission.
+    @ivar maps: Liste des cartes accessibles grâce à cette permission.
     """
 
     __tablename__ = bdd_basename + 'permission'

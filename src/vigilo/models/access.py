@@ -16,7 +16,15 @@ from .session import DBSession
 __all__ = ('Access', )
 
 class Access(DeclarativeBase, object):
-    """Mémorise les connexions/déconnexions des utilisateurs."""
+    """
+    Mémorise les connexions/déconnexions des utilisateurs.
+    
+    @ivar idaccess: Identifiant auto-généré de l'entrée.
+    @ivar timestamp: Horodateur indiquant à quel moment a eu lieu l'événement
+        enregistré.
+    @ivar message: Un message décrivant le type d'événement enregistré.
+    @ivar ip: Adresse IP de l'utilisateur lorsque l'événement a été enregistré.
+    """
 
     __tablename__ = bdd_basename + "access"
 
