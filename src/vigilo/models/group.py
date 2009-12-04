@@ -145,7 +145,9 @@ class MapGroup(Group):
 
     @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
         groupe de cartes.
-    @ivar hosts: Liste d'instances de L{Map}s contenues dans ce groupe.
+    @ivar subgroups: Liste d'instances de L{MapGroup} qui sont des fils
+        du groupe courant.
+    @ivar maps: Liste d'instances de L{Map}s contenues dans ce groupe.
     """
 
     __mapper_args__ = {'polymorphic_identity': u'mapgroup'}
@@ -165,7 +167,7 @@ class GraphGroup(Group):
 
     @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
         groupe de graphes.
-    @ivar hosts: Liste d'instances de L{Graph}es contenus dans ce groupe.
+    @ivar graphs: Liste d'instances de L{Graph}es contenus dans ce groupe.
     """
 
     __mapper_args__ = {'polymorphic_identity': u'graphgroup'}
