@@ -4,6 +4,7 @@
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import UnicodeText, Unicode, Integer
 from sqlalchemy.orm import synonym, relation
+from sqlalchemy.schema import UniqueConstraint
 
 from vigilo.models.vigilo_bdd_config import bdd_basename, DeclarativeBase
 from vigilo.models.session import DBSession
@@ -84,6 +85,10 @@ class ServiceLowLevel(Service):
     @ivar command: Commande à exécuter pour vérifier l'état du service.
     """
     __tablename__ = bdd_basename + 'servicelowlevel'
+    __table_args__ = (
+        UniqueConstraint('idservice', 'idhost'),
+        {}
+    )
     __mapper_args__ = {'polymorphic_identity': u'lowlevel'}
 
     idservice = Column(
@@ -203,6 +208,8 @@ class ServiceHighLevel(Service):
         Integer,
         nullable=True,
     )
+
+    impacts = relation('ImpactedHLS', back_populates='hls', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(ServiceHighLevel, self).__init__(**kwargs)

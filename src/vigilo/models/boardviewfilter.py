@@ -26,8 +26,8 @@ class BoardViewFilter(DeclarativeBase, object):
             onupdate="CASCADE", ondelete="CASCADE"),
         primary_key=True, index=True, nullable=False)
 
-    _idservice = Column(
-        'idservice', Integer,
+    idservice = Column(
+        Integer,
         ForeignKey(
             bdd_basename + 'servicelowlevel.idservice',
             onupdate='CASCADE', ondelete='CASCADE',

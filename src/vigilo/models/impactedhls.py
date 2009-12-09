@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table Dependency."""
+"""Modèle pour la table ImpactedHLS."""
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
@@ -9,12 +9,12 @@ from sqlalchemy.types import Unicode, Integer
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
-__all__ = ('Dependency', )
+__all__ = ('ImpactedHLS', )
 
-class Dependency(DeclarativeBase, object):
+class ImpactedHLS(DeclarativeBase, object):
     """
     Marque un élément supervisé supitem1 comme dépendant d'un autre
-    élément supervisé nommé supitem2 (vision fonctionnelle et non Nagios).
+    élément supervisé nommé supitem2.
 
     @ivar idsupitem1: Identifiant de l'élément supervisé marqué comme
         dépendant d'un autre.
@@ -24,34 +24,35 @@ class Dependency(DeclarativeBase, object):
     @ivar supitem2: Instance d'élément supervisé marquée comme dépendance.
     """
 
-    __tablename__ = bdd_basename + 'dependency'
+    __tablename__ = bdd_basename + 'impactedhls'
 
-    idsupitem1 = Column(
+
+    idpath = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'supitem.idsupitem',
-            ondelete='CASCADE', onupdate='CASCADE',
+            bdd_basename + 'impactedpath.idpath',
+            onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,
     )
 
-    supitem1 = relation('SupItem', foreign_keys=[idsupitem1],
-                    primaryjoin='SupItem.idsupitem == ' + \
-                        'Dependency.idsupitem1')
+    path = relation('ImpactedPath', back_populates='impacted_hls',
+        lazy='dynamic')
 
-    idsupitem2 = Column(
+    idhls = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'supitem.idsupitem',
-            ondelete='CASCADE', onupdate='CASCADE',
+            bdd_basename + 'servicehighlevel.idservice',
+            onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,
     )
 
-    supitem2 = relation('SupItem', foreign_keys=[idsupitem2],
-                    primaryjoin='SupItem.idsupitem == ' + \
-                        'Dependency.idsupitem2')
+    hls = relation('ServiceHighLevel', back_populates='impacts',
+        lazy='dynamic')
 
-    def __init__(self, **kwargs):
-        super(Dependency, self).__init__(**kwargs)
+    distance = Column(
+        Integer,
+        primary_key=False, nullable=False,
+    )
 

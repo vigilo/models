@@ -28,6 +28,9 @@ class SupItem(DeclarativeBase, object):
     tags = relation('Tag', secondary=SUPITEM_TAG_TABLE,
         back_populates='supitems', lazy='dynamic')
 
+    impacted_paths = relation('ImpactedPath', back_populates='supitem',
+        lazy='dynamic')
+
     __mapper_args__ = {'polymorphic_on': _itemtype}
 
     def __init__(self, **kwargs):

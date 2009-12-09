@@ -145,7 +145,7 @@ class MapNodeService(MapNode):
         nullable=False
     )
 
-    _idservice = Column(
+    idservice = Column(
         Integer,
         ForeignKey(
             bdd_basename + 'servicelowlevel.idservice',

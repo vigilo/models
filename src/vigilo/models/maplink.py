@@ -106,7 +106,7 @@ class MapServiceLink(MapLink):
         nullable=False
         )
 
-    _idref = Column(
+    idref = Column(
         Integer,
         ForeignKey(
             bdd_basename + 'servicelowlevel.idservice',

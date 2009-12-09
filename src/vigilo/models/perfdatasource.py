@@ -31,8 +31,8 @@ class PerfDataSource(DeclarativeBase, object):
         primary_key=True, autoincrement=True,
     )
 
-    _idservice = Column(
-        'idservice', Integer,
+    idservice = Column(
+        Integer,
         ForeignKey(
             bdd_basename + 'servicelowlevel.idservice',
             ondelete='CASCADE', onupdate='CASCADE',

@@ -12,7 +12,7 @@ __all__ = (
         'Access', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
         'Map', 'MapServiceLink',
         'Legend', 'Service', 'StateName', 'Host_VigiloServer_AppGroup',
-        'VigiloServer', 'AppGroup',
+        'VigiloServer', 'AppGroup', 'ImpactedPath', 'ImpactedHLS',
         )
 
 
@@ -43,4 +43,6 @@ from .legend import Legend
 from .host_vigiloserver_appgroup import Host_VigiloServer_AppGroup
 from .vigiloserver import VigiloServer
 from .appgroup import AppGroup
+from .impactedpath import ImpactedPath
+from .impactedhls import ImpactedHLS
 
