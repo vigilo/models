@@ -7,8 +7,7 @@ __all__ = (
         'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass',
         'PerfDataSource', 'ServiceGroup',
         'ServiceLowLevel', 'ServiceHighLevel',
-        'ServiceDepHighOnHigh', 'ServiceDepHighOnLow', 'ServiceDepLowOnLow',
-        'Version', 'State', 'Permission',
+        'Dependency', 'Version', 'State', 'Permission',
         'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
         'Access', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
         'Map', 'MapServiceLink',
@@ -26,8 +25,7 @@ from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
 from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup
 from .service import ServiceLowLevel, ServiceHighLevel, Service
-from .servicedephigh import ServiceDepHighOnHigh, ServiceDepHighOnLow
-from .servicedeplow import ServiceDepLowOnLow
+from .dependency import Dependency
 from .version import Version
 from .state import State
 from .statename import StateName
