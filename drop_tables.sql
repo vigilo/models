@@ -17,6 +17,8 @@ DROP TABLE host2hostclass CASCADE;
 DROP TABLE hostclass CASCADE;
 DROP TABLE hostgroup CASCADE;
 DROP TABLE host_vigiloserver_appgroup;
+DROP TABLE impactedhls CASCADE;
+DROP TABLE impactedpath CASCADE;
 DROP TABLE legend CASCADE;
 DROP TABLE maplink CASCADE;
 DROP TABLE mapsegment CASCADE;
