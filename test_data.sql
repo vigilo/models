@@ -216,42 +216,32 @@ INSERT INTO servicehighlevel (idservice, message, warning_threshold, critical_th
 INSERT INTO servicehighlevel (idservice, message, warning_threshold, critical_threshold, weight) VALUES (30, 'Ouch', 300, 150, NULL);
 
 
-INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (1, 29, 'lowlevel');
-INSERT INTO servicedephighonlow (iddep, idservice_dep) VALUES(1, 2);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (29, 2);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (29, 7);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (29, 12);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (30, 26);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (30, 29);
 
-INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (2, 29, 'lowlevel');
-INSERT INTO servicedephighonlow (iddep, idservice_dep) VALUES(2, 7);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (23, 18);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (23, 27);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (18, 3);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (27, 3);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (3, 10);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (3, 11);
 
-INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (3, 29, 'lowlevel');
-INSERT INTO servicedephighonlow (iddep, idservice_dep) VALUES(3, 12);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (24, 19);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (24, 28);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (19, 1);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (28, 1);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (1, 9);
 
-INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (4, 30, 'lowlevel');
-INSERT INTO servicedephighonlow (iddep, idservice_dep) VALUES(4, 26);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (9, 4);
 
-INSERT INTO servicedephigh (iddep, idservice, type_dep) VALUES (5, 30, 'highlevel');
-INSERT INTO servicedephighonhigh (iddep, idservice_dep) VALUES(5, 29);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (4, 10);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (4, 11);
 
-
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (23, 18);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (23, 27);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (18, 3);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (27, 3);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (3, 10);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (3, 11);
-
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (24, 19);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (24, 28);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (19, 1);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (28, 1);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (1, 9);
-
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (9, 4);
-
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (4, 10);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (4, 11);
-
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (10, 6);
-INSERT INTO servicedeplowonlow (idservice, iddep) VALUES (11, 5);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (10, 6);
+INSERT INTO dependency (idsupitem1, idsupitem2) VALUES (11, 5);
 
 
 --
