@@ -16,7 +16,6 @@ class TestHostState(ModelTest):
         # car le modèle n'est pas encore créé lorsque ce code est
         # exécuté.
         'state': 3, # = WARNING
-        'statetype': u'SOFT',
         'attempt': 42,
         'timestamp': datetime.now(),
         'message': 'Foo!',

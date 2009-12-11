@@ -19,7 +19,6 @@ class State(DeclarativeBase, object):
     @ivar idsupitem: Identifiant de l'équipement concerné.
     @ivar timestamp: Horodattage de l'état.
     @ivar state: Code de l'état dans L{vigilo.models.statename.StateName}.
-    @ivar statetype: Type d'état (cf. Nagios). Vaut soit 'SOFT', soit 'HARD'.
     @ivar attempt: Nombre de tentatives effectuées par Nagios.
     @ivar message: Message d'état transmis par Nagios.
     """
@@ -50,13 +49,6 @@ class State(DeclarativeBase, object):
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
-    )
-
-    # 'SOFT' ou 'HARD'
-    statetype = Column(
-        Unicode(8),
-        nullable=False,
-        default=u"SOFT",
     )
 
     attempt = Column(
