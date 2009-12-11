@@ -94,58 +94,58 @@ INSERT INTO supitem (idsupitem, itemtype) VALUES (56, 'host');
 -- Data for Name: host; Type: TABLE DATA; Schema: public; Owner: vigiboard
 --
 
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (31, 'ajc.fw.1', 'check1', 'com1', 'tpl1', '192.168.0.1', 1, 1, '1');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (32, 'ajc.linux1', 'check2', 'com2',   'tpl2', '192.168.0.2', 2, 2, '2');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (33, 'ajc.sw.1', 'check3', 'com3', 'tpl3', '192.168.0.3', 3, 3, '3');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (34, 'bdx.fw.1', 'check4', 'com4', 'tpl4', '192.168.0.4', 4, 4, '4');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (35, 'bdx.linux1', 'check5', 'com5', 'tpl5', '192.168.0.5', 5, 5, '5');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (36, 'brouteur', 'check6', 'com6', 'tpl6', '192.168.0.6', 6, 6, '6');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (37, 'bst.fw.1', 'check7', 'com7', 'tpl7', '192.168.0.7', 7, 7, '7');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (38, 'bst.unix0', 'check8', 'com8', 'tpl8', '192.168.0.8', 8, 8, '8');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (39, 'bst.unix1', 'check9', 'com9', 'tpl9', '192.168.0.9', 9, 9, '9');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (40, 'bst.win0', 'check10', 'com10', 'tpl10', '192.168.0.10', 10, 10, '10');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (41, 'messagerie', 'check11', 'com11', 'tpl11', '192.168.0.11', 11, 11, '11');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (42, 'par.fw.1', 'check12', 'com12', 'tpl12', '192.168.0.12', 12, 12, '12');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (43, 'par.linux0', 'check13', 'com13', 'tpl13', '192.168.0.13', 13, 13, '13');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (44, 'par.linux1', 'check14', 'com14', 'tpl14', '192.168.0.14', 14, 14, '14');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (45, 'par.unix0', 'check15', 'com15', 'tpl15', '192.168.0.15', 15, 15, '15');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (46, 'proto4', 'check16', 'com16', 'tpl16', '192.168.0.16', 16, 16, '16');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (47, 'server.mails', 'check17', 'com17', 'tpl17', '192.168.0.17', 17, 17, '17');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (48, 'testaix', 'check18', 'com18', 'tpl18', '192.168.0.18', 18, 18, '18');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (49, 'testnortel', 'check19', 'com19', 'tpl19', '192.168.0.19', 19, 19, '19');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (50, 'testsolaris', 'check20', 'com20', 'tpl20', '192.168.0.20', 20, 20, '20');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (51, 'host1.example.com', 'check21', 'com21', 'tpl21', '192.168.0.21', 21, 21,'21');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (52, 'host2.example.com', 'check22', 'com22', 'tpl22', '192.168.0.22', 22, 22,'22');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (53, 'host3.example.com', 'check23', 'com23', 'tpl23', '192.168.0.23', 23, 23,'23');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (54, 'routeur1', 'check24', 'com24', 'tpl24', '192.168.0.24', 24, 24,'24');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (55, 'routeur2', 'check25', 'com25', 'tpl25', '192.168.0.25', 25, 25,'25');
-INSERT INTO host (idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
-    VALUES (56, 'firewall', 'check26', 'com26', 'tpl26', '192.168.0.26', 26, 26,'26');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 31, 'ajc.fw.1', 'check1', 'com1', 'tpl1', '192.168.0.1', 1, 1, '1');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 32, 'ajc.linux1', 'check2', 'com2',   'tpl2', '192.168.0.2', 2, 2, '2');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 33, 'ajc.sw.1', 'check3', 'com3', 'tpl3', '192.168.0.3', 3, 3, '3');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 34, 'bdx.fw.1', 'check4', 'com4', 'tpl4', '192.168.0.4', 4, 4, '4');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 35, 'bdx.linux1', 'check5', 'com5', 'tpl5', '192.168.0.5', 5, 5, '5');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 36, 'brouteur', 'check6', 'com6', 'tpl6', '192.168.0.6', 6, 6, '6');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 37, 'bst.fw.1', 'check7', 'com7', 'tpl7', '192.168.0.7', 7, 7, '7');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 38, 'bst.unix0', 'check8', 'com8', 'tpl8', '192.168.0.8', 8, 8, '8');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 39, 'bst.unix1', 'check9', 'com9', 'tpl9', '192.168.0.9', 9, 9, '9');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 40, 'bst.win0', 'check10', 'com10', 'tpl10', '192.168.0.10', 10, 10, '10');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 41, 'messagerie', 'check11', 'com11', 'tpl11', '192.168.0.11', 11, 11, '11');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 42, 'par.fw.1', 'check12', 'com12', 'tpl12', '192.168.0.12', 12, 12, '12');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 43, 'par.linux0', 'check13', 'com13', 'tpl13', '192.168.0.13', 13, 13, '13');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 44, 'par.linux1', 'check14', 'com14', 'tpl14', '192.168.0.14', 14, 14, '14');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 45, 'par.unix0', 'check15', 'com15', 'tpl15', '192.168.0.15', 15, 15, '15');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 46, 'proto4', 'check16', 'com16', 'tpl16', '192.168.0.16', 16, 16, '16');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 47, 'server.mails', 'check17', 'com17', 'tpl17', '192.168.0.17', 17, 17, '17');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 48, 'testaix', 'check18', 'com18', 'tpl18', '192.168.0.18', 18, 18, '18');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 49, 'testnortel', 'check19', 'com19', 'tpl19', '192.168.0.19', 19, 19, '19');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 50, 'testsolaris', 'check20', 'com20', 'tpl20', '192.168.0.20', 20, 20, '20');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 51, 'host1.example.com', 'check21', 'com21', 'tpl21', '192.168.0.21', 21, 21,'21');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 52, 'host2.example.com', 'check22', 'com22', 'tpl22', '192.168.0.22', 22, 22,'22');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 53, 'host3.example.com', 'check23', 'com23', 'tpl23', '192.168.0.23', 23, 23,'23');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 54, 'routeur1', 'check24', 'com24', 'tpl24', '192.168.0.24', 24, 24,'24');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 55, 'routeur2', 'check25', 'com25', 'tpl25', '192.168.0.25', 25, 25,'25');
+INSERT INTO host (weight, idhost, name, checkhostcmd, snmpcommunity, hosttpl, mainip, snmpport, snmpoidsperpdu, snmpversion)
+    VALUES (42, 56, 'firewall', 'check26', 'com26', 'tpl26', '192.168.0.26', 26, 26,'26');
 
 
 --

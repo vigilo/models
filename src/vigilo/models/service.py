@@ -137,7 +137,7 @@ class ServiceLowLevel(Service):
         """Modifie la priorité associée à un couple hôte/service."""
         self.__priority = priority
 
-    priority = synonym('_priority',
+    priority = synonym(__priority,
         descriptor=property(_get_priority, _set_priority))
 
     groups = relation('ServiceGroup', secondary=SERVICE_GROUP_TABLE,
