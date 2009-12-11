@@ -18,14 +18,15 @@ class TestHostClass(ModelTest):
     def do_get_dependencies(self):
         """Generate some data for the test"""
         host =  Host(
-                    name=u'myhost',
-                    checkhostcmd=u'halt -f',
-                    snmpcommunity=u'public',
-                    description=u'My Host',
-                    hosttpl=u'template',
-                    mainip=u'127.0.0.1',
-                    snmpport=1234,
-                )
+            name=u'myhost',
+            checkhostcmd=u'halt -f',
+            snmpcommunity=u'public',
+            description=u'My Host',
+            hosttpl=u'template',
+            mainip=u'127.0.0.1',
+            snmpport=1234,
+            weight=42,
+        )
         DBSession.add(host)
         return dict(hosts=[host])
 

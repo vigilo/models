@@ -22,6 +22,7 @@ class TestDependency(ModelTest):
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
+            weight=42,
         )
         DBSession.add(host)
 
@@ -31,6 +32,7 @@ class TestDependency(ModelTest):
             command=u'halt',
             op_dep=u'+',
             priority=1,
+            weight=42,
         )
         DBSession.add(service)
 

@@ -119,23 +119,23 @@ class ServiceLowLevel(Service):
 
     weight = Column(
         Integer,
-        nullable=True,
+        nullable=False,
     )
 
-    _priority = Column(
+    __priority = Column(
         'priority', Integer,
         nullable=False,
     )
 
     def _get_priority(self):
         """Renvoie la priorité associée à un couple hôte/service."""
-        return self._priority
+        return self.__priority
 
     # XXX on devrait s'assurer que la priorité est bornée.
     # Ceci permettra aussi de définir les limites pour Rum (Vigicore).
     def _set_priority(self, priority):
         """Modifie la priorité associée à un couple hôte/service."""
-        self._priority = priority
+        self.__priority = priority
 
     priority = synonym('_priority',
         descriptor=property(_get_priority, _set_priority))

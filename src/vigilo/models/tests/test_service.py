@@ -29,6 +29,7 @@ class TestServiceLowLevel(ModelTest):
             hosttpl=u'foo',
             mainip=u'127.0.0.1',
             snmpport=42,
+            weight=42,
         )
         DBSession.add(host)
         DBSession.flush()

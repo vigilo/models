@@ -75,6 +75,11 @@ class Host(SupItem):
 
     snmpversion = Column(Unicode(255))
 
+    weight = Column(
+        Integer,
+        nullable=False,
+    )
+
     groups = relation('HostGroup', secondary=HOST_GROUP_TABLE,
                 back_populates='hosts')
 

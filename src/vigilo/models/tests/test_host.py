@@ -15,6 +15,7 @@ class TestHost(ModelTest):
         'hosttpl': u'template',
         'mainip': u'127.0.0.1',
         'snmpport': 1234,
+        'weight': 42,
     }
 
     def __init__(self):

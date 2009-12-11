@@ -27,6 +27,7 @@ class TestTag(ModelTest):
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
+            weight=42,
         )
         DBSession.add(host)
 
@@ -35,6 +36,7 @@ class TestTag(ModelTest):
             servicename=u'myservice',
             op_dep=u'+',
             priority=1,
+            weight=42,
         )
         DBSession.add(service)
 

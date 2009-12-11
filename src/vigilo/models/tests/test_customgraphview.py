@@ -34,7 +34,8 @@ class TestCustomGraphView(ModelTest):
             hosttpl=u'template',
             mainip=u'127.0.0.1',
             snmpport=u'1234',
-            ))
+            weight=42,
+        ))
         graph = Graph(name=u"mygraph", template=u"", vlabel=u"")
         DBSession.add(graph)
         DBSession.flush()

@@ -2,7 +2,6 @@ DROP TABLE appgroup CASCADE;
 DROP TABLE "access" CASCADE;
 DROP TABLE boardviewfilter CASCADE;
 DROP TABLE correvent CASCADE;
-DROP TABLE correvent2hls CASCADE;
 DROP TABLE customgraphview CASCADE;
 DROP TABLE dependency CASCADE;
 DROP TABLE event CASCADE;

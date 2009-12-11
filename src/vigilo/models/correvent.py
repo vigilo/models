@@ -11,8 +11,7 @@ from datetime import datetime
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from vigilo.common.conf import settings
 from .event import Event
-from .secondary_tables import EVENTSAGGREGATE_TABLE, \
-                                CORREVENTS_HLS_TABLE
+from .secondary_tables import EVENTSAGGREGATE_TABLE
 
 __all__ = ('CorrEvent', )
 
@@ -77,10 +76,6 @@ class CorrEvent(DeclarativeBase, object):
 
     cause = relation('Event', lazy='dynamic',
         primaryjoin='CorrEvent.idcause == Event.idevent')
-
-    high_level_services = relation('ServiceHighLevel',
-        lazy='dynamic',
-        secondary=CORREVENTS_HLS_TABLE)
 
 
     def __init__(self, **kwargs):

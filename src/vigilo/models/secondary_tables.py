@@ -45,17 +45,6 @@ EVENTSAGGREGATE_TABLE = Table(
             primary_key=True, autoincrement=False),
 )
 
-CORREVENTS_HLS_TABLE = Table(
-    bdd_basename + 'correvent2hls', metadata,
-    Column('idservice', Integer,
-            ForeignKey(bdd_basename + 'servicehighlevel.idservice'),
-            primary_key=True, autoincrement=False),
-    Column('idcorrevent', Integer, ForeignKey(
-                bdd_basename + 'correvent.idcorrevent',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-)
-
 GROUP_PERMISSION_TABLE = Table(
     bdd_basename + 'grouppermissions', metadata,
     Column('idgroup', Integer, ForeignKey(

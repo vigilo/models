@@ -46,7 +46,7 @@ class ModelTest(object):
     def setup(self):
         """Set up the fixture used to test the model."""
         try:
-            print self.klass
+            print "Class being tested:", self.klass
             new_attrs = {}
             new_attrs.update(self.attrs)
             new_attrs.update(self.do_get_dependencies())
