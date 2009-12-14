@@ -29,7 +29,7 @@ class Tag(DeclarativeBase, object):
     value = Column(Unicode(255), nullable=True)
 
     supitems = relation('SupItem', secondary=SUPITEM_TAG_TABLE,
-        back_populates='tags', lazy='dynamic')
+        back_populates='tags', lazy=True)
 
 
     def __init__(self, **kwargs):

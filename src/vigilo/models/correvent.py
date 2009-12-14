@@ -71,10 +71,10 @@ class CorrEvent(DeclarativeBase, object):
         nullable=False,
     )
 
-    events = relation('Event', lazy='dynamic',
+    events = relation('Event', lazy=True,
         secondary=EVENTSAGGREGATE_TABLE)
 
-    cause = relation('Event', lazy='dynamic',
+    cause = relation('Event', lazy=True,
         primaryjoin='CorrEvent.idcause == Event.idevent')
 
 

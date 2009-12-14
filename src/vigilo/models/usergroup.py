@@ -30,10 +30,10 @@ class UserGroup(DeclarativeBase, object):
     )
 
     permissions = relation('Permission', secondary=USERGROUP_PERMISSION_TABLE,
-                      back_populates='usergroups', lazy='dynamic')
+                      back_populates='usergroups', lazy=True)
 
     users = relation('User', secondary=USER_GROUP_TABLE,
-        back_populates='usergroups')
+        back_populates='usergroups', lazy=True)
 
     def __init__(self, **kwargs):
         super(UserGroup, self).__init__(**kwargs)

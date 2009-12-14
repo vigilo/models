@@ -31,9 +31,9 @@ class ImpactedPath(DeclarativeBase, object):
         primary_key=True, autoincrement=True,
     )
 
-    impacted_hls = relation('ImpactedHLS', back_populates='path',
+    impacted_hls = relation('ImpactedHLS', back_populates='path', lazy=True,
 #        primaryjoin='ImpactedHLS.idpath == ImpactedPath.idpath',
-        lazy='dynamic')
+        )
 
     idsupitem = Column(
         Integer,
@@ -44,6 +44,5 @@ class ImpactedPath(DeclarativeBase, object):
         nullable=False,
     )
 
-    supitem = relation('SupItem', back_populates='impacted_paths',
-        lazy='dynamic')
+    supitem = relation('SupItem', back_populates='impacted_paths', lazy=True)
 

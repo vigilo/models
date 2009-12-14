@@ -23,7 +23,6 @@ class Service(SupItem):
         service de haut niveau ('+', '&' ou '|').
     @ivar servicegroups: Liste des groupes de services auxquels
         ce service appartient.
-    @ivar tags: Liste des libellés associés à ce service.
     @ivar dependancies: Liste des services dont ce service dépend.
         Pour les services techniques, cette liste est toujours vide.
     """
@@ -165,6 +164,9 @@ class ServiceLowLevel(Service):
             ).filter(cls.servicename == servicename
             ).first()
 
+    def __unicode__(self):
+        return "%s (%s)" % (self.servicename, self.host.name)
+
 
 class ServiceHighLevel(Service):
     """
@@ -209,7 +211,7 @@ class ServiceHighLevel(Service):
         nullable=True,
     )
 
-    impacts = relation('ImpactedHLS', back_populates='hls', lazy='dynamic')
+    impacts = relation('ImpactedHLS', back_populates='hls', lazy=True)
 
     def __init__(self, **kwargs):
         super(ServiceHighLevel, self).__init__(**kwargs)

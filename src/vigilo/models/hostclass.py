@@ -38,7 +38,7 @@ class HostClass(DeclarativeBase, object):
     )
 
     hosts = relation('Host', secondary=HOST_HOSTCLASS_TABLE,
-        back_populates='hostclasses', lazy='dynamic')
+        back_populates='hostclasses', lazy=True)
 
     def __init__(self, **kwargs):
         """Initialise une classe d'hôtes."""

@@ -50,17 +50,16 @@ class Map(DeclarativeBase, object):
     """
     
     groups = relation('MapGroup', secondary=MAP_GROUP_TABLE,
-                         back_populates='maps', lazy='dynamic')
+                         back_populates='maps', lazy=True)
 
-    links = relation('MapServiceLink', back_populates='map', uselist=True)
-    #, secondary=MAP_LINK_TABLE, lazy='dynamic'
+    links = relation('MapServiceLink', back_populates='map', lazy=True)
     
-    nodes = relation('MapNode', back_populates='map', uselist=True)
+    nodes = relation('MapNode', back_populates='map', lazy=True)
     
-    segments = relation('MapSegment', back_populates='map', uselist=True)
+    segments = relation('MapSegment', back_populates='map', lazy=True)
     
     permissions = relation('Permission', secondary=MAP_PERMISSION_TABLE,
-                            back_populates='maps')
+                            back_populates='maps', lazy=True)
 
 
     def __init__(self, **kwargs):

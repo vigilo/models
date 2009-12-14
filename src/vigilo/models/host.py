@@ -81,12 +81,12 @@ class Host(SupItem):
     )
 
     groups = relation('HostGroup', secondary=HOST_GROUP_TABLE,
-                back_populates='hosts')
+                back_populates='hosts', lazy=True)
 
     hostclasses = relation('HostClass', secondary=HOST_HOSTCLASS_TABLE,
-        back_populates='hosts', lazy='dynamic')
+        back_populates='hosts', lazy=True)
 
-    services = relation('ServiceLowLevel', lazy='dynamic',
+    services = relation('ServiceLowLevel', lazy=True,
         primaryjoin='Host.idhost == ServiceLowLevel.idhost')
 
     def __init__(self, **kwargs):

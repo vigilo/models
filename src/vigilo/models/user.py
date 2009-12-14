@@ -58,13 +58,11 @@ class User(DeclarativeBase, object):
 #        nullable=False,
     )
 
-    # XXX En attendant que certains problèmes dans Rum soient résolus,
-    # le lazy loading devrait être évité.
-    customgraphviews = relation('CustomGraphView', cascade='delete',)
-        #backref=backref('user', lazy='dynamic'), lazy='dynamic')
+    customgraphviews = relation('CustomGraphView',
+        cascade='delete', lazy=True)
 
     usergroups = relation('UserGroup', secondary=USER_GROUP_TABLE,
-        back_populates='users')
+        back_populates='users', lazy=True)
 
 
     def __init__(self, **kwargs):

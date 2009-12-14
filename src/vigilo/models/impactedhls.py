@@ -36,8 +36,7 @@ class ImpactedHLS(DeclarativeBase, object):
         primary_key=True, autoincrement=False,
     )
 
-    path = relation('ImpactedPath', back_populates='impacted_hls',
-        lazy='dynamic')
+    path = relation('ImpactedPath', back_populates='impacted_hls', lazy=True)
 
     idhls = Column(
         Integer,
@@ -48,8 +47,7 @@ class ImpactedHLS(DeclarativeBase, object):
         primary_key=True, autoincrement=False,
     )
 
-    hls = relation('ServiceHighLevel', back_populates='impacts',
-        lazy='dynamic')
+    hls = relation('ServiceHighLevel', back_populates='impacts', lazy=True)
 
     distance = Column(
         Integer,
