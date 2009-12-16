@@ -51,7 +51,7 @@ class PerfDataSource(DeclarativeBase, object):
         #nullable=False,
     )
     
-    graph = relation()
+    graph = relation('graph')
 
     name = Column(
         UnicodeText,
