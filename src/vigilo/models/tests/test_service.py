@@ -12,7 +12,6 @@ class TestServiceLowLevel(ModelTest):
         'servicename': u'myservice',
         'op_dep': u'+',
         'weight': 100,
-        'priority': 1,
     }
 
     def __init__(self):
@@ -45,6 +44,7 @@ class TestServiceHighLevel(ModelTest):
         'message': u'Hello world',
         'warning_threshold': 50,
         'critical_threshold': 80,
+        'priority': 1,
     }
 
     def __init__(self):

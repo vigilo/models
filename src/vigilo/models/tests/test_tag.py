@@ -35,7 +35,6 @@ class TestTag(ModelTest):
             host=host,
             servicename=u'myservice',
             op_dep=u'+',
-            priority=1,
             weight=42,
         )
         DBSession.add(service)

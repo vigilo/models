@@ -39,7 +39,6 @@ class TestEventHistory(ModelTest):
             servicename=u'monservice',
             command=u'halt',
             op_dep=u'+',
-            priority=1,
             weight=42,
         )
         DBSession.add(service)
