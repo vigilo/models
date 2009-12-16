@@ -153,3 +153,15 @@ GRAPH_GROUP_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
+GRAPH_PERFDATASOURCE_TABLE = Table(
+    bdd_basename + 'graphperfdatasource', metadata,
+    Column('idperfdatasource', Integer, ForeignKey(
+                bdd_basename + 'perfdatasource.idperfdatasource',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False),
+    Column('idgraph', Integer, ForeignKey(
+                bdd_basename + 'graph.idgraph',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+

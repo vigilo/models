@@ -41,6 +41,7 @@ class Graph(DeclarativeBase, object):
     
     groups = relation('GraphGroup', secondary=GRAPH_GROUP_TABLE,
                             back_populates='graphs')
+    
 
 
     def __init__(self, **kwargs):

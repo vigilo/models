@@ -42,16 +42,8 @@ class PerfDataSource(DeclarativeBase, object):
 
     service = relation('ServiceLowLevel')
     
-    idgraph = Column(
-        Integer,
-        ForeignKey(
-            bdd_basename + 'graph.idgraph',
-            ondelete='CASCADE', onupdate='CASCADE',
-        ),
-        #nullable=False,
-    )
-    
-    graph = relation('graph')
+    graphs = relation('MapGroup', secondary=GRAPH_PERFDATASOURCE_TABLE,
+                         back_populates='perfdatasources', lazy=True)
 
     name = Column(
         UnicodeText,
