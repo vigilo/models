@@ -121,24 +121,6 @@ class ServiceLowLevel(Service):
         nullable=False,
     )
 
-    __priority = Column(
-        'priority', Integer,
-        nullable=False,
-    )
-
-    def _get_priority(self):
-        """Renvoie la priorité associée à un couple hôte/service."""
-        return self.__priority
-
-    # XXX on devrait s'assurer que la priorité est bornée.
-    # Ceci permettra aussi de définir les limites pour Rum (Vigicore).
-    def _set_priority(self, priority):
-        """Modifie la priorité associée à un couple hôte/service."""
-        self.__priority = priority
-
-    priority = synonym(__priority,
-        descriptor=property(_get_priority, _set_priority))
-
     groups = relation('ServiceGroup', secondary=SERVICE_GROUP_TABLE,
                 back_populates='services')
 
@@ -209,6 +191,11 @@ class ServiceHighLevel(Service):
     weight = Column(
         Integer,
         nullable=True,
+    )
+
+    priority = Column(
+        Integer,
+        nullable=False,
     )
 
     impacts = relation('ImpactedHLS', back_populates='hls', lazy=True)

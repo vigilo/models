@@ -77,7 +77,6 @@ class CorrEvent(DeclarativeBase, object):
     cause = relation('Event', lazy=True,
         primaryjoin='CorrEvent.idcause == Event.idevent')
 
-
     def __init__(self, **kwargs):
         """
         Initialise un événement corrélé.

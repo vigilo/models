@@ -45,11 +45,11 @@ class TestTag(ModelTest):
         DBSession.flush()
 
         host = Host.by_host_name(u'myhost')
-        assert_equals(1, host.tags.count())
+        assert_equals(1, len(host.tags))
         assert_equals(self.obj, host.tags[0])
 
         service = ServiceLowLevel.by_host_service_name(
                     hostname=u'myhost', servicename=u'myservice')
-        assert_equals(1, service.tags.count())
+        assert_equals(1, len(service.tags))
         assert_equals(self.obj, service.tags[0])
 
