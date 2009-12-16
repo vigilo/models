@@ -42,7 +42,7 @@ class PerfDataSource(DeclarativeBase, object):
 
     service = relation('ServiceLowLevel')
     
-    graphs = relation('MapGroup', secondary=GRAPH_PERFDATASOURCE_TABLE,
+    graphs = relation('Graph', secondary=GRAPH_PERFDATASOURCE_TABLE,
                          back_populates='perfdatasources', lazy=True)
 
     name = Column(

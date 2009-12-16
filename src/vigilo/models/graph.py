@@ -42,6 +42,8 @@ class Graph(DeclarativeBase, object):
     groups = relation('GraphGroup', secondary=GRAPH_GROUP_TABLE,
                             back_populates='graphs')
     
+    perfdatasources = relation('PerfDataSource', secondary=GRAPH_PERFDATASOURCE_TABLE,
+                         back_populates='graphs', lazy=True)
 
 
     def __init__(self, **kwargs):
