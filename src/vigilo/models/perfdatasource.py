@@ -9,6 +9,8 @@ from sqlalchemy.types import Integer, UnicodeText, Float
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
+from .secondary_tables import GRAPH_PERFDATASOURCE_TABLE
+
 __all__ = ('PerfDataSource', )
 
 class PerfDataSource(DeclarativeBase, object):

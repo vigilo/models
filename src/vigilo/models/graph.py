@@ -8,6 +8,7 @@ from sqlalchemy.types import Unicode, Integer
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .secondary_tables import GRAPH_GROUP_TABLE
+from .secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from sqlalchemy.orm import relation
 
 __all__ = ('Graph', )
