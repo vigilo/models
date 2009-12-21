@@ -55,3 +55,7 @@ class Dependency(DeclarativeBase, object):
     def __init__(self, **kwargs):
         super(Dependency, self).__init__(**kwargs)
 
+    def __unicode__(self):
+        return 'Dependency from %s on %s' % \
+            (unicode(self.supitem1), unicode(self.supitem2))
+
