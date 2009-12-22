@@ -10,9 +10,9 @@ __all__ = (
         'Dependency', 'Version', 'State', 'Permission',
         'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
         'Access', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
-        'Map', 'MapServiceLink',
-        'Legend', 'Service', 'StateName', 'Host_VigiloServer_AppGroup',
-        'VigiloServer', 'AppGroup', 'ImpactedPath', 'ImpactedHLS',
+        'Map', 'MapServiceLink', 'Legend', 'Service', 'StateName',
+        'HostApplication', 'HostBusApplication', 'Application',
+        'ImpactedPath', 'ImpactedHLS',
         )
 
 
@@ -40,9 +40,8 @@ from .mapnode import MapNode, MapNodeHost, MapNodeService
 from .map import Map
 from .maplink import MapLink, MapServiceLink, MapSegment
 from .legend import Legend
-from .host_vigiloserver_appgroup import Host_VigiloServer_AppGroup
-from .vigiloserver import VigiloServer
-from .appgroup import AppGroup
+from .hostapp import HostApplication, HostBusApplication
+from .application import Application
 from .impactedpath import ImpactedPath
 from .impactedhls import ImpactedHLS
 
