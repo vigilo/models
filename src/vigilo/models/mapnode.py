@@ -100,10 +100,10 @@ class MapNodeHost(MapNode):
         nullable=False
     )
     
-    name = Column(
-        Unicode(255), 
+    idhost = Column(
+        Integer, 
         ForeignKey(
-            bdd_basename + 'host.name',
+            bdd_basename + 'host.idhost',
             onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False)
     #index=True,    
