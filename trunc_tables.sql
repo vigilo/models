@@ -46,4 +46,4 @@ TRUNCATE TABLE tags2supitems CASCADE;
 --TRUNCATE TABLE usertousergroups CASCADE;
 TRUNCATE TABLE version CASCADE;
 TRUNCATE TABLE vigiloserver CASCADE;
-
+DROP TABLE graphperfdatasource CASCADE;

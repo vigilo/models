@@ -46,4 +46,4 @@ DROP TABLE usergrouppermissions CASCADE;
 DROP TABLE usertousergroups CASCADE;
 DROP TABLE version CASCADE;
 DROP TABLE vigiloserver CASCADE;
-
+DROP TABLE graphperfdatasource CASCADE;
