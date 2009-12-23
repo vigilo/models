@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import synonym, relation, aliased
-from sqlalchemy.types import Unicode, Text, DateTime, Integer
+from sqlalchemy.types import Text, DateTime, Integer
 
 from datetime import datetime
 

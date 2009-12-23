@@ -3,10 +3,10 @@
 """Modèle pour la table Service"""
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import UnicodeText, Unicode, Integer
-from sqlalchemy.orm import synonym, relation
+from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
 
-from vigilo.models.vigilo_bdd_config import bdd_basename, DeclarativeBase
+from vigilo.models.vigilo_bdd_config import bdd_basename
 from vigilo.models.session import DBSession
 from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.supitem import SupItem

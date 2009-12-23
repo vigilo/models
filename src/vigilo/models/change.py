@@ -5,7 +5,6 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime
-from sqlalchemy.orm import relation
 
 from datetime import datetime
 
@@ -19,7 +18,7 @@ class Change(DeclarativeBase, object):
     Mémorise la date de dernière modification d'une table.
     
     @ivar tablename: Nom de la table.
-    @ivar last_modifier: Date de dernière modification.
+    @ivar last_modified: Date de dernière modification.
     """
     __tablename__ = bdd_basename + 'change'
 
@@ -60,13 +59,18 @@ class Change(DeclarativeBase, object):
         return DBSession.query(cls).filter(cls.tablename == tablename).first()
 
     @classmethod
-    def was_modified(cls, tablename):
+    def mark_as_modified(cls, tablename):
+        """
+        Marque une table comme ayant été modifiée.
+        @param tablename: Nom de la table ayant subit une modification.
+        @type tablename: C{unicode}
+        """
         change = cls.by_table_name(tablename)
 
         if not change:
             change = cls(tablename=tablename)
 
-        change.last_modifier = datetime.now()
+        change.last_modified = datetime.now()
         DBSession.add(change)
         DBSession.flush()
 

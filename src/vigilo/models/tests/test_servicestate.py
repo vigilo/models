@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for State class"""
-from vigilo.models import State, StateName, Host, ServiceLowLevel
+from vigilo.models import State, Host, ServiceLowLevel
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
-from nose.tools import assert_equals
 from datetime import datetime
 
 class TestServiceState(ModelTest):

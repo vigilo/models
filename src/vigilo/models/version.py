@@ -11,6 +11,7 @@ from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 __all__ = ('Version', )
 
 class Version(DeclarativeBase, object):
+    """Stocke des informations sur la version d'un composant de Vigilo."""
     __tablename__ = bdd_basename + 'version'
 
     name = Column(
@@ -21,6 +22,6 @@ class Version(DeclarativeBase, object):
             nullable=False)
 
     def __init__(self, **kwargs):
+        """Initialise une instance de la classe Version."""
         super(Version, self).__init__(**kwargs)
-
 

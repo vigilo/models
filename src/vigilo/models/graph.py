@@ -19,7 +19,7 @@ class Graph(DeclarativeBase, object):
     
     @ivar idgraph: Identifiant du graph, autogénéré.
     @ivar name: Nom du graph.
-    @ivar template: XXX.
+    @ivar template: XXX à quoi sert ce champ ?
     @ivar vlabel: Unité de mesure (bits/s, Mbits/s ...).
     """
     __tablename__ = bdd_basename + 'graph'
@@ -43,8 +43,8 @@ class Graph(DeclarativeBase, object):
     groups = relation('GraphGroup', secondary=GRAPH_GROUP_TABLE,
                             back_populates='graphs')
     
-    perfdatasources = relation('PerfDataSource', secondary=GRAPH_PERFDATASOURCE_TABLE,
-                         back_populates='graphs', lazy=True)
+    perfdatasources = relation('PerfDataSource', lazy=True,
+        back_populates='graphs', secondary=GRAPH_PERFDATASOURCE_TABLE)
 
 
     def __init__(self, **kwargs):

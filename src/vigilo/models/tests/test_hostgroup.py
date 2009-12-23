@@ -2,7 +2,6 @@
 """Test suite for HostGroup class"""
 from vigilo.models import HostGroup
 from vigilo.models.tests import ModelTest
-from vigilo.models.session import DBSession
 
 class TestHostGroups(ModelTest):
     """Test de la table hostgroup"""

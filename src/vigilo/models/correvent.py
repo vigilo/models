@@ -10,7 +10,6 @@ from datetime import datetime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from vigilo.common.conf import settings
-from .event import Event
 from .secondary_tables import EVENTSAGGREGATE_TABLE
 
 __all__ = ('CorrEvent', )

@@ -2,7 +2,6 @@
 """Test suite for ServiceGroup class"""
 from vigilo.models import ServiceGroup
 from vigilo.models.tests import ModelTest
-from vigilo.models.session import DBSession
 
 class TestServiceGroup(ModelTest):
     """Test de la table ServiceGroup"""

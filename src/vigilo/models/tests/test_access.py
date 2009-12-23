@@ -26,9 +26,11 @@ class TestAccessFunc(unittest.TestCase):
     """Tests fonctionnels de la classe Access"""
 
     def setUp(self):
+        """Initialisation du test."""
         transaction.begin()
 
     def tearDown(self):
+        """Suppression des données d'initialisation du test."""
         DBSession.rollback()
 
     def test_add_login(self):

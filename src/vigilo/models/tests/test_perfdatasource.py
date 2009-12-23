@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for PerfDataSource class"""
-from vigilo.models import Host, ServiceLowLevel, Graph, PerfDataSource
+from vigilo.models import Host, ServiceLowLevel, PerfDataSource
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 

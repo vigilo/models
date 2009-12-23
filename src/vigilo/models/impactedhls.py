@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.orm import relation
-from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.types import Integer
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 

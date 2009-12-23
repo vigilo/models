@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.orm import relation
-from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.types import Integer
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 
@@ -31,9 +31,7 @@ class ImpactedPath(DeclarativeBase, object):
         primary_key=True, autoincrement=True,
     )
 
-    impacted_hls = relation('ImpactedHLS', back_populates='path', lazy=True,
-#        primaryjoin='ImpactedHLS.idpath == ImpactedPath.idpath',
-    )
+    impacted_hls = relation('ImpactedHLS', back_populates='path', lazy=True)
 
     idsupitem = Column(
         Integer,

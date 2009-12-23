@@ -17,6 +17,7 @@ class TestUser(ModelTest):
     )
 
     def __init__(self):
+        """Initialisation du test."""
         ModelTest.__init__(self)
 
     def test_no_permissions_by_default(self):

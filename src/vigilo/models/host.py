@@ -7,7 +7,7 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from .vigilo_bdd_config import bdd_basename
 from .session import DBSession
 from .secondary_tables import HOST_HOSTCLASS_TABLE, \
                                 HOST_GROUP_TABLE

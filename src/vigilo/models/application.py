@@ -3,13 +3,11 @@
 """Modèle pour la table Application."""
 from __future__ import absolute_import
 
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation, backref
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-from .secondary_tables import GROUP_PERMISSION_TABLE
 
 __all__ = ('Application', )
 

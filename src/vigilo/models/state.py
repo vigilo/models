@@ -8,7 +8,7 @@ import datetime
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
-from sqlalchemy.types import Integer, Text, DateTime, Unicode
+from sqlalchemy.types import Integer, Text, DateTime
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 

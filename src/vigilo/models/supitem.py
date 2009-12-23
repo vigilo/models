@@ -7,7 +7,6 @@ from sqlalchemy import Column
 from sqlalchemy.orm import relation, aliased
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.sql import functions
-from sqlalchemy.sql.expression import and_
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from vigilo.models.secondary_tables import SUPITEM_TAG_TABLE
@@ -16,6 +15,12 @@ from vigilo.models.session import DBSession
 __all__ = ('SupItem', )
 
 class SupItem(DeclarativeBase, object):
+    """
+    Classe abstraite qui gère un objet supervisé.
+
+    @ivar idsupitem: Identifiant de l'objet supervisé.
+    @ivar tags: Libellés attachés à cet objet.
+    """
     __tablename__ = bdd_basename + 'supitem'
 
     idsupitem = Column(
@@ -34,6 +39,14 @@ class SupItem(DeclarativeBase, object):
     __mapper_args__ = {'polymorphic_on': _itemtype}
 
     def impacted_hls(self, *args):
+        """
+        Renvoie une requête portant sur les services de haut niveau impactés.
+        
+        @param *args: Liste d'éléments à récupérer dans la requête.
+        @type *args: Une C{DeclarativeBase} ou une liste de C{Column}s.
+        @return: Une C{Query} portant sur les éléments demandés.
+        @rtype: C{sqlalchemy.orm.query.Query}.
+        """
         from vigilo.models import ServiceHighLevel, ImpactedHLS, ImpactedPath
 
         if not args:
@@ -58,5 +71,6 @@ class SupItem(DeclarativeBase, object):
         return services_query
 
     def __init__(self, **kwargs):
+        """Initialise un objet supervisé."""
         super(SupItem, self).__init__(**kwargs)
 
