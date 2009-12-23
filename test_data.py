@@ -30,11 +30,17 @@ collect = models.Permission(
     description=u'Autorise les utilisateurs à lancer une demande de collecte',
 )
 DBSession.add(collect)
+downtime = models.Permission(
+    permission_name=u'downtime',
+    description=u'Autorise les utilisateurs à planifier une maintenance',
+)
+DBSession.add(downtime)
 DBSession.flush()
 
 # Affectation des permissions aux groupes d'utilisateurs.
 managers = models.UserGroup.by_group_name(u'managers')
 managers.permissions.append(collect)
+managers.permissions.append(downtime)
 
 # Host
 def add_Host(name):
