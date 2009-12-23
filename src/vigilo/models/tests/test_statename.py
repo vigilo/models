@@ -30,11 +30,11 @@ class TestStateName(ModelTest):
         """Teste la récupération d'une valeur d'état par son nom."""
         # Si on parvient à récupérer une information sans erreurs,
         # alors le test est concluant.
-        self.statename_to_value(u'Foo')
+        self.obj.statename_to_value(u'Foo')
 
     def test_value_to_statename(self):
         """Teste la récupération d'un nom d'état par sa valeur."""
         row = DBSession.query(StateName.idstatename).first()
-        statename = self.value_to_statename(row.idstatename)
+        statename = self.obj.value_to_statename(row.idstatename)
         assert_equals(u'Foo', statename)
 
