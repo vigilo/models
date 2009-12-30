@@ -24,6 +24,13 @@ DBSession.add(models.StateName(statename=u'UNREACHABLE', order=1))
 DBSession.add(models.StateName(statename=u'DOWN', order=3))
 DBSession.flush()
 
+# Etats possibles de la mise en silence pour maintenance
+DBSession.add(models.DowntimeStatus(status=u'Planified',))
+DBSession.add(models.DowntimeStatus(status=u'Enabled',))
+DBSession.add(models.DowntimeStatus(status=u'Finished',))
+DBSession.add(models.DowntimeStatus(status=u'Cancelled',))
+DBSession.flush()
+
 # Permissions
 collect = models.Permission(
     permission_name=u'collect',
@@ -384,6 +391,6 @@ def add_HostApp(host, appserver, app, jid=None):
     DBSession.add(cls(**kwargs))
     DBSession.flush()
 
-add_HostApp('host2.example.com', 'proto4', 'Nagios', 'proto4_nagios@localhost')
+add_HostApp('host2.example.com', 'proto4', 'Nagios', 'connector-nagios@localhost')
 add_HostApp('host2.example.com', 'proto4', 'Metrology')
 
