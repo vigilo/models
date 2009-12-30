@@ -6,13 +6,13 @@ __all__ = (
         'EventHistory', 'Event', 'CorrEvent',
         'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass',
         'PerfDataSource', 'ServiceGroup',
-        'ServiceLowLevel', 'ServiceHighLevel',
+        'SupItem', 'ServiceLowLevel', 'ServiceHighLevel',
         'Dependency', 'Version', 'State', 'Permission',
         'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
         'Access', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
         'Map', 'MapServiceLink', 'Legend', 'Service', 'StateName',
         'HostApplication', 'HostBusApplication', 'Application',
-        'ImpactedPath', 'ImpactedHLS',
+        'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
         )
 
 
@@ -24,6 +24,7 @@ from .host import Host
 from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
 from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup
+from .supitem import SupItem
 from .service import ServiceLowLevel, ServiceHighLevel, Service
 from .dependency import Dependency
 from .version import Version
@@ -44,4 +45,5 @@ from .hostapp import HostApplication, HostBusApplication
 from .application import Application
 from .impactedpath import ImpactedPath
 from .impactedhls import ImpactedHLS
+from .downtime import Downtime, DowntimeStatus
 

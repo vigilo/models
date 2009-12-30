@@ -38,6 +38,7 @@ class SupItem(DeclarativeBase, object):
 
     __mapper_args__ = {'polymorphic_on': _itemtype}
 
+
     def impacted_hls(self, *args):
         """
         Renvoie une requête portant sur les services de haut niveau impactés.
@@ -69,6 +70,71 @@ class SupItem(DeclarativeBase, object):
             )
 
         return services_query
+ 
+ 
+    @classmethod
+    def get_supitem(cls, hostname, servicename):
+        """
+        Récupère dans la BDD l'identifiant de l'item (host ou service)
+        correspondant à ce hostname et à ce servicename. 
+        Lorsque le paramètre servicename vaut None, l'item est alors un host. 
+        Lorsque le paramètre hostname vaut None, l'item est un SHN.
+        Sinon, l'item est un SBN.
+            
+        @param hostname: Nom du host.
+        @type hostname: C{str}
+        @param servicename: Nom du service.
+        @type servicename: C{str}
+        @return: L'identifiant d'un host, un SHN, ou un SBN.
+        @rtype: C{int}
+        """  
+        from vigilo.models import Host, ServiceHighLevel, ServiceLowLevel
+        from sqlalchemy.sql.expression import and_
+        
+        # Si le nom du service vaut None, l'item est un hôte.
+        if not servicename:
+            host = DBSession.query(Host.idhost
+                        ).filter(Host.name == hostname
+                        ).first()
+                    
+            if host:
+                return host.idhost
+    
+            LOGGER.error(_('Got a reference to a non configured ' +
+                    'host (%r)') % (hostname, ))
+            return None
+        
+        # Lorsque l'item est un service de haut niveau.
+        if not hostname:
+            service = DBSession.query(ServiceHighLevel.idservice
+                        ).filter(ServiceHighLevel.servicename == servicename,
+                        ).first()
+                    
+            if service:
+                return service.idservice
+                
+            LOGGER.error(_('Got a reference to a non configured ' +
+                    'high level service (%r)') % (servicename, ))
+            return None
+        
+        # Sinon, l'item est un service de bas niveau.
+        service = DBSession.query(ServiceLowLevel.idservice
+                    ).join(
+                        (Host, ServiceLowLevel.idhost == Host.idhost)
+                    ).filter(
+                         and_(
+                            ServiceLowLevel.servicename == servicename,
+                            Host.name == hostname
+                        )
+                    ).first()
+                
+        if service:
+            return service.idservice
+                
+        LOGGER.error(_('Got a reference to a non configured ' +
+                'low level service (%r, %r)') % (hostname, servicename))
+        return None
+
 
     def __init__(self, **kwargs):
         """Initialise un objet supervisé."""
