@@ -88,7 +88,7 @@ class Downtime(DeclarativeBase, object):
     @ivar start: Date de début de la mise en silence.
     @ivar end: Date de fin de la mise en silence.
     @ivar status: Statut de la mise en silence (valeurs possibles :
-    'Planified', 'Enabled', 'Finished', 'Cancelled').
+    'Scheduled', 'Active', 'Finished', 'Cancelled').
     """
 
     __tablename__ = bdd_basename + 'downtime'

@@ -86,7 +86,7 @@ class TestDowntime(ModelTest):
         DBSession.flush()
         
         status = DowntimeStatus(   
-            status = u"planified"
+            status = u"Scheduled"
         )
         DBSession.add(status)
         DBSession.flush()
