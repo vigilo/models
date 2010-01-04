@@ -9,7 +9,7 @@ __all__ = (
         'SupItem', 'ServiceLowLevel', 'ServiceHighLevel',
         'Dependency', 'Version', 'State', 'Permission',
         'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
-        'Access', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
+        'ApplicationLog', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
         'Map', 'MapServiceLink', 'Legend', 'Service', 'StateName',
         'HostApplication', 'HostBusApplication', 'Application',
         'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
@@ -36,7 +36,7 @@ from .user import User
 from .boardviewfilter import BoardViewFilter
 from .customgraphview import CustomGraphView
 from .tag import Tag
-from .access import Access
+from .applicationlog import ApplicationLog
 from .mapnode import MapNode, MapNodeHost, MapNodeService
 from .map import Map
 from .maplink import MapLink, MapServiceLink, MapSegment

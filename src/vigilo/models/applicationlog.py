@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table Access"""
+"""Modèle pour la table ApplicationLog"""
 
 from __future__ import absolute_import
 
@@ -13,22 +13,22 @@ import transaction
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
 
-__all__ = ('Access', )
+__all__ = ('ApplicationLog', )
 
-class Access(DeclarativeBase, object):
+class ApplicationLog(DeclarativeBase, object):
     """
     Mémorise les connexions/déconnexions des utilisateurs.
     
-    @ivar idaccess: Identifiant auto-généré de l'entrée.
+    @ivar idlog: Identifiant auto-généré de l'entrée.
     @ivar timestamp: Horodateur indiquant à quel moment a eu lieu l'événement
         enregistré.
     @ivar message: Un message décrivant le type d'événement enregistré.
     @ivar ip: Adresse IP de l'utilisateur lorsque l'événement a été enregistré.
     """
 
-    __tablename__ = bdd_basename + "access"
+    __tablename__ = bdd_basename + "application_log"
 
-    idaccess = Column(
+    idlog = Column(
         Integer,
         primary_key=True, autoincrement=True, nullable=False,
     )
@@ -42,7 +42,7 @@ class Access(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         """Initialise une entrée des logs des accès."""
-        super(Access, self).__init__(**kwargs)
+        super(ApplicationLog, self).__init__(**kwargs)
 
     @classmethod
     def add_login(cls, username, ip, application):
@@ -62,12 +62,12 @@ class Access(DeclarativeBase, object):
         message = u"User '%s' logged in (%s)." % (username, application)
         if not ip is None:
             ip = u'' + ip
-        access = cls(
+        log = cls(
             timestamp=datetime.now(),
             message=message,
             ip=ip,
         )
-        DBSession.add(access)
+        DBSession.add(log)
         try:
             DBSession.flush()
         except (InvalidRequestError, IntegrityError):
@@ -94,12 +94,12 @@ class Access(DeclarativeBase, object):
         message = u"User '%s' logged out (%s)." % (username, application)
         if not ip is None:
             ip = u'' + ip
-        access = cls(
+        log = cls(
             timestamp=datetime.now(),
             message=message,
             ip=ip,
         )
-        DBSession.add(access)
+        DBSession.add(log)
         try:
             DBSession.flush()
         except (InvalidRequestError, IntegrityError):

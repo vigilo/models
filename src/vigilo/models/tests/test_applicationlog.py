@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Test suite for Access class"""
-from vigilo.models import Access
+"""Test suite for ApplicationLog class"""
+from vigilo.models import ApplicationLog
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from datetime import datetime
 import unittest
 import transaction
 
-class TestAccess(ModelTest):
-    """Tests unitaires de la table Access"""
+class TestApplicationLog(ModelTest):
+    """Tests unitaires de la table ApplicationLog"""
 
-    klass = Access
+    klass = ApplicationLog
     attrs = {
         'message': u'This is a test',
         'timestamp': datetime.now(),
@@ -22,8 +22,8 @@ class TestAccess(ModelTest):
         ModelTest.__init__(self)
 
 
-class TestAccessFunc(unittest.TestCase):
-    """Tests fonctionnels de la classe Access"""
+class TestApplicationLogFunc(unittest.TestCase):
+    """Tests fonctionnels de la classe ApplicationLog"""
 
     def setUp(self):
         """Initialisation du test."""
@@ -36,18 +36,18 @@ class TestAccessFunc(unittest.TestCase):
     def test_add_login(self):
         """Vérifie que l'enregistrement des connexions fonctionne."""
 
-        Access.add_login(u'foo', u'127.0.0.1', u'app1')
-        count = DBSession.query(Access).filter(
-            Access.message == u"User 'foo' logged in (app1).").count()
+        ApplicationLog.add_login(u'foo', u'127.0.0.1', u'app1')
+        count = DBSession.query(ApplicationLog).filter(
+            ApplicationLog.message == u"User 'foo' logged in (app1).").count()
         self.assertEquals(1, count,
             "Expected exactly 1 user login message, got %d." % count)
         
     def test_add_logout(self):
         """Vérifie que l'enregistrement des déconnexions fonctionne."""
 
-        Access.add_logout(u'bar', u'127.0.0.1', u'app2')
-        count = DBSession.query(Access).filter(
-            Access.message == u"User 'bar' logged out (app2).").count()
+        ApplicationLog.add_logout(u'bar', u'127.0.0.1', u'app2')
+        count = DBSession.query(ApplicationLog).filter(
+            ApplicationLog.message == u"User 'bar' logged out (app2).").count()
         self.assertEquals(1, count,
             "Expected exactly 1 user logout message, got %d." % count)
 
