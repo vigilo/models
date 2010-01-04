@@ -136,7 +136,7 @@ class ServiceGroup(Group):
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='servicegroups')
 
-    services = relation('ServiceLowLevel', secondary=SERVICE_GROUP_TABLE,
+    services = relation('Service', secondary=SERVICE_GROUP_TABLE,
                     back_populates='groups')
 
 class MapGroup(Group):

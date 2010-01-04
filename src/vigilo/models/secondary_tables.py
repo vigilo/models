@@ -132,7 +132,7 @@ HOST_GROUP_TABLE = Table(
 SERVICE_GROUP_TABLE = Table(
     bdd_basename + 'servicegroup', metadata,
     Column('idservice', Integer, ForeignKey(
-                bdd_basename + 'servicelowlevel.idservice',
+                bdd_basename + 'service.idservice',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
     Column('idgroup', Integer, ForeignKey(

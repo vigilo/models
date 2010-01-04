@@ -47,6 +47,9 @@ class Service(SupItem):
         nullable=False,
     )
 
+    groups = relation('ServiceGroup', secondary=SERVICE_GROUP_TABLE,
+                back_populates='services')
+
     @property
     def dependancies(self):
         """
@@ -120,9 +123,6 @@ class ServiceLowLevel(Service):
         Integer,
         nullable=False,
     )
-
-    groups = relation('ServiceGroup', secondary=SERVICE_GROUP_TABLE,
-                back_populates='services')
 
     def __init__(self, **kwargs):
         super(ServiceLowLevel, self).__init__(**kwargs)

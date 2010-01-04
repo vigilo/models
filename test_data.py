@@ -392,6 +392,8 @@ def add_HostApp(host, appserver, app, jid=None):
     DBSession.add(cls(**kwargs))
     DBSession.flush()
 
+add_HostApp('host1.example.com', 'proto4', 'Nagios', 'connector-nagios@localhost')
 add_HostApp('host2.example.com', 'proto4', 'Nagios', 'connector-nagios@localhost')
+add_HostApp('host3.example.com', 'proto4', 'Nagios', 'connector-nagios@localhost')
 add_HostApp('host2.example.com', 'proto4', 'Metrology')
 
