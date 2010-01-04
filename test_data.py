@@ -224,21 +224,22 @@ add_Dependency(('routeur1', 'Interface eth1'), ('routeur1', 'Interface eth0'))
 add_Dependency(('routeur2', 'Interface eth1'), ('routeur2', 'Interface eth0'))
 
 # HostGroup
-serveurs = DBSession.add(models.HostGroup(
+servers = models.HostGroup(
     name=u'Serveurs',
     parent=None,
-))
+)
+DBSession.add(servers)
 DBSession.flush()
 
 DBSession.add(models.HostGroup(
     name=u'Serveurs Linux',
-    parent=serveurs,
+    parent=servers,
 ))
 DBSession.flush()
 
 DBSession.add(models.HostGroup(
     name=u'Serveurs Windows',
-    parent=serveurs,
+    parent=servers,
 ))
 DBSession.flush()
 
@@ -328,34 +329,34 @@ def add_Service2ServiceGroup(lls, group):
     group.services.append(lls)
     DBSession.flush()
 
-add_Service2ServiceGroup(('Interface eth0', 'host1.example.com'), 'Services')
-add_Service2ServiceGroup(('Interface eth0', 'host2.example.com'), 'Services')
-add_Service2ServiceGroup(('Interface eth0', 'messagerie'), 'Services')
-add_Service2ServiceGroup(('Interface eth0', 'routeur1'), 'Services')
-add_Service2ServiceGroup(('Interface eth0', 'routeur2'), 'Services')
-add_Service2ServiceGroup(('Interface eth0', 'firewall'), 'Services')
-add_Service2ServiceGroup(('Interface eth1', 'host2.example.com'), 'Services')
-add_Service2ServiceGroup(('Interface eth1', 'host3.example.com'), 'Services')
-add_Service2ServiceGroup(('Interface eth1', 'routeur1'), 'Services')
-add_Service2ServiceGroup(('Interface eth1', 'routeur2'), 'Services')
-add_Service2ServiceGroup(('Interface eth1', 'firewall'), 'Services')
-add_Service2ServiceGroup(('Interface eth2', 'host2.example.com'), 'Services')
-add_Service2ServiceGroup(('UpTime', 'brouteur'), 'Services')
-add_Service2ServiceGroup(('UpTime', 'messagerie'), 'Services')
-add_Service2ServiceGroup(('UpTime', 'proto4'), 'Services')
-add_Service2ServiceGroup(('CPU', 'brouteur'), 'Services')
-add_Service2ServiceGroup(('CPU', 'messagerie'), 'Services')
-add_Service2ServiceGroup(('CPU', 'proto4'), 'Services')
-add_Service2ServiceGroup(('CPU', 'host1.example.com'), 'Services')
-add_Service2ServiceGroup(('Load', 'host1.example.com'), 'Services')
-add_Service2ServiceGroup(('Processes', 'brouteur'), 'Services')
-add_Service2ServiceGroup(('Processes', 'messagerie'), 'Services')
-add_Service2ServiceGroup(('Processes', 'proto4'), 'Services')
-add_Service2ServiceGroup(('Processes', 'host1.example.com'), 'Services')
-add_Service2ServiceGroup(('HTTPD', 'host1.example.com'), 'Services')
-add_Service2ServiceGroup(('HTTPD', 'host2.example.com'), 'Services')
-add_Service2ServiceGroup(('RAM', 'messagerie'), 'Services')
-add_Service2ServiceGroup(('RAM', 'host1.example.com'), 'Services')
+add_Service2ServiceGroup(('brouteur', 'UpTime'), 'Services')
+add_Service2ServiceGroup(('brouteur', 'CPU'), 'Services')
+add_Service2ServiceGroup(('brouteur', 'Processes'), 'Services')
+add_Service2ServiceGroup(('firewall', 'Interface eth0'), 'Services')
+add_Service2ServiceGroup(('firewall', 'Interface eth1'), 'Services')
+add_Service2ServiceGroup(('host1.example.com', 'CPU'), 'Services')
+add_Service2ServiceGroup(('host1.example.com', 'Load'), 'Services')
+add_Service2ServiceGroup(('host1.example.com', 'Processes'), 'Services')
+add_Service2ServiceGroup(('host1.example.com', 'HTTPD'), 'Services')
+add_Service2ServiceGroup(('host1.example.com', 'RAM'), 'Services')
+add_Service2ServiceGroup(('host1.example.com', 'Interface eth0'), 'Services')
+add_Service2ServiceGroup(('host2.example.com', 'Interface eth0'), 'Services')
+add_Service2ServiceGroup(('host2.example.com', 'Interface eth1'), 'Services')
+add_Service2ServiceGroup(('host2.example.com', 'Interface eth2'), 'Services')
+add_Service2ServiceGroup(('host2.example.com', 'HTTPD'), 'Services')
+add_Service2ServiceGroup(('host3.example.com', 'Interface eth1'), 'Services')
+add_Service2ServiceGroup(('messagerie', 'CPU'), 'Services')
+add_Service2ServiceGroup(('messagerie', 'Interface eth0'), 'Services')
+add_Service2ServiceGroup(('messagerie', 'Processes'), 'Services')
+add_Service2ServiceGroup(('messagerie', 'RAM'), 'Services')
+add_Service2ServiceGroup(('messagerie', 'UpTime'), 'Services')
+add_Service2ServiceGroup(('proto4', 'Processes'), 'Services')
+add_Service2ServiceGroup(('proto4', 'UpTime'), 'Services')
+add_Service2ServiceGroup(('proto4', 'CPU'), 'Services')
+add_Service2ServiceGroup(('routeur1', 'Interface eth0'), 'Services')
+add_Service2ServiceGroup(('routeur1', 'Interface eth1'), 'Services')
+add_Service2ServiceGroup(('routeur2', 'Interface eth0'), 'Services')
+add_Service2ServiceGroup(('routeur2', 'Interface eth1'), 'Services')
 
 # Application
 def add_Application(name):
