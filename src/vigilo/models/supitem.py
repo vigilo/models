@@ -90,6 +90,12 @@ class SupItem(DeclarativeBase, object):
         """  
         from vigilo.models import Host, ServiceHighLevel, ServiceLowLevel
         from sqlalchemy.sql.expression import and_
+
+        from vigilo.common.logging import get_logger
+        from vigilo.common.gettext import translate
+
+        LOGGER = get_logger(__name__)
+        _ = translate(__name__)
         
         # Si le nom du service vaut None, l'item est un hôte.
         if not servicename:
