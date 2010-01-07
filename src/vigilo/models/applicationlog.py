@@ -15,6 +15,10 @@ from .session import DBSession
 
 __all__ = ('ApplicationLog', )
 
+def l_(msg):
+    """Stub pour la fonction d'i18n."""
+    return unicode(msg)
+
 class ApplicationLog(DeclarativeBase, object):
     """
     Mémorise les connexions/déconnexions des utilisateurs.
@@ -33,11 +37,31 @@ class ApplicationLog(DeclarativeBase, object):
         primary_key=True, autoincrement=True, nullable=False,
     )
 
-    timestamp = Column(DateTime(timezone=False), default=datetime.now())
+    username = Column(
+        Unicode(255),
+        nullable=False,
+    )
 
-    message = Column(UnicodeText)
+    application = Column(
+        Unicode(20),
+        nullable=True,
+    )
 
-    ip = Column(Unicode(40))
+    timestamp = Column(
+        DateTime(timezone=False),
+        default=datetime.now(),
+        nullable=False,
+    )
+
+    message = Column(
+        UnicodeText,
+        nullable=False,
+    )
+
+    ip = Column(
+        Unicode(40),
+        nullable=True,
+    )
 
 
     def __init__(self, **kwargs):
@@ -59,12 +83,14 @@ class ApplicationLog(DeclarativeBase, object):
             la connexion survient.
         """
 
-        message = u"User '%s' logged in (%s)." % (username, application)
+        message = l_("User logged in.")
         if not ip is None:
             ip = u'' + ip
         log = cls(
             timestamp=datetime.now(),
             message=message,
+            username=username,
+            application=application,
             ip=ip,
         )
         DBSession.add(log)
@@ -73,8 +99,6 @@ class ApplicationLog(DeclarativeBase, object):
         except (InvalidRequestError, IntegrityError):
             # XXX log error before we pass.
             pass
-        else:
-            transaction.commit()
 
     @classmethod
     def add_logout(cls, username, ip, application):
@@ -91,12 +115,14 @@ class ApplicationLog(DeclarativeBase, object):
             la déconnexion survient.
         """
 
-        message = u"User '%s' logged out (%s)." % (username, application)
+        message = l_("User logged out.")
         if not ip is None:
             ip = u'' + ip
         log = cls(
             timestamp=datetime.now(),
             message=message,
+            username=username,
+            application=application,
             ip=ip,
         )
         DBSession.add(log)
@@ -105,6 +131,4 @@ class ApplicationLog(DeclarativeBase, object):
         except (InvalidRequestError, IntegrityError):
             # XXX log error before we pass.
             pass
-        else:
-            transaction.commit()
 
