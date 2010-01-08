@@ -24,9 +24,11 @@ class ApplicationLog(DeclarativeBase, object):
     Mémorise les connexions/déconnexions des utilisateurs.
     
     @ivar idlog: Identifiant auto-généré de l'entrée.
+    @ivar username: Nom de l'utilisateur à l'origine de l'événement.
+    @ivar application: Nom de l'application dans lequel l'événement a eu lieu.
     @ivar timestamp: Horodateur indiquant à quel moment a eu lieu l'événement
         enregistré.
-    @ivar message: Un message décrivant le type d'événement enregistré.
+    @ivar message: Message décrivant le type d'événement enregistré.
     @ivar ip: Adresse IP de l'utilisateur lorsque l'événement a été enregistré.
     """
 
