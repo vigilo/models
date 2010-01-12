@@ -88,7 +88,7 @@ class ModelTest(object):
 
 def runtests(*args):
     """This is the method called when running unit tests."""
-    sys.argv[1:0] = ['--cover-inclusive',
+    sys.argv[1:0] = ['--with-coverage', '--cover-inclusive',
                      '--cover-erase', '--cover-package', 'models',
                      'vigilo.models.tests']
     nose.main()
