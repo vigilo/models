@@ -19,8 +19,8 @@ class MapLink(DeclarativeBase, object):
     """
     Informations sur une liaison de carte.
     @ivar idmaplink: Identifiant de la liaison.
-    @ivar from_node: Noeud de départ de la liaison.
-    @ivar to_node: Noeud d'arrivée de la liaison.
+    @ivar idfrom_node: Noeud de départ de la liaison.
+    @ivar idto_node: Noeud d'arrivée de la liaison.
     @ivar idmap: Référence vers l'identifiant de carte de la liaison. 
     """
     __tablename__ = bdd_basename + 'maplink'
@@ -30,14 +30,14 @@ class MapLink(DeclarativeBase, object):
         primary_key=True, autoincrement=True, nullable=False,
     )
 
-    from_node = Column(
+    idfrom_node = Column(
         Integer,
         ForeignKey(
             bdd_basename + 'mapnode.idmapnode',
             ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
     
-    to_node = Column(
+    idto_node = Column(
         Integer,
         ForeignKey(
             bdd_basename + 'mapnode.idmapnode',
@@ -55,7 +55,10 @@ class MapLink(DeclarativeBase, object):
 
     __mapper_args__ = {'polymorphic_on': type_link}
 
-
+    from_node = relation('MapNode', foreign_keys=[idto_node], lazy=True)
+    
+    to_node = relation('MapNode', foreign_keys=[idfrom_node], lazy=True)
+ 
     def __init__(self, **kwargs):
         """Initialise une liaison."""
         super(MapLink, self).__init__(**kwargs)
@@ -76,7 +79,8 @@ class MapLink(DeclarativeBase, object):
         """
         Renvoie la liaison dont le nom est L{linkname}.
         
-        @param linkname: Nom de la liaison voulue.
+        @param linkname: Nom de la lia= relation('MapNode', foreign_keys=[idfrom_node], lazy=True)
+ison voulue.
         @type linkname: C{unicode}
         @return: La liaison demandée.
         @rtype: L{MapLink}
@@ -125,7 +129,7 @@ class MapServiceLink(MapLink):
         )
     
     map = relation('Map',
-        back_populates='links') 
+        back_populates='links', lazy=True) 
     
         
     def __init__(self, **kwargs):
