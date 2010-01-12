@@ -2,7 +2,6 @@
 """Bibliothèque pour faciliter certaines opérations sur le modèle."""
 __all__ = ('sql_escape_like', )
 
-# TODO: Ajouter des tests unitaires pour cette fonction (facile à tester).
 def sql_escape_like(s):
     """
     Renvoie une chaine de caractères compatible avec l'opérateur
