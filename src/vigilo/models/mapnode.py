@@ -116,6 +116,8 @@ class MapNodeHost(MapNode):
         Unicode(255)
         )
     
+    host = relation('Host', lazy=True)
+    
     
     def __init__(self, **kwargs):
         super(MapNodeHost, self).__init__(**kwargs)
