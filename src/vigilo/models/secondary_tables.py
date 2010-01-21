@@ -165,3 +165,28 @@ GRAPH_PERFDATASOURCE_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
+
+APPLICATION_GROUP_TABLE = Table(
+    bdd_basename + 'appgroup', metadata,
+    Column('idapp', Integer, ForeignKey(
+                bdd_basename + 'application.idapp',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False),
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'group.idgroup',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+
+USAGE_TABLE = Table(
+    bdd_basename + 'usage', metadata,
+    Column('idvigiloserver', Integer, ForeignKey(
+                bdd_basename + 'vigiloserver.idvigiloserver',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False),
+    Column('idgroup', Integer, ForeignKey(
+                bdd_basename + 'group.idgroup',
+                onupdate="CASCADE", ondelete="CASCADE"),
+            primary_key=True, autoincrement=False)
+)
+

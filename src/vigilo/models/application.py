@@ -5,8 +5,10 @@ from __future__ import absolute_import
 
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from .secondary_tables import APPLICATION_GROUP_TABLE
 from .session import DBSession
 
 __all__ = ('Application', )
@@ -26,6 +28,9 @@ class Application(DeclarativeBase, object):
         nullable=False,
         unique=True,
     )
+    
+    groups = relation('AppGroup', secondary=APPLICATION_GROUP_TABLE,
+                            back_populates='applications')
 
     def __init__(self, **kwargs):
         """

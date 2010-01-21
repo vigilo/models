@@ -14,7 +14,9 @@ from .secondary_tables import GROUP_PERMISSION_TABLE, \
                                 HOST_GROUP_TABLE, \
                                 SERVICE_GROUP_TABLE, \
                                 MAP_GROUP_TABLE, \
-                                GRAPH_GROUP_TABLE
+                                GRAPH_GROUP_TABLE, \
+                                APPLICATION_GROUP_TABLE, \
+                                USAGE_TABLE
 
 __all__ = ('HostGroup', 'ServiceGroup', 'MapGroup')
 
@@ -177,5 +179,23 @@ class GraphGroup(Group):
 
     graphs = relation('Graph', secondary=GRAPH_GROUP_TABLE,
                     back_populates='groups')
+    
+
+class AppGroup(Group):
+    """
+    Groupe d'applicationss.
+    @ivar applications: Liste d'instances de L{Application}s contenus dans ce groupe.
+    """
+
+    __mapper_args__ = {'polymorphic_identity': u'appgroup'}
+
+    #permissions = relation('Permission', secondary=APPLICATION_PERMISSION_TABLE,
+    #                back_populates='appgroups')
+    
+    applications = relation('Application', secondary=APPLICATION_GROUP_TABLE,
+                    back_populates='groups')
+    
+    vigiloservers = relation('VigiloServer', secondary=USAGE_TABLE,
+                    back_populates='appgroups')
     
 

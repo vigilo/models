@@ -13,6 +13,7 @@ __all__ = (
         'Map', 'MapServiceLink', 'Legend', 'Service', 'StateName',
         'HostApplication', 'HostBusApplication', 'Application',
         'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
+        'VigiloServer', 'AppGroup', 'Ventilation'
         )
 
 
@@ -23,7 +24,7 @@ from .graph import Graph
 from .host import Host
 from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
-from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup
+from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup, AppGroup
 from .supitem import SupItem
 from .service import ServiceLowLevel, ServiceHighLevel, Service
 from .dependency import Dependency
@@ -46,4 +47,6 @@ from .application import Application
 from .impactedpath import ImpactedPath
 from .impactedhls import ImpactedHLS
 from .downtime import Downtime, DowntimeStatus
+from .vigiloserver import VigiloServer
+from .ventilation import Ventilation
 

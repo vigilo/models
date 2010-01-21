@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for ServiceGroup class"""
-from vigilo.models import ServiceGroup, GraphGroup, MapGroup, HostGroup
+from vigilo.models import ServiceGroup, GraphGroup, MapGroup, HostGroup, AppGroup
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -48,4 +48,13 @@ class TestGraphGroup(ModelTest):
     def __init__(self):
         ModelTest.__init__(self)
         
+        
+class TestAppGroup(ModelTest):
+    """Test de la table GraphGroup"""
+
+    klass = AppGroup
+    attrs = dict(name = u"monappgroup")
+
+    def __init__(self):
+        ModelTest.__init__(self)
 
