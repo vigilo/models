@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-"""Test suite for ServiceLowLevel & ServiceHighLevel classes"""
-from vigilo.models import Host, ServiceLowLevel, ServiceHighLevel
+"""Test suite for LowLevelService & HighLevelService classes"""
+from vigilo.models import Host, LowLevelService, HighLevelService
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
-class TestServiceLowLevel(ModelTest):
-    """Test de la classe ServiceLowLevel."""
+class TestLowLevelService(ModelTest):
+    """Test de la classe LowLevelService."""
 
-    klass = ServiceLowLevel
+    klass = LowLevelService
     attrs = {
         'servicename': u'myservice',
         'op_dep': u'+',
@@ -34,10 +34,10 @@ class TestServiceLowLevel(ModelTest):
         DBSession.flush()
         return dict(host=host)
 
-class TestServiceHighLevel(ModelTest):
-    """Test de la classe ServiceHighLevel."""
+class TestHighLevelService(ModelTest):
+    """Test de la classe HighLevelService."""
 
-    klass = ServiceHighLevel
+    klass = HighLevelService
     attrs = {
         'servicename': u'myservice',
         'op_dep': u'+',

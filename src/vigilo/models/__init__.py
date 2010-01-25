@@ -6,7 +6,7 @@ __all__ = (
         'EventHistory', 'Event', 'CorrEvent',
         'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass',
         'PerfDataSource', 'ServiceGroup',
-        'SupItem', 'ServiceLowLevel', 'ServiceHighLevel',
+        'SupItem', 'LowLevelService', 'HighLevelService',
         'Dependency', 'Version', 'State', 'Permission',
         'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
         'ApplicationLog', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
@@ -26,7 +26,7 @@ from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
 from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup, AppGroup
 from .supitem import SupItem
-from .service import ServiceLowLevel, ServiceHighLevel, Service
+from .service import LowLevelService, HighLevelService, Service
 from .dependency import Dependency
 from .version import Version
 from .state import State

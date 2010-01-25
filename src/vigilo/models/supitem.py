@@ -49,10 +49,10 @@ class SupItem(DeclarativeBase, object):
         @return: Une C{Query} portant sur les éléments demandés.
         @rtype: C{sqlalchemy.orm.query.Query}.
         """
-        from vigilo.models import ServiceHighLevel, ImpactedHLS, ImpactedPath
+        from vigilo.models import HighLevelService, ImpactedHLS, ImpactedPath
 
         if not args:
-            args = [ServiceHighLevel]
+            args = [HighLevelService]
 
         subquery = DBSession.query(
             functions.max(ImpactedHLS.distance).label('distance'),
@@ -89,7 +89,7 @@ class SupItem(DeclarativeBase, object):
         @return: L'identifiant d'un host, un SHN, ou un SBN.
         @rtype: C{int}
         """  
-        from vigilo.models import Host, ServiceHighLevel, ServiceLowLevel
+        from vigilo.models import Host, HighLevelService, LowLevelService
         from sqlalchemy.sql.expression import and_
 
         from vigilo.common.logging import get_logger
@@ -113,8 +113,8 @@ class SupItem(DeclarativeBase, object):
         
         # Lorsque l'item est un service de haut niveau.
         if not hostname:
-            service = DBSession.query(ServiceHighLevel.idservice
-                        ).filter(ServiceHighLevel.servicename == servicename,
+            service = DBSession.query(HighLevelService.idservice
+                        ).filter(HighLevelService.servicename == servicename,
                         ).first()
                     
             if service:
@@ -125,12 +125,12 @@ class SupItem(DeclarativeBase, object):
             return None
         
         # Sinon, l'item est un service de bas niveau.
-        service = DBSession.query(ServiceLowLevel.idservice
+        service = DBSession.query(LowLevelService.idservice
                     ).join(
-                        (Host, ServiceLowLevel.idhost == Host.idhost)
+                        (Host, LowLevelService.idhost == Host.idhost)
                     ).filter(
                          and_(
-                            ServiceLowLevel.servicename == servicename,
+                            LowLevelService.servicename == servicename,
                             Host.name == hostname
                         )
                     ).first()

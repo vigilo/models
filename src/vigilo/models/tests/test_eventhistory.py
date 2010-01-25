@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for EventHistory class"""
-from vigilo.models import EventHistory, Host, ServiceLowLevel, Event
+from vigilo.models import EventHistory, Host, LowLevelService, Event
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from datetime import datetime
@@ -34,7 +34,7 @@ class TestEventHistory(ModelTest):
         )
         DBSession.add(host)
 
-        service = ServiceLowLevel(
+        service = LowLevelService(
             host=host,
             servicename=u'monservice',
             command=u'halt',

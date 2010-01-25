@@ -3,7 +3,7 @@
 from vigilo.models.tests import ModelTest
 from nose.tools import assert_equals
 from vigilo.models.session import DBSession
-from vigilo.models import Host, ServiceLowLevel, User
+from vigilo.models import Host, LowLevelService, User
 from vigilo.models import Downtime, DowntimeStatus
 
 from datetime import datetime
@@ -67,7 +67,7 @@ class TestDowntime(ModelTest):
         )
         DBSession.add(host)
 
-        service = ServiceLowLevel(
+        service = LowLevelService(
             host=host,
             servicename=u'myservice',
             command=u'halt',

@@ -117,13 +117,13 @@ class MapServiceLink(MapLink):
     idref = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'servicelowlevel.idservice',
+            bdd_basename + 'lowlevelservice.idservice',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
     )
 
-    reference = relation('ServiceLowLevel')
+    reference = relation('LowLevelService')
 
     idgraph = Column(
         Integer,

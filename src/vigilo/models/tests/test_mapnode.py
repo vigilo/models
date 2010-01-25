@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Test suite for ServiceLowLevel & ServiceHighLevel classes"""
-from vigilo.models import Host, ServiceLowLevel, Map, MapNodeHost\
+"""Test suite for LowLevelService & HighLevelService classes"""
+from vigilo.models import Host, LowLevelService, Map, MapNodeHost\
                             , MapNodeService
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
@@ -92,7 +92,7 @@ class TestMapNodeService(ModelTest):
         )
         DBSession.add(host)
         DBSession.flush()
-        service=ServiceLowLevel(
+        service=LowLevelService(
             servicename=u'myservice',
             op_dep=u'+',
             weight=100,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for Event class"""
-from vigilo.models import Event, Host, ServiceLowLevel, StateName
+from vigilo.models import Event, Host, LowLevelService, StateName
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true, assert_equal
@@ -41,7 +41,7 @@ class TestEvent(ModelTest):
         )
         DBSession.add(host)
 
-        service = ServiceLowLevel(
+        service = LowLevelService(
             host=host,
             servicename=u'myservice',
             command=u'halt',

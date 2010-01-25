@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for the CorrEvent class"""
-from vigilo.models import CorrEvent, Event, ServiceLowLevel, Host
+from vigilo.models import CorrEvent, Event, LowLevelService, Host
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true
@@ -34,7 +34,7 @@ class TestCorrEvent(ModelTest):
         DBSession.add(host)
         DBSession.flush()
 
-        service = ServiceLowLevel(
+        service = LowLevelService(
             host=host,
             servicename=u'myservice',
             command=u'halt',

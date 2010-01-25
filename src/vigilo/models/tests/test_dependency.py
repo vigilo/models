@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for Dependency class"""
-from vigilo.models import Dependency, Host, ServiceLowLevel
+from vigilo.models import Dependency, Host, LowLevelService
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -26,7 +26,7 @@ class TestDependency(ModelTest):
         )
         DBSession.add(host)
 
-        service = ServiceLowLevel(
+        service = LowLevelService(
             host=host,
             servicename=u'myservice',
             command=u'halt',

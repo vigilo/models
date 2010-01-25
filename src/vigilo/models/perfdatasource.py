@@ -36,13 +36,13 @@ class PerfDataSource(DeclarativeBase, object):
     idservice = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'servicelowlevel.idservice',
+            bdd_basename + 'lowlevelservice.idservice',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
     )
 
-    service = relation('ServiceLowLevel')
+    service = relation('LowLevelService')
     
     graphs = relation('Graph', secondary=GRAPH_PERFDATASOURCE_TABLE,
                          back_populates='perfdatasources', lazy=True)

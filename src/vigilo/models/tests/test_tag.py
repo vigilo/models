@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for Tag class"""
-from vigilo.models import Tag, Host, ServiceLowLevel
+from vigilo.models import Tag, Host, LowLevelService
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_equals
@@ -31,7 +31,7 @@ class TestTag(ModelTest):
         )
         DBSession.add(host)
 
-        service = ServiceLowLevel(
+        service = LowLevelService(
             host=host,
             servicename=u'myservice',
             op_dep=u'+',
@@ -47,7 +47,7 @@ class TestTag(ModelTest):
         assert_equals(1, len(host.tags))
         assert_equals(self.obj, host.tags[0])
 
-        service = ServiceLowLevel.by_host_service_name(
+        service = LowLevelService.by_host_service_name(
                     hostname=u'myhost', servicename=u'myservice')
         assert_equals(1, len(service.tags))
         assert_equals(self.obj, service.tags[0])

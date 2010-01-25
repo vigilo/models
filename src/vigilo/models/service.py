@@ -80,13 +80,13 @@ class Service(SupItem):
         return self.servicename
 
 
-class ServiceLowLevel(Service):
+class LowLevelService(Service):
     """
     Service de bas niveau (service technique).
 
     @ivar command: Commande à exécuter pour vérifier l'état du service.
     """
-    __tablename__ = bdd_basename + 'servicelowlevel'
+    __tablename__ = bdd_basename + 'lowlevelservice'
     __table_args__ = (
         UniqueConstraint('idservice', 'idhost'),
         {}
@@ -112,7 +112,7 @@ class ServiceLowLevel(Service):
     )
 
     host = relation('Host', foreign_keys=[idhost],
-        primaryjoin='ServiceLowLevel.idhost == Host.idsupitem')
+        primaryjoin='LowLevelService.idhost == Host.idsupitem')
 
     command = Column(
         UnicodeText,
@@ -125,7 +125,7 @@ class ServiceLowLevel(Service):
     )
 
     def __init__(self, **kwargs):
-        super(ServiceLowLevel, self).__init__(**kwargs)
+        super(LowLevelService, self).__init__(**kwargs)
 
     @classmethod
     def by_host_service_name(cls, hostname, servicename):
@@ -138,7 +138,7 @@ class ServiceLowLevel(Service):
         @param servicename: Nom du service voulu.
         @type servicename: C{unicode}
         @return: Le service de bas niveau demandé.
-        @rtype: L{ServiceLowLevel} ou None
+        @rtype: L{LowLevelService} ou None
         """
         return DBSession.query(cls).join(
                 (Host, Host.idsupitem == cls.idhost)
@@ -150,7 +150,7 @@ class ServiceLowLevel(Service):
         return "%s (%s)" % (self.servicename, self.host.name)
 
 
-class ServiceHighLevel(Service):
+class HighLevelService(Service):
     """
     Service de haut niveau.
 
@@ -161,7 +161,7 @@ class ServiceHighLevel(Service):
     @ivar critical_threshold: Seuil à partir duquel le service passe de
         l'état WARNING à l'état CRITICAL.
     """
-    __tablename__ = bdd_basename + 'servicehighlevel'
+    __tablename__ = bdd_basename + 'highlevelservice'
     __mapper_args__ = {'polymorphic_identity': u'highlevel'}
 
     idservice = Column(
@@ -201,7 +201,7 @@ class ServiceHighLevel(Service):
     impacts = relation('ImpactedHLS', back_populates='hls', lazy=True)
 
     def __init__(self, **kwargs):
-        super(ServiceHighLevel, self).__init__(**kwargs)
+        super(HighLevelService, self).__init__(**kwargs)
 
     @classmethod
     def by_service_name(cls, servicename):
@@ -211,7 +211,7 @@ class ServiceHighLevel(Service):
         @param servicename: Nom du service de haut niveau voulu.
         @type servicename: C{unicode}
         @return: Le service de haut niveau demandé.
-        @rtype: L{ServiceHighLevel} ou None
+        @rtype: L{HighLevelService} ou None
         """
         return DBSession.query(cls).filter(
             cls.servicename == servicename).first()

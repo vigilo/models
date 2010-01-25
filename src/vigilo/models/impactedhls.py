@@ -41,13 +41,13 @@ class ImpactedHLS(DeclarativeBase, object):
     idhls = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'servicehighlevel.idservice',
+            bdd_basename + 'highlevelservice.idservice',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,
     )
 
-    hls = relation('ServiceHighLevel', back_populates='impacts', lazy=True)
+    hls = relation('HighLevelService', back_populates='impacts', lazy=True)
 
     distance = Column(
         Integer,

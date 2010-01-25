@@ -9,7 +9,7 @@ from vigilo.models.session import DBSession
 
 from vigilo.models.tests import setup_db, teardown_db
 
-from vigilo.models import Host, ServiceLowLevel, ServiceHighLevel
+from vigilo.models import Host, LowLevelService, HighLevelService
 
 from vigilo.models.supitem import SupItem
     
@@ -36,7 +36,7 @@ class TestGetSupItem(unittest.TestCase):
         DBSession.flush()
         
         # Ajout d'un service de bas niveau dans la BDD
-        lls1 = ServiceLowLevel(
+        lls1 = LowLevelService(
             servicename = u'Processes',
             host = host1,
             command = u'halt',
@@ -47,7 +47,7 @@ class TestGetSupItem(unittest.TestCase):
         DBSession.flush()
         
         # Ajout d'un service de haut niveau dans la BDD
-        hls1 = ServiceHighLevel(
+        hls1 = HighLevelService(
             servicename = u'Connexion',
             message = u'Ouch',
             warning_threshold = 300,

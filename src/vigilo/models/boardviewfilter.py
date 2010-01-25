@@ -29,13 +29,13 @@ class BoardViewFilter(DeclarativeBase, object):
     idservice = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'servicelowlevel.idservice',
+            bdd_basename + 'lowlevelservice.idservice',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
     )
 
-    service = relation('ServiceLowLevel')
+    service = relation('LowLevelService')
 
     message = Column(UnicodeText)
 

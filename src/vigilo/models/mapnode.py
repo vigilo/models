@@ -150,13 +150,13 @@ class MapNodeService(MapNode):
     idservice = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'servicelowlevel.idservice',
+            bdd_basename + 'lowlevelservice.idservice',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
     )
 
-    service = relation('ServiceLowLevel')
+    service = relation('LowLevelService')
 
     serviceicon = Column(
         Unicode(255)

@@ -93,7 +93,7 @@ add_Host('routeur1')
 add_Host('routeur2')
 add_Host('firewall')
 
-# ServiceLowLevel
+# LowLevelService
 def add_LowLevelService(name, hostident, weight=100):
     name = u'' + name
     kwargs = {
@@ -111,7 +111,7 @@ def add_LowLevelService(name, hostident, weight=100):
     else:
         kwargs['host'] = hostident
 
-    DBSession.add(models.ServiceLowLevel(**kwargs))
+    DBSession.add(models.LowLevelService(**kwargs))
     DBSession.flush()
 
 add_LowLevelService('Interface eth0', 'host1.example.com')
@@ -143,8 +143,8 @@ add_LowLevelService('HTTPD', 'host2.example.com')
 add_LowLevelService('RAM', 'messagerie')
 add_LowLevelService('RAM', 'host1.example.com')
 
-# ServiceHighLevel
-DBSession.add(models.ServiceHighLevel(
+# HighLevelService
+DBSession.add(models.HighLevelService(
     servicename=u'Connexion',
     op_dep=u'+',
     message=u'Ouch',
@@ -155,7 +155,7 @@ DBSession.add(models.ServiceHighLevel(
 ))
 DBSession.flush()
 
-DBSession.add(models.ServiceHighLevel(
+DBSession.add(models.HighLevelService(
     servicename=u'Portail web',
     op_dep=u'&',
     message=u'Ouch',
@@ -176,12 +176,12 @@ def add_Dependency(dependent, depended):
         host, service = dependent
         if host is None:        # HLS
             kwargs['supitem1'] = \
-                models.ServiceHighLevel.by_service_name(u'' + service)
+                models.HighLevelService.by_service_name(u'' + service)
         elif service is None:   # Host
             kwargs['supitem1'] = models.Host.by_host_name(u'' + host)
         else:                   # LLS
             kwargs['supitem1'] = \
-                models.ServiceLowLevel.by_host_service_name(
+                models.LowLevelService.by_host_service_name(
                     u'' + host, u'' + service)
 
     if isinstance(depended, int):
@@ -190,12 +190,12 @@ def add_Dependency(dependent, depended):
         host, service = depended
         if host is None:        # HLS
             kwargs['supitem2'] = \
-                models.ServiceHighLevel.by_service_name(u'' + service)
+                models.HighLevelService.by_service_name(u'' + service)
         elif service is None:   # Host
             kwargs['supitem2'] = models.Host.by_host_name(u'' + host)
         else:                   # LLS
             kwargs['supitem2'] = \
-                models.ServiceLowLevel.by_host_service_name(
+                models.LowLevelService.by_host_service_name(
                     u'' + host, u'' + service)
 
     DBSession.add(models.Dependency(**kwargs))
@@ -323,7 +323,7 @@ def add_Service2ServiceGroup(lls, group):
 
     if isinstance(lls, tuple):
         host, service = lls
-        lls = models.ServiceLowLevel.by_host_service_name(
+        lls = models.LowLevelService.by_host_service_name(
             u'' + host, u'' + service)
 
     group.services.append(lls)

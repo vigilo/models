@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Test suite for ServiceLowLevel & ServiceHighLevel classes"""
-from vigilo.models import Host, ServiceLowLevel, Map, MapServiceLink, MapNodeHost
+"""Test suite for LowLevelService & HighLevelService classes"""
+from vigilo.models import Host, LowLevelService, Map, MapServiceLink, MapNodeHost
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from datetime import datetime
@@ -50,7 +50,7 @@ class TestMapServiceLink(ModelTest):
             weight=41,
         )
         DBSession.add(host2)
-        reference=ServiceLowLevel(
+        reference=LowLevelService(
             servicename=u'myservice',
             op_dep=u'+',
             weight=100,

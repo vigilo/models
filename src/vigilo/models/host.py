@@ -86,8 +86,8 @@ class Host(SupItem):
     hostclasses = relation('HostClass', secondary=HOST_HOSTCLASS_TABLE,
         back_populates='hosts', lazy=True)
 
-    services = relation('ServiceLowLevel', lazy=True,
-        primaryjoin='Host.idhost == ServiceLowLevel.idhost')
+    services = relation('LowLevelService', lazy=True,
+        primaryjoin='Host.idhost == LowLevelService.idhost')
 
     def __init__(self, **kwargs):
         """Initialise un hôte."""

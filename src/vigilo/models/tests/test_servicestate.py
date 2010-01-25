@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for State class"""
-from vigilo.models import State, Host, ServiceLowLevel
+from vigilo.models import State, Host, LowLevelService
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -41,7 +41,7 @@ class TestServiceState(ModelTest):
         )
         DBSession.add(host)
 
-        service = ServiceLowLevel(
+        service = LowLevelService(
             host=host,
             servicename=u'myservice',
             command=u'halt',

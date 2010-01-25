@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Test suite for ServiceLowLevel & ServiceHighLevel classes"""
+"""Test suite for LowLevelService & HighLevelService classes"""
 from vigilo.models import Map
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession

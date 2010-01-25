@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for BoardViewFilter class"""
-from vigilo.models import BoardViewFilter, Host, ServiceLowLevel, User
+from vigilo.models import BoardViewFilter, Host, LowLevelService, User
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -38,7 +38,7 @@ class TestBoardViewFilter(ModelTest):
         )
         DBSession.add(host)
 
-        service = ServiceLowLevel(
+        service = LowLevelService(
             host=host,
             servicename=u'myservice',
             command=u'halt',

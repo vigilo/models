@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for ImpactedHLS class"""
-from vigilo.models import ServiceHighLevel, ImpactedHLS, ImpactedPath, Host
+from vigilo.models import HighLevelService, ImpactedHLS, ImpactedPath, Host
 from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
@@ -18,7 +18,7 @@ class TestImpactedHLS(ModelTest):
 
     def do_get_dependencies(self):
         """Création des dépendances du test."""
-        hls = ServiceHighLevel(
+        hls = HighLevelService(
             servicename=u'HLS',
             op_dep=u'+',
             message=u'Ouch',
