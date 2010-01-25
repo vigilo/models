@@ -54,21 +54,22 @@ class SupItem(DeclarativeBase, object):
         if not args:
             args = [HighLevelService]
 
-        subquery = DBSession.query(
-            functions.max(ImpactedHLS.distance).label('distance'),
-            ImpactedHLS.idpath
-        ).join(
-            (ImpactedPath, ImpactedPath.idpath == ImpactedHLS.idpath)
-        ).group_by(ImpactedHLS.idpath).subquery()
+        imp_hls1 = aliased(ImpactedHLS)
+        imp_hls2 = aliased(ImpactedHLS)
 
-        ends = aliased(ImpactedHLS, subquery)
+        subquery = DBSession.query(
+            functions.max(imp_hls1.distance).label('distance'),
+            imp_hls1.idpath
+        ).join(
+            (ImpactedPath, ImpactedPath.idpath == imp_hls1.idpath)
+        ).filter(ImpactedPath.idsupitem == self.idsupitem
+        ).group_by(imp_hls1.idpath).subquery()
 
         services_query = DBSession.query(*args).distinct(
-            ).join(
-                ImpactedHLS,
-                (ends, ends.idpath == ImpactedHLS.idpath),
-            ).filter(ImpactedHLS.distance == ends.distance
-            )
+        ).join(
+            (imp_hls2, HighLevelService.idservice == imp_hls2.idhls),
+            (subquery, subquery.c.idpath == imp_hls2.idpath),
+        ).filter(imp_hls2.distance == subquery.c.distance)
 
         return services_query
  
