@@ -363,37 +363,80 @@ def add_Application(name):
     DBSession.add(models.Application(name=u'' + name))
     DBSession.flush()
 
-add_Application('Nagios')
-add_Application('Metrology')
+add_Application('nagios')
+add_Application('collector')
+add_Application('connector-nagios')
 
-# HostApplication/HostBusApplication
-def add_HostApp(host, appserver, app, jid=None):
+# VigiloServer
+def add_VigiloServer(name, description=None):
+    DBSession.add(models.VigiloServer(
+        name=u'' + name,
+        description=description,
+    ))
+    DBSession.flush()
+
+add_VigiloServer('foo')
+add_VigiloServer('bar')
+add_VigiloServer('baz')
+
+# Ventilation
+def add_Ventilation(host, vigiloserver, app):
     kwargs = {}
-
-    if jid:
-        kwargs['jid'] = u'' + jid
 
     if isinstance(host, basestring):
         kwargs['host'] = models.Host.by_host_name(u'' + host)
     elif isinstance(host, int):
         kwargs['idhost'] = host
+    else:
+        kwargs['host'] = host
 
-    if isinstance(appserver, basestring):
-        kwargs['appserver'] = models.Host.by_host_name(u'' + appserver)
-    elif isinstance(appserver, int):
-        kwargs['idappserver'] = appserver
+    if isinstance(vigiloserver, basestring):
+        kwargs['vigiloserver'] = models.VigiloServer.by_vigiloserver_name(
+                                        u'' + vigiloserver)
+    elif isinstance(vigiloserver, int):
+        kwargs['idvigiloserver'] = vigiloserver
+    else:
+        kwargs['vigiloserver'] = vigiloserver
 
     if isinstance(app, basestring):
         kwargs['application'] = models.Application.by_app_name(u'' + app)
     elif isinstance(app, int):
         kwargs['idapp'] = app
+    else:
+        kwargs['application'] = app
 
-    cls = (models.HostBusApplication, models.HostApplication)[jid is None]
-    DBSession.add(cls(**kwargs))
+    DBSession.add(models.Ventilation(**kwargs))
     DBSession.flush()
 
-add_HostApp('host1.example.com', 'proto4', 'Nagios', 'connector-nagios@localhost')
-add_HostApp('host2.example.com', 'proto4', 'Nagios', 'connector-nagios@localhost')
-add_HostApp('host3.example.com', 'proto4', 'Nagios', 'connector-nagios@localhost')
-add_HostApp('host2.example.com', 'proto4', 'Metrology')
+add_Ventilation('host1.example.com', 'foo', 'nagios')
+add_Ventilation('host2.example.com', 'bar', 'nagios')
+add_Ventilation('host3.example.com', 'baz', 'nagios')
+
+# Installation
+def add_Installation(vigiloserver, app, jid):
+    kwargs = {}
+
+    if isinstance(vigiloserver, basestring):
+        kwargs['vigiloserver'] = models.VigiloServer.by_vigiloserver_name(
+                                        u'' + vigiloserver)
+    elif isinstance(vigiloserver, int):
+        kwargs['idvigiloserver'] = vigiloserver
+    else:
+        kwargs['vigiloserver'] = vigiloserver
+
+    if isinstance(app, basestring):
+        kwargs['application'] = models.Application.by_app_name(u'' + app)
+    elif isinstance(app, int):
+        kwargs['idapp'] = app
+    else:
+        kwargs['application'] = app
+
+    kwargs['jid'] = u'' + jid
+
+    DBSession.add(models.Installation(**kwargs))
+    DBSession.flush()
+
+add_Installation('foo', 'nagios', 'connector-nagios@localhost')
+add_Installation('bar', 'nagios', 'connector-nagios@localhost')
+add_Installation('baz', 'nagios', 'connector-nagios@localhost')
 

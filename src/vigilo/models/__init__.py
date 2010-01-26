@@ -11,9 +11,8 @@ __all__ = (
         'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
         'ApplicationLog', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
         'Map', 'MapServiceLink', 'Legend', 'Service', 'StateName',
-        'HostApplication', 'HostBusApplication', 'Application',
+        'Application', 'VigiloServer', 'Ventilation', 'Installation',
         'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
-        'VigiloServer', 'AppGroup', 'Ventilation'
         )
 
 
@@ -24,7 +23,7 @@ from .graph import Graph
 from .host import Host
 from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
-from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup, AppGroup
+from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup
 from .supitem import SupItem
 from .service import LowLevelService, HighLevelService, Service
 from .dependency import Dependency
@@ -42,11 +41,11 @@ from .mapnode import MapNode, MapNodeHost, MapNodeService
 from .map import Map
 from .maplink import MapLink, MapServiceLink, MapSegment
 from .legend import Legend
-from .hostapp import HostApplication, HostBusApplication
 from .application import Application
 from .impactedpath import ImpactedPath
 from .impactedhls import ImpactedHLS
 from .downtime import Downtime, DowntimeStatus
 from .vigiloserver import VigiloServer
 from .ventilation import Ventilation
+from .installation import Installation
 

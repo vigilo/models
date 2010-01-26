@@ -9,14 +9,13 @@ from sqlalchemy.orm import relation
 
 from .vigilo_bdd_config import bdd_basename, DeclarativeBase
 from .session import DBSession
-from .secondary_tables import USAGE_TABLE
 
 __all__ = ('VigiloServer', )
 
 class VigiloServer(DeclarativeBase, object):
     """
     Vigilo server class.
-    
+
     @ivar name: Nom complet (FQDN) du serveur.
     @ivar description: Une description intelligible du serveur.
     @ivar hostgroups: Liste des groupes d'hôtes auxquels cet hôte appartient.
@@ -27,20 +26,22 @@ class VigiloServer(DeclarativeBase, object):
     
     idvigiloserver = Column(
         Integer,
-        primary_key=True, autoincrement=True,
+        primary_key=True,
+        autoincrement=True,
     )
     
     name = Column(
         Unicode(255),
-        index=True, unique=True, nullable=False)
+        index=True,
+        unique=True,
+        nullable=False,
+    )
     
     description = Column(
         UnicodeText,
-        nullable=True)
+        nullable=True,
+    )
 
-    appgroups = relation('AppGroup', secondary=USAGE_TABLE,
-                         back_populates='vigiloservers', lazy=True)
-    
     def __init__(self, **kwargs):
         """
         Initialise l'instance avec les informations du serveur.
@@ -61,16 +62,16 @@ class VigiloServer(DeclarativeBase, object):
     
     
     @classmethod
-    def by_vigiloserver_name(cls, vigiloservername):
+    def by_vigiloserver_name(cls, vigiloserver):
         """
         Renvoie le serveur dont le nom est C{vigiloservername}.
 
         @param cls: La classe à utiliser, c'est-à-dire L{VigiloServer}.
         @type cls: C{class}
-        @param vigiloservername: Le nom du groupe que l'on souhaite récupérer.
-        @type vigiloservername: C{str}
+        @param vigiloserver: Le nom du groupe que l'on souhaite récupérer.
+        @type vigiloserver: C{str}
         @return: Le serveur demandé.
         @rtype: Une instance de la classe L{VigiloServer}
         """
-        return DBSession.query(cls).filter(cls.name == vigiloservername).first()
+        return DBSession.query(cls).filter(cls.name == vigiloserver).first()
 
