@@ -3,17 +3,20 @@
 """BdD Vigiboard"""
 
 __all__ = (
-        'EventHistory', 'Event', 'CorrEvent',
-        'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass',
-        'PerfDataSource', 'ServiceGroup',
-        'SupItem', 'LowLevelService', 'HighLevelService',
-        'Dependency', 'Version', 'State', 'Permission',
-        'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
-        'ApplicationLog', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
-        'Map', 'MapServiceLink', 'Legend', 'Service', 'StateName',
-        'Application', 'VigiloServer', 'Ventilation', 'Installation',
-        'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
-        )
+    'VIGILO_MODEL_VERSION',
+    'EventHistory', 'Event', 'CorrEvent',
+    'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass',
+    'PerfDataSource', 'ServiceGroup',
+    'SupItem', 'LowLevelService', 'HighLevelService',
+    'Dependency', 'Version', 'State', 'Permission',
+    'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
+    'ApplicationLog', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
+    'Map', 'MapServiceLink', 'Legend', 'Service', 'StateName',
+    'Application', 'VigiloServer', 'Ventilation', 'Installation',
+    'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
+)
+
+VIGILO_MODEL_VERSION = 1
 
 
 from .eventhistory import EventHistory
