@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """Test suite for the CorrEvent class"""
 from vigilo.models import CorrEvent, Event, LowLevelService, Host
-from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 from nose.tools import assert_true
 import re
 from datetime import datetime
+
+from controller import ModelTest
 
 class TestCorrEvent(ModelTest):
     """Test de la table CorrEvent"""

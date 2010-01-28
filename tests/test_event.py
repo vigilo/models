@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """Test suite for Event class"""
-from vigilo.models import Event, Host, LowLevelService, StateName
-from vigilo.models.tests import ModelTest
-from vigilo.models.session import DBSession
-from nose.tools import assert_true, assert_equal
 import re
 from datetime import datetime
+from nose.tools import assert_true, assert_equal
+
+from vigilo.models import Event, Host, LowLevelService, StateName
+from vigilo.models.session import DBSession
+
+from controller import ModelTest
 
 class TestEvent(ModelTest):
     """Test de la table Event"""

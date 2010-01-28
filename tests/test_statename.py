@@ -2,8 +2,9 @@
 """Test suite for StateName class"""
 from nose.tools import assert_equals
 from vigilo.models import StateName
-from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
+
+from controller import ModelTest
 
 class TestStateName(ModelTest):
     """Test de la table StateName."""

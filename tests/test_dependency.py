@@ -1,31 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Test suite for BoardViewFilter class"""
-from vigilo.models import BoardViewFilter, Host, LowLevelService, User
-from vigilo.models.tests import ModelTest
+"""Test suite for Dependency class"""
+from vigilo.models import Dependency, Host, LowLevelService
 from vigilo.models.session import DBSession
 
-class TestBoardViewFilter(ModelTest):
-    """Test de la table BoardViewFilter"""
+from controller import ModelTest
 
-    klass = BoardViewFilter
-    attrs = {
-        'filtername': u'monfiltre',
-        'username': u'manager',
-        'message': u'WARNING2: SNMP error: No response from remote host',
-        'trouble_ticket': u'42',
-    }
+class TestDependency(ModelTest):
+    """Test de la table Dependency."""
+
+    klass = Dependency
 
     def __init__(self):
         ModelTest.__init__(self)
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
-        DBSession.add(User(
-            user_name=u'manager',
-            fullname=u'Manager',
-            email=u'foo@b.ar',
-        ))
-
         host = Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',
@@ -48,5 +37,5 @@ class TestBoardViewFilter(ModelTest):
         DBSession.add(service)
 
         DBSession.flush()
-        return dict(service=service)
+        return dict(supitem1=host, supitem2=service)
 

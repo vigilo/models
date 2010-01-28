@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Test suite for Dependency class"""
-from vigilo.models import Dependency, Host, LowLevelService
-from vigilo.models.tests import ModelTest
+"""Test suite for PerfDataSource class"""
+from vigilo.models import Host, LowLevelService, PerfDataSource
 from vigilo.models.session import DBSession
 
-class TestDependency(ModelTest):
-    """Test de la table Dependency."""
+from controller import ModelTest
 
-    klass = Dependency
+class TestPerfDataSource(ModelTest):
+    """Test de la table perfdatasource"""
+
+    klass = PerfDataSource
+    attrs = {
+        'name': u'myperfsource',
+    }
 
     def __init__(self):
         ModelTest.__init__(self)
@@ -34,7 +38,6 @@ class TestDependency(ModelTest):
             weight=42,
         )
         DBSession.add(service)
-
         DBSession.flush()
-        return dict(supitem1=host, supitem2=service)
+        return dict(service=service)
 

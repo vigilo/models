@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for ImpactedHLS class"""
 from vigilo.models import HighLevelService, ImpactedHLS, ImpactedPath, Host
-from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
+
+from controller import ModelTest
 
 class TestImpactedHLS(ModelTest):
     """Unit test case for the ``ImpactedHLS`` model."""

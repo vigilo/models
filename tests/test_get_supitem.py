@@ -6,12 +6,9 @@ from nose.tools import assert_equals
 
 from vigilo.models.vigilo_bdd_config import metadata
 from vigilo.models.session import DBSession
+from vigilo.models import Host, LowLevelService, HighLevelService, SupItem
 
-from vigilo.models.tests import setup_db, teardown_db
-
-from vigilo.models import Host, LowLevelService, HighLevelService
-
-from vigilo.models.supitem import SupItem
+from controller import ModelTest, setup_db, teardown_db
     
 class TestGetSupItem(unittest.TestCase):
     """Test de la méthode get_supitem de la classe 'SupItem'"""

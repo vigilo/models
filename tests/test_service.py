@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for LowLevelService & HighLevelService classes"""
 from vigilo.models import Host, LowLevelService, HighLevelService
-from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
+
+from controller import ModelTest
 
 class TestLowLevelService(ModelTest):
     """Test de la classe LowLevelService."""

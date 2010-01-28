@@ -2,7 +2,8 @@
 """Test suite for Application class"""
 from nose.tools import assert_equal
 from vigilo.models import Application
-from vigilo.models.tests import ModelTest
+
+from controller import ModelTest
 
 class TestApplication(ModelTest):
     """Unit test case for the ``Application`` model."""

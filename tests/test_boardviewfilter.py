@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
-"""Test suite for PerfDataSource class"""
-from vigilo.models import Host, LowLevelService, PerfDataSource
-from vigilo.models.tests import ModelTest
+"""Test suite for BoardViewFilter class"""
+from vigilo.models import BoardViewFilter, Host, LowLevelService, User
 from vigilo.models.session import DBSession
 
-class TestPerfDataSource(ModelTest):
-    """Test de la table perfdatasource"""
+from controller import ModelTest
 
-    klass = PerfDataSource
+class TestBoardViewFilter(ModelTest):
+    """Test de la table BoardViewFilter"""
+
+    klass = BoardViewFilter
     attrs = {
-        'name': u'myperfsource',
+        'filtername': u'monfiltre',
+        'username': u'manager',
+        'message': u'WARNING2: SNMP error: No response from remote host',
+        'trouble_ticket': u'42',
     }
 
     def __init__(self):
@@ -17,6 +21,12 @@ class TestPerfDataSource(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
+        DBSession.add(User(
+            user_name=u'manager',
+            fullname=u'Manager',
+            email=u'foo@b.ar',
+        ))
+
         host = Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',
@@ -37,6 +47,7 @@ class TestPerfDataSource(ModelTest):
             weight=42,
         )
         DBSession.add(service)
+
         DBSession.flush()
         return dict(service=service)
 

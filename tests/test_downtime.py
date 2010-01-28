@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """Test suite for Downtime class"""
-from vigilo.models.tests import ModelTest
+from datetime import datetime
 from nose.tools import assert_equals
+
 from vigilo.models.session import DBSession
 from vigilo.models import Host, LowLevelService, User
 from vigilo.models import Downtime, DowntimeStatus
 
-from datetime import datetime
-
+from controller import ModelTest
 
 class TestDowntimeStatus(ModelTest):
     """Unit test case for the ``DowntimeStatus`` model."""

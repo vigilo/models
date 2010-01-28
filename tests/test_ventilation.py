@@ -3,8 +3,9 @@
 from nose.tools import assert_equals
 
 from vigilo.models import Ventilation, Host, VigiloServer, Application
-from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
+
+from controller import ModelTest
 
 class TestVentilation(ModelTest):
     """Test de la table Ventilation"""

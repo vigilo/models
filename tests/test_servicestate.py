@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """Test suite for State class"""
-from vigilo.models import State, Host
-from vigilo.models.tests import ModelTest
+from vigilo.models import State, Host, LowLevelService
 from vigilo.models.session import DBSession
 
 from datetime import datetime
 
-class TestHostState(ModelTest):
-    """Test de la table State avec un Host"""
+from controller import ModelTest
+
+class TestServiceState(ModelTest):
+    """Test de la table State avec un service"""
 
     klass = State
     attrs = {
@@ -41,6 +42,15 @@ class TestHostState(ModelTest):
         )
         DBSession.add(host)
 
+        service = LowLevelService(
+            host=host,
+            servicename=u'myservice',
+            command=u'halt',
+            op_dep=u'+',
+            weight=42,
+        )
+        DBSession.add(service)
+
         DBSession.flush()
-        return dict(supitem=host)
+        return dict(supitem=service)
 

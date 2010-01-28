@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Test suite for UserGroup class"""
 from vigilo.models import UserGroup
-from vigilo.models.tests import ModelTest
+
+from controller import ModelTest
 
 class TestUserGroup(ModelTest):
     """Unit test case for the ``Group`` model."""

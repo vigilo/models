@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for Installation class"""
 from vigilo.models import VigiloServer, Installation, Application
-from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
 
+from controller import ModelTest
 
 class TestInstallation(ModelTest):
 

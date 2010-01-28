@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Test suite for Permission class"""
 from vigilo.models import Permission
-from vigilo.models.tests import ModelTest
+
+from controller import ModelTest
 
 class TestPermission(ModelTest):
     """Unit test case for the ``Permission`` model."""

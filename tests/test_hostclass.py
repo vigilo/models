@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for HostClass class"""
 from vigilo.models import Host, HostClass
-from vigilo.models.tests import ModelTest
 from vigilo.models.session import DBSession
+
+from controller import ModelTest
 
 class TestHostClass(ModelTest):
     """Test de la table HostClass"""

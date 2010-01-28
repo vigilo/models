@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Test suite for ApplicationLog class"""
-from vigilo.models import ApplicationLog
-from vigilo.models.tests import ModelTest, setup_db, teardown_db
-from vigilo.models.session import DBSession
-from vigilo.models.vigilo_bdd_config import metadata
 from datetime import datetime
 import unittest
+
+from vigilo.models import ApplicationLog
+from vigilo.models.session import DBSession
+from vigilo.models.vigilo_bdd_config import metadata
+
+from controller import ModelTest, setup_db, teardown_db
 
 class TestApplicationLog(ModelTest):
     """Tests unitaires de la table ApplicationLog"""

@@ -3,8 +3,9 @@
 from nose.tools import eq_
 
 from vigilo.models import User
-from vigilo.models.tests import ModelTest
 from vigilo.common.conf import settings
+
+from controller import ModelTest
 
 class TestUser(ModelTest):
     """Unit test case for the ``User`` model."""
