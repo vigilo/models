@@ -23,15 +23,6 @@ def teardown_db():
     """Supprime toutes les tables du modèle de la BDD."""
     metadata.drop_all()
 
-
-def setup():
-    """Fonction appelée par nose au début des tests."""
-    setup_db()
-
-def teardown():
-    """Fonction appelée par nose à la fin des tests."""
-    teardown_db()
-
 class ModelTest(object):
     """Base unit test case for the models."""
 
@@ -86,8 +77,3 @@ class ModelTest(object):
         for key, value in self.attrs.iteritems():
             assert_equals(getattr(obj, key), value)
 
-def runtests(*args):
-    """This is the method called when running unit tests."""
-    sys.argv[1:0] = ['-v', '--with-coverage', '--cover-package=vigilo.models',
-                     '--cover-inclusive', 'vigilo.models.tests']
-    nose.main()
