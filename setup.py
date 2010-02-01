@@ -21,25 +21,23 @@ setup(name='vigilo-models',
             'setuptools',
             'psycopg2',
             'SQLAlchemy',
-            # I'd like to prevent the zope stuff from leaking in, but couldn't.
             'zope.sqlalchemy',
             'vigilo-common',
-            ],
+        ],
         extras_require ={
             'tests': tests_require
-            },
+        },
         namespace_packages = [
             'vigilo',
-            ],
+        ],
         packages=[
             'vigilo',
             'vigilo.models',
-            ],
+        ],
         entry_points={
             'console_scripts': [
-                'runtests-models = vigilo.models.tests:runtests [tests]',
-                ]
-            },
+            ]
+        },
         package_dir={'': 'src'},
         )
 
