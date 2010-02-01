@@ -10,8 +10,8 @@ __all__ = (
     'SupItem', 'LowLevelService', 'HighLevelService',
     'Dependency', 'Version', 'State', 'Permission',
     'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
-    'ApplicationLog', 'MapGroup', 'MapLink', 'MapNode','MapSegment',
-    'Map', 'MapServiceLink', 'Legend', 'Service', 'StateName',
+    'ApplicationLog', 'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost',
+    'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
     'Application', 'VigiloServer', 'Ventilation', 'Installation',
     'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
 )
