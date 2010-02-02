@@ -67,7 +67,7 @@ class ApplicationLog(DeclarativeBase, object):
 
 
     def __init__(self, **kwargs):
-        """Initialise une entrée des logs des accès."""
+        """Initialise une entrée dans les logs des applications."""
         super(ApplicationLog, self).__init__(**kwargs)
 
     @classmethod

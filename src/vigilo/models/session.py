@@ -1,20 +1,17 @@
+# -*- coding: utf-8 -*-
 # vim: set fileencoding=utf-8 sw=4 ts=4 et :
 """
-Gère les sessions d'accès à la BDD utilisées par les différents
+Gère la session d'accès à la BDD utilisée par les différents
 composants de Vigilo.
 
-On dispose de 2 types de session :
+La session déclarée ici utilise l'extension ZopeTransactionExtension,
+ce qui lui permet, dans le contexte de Turbogears, d'effectuer un COMMIT
+automatiquement lorsqu'une requête HTTP a été traitée avec succès.
 
--   DBSession correspond à une session utilisant l'extension
-    ZopeTransactionExtension. Il s'agit du type de session à utiliser de
-    préférence dans les applications TurboGears. L'extension utilisée permet
-    de faire un COMMIT des transactions automatiquement à la fin des requêtes
-    HTTP (lorsque la requête a pu être traitée correctement, c'est-à-dire
-    lorsque le code de retour vaut 200).
-
-    Après discussion interne, on utilisera DBSession également dans les
-    autres composants (corrélateur, ...), même si ces composants n'ont pas
-    besoin des fonctionnalités apportées par ZopeTransactionExtension.
+Après discussion en interne, on utilisera DBSession également dans les
+composants qui ne sont pas liés à Turbogears (corrélateur, ...), et ce,
+même si ces composants n'ont pas besoin des fonctionnalités apportées
+par ZopeTransactionExtension.
 """
 
 from sqlalchemy.engine import engine_from_config

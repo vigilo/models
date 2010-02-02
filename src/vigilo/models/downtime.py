@@ -45,8 +45,10 @@ class DowntimeStatus(DeclarativeBase, object):
         Renvoie l'identifiant du statut de mise en 
         silence dont le nom est passé en paramètre.
         
-        @param servicename: Nom du statut voulu.
-        @type servicename: C{unicode}
+        @param cls: Classe à utiliser pour la requête.
+        @type cls: C{DeclarativeBase}
+        @param status_name: Nom du statut voulu.
+        @type status_name: C{unicode}
         @return: L'identifiant du statut demandé.
         @rtype: C{int} ou None
         """
@@ -62,10 +64,12 @@ class DowntimeStatus(DeclarativeBase, object):
         Renvoie le nom du statut dont 
         l'identifiant est passé en paramètre.
         
-        @param: L'identifiant du statut demandé.
-        @rtype: C{int}
-        @return servicename: Le nom du statut voulu.
-        @type servicename: C{unicode} ou None
+        @param cls: Classe à utiliser pour la requête.
+        @type cls: C{DeclarativeBase}
+        @param status_id: L'identifiant du statut demandé.
+        @type status_id: C{int}
+        @return: Le nom du statut voulu.
+        @rtype: C{unicode} ou None
         """
         status = DBSession.query(cls.status).filter(
             cls.idstatus == status_id).first()

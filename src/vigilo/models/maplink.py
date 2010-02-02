@@ -83,8 +83,7 @@ class MapLink(DeclarativeBase, object):
         """
         Renvoie la liaison dont le nom est L{linkname}.
         
-        @param linkname: Nom de la lia= relation('MapNode', foreign_keys=[idfrom_node], lazy=True)
-ison voulue.
+        @param linkname: Nom de la liaison voulue.
         @type linkname: C{unicode}
         @return: La liaison demandée.
         @rtype: L{MapLink}

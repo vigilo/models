@@ -42,13 +42,6 @@ class Map(DeclarativeBase, object):
     background_position = Column(Unicode(255))
     background_repeat = Column(Unicode(255))
     
-    """nodeforsubmap = Column(
-        Integer,
-        ForeignKey(
-            bdd_basename + 'mapnode.idmapnode'),
-        nullable=True)
-    """
-    
     groups = relation('MapGroup', secondary=MAP_GROUP_TABLE,
                          back_populates='maps', lazy=True)
 

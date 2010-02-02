@@ -44,10 +44,10 @@ class SupItem(DeclarativeBase, object):
         """
         Renvoie une requête portant sur les services de haut niveau impactés.
         
-        @param *args: Liste d'éléments à récupérer dans la requête.
-        @type *args: Une C{DeclarativeBase} ou une liste de C{Column}s.
+        @param args: Liste d'éléments à récupérer dans la requête.
+        @type args: Une C{DeclarativeBase} ou une liste de C{Column}s.
         @return: Une C{Query} portant sur les éléments demandés.
-        @rtype: C{sqlalchemy.orm.query.Query}.
+        @rtype: C{sqlalchemy.orm.query.Query}
         """
         from vigilo.models import HighLevelService, ImpactedHLS, ImpactedPath
 
