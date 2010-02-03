@@ -107,7 +107,7 @@ class Host(SupItem):
         @rtype: C{str}
         """
         return self.name
-
+    
     @classmethod
     def by_host_name(cls, hostname):
         """

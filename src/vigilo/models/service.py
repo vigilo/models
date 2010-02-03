@@ -214,7 +214,7 @@ class HighLevelService(Service):
     )
 
     impacts = relation('ImpactedHLS', back_populates='hls', lazy=True)
-
+    
     def __init__(self, **kwargs):
         """Initialisation de l'objet."""
         super(HighLevelService, self).__init__(**kwargs)

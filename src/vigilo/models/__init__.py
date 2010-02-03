@@ -14,6 +14,7 @@ __all__ = (
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
     'Application', 'VigiloServer', 'Ventilation', 'Installation',
     'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
+    'FileDeployment'
 )
 
 # Numéro de version du modèle, il sera incrémenté pour chaque nouvelle
@@ -56,4 +57,4 @@ from .downtimestatus import DowntimeStatus
 from .vigiloserver import VigiloServer
 from .ventilation import Ventilation
 from .installation import Installation
-
+from .filedeployment import FileDeployment
