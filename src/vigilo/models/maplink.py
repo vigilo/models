@@ -17,11 +17,15 @@ __all__ = ('Link', )
 
 class MapLink(DeclarativeBase, object):
     """
-    Informations sur une liaison de carte.
+    Informations sur une liaison dans une carte.
+
     @ivar idmaplink: Identifiant de la liaison.
-    @ivar idfrom_node: Noeud de départ de la liaison.
-    @ivar idto_node: Noeud d'arrivée de la liaison.
+    @ivar idfrom_node: Identifiant du nœud de départ de la liaison.
+    @ivar idto_node: Identifiant du nœud d'arrivée de la liaison.
     @ivar idmap: Référence vers l'identifiant de carte de la liaison. 
+    @ivar type_link: Type de liaison.
+    @ivar from_node: Instance du nœud de départ de la liaison.
+    @ivar to_node: Instance du nœud d'arrivée de la liaison.
     """
     __tablename__ = bdd_basename + 'maplink'
 
@@ -74,7 +78,7 @@ class MapLink(DeclarativeBase, object):
         Le nom de la liaison est utilisé pour la représenter dans les formulaires.
 
         @return: Le nom de la liaison.
-        @rtype: C{str}
+        @rtype: C{unicode}
         """
         return self.name
 
@@ -93,12 +97,14 @@ class MapLink(DeclarativeBase, object):
     
 class MapServiceLink(MapLink):
     """
-    Classe chargée de la représentation graphique d'une liaison Service dans vigimap
+    Classe chargée de la représentation graphique d'une
+    liaison de type Service dans VigiMap.
     
-    @ivar idmapServicelink: Identifiant du modèle de l'hôte (séquence).
-    @ivar refhost: Référence vers l'hôte associée à la liaison.
-    @ivar refservice: Référence vers le service associé à la liaison.
-    @ivar graph: Référence vers le graphe associé à la liaison.
+    @ivar idmapservicelink: Identifiant du modèle de l'hôte (séquence).
+    @ivar idref: Identifiant du service de bas niveau référencé.
+    @ivar reference: Instance du service de bas niveau référencé.
+    @ivar idgraph: Identifiant du graphe associé à la liaison.
+    @ivar graph: Instance graphe associé à la liaison.
     @ivar map: Relation vers la carte.
     """
     __tablename__ = 'mapservicelink'
@@ -136,17 +142,18 @@ class MapServiceLink(MapLink):
     
         
     def __init__(self, **kwargs):
+        """Initialisation d'une liaison concernant un L{LowLevelService}."""
         super(MapServiceLink, self).__init__(**kwargs)
         
         
 class MapSegment(MapLink):
     """
-    Classe chargée de la représentation graphique d'un segment dans vigimap
-    Cette classe hérite de MapLink.
+    Classe chargée de la représentation graphique d'un segment dans VigiMap.
+
     @ivar idmapsegment: Identifiant du modèle de l'hôte (séquence).
     @ivar color: Couleur du segment.
-    @ivar thickness: Epaisseur de trait du segment.
-    @ivar map: Relation vers la carte.
+    @ivar thickness: Épaisseur de trait du segment.
+    @ivar map: Instance de la carte.
     """
     __tablename__ = 'mapsegment'
     __mapper_args__ = {'polymorphic_identity': u'mapsegment'}
@@ -164,5 +171,5 @@ class MapSegment(MapLink):
     
     thickness = Column(Integer)
     
-    map = relation('Map',
-        back_populates='segments')
+    map = relation('Map', back_populates='segments')
+

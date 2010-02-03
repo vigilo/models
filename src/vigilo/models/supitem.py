@@ -19,6 +19,8 @@ class SupItem(DeclarativeBase, object):
     Classe abstraite qui gère un objet supervisé.
 
     @ivar idsupitem: Identifiant de l'objet supervisé.
+    @ivar _itemtype: Type d'élément supervisé (host, lowlevelservice,
+        highlevelservice).
     @ivar tags: Libellés attachés à cet objet.
     """
     __tablename__ = bdd_basename + 'supitem'
@@ -103,27 +105,25 @@ class SupItem(DeclarativeBase, object):
         if not servicename:
             host = DBSession.query(Host.idhost
                         ).filter(Host.name == hostname
-                        ).first()
-                    
-            if host:
-                return host.idhost
-    
-            LOGGER.error(_('Got a reference to a non configured ' +
-                    'host (%r)') % (hostname, ))
-            return None
+                        ).scalar()
+
+            if not host:
+                LOGGER.error(_('Got a reference to a non configured ' +
+                        'host (%r)') % (hostname, ))
+
+            return host
         
         # Lorsque l'item est un service de haut niveau.
         if not hostname:
             service = DBSession.query(HighLevelService.idservice
                         ).filter(HighLevelService.servicename == servicename,
-                        ).first()
+                        ).scalar()
                     
-            if service:
-                return service.idservice
-                
-            LOGGER.error(_('Got a reference to a non configured ' +
-                    'high level service (%r)') % (servicename, ))
-            return None
+            if not service:
+                LOGGER.error(_('Got a reference to a non configured ' +
+                        'high level service (%r)') % (servicename, ))
+
+            return service
         
         # Sinon, l'item est un service de bas niveau.
         service = DBSession.query(LowLevelService.idservice
@@ -134,14 +134,13 @@ class SupItem(DeclarativeBase, object):
                             LowLevelService.servicename == servicename,
                             Host.name == hostname
                         )
-                    ).first()
-                
-        if service:
-            return service.idservice
-                
-        LOGGER.error(_('Got a reference to a non configured ' +
-                'low level service (%r, %r)') % (hostname, servicename))
-        return None
+                    ).scalar()
+
+        if not service:
+            LOGGER.error(_('Got a reference to a non configured ' +
+                    'low level service (%r, %r)') % (hostname, servicename))
+
+        return service
 
 
     def __init__(self, **kwargs):

@@ -17,12 +17,17 @@ class Map(DeclarativeBase, object):
     """
     Informations sur une carte.
     @ivar idmap: Identifiant de la carte.
+    @ivar mtime: Date de dernière modification de la carte.
     @ivar title: Titre de la carte.
-    @ivar background_color: Couleur d'arrière-plan 
-        (valeur de la propriété CSS background-color).
+    @ivar background_color: Couleur d'arrière-plan (propriété CSS).
     @ivar background_image: Image d'arrière-plan (propriété CSS).
     @ivar background_position: Position d'arrière-plan (propriété CSS).
     @ivar background_repeat: Répétition d'arrière-plan (propriété CSS). 
+    @ivar groups: Liste des L{MapGroup}s auxquels cette carte appartient.
+    @ivar links: Liste des liaisons (L{MapServiceLink}) présentes sur la carte.
+    @ivar nodes: Liste des nœuds (L{MapNode}) présents sur la carte.
+    @ivar segments: Liste des segments (L{MapSegment}) présents sur la carte.
+    @ivar permissions: Liste des L{Permission}s donnant accès à la carte.
     """
     __tablename__ = bdd_basename + 'map'
 
@@ -37,7 +42,7 @@ class Map(DeclarativeBase, object):
     
     title = Column(Unicode(255), nullable=False)
     
-    background_color = Column(Unicode(255))
+    background_color = Column(Unicode(8))
     background_image = Column(Unicode(255))
     background_position = Column(Unicode(255))
     background_repeat = Column(Unicode(255))
@@ -63,10 +68,11 @@ class Map(DeclarativeBase, object):
         """
         Formatte un C{Map} pour l'afficher dans les formulaires.
 
-        Le nom de la carte est utilisé pour le représenter dans les formulaires.
+        Le nom de la carte est utilisé pour représenter la carte
+        dans les formulaires.
 
         @return: Le nom de la carte.
-        @rtype: C{str}
+        @rtype: C{unicode}
         """
         return self.name
 
@@ -77,7 +83,7 @@ class Map(DeclarativeBase, object):
         
         @param mapname: Nom de la carte voulue.
         @type mapname: C{unicode}
-        @return: La carte demandée.
+        @return: L'instance correspondant à la carte demandée.
         @rtype: L{Map}
         """
         return DBSession.query(cls).filter(cls.name == mapname).first()

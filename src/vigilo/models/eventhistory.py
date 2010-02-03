@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import ForeignKey, Column
+from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, UnicodeText, Unicode, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
@@ -14,12 +15,19 @@ __all__ = ('EventHistory', )
 
 class EventHistory(DeclarativeBase, object):
     """
+    Cette classe enregistre un historique des modifications relatives
+    à un événement (nouvelle occurrence, changement d'acquittement, etc.).
+
+    @ivar idhistory: Identifiant de l'entrée dans l'historique.
     @ivar type_action: Le type d'action effectue, peut etre
         'Nagios update state', 'Acknowlegement change state', 'New occurence',
         'User comment', 'Ticket change', 'Oncall' ou 'Forced state'.
-    @ivar idevent: Identifiant de l'evenement.
-    @ivar value: Valeur associee a l'action.
-    @ivar text: Commentaire sur l'action effectuee.
+    @ivar idevent: Identifiant de l'événement auquel se rapporte
+        cette entrée d'historique.
+    @ivar event: Instance de l'événement à laquelle se rapporte l'entrée.
+    @ivar value: Valeur associée a l'action. Il s'agira par exemple du
+        nouvel état d'un élément supervisé, tel que transmis par Nagios.
+    @ivar text: Commentaire sur l'action effectuée.
     @ivar username: Nom d'utilisateur de la personne effectuant l'action.
     """
 
@@ -27,7 +35,9 @@ class EventHistory(DeclarativeBase, object):
 
     idhistory = Column(
         Integer,
-        primary_key=True, nullable=False, autoincrement=True,
+        primary_key=True,
+        nullable=False,
+        autoincrement=True,
     )
 
     type_action = Column(
@@ -45,12 +55,18 @@ class EventHistory(DeclarativeBase, object):
         index=True, nullable=False, autoincrement=False,
     )
 
+    event = relation('Event', lazy=True)
+
     value = Column(UnicodeText)
 
+    # On ne peut pas imposer de l'Unicode au champ "text" car son contenu
+    # provient parfois de Nagios, qui n'a pas la notion d'encodages.
     text = Column(Text(length=None, convert_unicode=True, assert_unicode=None))
 
     timestamp = Column(DateTime(timezone=False), nullable=False)
 
+    # Le nom d'utilisateur peut être vide dans le cas où le changement
+    # est provoqué par Nagios.
     username = Column(Unicode(255))
 
 

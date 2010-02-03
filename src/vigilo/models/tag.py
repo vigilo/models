@@ -12,12 +12,12 @@ from .secondary_tables import SUPITEM_TAG_TABLE
 
 class Tag(DeclarativeBase, object):
     """
-    Un tag associé soit à un hôte, soit à un service.
+    Un tag associé soit à un élément supervisé.
     
     @ivar name: Nom du tag.
     @ivar value: Valeur associée au tag.
-    @ivar hosts: Liste des hôtes auxquels ce tag est associé.
-    @ivar services: Liste des services auxquels ce tag est associé.
+    @ivar supitems: Liste des éléments supervisés (L{SupItem}s) auxquels
+        le tag est rattaché.
     """
 
     __tablename__ = bdd_basename + 'tag'

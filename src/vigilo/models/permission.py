@@ -17,7 +17,8 @@ __all__ = ('Permission', )
 
 class Permission(DeclarativeBase, object):
     """
-    Définition des permissions.
+    Cette classe définit une permission.
+
     @ivar idpermission: Identifiant (autogénéré) de la permission.
     @ivar permission_name: Nom de la permission (ex: "manage").
     @ivar description: Description intelligible du rôle de la permission.
@@ -71,9 +72,11 @@ class Permission(DeclarativeBase, object):
 
 
     def __init__(self, **kwargs):
+        """Initialisation des informations concernant la permission."""
         super(Permission, self).__init__(**kwargs)
 
     def __unicode__(self):
+        """Représentation unicode de la permission."""
         return self.permission_name
 
     @classmethod

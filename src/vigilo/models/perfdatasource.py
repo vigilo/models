@@ -15,11 +15,12 @@ __all__ = ('PerfDataSource', )
 
 class PerfDataSource(DeclarativeBase, object):
     """
-    Informations sur une datasource d'un service.
+    Informations sur une source de donnée d'un service.
 
-    @ivar idperfdatasource: Identifiant de la datasource, autogénéré.
-    @ivar name: Nom de la datasource.
-    @ivar type: Type de la datasource (COUNTER, DERIVE, ABSOLUTE, GAUGE).
+    @ivar idperfdatasource: Identifiant auto-généré de la source de données.
+    @ivar name: Nom de la source de données.
+    @ivar type: Type de la source de données
+        (COUNTER, DERIVE, ABSOLUTE, GAUGE).
     @ivar label: Label affiché sur le graphique.
         (ex name=ineth0 -> label=Données en entrée sur la carte réseau eth0)
     @ivar factor: Facteur de multiplication pour les valeurs stockés.
@@ -55,6 +56,7 @@ class PerfDataSource(DeclarativeBase, object):
     type = Column(
         UnicodeText,
         default=u'', nullable=False)
+
     # pour l'affichage du nom sur le graphique généré
     label = Column(
         UnicodeText,
@@ -65,5 +67,6 @@ class PerfDataSource(DeclarativeBase, object):
         default=0.0, nullable=False)
 
     def __init__(self, **kwargs):
+        """Initialisation de la source de données de performance."""
         super(PerfDataSource, self).__init__(**kwargs)
 

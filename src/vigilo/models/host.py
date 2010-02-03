@@ -19,7 +19,8 @@ class Host(SupItem):
     """
     Informations sur un hôte du parc informatique.
     
-    @ivar name: Nom complet (FQDN) de l'hôte.
+    @ivar idhost: Identifiant de l'hôte.
+    @ivar name: Nom complet (FQDN) unique de l'hôte.
     @ivar checkhostcmd: Commande à exécuter pour vérifier l'état de l'hôte.
     @ivar description: Une description intelligible de l'hôte.
     @ivar hosttpl: ???.
@@ -29,8 +30,11 @@ class Host(SupItem):
     @ivar snmpport: Port à utiliser pour le protocole SNMP.
     @ivar snmpoidsperpdu: Nombre d'OIDs à transmettre par PDU.
     @ivar snmpversion: Version du protocole SNMP à utiliser.
-    @ivar hostgroups: Liste des groupes d'hôtes auxquels cet hôte appartient.
-    @ivar tags: Liste des libellés attachés à cet hôte.
+    @ivar weight: Poids affecté à cet hôte pour le calcul de l'état
+        des services de haut niveau qui en dépendent.
+    @ivar groups: Liste des groupes d'hôtes auxquels cet hôte appartient.
+    @ivar hostclasses: Classes d'hôtes attachées à l'hôte.
+    @ivar services: Liste des services de bas niveau configurés sur cet hôte.
     """
     __tablename__ = bdd_basename + 'host'
     __mapper_args__ = {'polymorphic_identity': u'host'}

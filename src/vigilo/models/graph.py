@@ -21,6 +21,9 @@ class Graph(DeclarativeBase, object):
     @ivar name: Nom du graph.
     @ivar template: XXX à quoi sert ce champ ?
     @ivar vlabel: Unité de mesure (bits/s, Mbits/s ...).
+    @ivar groups: Liste des groupes de graphes auxquels ce graphe appartient.
+    @ivar perfdatasources: Liste des sources de données de performances
+        rattachées à ce graphe.
     """
     __tablename__ = bdd_basename + 'graph'
     

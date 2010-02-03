@@ -18,21 +18,22 @@ __all__ = ('Event', )
 
 class Event(DeclarativeBase, object):
     """
-    Evenement brut ou correle.
+    événement brut ou correle.
 
-    @ivar idevent: Identifiant de l'evenement, tel que fourni par Nagios
+    @ivar idevent: Identifiant de l'événement, tel que fourni par Nagios
         ou genere par le correlateur.
-    @ivar timestamp: Date de la derniere occurence de l'evenement.
-    @ivar hostname: Identifiant de l'hote concerne par l'evenement.
-    @ivar servicename: Identifiant du service concerne par l'evenement.
-        Vaut None si l'evenement concerne directement l'hote.
+    @ivar timestamp: Date de la dernière occurence de l'événement.
+    @ivar idsupitem: Identifiant de l'élément supervisé sur lequel
+        porte l'événement.
+    @ivar supitem: Instance d'élément supervisé sur laquelle porte
+        l'événement.
     @ivar current_state: L'etat courant du service/hote,
         tel que transmis par Nagios, sous forme numérique.
     @ivar initial_state: L'etat initial du service/hote,
         tel que transmis par Nagios, sous forme numérique.
     @ivar peak_state: L'etat du service/hote, tel que transmis
         par Nagios, sous forme numérique.
-    @ivar message: Le message transmis par Nagios avec l'evenement.
+    @ivar message: Le message transmis par Nagios avec l'événement.
     """
 
     __tablename__ = bdd_basename + 'event'

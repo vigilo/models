@@ -13,15 +13,15 @@ __all__ = ('ImpactedPath', )
 
 class ImpactedPath(DeclarativeBase, object):
     """
-    Marque un élément supervisé supitem1 comme dépendant d'un autre
-    élément supervisé nommé supitem2.
+    Cette classe contient les données relatives à un chemin d'impactes.
 
-    @ivar idsupitem1: Identifiant de l'élément supervisé marqué comme
-        dépendant d'un autre.
-    @ivar supitem1: Instance d'élément supervisé marquée comme dépendante.
-    @ivar idsupitem2: Identifiant de l'élement supervisé marqué comme
-        dépendance d'un autre.
-    @ivar supitem2: Instance d'élément supervisé marquée comme dépendance.
+    @ivar idpath: Identifiant auto-généré du chemin.
+    @ivar impacted_hls: Liste des L{HighLevelService} impactés présents
+        sur le chemin.
+    @ivar idsupitem: Identifiant de l'élément supervisé à l'origine du
+        chemin d'impactes.
+    @ivar supitem: Instance de l'élément supervisé à l'origine du chemin
+        d'impactes.
     """
 
     __tablename__ = bdd_basename + 'impactedpath'

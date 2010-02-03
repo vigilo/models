@@ -16,8 +16,9 @@ class State(DeclarativeBase, object):
     """
     Stocke un état transmis par Nagios.
 
-    @ivar idsupitem: Identifiant de l'équipement concerné.
-    @ivar timestamp: Horodattage de l'état.
+    @ivar idsupitem: Identifiant de l'équipement concerné (L{SupItem}).
+    @ivar supitem: Instance de l'équipement concerné (L{SupItem}).
+    @ivar timestamp: Horodatage de l'état.
     @ivar state: Code de l'état dans L{vigilo.models.statename.StateName}.
     @ivar attempt: Nombre de tentatives effectuées par Nagios.
     @ivar message: Message d'état transmis par Nagios.
@@ -57,6 +58,10 @@ class State(DeclarativeBase, object):
         autoincrement=False,
     )
 
+    # Le message stocké ici est fourni par Nagios, qui ne possède pas
+    # la notion d'encodages. On tente une conversion vers Unicode,
+    # mais on ne peut pas garantir le type, d'où l'utilisation du type
+    # SQL générique "Text".
     message = Column(
         Text(length=None, convert_unicode=True, assert_unicode=None))
 

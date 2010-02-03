@@ -11,7 +11,17 @@ from vigilo.models.vigilo_bdd_config import bdd_basename, DeclarativeBase
 __all__ = ('BoardViewFilter', )
 
 class BoardViewFilter(DeclarativeBase, object):
-    """Gère les filtres personnalisés d'un utilisateur dans Vigiboard."""
+    """
+    Gère les filtres personnalisés d'un utilisateur dans Vigiboard.
+    Cette classe permet de remplir le formulaire de recherche
+    de VigiBoard avec des valeurs prédéfinies. Elle reprend donc les
+    différents champs de ce formulaire.
+
+    @ivar filtername: Nom du filtre.
+    @ivar username: Nom de l'utilisateur à qui appartient le filtre.
+    @ivar message: Message issu de Nagios.
+    @ivar trouble_ticket: Ticket d'incident.
+    """
 
     __tablename__ = bdd_basename + 'boardviewfilter'
 

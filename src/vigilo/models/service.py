@@ -18,11 +18,11 @@ class Service(SupItem):
     """
     Service générique.
 
-    @ivar name: Nom du service.
+    @ivar idservice: Identifiant du service.
+    @ivar servicename: Nom du service.
     @ivar op_dep: Le type d'opération à appliquer aux dépendances de ce
         service de haut niveau ('+', '&' ou '|').
-    @ivar servicegroups: Liste des groupes de services auxquels
-        ce service appartient.
+    @ivar groups: Liste des groupes de services auxquels ce service appartient.
     @ivar dependancies: Liste des services dont ce service dépend.
         Pour les services techniques, cette liste est toujours vide.
     """
@@ -84,7 +84,12 @@ class LowLevelService(Service):
     """
     Service de bas niveau (service technique).
 
+    @ivar idservice: Identifiant du service.
+    @ivar idhost: Identifiant de l'L{Host} sur lequel ce service est configuré.
+    @ivar host: Instande de l'L{Host} sur lequel ce service est configuré.
     @ivar command: Commande à exécuter pour vérifier l'état du service.
+    @ivar weight: Poids affecté à ce service pour le calcul de l'état
+        des services de haut niveau (L{HighLevelService}).
     """
     __tablename__ = bdd_basename + 'lowlevelservice'
     __table_args__ = (
@@ -125,6 +130,7 @@ class LowLevelService(Service):
     )
 
     def __init__(self, **kwargs):
+        """Initialisation de l'objet."""
         super(LowLevelService, self).__init__(**kwargs)
 
     @classmethod
@@ -147,6 +153,7 @@ class LowLevelService(Service):
             ).first()
 
     def __unicode__(self):
+        """Représentation unicode de l'objet."""
         return "%s (%s)" % (self.servicename, self.host.name)
 
 
@@ -154,12 +161,20 @@ class HighLevelService(Service):
     """
     Service de haut niveau.
 
+    @ivar idservice: Identifiant du service.
     @ivar message: Message à afficher dans Vigiboard lorsque le service
         passe dans un état autre que OK.
     @ivar warning_threshold: Seuil à partir duquel le service passe de
         l'état OK à l'état WARNING.
     @ivar critical_threshold: Seuil à partir duquel le service passe de
         l'état WARNING à l'état CRITICAL.
+    @ivar weight: Poids courant du service de haut niveau. Vaut None
+        si le poids n'a pas encore été calculé (à l'initialisation
+        par exemple).
+    @ivar priority: Priorité à donner aux événements qui concernent
+        ce service de haut niveau.
+    @ivar impacts: Liste des services de haut niveau impactés par
+        celui-ci.
     """
     __tablename__ = bdd_basename + 'highlevelservice'
     __mapper_args__ = {'polymorphic_identity': u'highlevel'}
@@ -201,6 +216,7 @@ class HighLevelService(Service):
     impacts = relation('ImpactedHLS', back_populates='hls', lazy=True)
 
     def __init__(self, **kwargs):
+        """Initialisation de l'objet."""
         super(HighLevelService, self).__init__(**kwargs)
 
     @classmethod

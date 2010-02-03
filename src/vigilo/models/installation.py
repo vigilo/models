@@ -13,10 +13,17 @@ __all__ = ('Installation', )
 
 class Installation(DeclarativeBase):
     """
-    Etant donné un serveur Vigilo et une application,
+    Étant donné un serveur Vigilo et une application,
     cette table fournit l'identifiant Jabber à utiliser
     pour communiquer avec l'application hébergée sur
     ce serveur.
+
+    @ivar idvigiloserver: Identifiant du serveur Vigilo.
+    @ivar vigiloserver: Instance de L{VigiloServer}.
+    @ivar idapp: Identifiant de l'application.
+    @ivar application: Instance de l'L{Application}.
+    @ivar jid: Identifiant Jabber (JID) à utiliser pour communiquer
+        avec l'application via le bus XMPP.
     """
     __tablename__ = bdd_basename + 'hostapp'
 

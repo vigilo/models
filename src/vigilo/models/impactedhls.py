@@ -13,15 +13,18 @@ __all__ = ('ImpactedHLS', )
 
 class ImpactedHLS(DeclarativeBase, object):
     """
-    Marque un élément supervisé supitem1 comme dépendant d'un autre
-    élément supervisé nommé supitem2.
+    Marque un L{HighLevelService} comme impacté dans un chemin d'impactes.
 
-    @ivar idsupitem1: Identifiant de l'élément supervisé marqué comme
-        dépendant d'un autre.
-    @ivar supitem1: Instance d'élément supervisé marquée comme dépendante.
-    @ivar idsupitem2: Identifiant de l'élement supervisé marqué comme
-        dépendance d'un autre.
-    @ivar supitem2: Instance d'élément supervisé marquée comme dépendance.
+    @ivar idpath: Identifiant du chemin d'impactes.
+    @ivar path: Instance du chemin d'impactes.
+    @ivar idhls: Identifiant du L{HighLevelService} impacté.
+    @ivar hls: Instance du L{HighLevelService} impacté.
+    @ivar distance: Distance à laquelle se trouve le L{HighLevelService}
+        sur le chemin d'impactes par rapport à la source (le L{SupItem}
+        à l'origine de l'impacte). Cet attribut est utilisé par VigiBoard
+        pour n'afficher que les L{HighLevelService} situé tout au bout
+        des chemins d'impactes liés à un L{CorrEvent} (ie. : ceux dont la
+        distance est maximale sur le chemin).
     """
 
     __tablename__ = bdd_basename + 'impactedhls'

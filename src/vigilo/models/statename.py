@@ -13,11 +13,11 @@ __all__ = ('StateName', )
 
 class StateName(DeclarativeBase, object):
     """
-    @ivar idstatename: Identifiant (auto-généré) de la classe.
+    @ivar idstatename: Identifiant (auto-généré) du nom d'état.
     @ivar statename: Le nom de l'état (ex: "UP", "UNKNOWN", "OK", etc.).
     @ivar order: L'importance de l'état. Plus ce nombre est élevé,
-        plus l'état a d'importance et devrait apapraître en premier
-        dans un tableau par exemple.
+        plus l'état a de l'importance et apparaîtra en début d'un
+        tableau (cas des événements dans VigiBoard par exemple).
     """
     __tablename__ = bdd_basename + 'statename'
 
@@ -39,7 +39,13 @@ class StateName(DeclarativeBase, object):
 
     @classmethod
     def __statename_mapping(cls):
-        """Renvoie un dictionnaire avec les associations id <-> nom."""
+        """
+        Renvoie un dictionnaire avec les associations id <-> nom.
+        Cette méthode agit comme un cache, les valeurs sont obtenues
+        à la première requête qui interroge les noms d'états et mémorisées
+        localement. Les requêtes suivantes utilise la valeur enregistrée
+        localement sans effectuer de requêtes auprès du serveur SQL.
+        """
         def inner():
             """Renvoie un itérateur sur le dictionnaire des associations."""
             query =   DBSession.query(

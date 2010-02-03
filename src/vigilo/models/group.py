@@ -111,9 +111,9 @@ class HostGroup(Group):
     """
     Groupe d'hôtes.
 
-    @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
+    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
         groupe d'hôtes.
-    @ivar hosts: Liste d'instances d'L{Host}s contenus dans ce groupe.
+    @ivar hosts: Liste des L{Host}s appartenant à ce groupe.
     """
 
     __mapper_args__ = {'polymorphic_identity': u'hostgroup'}
@@ -128,9 +128,9 @@ class ServiceGroup(Group):
     """
     Groupe de services.
 
-    @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
+    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
         groupe de services.
-    @ivar services: Liste d'instances de L{Service}s contenus dans ce groupe.
+    @ivar services: Liste des L{Service}s appartenant à ce groupe.
     """
 
     __mapper_args__ = {'polymorphic_identity': u'servicegroup'}
@@ -145,11 +145,11 @@ class MapGroup(Group):
     """
     Groupe de cartes.
 
-    @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
+    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
         groupe de cartes.
-    @ivar subgroups: Liste d'instances de L{MapGroup} qui sont des fils
+    @ivar subgroups: Liste des L{MapGroup} qui sont des fils
         du groupe courant.
-    @ivar maps: Liste d'instances de L{Map}s contenues dans ce groupe.
+    @ivar maps: Liste des L{Map}s appartenant à ce groupe.
     """
 
     __mapper_args__ = {'polymorphic_identity': u'mapgroup'}
@@ -167,9 +167,9 @@ class GraphGroup(Group):
     """
     Groupe de graphes.
 
-    @ivar permissions: Liste d'instances de L{Permission}s qui donnent accès à ce
+    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
         groupe de graphes.
-    @ivar graphs: Liste d'instances de L{Graph}es contenus dans ce groupe.
+    @ivar graphs: Liste des L{Graph}es appartenant à ce groupe.
     """
 
     __mapper_args__ = {'polymorphic_identity': u'graphgroup'}
@@ -179,23 +179,4 @@ class GraphGroup(Group):
 
     graphs = relation('Graph', secondary=GRAPH_GROUP_TABLE,
                     back_populates='groups')
-    
-
-#class AppGroup(Group):
-#    """
-#    Groupe d'applicationss.
-#    @ivar applications: Liste d'instances de L{Application}s contenus dans ce groupe.
-#    """
-
-#    __mapper_args__ = {'polymorphic_identity': u'appgroup'}
-
-#    #permissions = relation('Permission', secondary=APPLICATION_PERMISSION_TABLE,
-#    #                back_populates='appgroups')
-#    
-#    applications = relation('Application', secondary=APPLICATION_GROUP_TABLE,
-#                    back_populates='groups')
-#    
-#    vigiloservers = relation('VigiloServer', secondary=USAGE_TABLE,
-#                    back_populates='appgroups')
-#    
 

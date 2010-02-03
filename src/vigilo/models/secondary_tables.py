@@ -2,7 +2,11 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """
 Contient les tables intermédiaires utilisées dans les relations de type
-"plusieurs-à-plusieurs".
+"plusieurs-à-plusieurs" sans attributs propres.
+Les tables définies ci-dessous ne correspondent qu'à des relations binaires.
+Si vous devez représenter une relation ternaire (ou plus), créez une
+table spécifique dans le reste du modèle (ie. : une classe qui hérite
+de DeclarativeBase).
 """
 
 from sqlalchemy import Column, Table, ForeignKey

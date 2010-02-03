@@ -11,7 +11,7 @@ def sql_escape_like(s):
     @type s: C{unicode}
     @note: La chaine de caratère L{s} peut contenir les caractères
     spéciaux '?' et '*' qui agissent comme jokers et correspondent
-    au jokers '_' et '%' de SQL.
+    aux jokers '_' et '%' de SQL.
     """
     return s.replace('%', '\\%').replace('_', '\\_') \
                 .replace('*', '%').replace('?', '_')

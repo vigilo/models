@@ -18,16 +18,24 @@ class CorrEvent(DeclarativeBase, object):
     """
     Informations sur un événement corrélé.
     
-    @ivar idcause: Référence à l'événement faisant partie de L{Event}
-        et identifié comme cause primaire de l'événement corrélé.
+    @ivar idcorrevent: Identifiant de l'événement corrélé.
+    @ivar idcause: Identifiant de l'événement qui a été identifié
+        comme cause principale de l'alerte.
+    @ivar cause: Instance de l'événement identifié comme cause de l'alerte.
     @ivar impact: Nombre d'hôtes impactés par l'événement corrélé.
-    @ivar trouble_ticket: URL du ticket d'incident se rapportant à l'événement
-        corrélé.
+    @ivar priority: Priorité de l'alerte.
+    @ivar trouble_ticket: URL du ticket d'incident se rapportant à
+        l'événement corrélé.
     @ivar status: Statut de la prise en compte de cet événement corrélé.
-    @ivar occurrences: Compteur d'occurrences de l'événement corrélé.
-        Il est incrémenté chaque fois que l'état de l'événement oscille
-        alors que l'opérateur n'est pas encore intervenu.
+    @ivar occurrence: Compteur d'occurrences de l'événement corrélé.
+        Il est incrémenté par le corrélateur chaque fois que l'état de
+        l'événement oscille alors que l'opérateur n'est pas encore intervenu.
     @ivar timestamp_active: Date de dernière ouverture de l'événement.
+        Il s'agit de la date de création de l'événement ou de la dernière
+        date à laquelle un événement s'est réenclenché, c'est-à-dire,
+        est repassé dans un état d'erreur (ie. ni 'OK' ni 'UP') alors que
+        l'opérateur avait marqué le problème comme résolu.
+    @ivar events: Liste d'instances d'L{Event}s qui sont liés à cette alerte.
     """
 
     __tablename__ = bdd_basename + 'correvent'
@@ -47,6 +55,9 @@ class CorrEvent(DeclarativeBase, object):
         autoincrement=False,
         nullable=False,
     )
+
+    cause = relation('Event', lazy=True,
+        primaryjoin='CorrEvent.idcause == Event.idevent')
 
     impact = Column(Integer)
 
@@ -72,9 +83,6 @@ class CorrEvent(DeclarativeBase, object):
 
     events = relation('Event', lazy=True,
         secondary=EVENTSAGGREGATE_TABLE)
-
-    cause = relation('Event', lazy=True,
-        primaryjoin='CorrEvent.idcause == Event.idevent')
 
     def __init__(self, **kwargs):
         """
@@ -115,5 +123,4 @@ class CorrEvent(DeclarativeBase, object):
         minutes = divmod(date.seconds, 60)[0]
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
-
 

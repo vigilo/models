@@ -20,10 +20,12 @@ class HostClass(DeclarativeBase, object):
     Un hôte va pouvoir appartenir à plusieurs classes.
     Exemples de classes : "Solaris", "Solaris9", "net-snmp".
     Ces informations sont utilisées pour déterminer la meilleure
-    stratégie utilisable pour interroger l'équipement sur son état.
+    stratégie à utiliser pour interroger l'équipement sur son état.
 
     @ivar idclass: Identifiant (auto-généré) de la classe.
     @ivar name: Le nom de la classe (ex: "Solaris").
+    @ivar hosts: Liste des L{Host}s auxquels la classe d'hôte courante
+        est attachée.
     """
     __tablename__ = bdd_basename + 'hostclass'
 

@@ -14,7 +14,12 @@ from .session import DBSession
 __all__ = ('Application', )
 
 class Application(DeclarativeBase, object):
-    """Gère les applications employées par Vigilo."""
+    """
+    Gère les applications employées par Vigilo.
+    
+    @ivar idapp: Identifiant de l'application.
+    @ivar name: Nom (unique) de l'application.
+    """
     __tablename__ = bdd_basename + 'application'
 
     idapp = Column(
