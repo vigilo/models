@@ -14,12 +14,12 @@ __all__ = ('VigiloServer', )
 
 class VigiloServer(DeclarativeBase, object):
     """
-    Vigilo server class.
+    Cette classe gère les informations concernant un serveur sur lequel
+    Vigilo est installé.
 
-    @ivar name: Nom complet (FQDN) du serveur.
+    @ivar idvigiloserver: Identifiant auto-généré du serveur.
+    @ivar name: Nom complet (FQDN) du serveur hébergeant Vigilo.
     @ivar description: Une description intelligible du serveur.
-    @ivar hostgroups: Liste des groupes d'hôtes auxquels cet hôte appartient.
-    @ivar tags: Liste des libellés attachés à cet hôte.
     """
     __tablename__ = bdd_basename + 'vigiloserver'
     
@@ -56,22 +56,22 @@ class VigiloServer(DeclarativeBase, object):
         Conversion en unicode.
         
         @return: Le nom du groupe.
-        @rtype: C{str}
+        @rtype: C{unicode}
         """
         return self.name
     
     
     @classmethod
-    def by_vigiloserver_name(cls, vigiloserver):
+    def by_vigiloserver_name(cls, servername):
         """
-        Renvoie le serveur dont le nom est C{vigiloservername}.
+        Renvoie le serveur dont le nom est L{servername}.
 
         @param cls: La classe à utiliser, c'est-à-dire L{VigiloServer}.
         @type cls: C{class}
-        @param vigiloserver: Le nom du groupe que l'on souhaite récupérer.
-        @type vigiloserver: C{str}
-        @return: Le serveur demandé.
-        @rtype: Une instance de la classe L{VigiloServer}
+        @param servername: Nom du serveur Vigilo à rechercher.
+        @type servername: C{unicode}
+        @return: Le serveur Vigilo demandé.
+        @rtype: L{VigiloServer}
         """
-        return DBSession.query(cls).filter(cls.name == vigiloserver).first()
+        return DBSession.query(cls).filter(cls.name == servername).first()
 

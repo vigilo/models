@@ -12,8 +12,18 @@ __all__ = ('CustomGraphView', )
 
 class Ventilation(DeclarativeBase, object):
     """
-    Modèle Ventilation spécifiant la répartition des hosts
-    par serveur Vigilo et par groupe d'applications.
+    Gestion de la ventilation des hôtes supervisés, c'est-à-dire que cette
+    classe gère la répartition des hosts par serveur Vigilo et par groupe
+    d'applications.
+
+    @ivar idhost: Identifiant de l'hôte à ventiler.
+    @ivar host: Instance de l'hôte à ventiler.
+    @ivar idvigiloserver: Identifiant du serveur Vigilo sur lequel
+        l'hôte sera ventilé.
+    @ivar vigiloserver: Instance du serveur Vigilo sur lequel l'hôte
+        sera ventilé.
+    @ivar idapp: Identifiant de l'L{Application} installée.
+    @ivar application: Instance de l'L{Application} installée.
     """
     
     __tablename__ = bdd_basename + 'ventilation'

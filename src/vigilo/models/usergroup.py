@@ -14,7 +14,17 @@ from .secondary_tables import USERGROUP_PERMISSION_TABLE, USER_GROUP_TABLE
 __all__ = ('UserGroup', )
 
 class UserGroup(DeclarativeBase, object):
-    """User groups, used eg. to organize users by services, privileges, etc."""
+    """
+    Gère un groupe d'utilisateurs. Un groupe d'utilisateur peut refléter
+    l'organisation d'une entreprise, par exemple avec un découpage en
+    "profils" des utilisateurs.
+
+    @ivar idgroup: Identifiant du groupe d'utilisateurs.
+    @ivar group_name: Nom du groupe d'utilisateurs.
+    @ivar permissions: Liste des L{Permission}s données aux utilisateurs
+        du groupe.
+    @ivar users: Liste des utilisateurs (L{User}) appartenant au groupe.
+    """
 
     __tablename__ = bdd_basename + 'usergroup'
 
@@ -36,13 +46,20 @@ class UserGroup(DeclarativeBase, object):
         back_populates='usergroups', lazy=True)
 
     def __init__(self, **kwargs):
+        """Initialisation dee l'objet."""
         super(UserGroup, self).__init__(**kwargs)
 
     def __unicode__(self):
+        """Représentation unicode."""
         return self.group_name
 
     @classmethod
     def by_group_name(cls, group_name):
-        """Return the group object whose group name is ``group_name``."""
+        """
+        Renvoie le groupe d'utilisateurs dont le nom est L{group_name}.
+        
+        @return: Groupe d'utilisateurs dont le nom est L{group_name}.
+        @rtype: L{UserGroup}
+        """
         return DBSession.query(cls).filter(cls.group_name == group_name).first()
 

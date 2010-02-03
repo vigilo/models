@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""BdD Vigiboard"""
+"""Modèles pour les tables SQL utilisées dans Vigilo."""
 
 __all__ = (
     'VIGILO_MODEL_VERSION',

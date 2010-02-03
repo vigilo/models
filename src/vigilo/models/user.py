@@ -16,7 +16,21 @@ from .secondary_tables import USER_GROUP_TABLE
 __all__ = ('User', )
 
 class User(DeclarativeBase, object):
-    """Stores information about users."""
+    """
+    Cette classe contient les informations relatives à un utilisateur.
+
+    @ivar user_name: Nom de l'utilisateur (identifiant).
+    @ivar fullname: Nom complet de l'utilisateur.
+    @ivar email: Adresse email de l'utilisateur.
+    @ivar password: Mot de passe (chiffré) de l'utilisateur.
+    @ivar language: Langage utilisé par l'utilisateur.
+    @ivar last_changed: Date de dernière mise à jour des informations
+        de l'utilisateur.
+    @ivar customgraphviews: Liste des vues personnalisées de l'utilisateur
+        dans VigiGraph.
+    @ivar usergroups: Liste des groupes d'utilisateurs auxquels
+        l'utilisateur courant appartient.
+    """
 
     __tablename__ = bdd_basename + 'user'
 
@@ -135,14 +149,22 @@ class User(DeclarativeBase, object):
     @classmethod
     def by_email_address(cls, email):
         """
-        Return the user object whose email address is C{email}.
+        Retourne l'utilisateur (L{User}) dont l'adresse email
+        est L{email}.
+        
+        @return: Utilisateur dont l'email est L{email}.
+        @rtype: L{User}
         """
         return DBSession.query(cls).filter(cls.email == email).first()
 
     @classmethod
     def by_user_name(cls, username):
         """
-        Return the user object whose user name is C{username}.
+        Retourne l'utilisateur (L{User}) dont le nom d'utilisateur
+        est L{username}.
+        
+        @return: Utilisateur dont le nom d'utilisateur est L{username}.
+        @rtype: L{User}
         """
         return DBSession.query(cls).filter(cls.user_name == username).first()
 

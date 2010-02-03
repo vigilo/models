@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """
-BdD Vigilo Config
+Configuration des métadonnées concernant la base de données
+de Vigilo, utilisée par SQLAlchemy.
 """
 
 from sqlalchemy.ext.declarative import declarative_base

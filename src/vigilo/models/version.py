@@ -10,7 +10,14 @@ from vigilo.models.session import DBSession
 __all__ = ('Version', )
 
 class Version(DeclarativeBase, object):
-    """Stocke des informations sur la version d'un composant de Vigilo."""
+    """
+    Stocke des informations sur la version d'un composant de Vigilo.
+
+    @ivar name: Nom du composant dont les informations de version
+        sont stockées ici.
+    @ivar version: Numéro de version du composant (valeur numérique
+        uniquement).
+    """
     __tablename__ = bdd_basename + 'version'
 
     name = Column(
@@ -19,6 +26,7 @@ class Version(DeclarativeBase, object):
         primary_key=True,
         nullable=False,
     )
+
     version = Column(
         Integer,
         nullable=False,
@@ -30,5 +38,12 @@ class Version(DeclarativeBase, object):
 
     @classmethod
     def by_object_name(cls, object_name):
+        """
+        Retourne les informations de version sur le composant
+        dont le nom est L{object_name}.
+        
+        @return: Informations de version sur le composant L{object_name}.
+        @rtype: L{Version}
+        """
         return DBSession.query(cls).filter(cls.name == object_name).first()
 
