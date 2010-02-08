@@ -15,7 +15,7 @@ def setup_db():
     """Crée toutes les tables du modèle dans la BDD."""
     from ConfigParser import SafeConfigParser
     parser = SafeConfigParser()
-    parser.read('test.ini')
+    parser.read('settings_tests.ini')
 
     settings = dict(parser.items('vigilo.models'))
 
