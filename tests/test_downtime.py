@@ -3,7 +3,7 @@
 from datetime import datetime
 from nose.tools import assert_equals
 
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession
 from vigilo.models import Host, LowLevelService, User
 from vigilo.models import Downtime, DowntimeStatus
 

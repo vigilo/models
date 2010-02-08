@@ -5,10 +5,9 @@ from datetime import datetime
 import unittest
 
 from vigilo.models import ApplicationLog
-from vigilo.models.session import DBSession
-from vigilo.models.vigilo_bdd_config import metadata
+from vigilo.models.configure import DBSession
 
-from controller import ModelTest, setup_db, teardown_db
+from controller import ModelTest
 
 class TestApplicationLog(ModelTest):
     """Tests unitaires de la table ApplicationLog"""

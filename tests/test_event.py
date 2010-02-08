@@ -5,7 +5,7 @@ from datetime import datetime
 from nose.tools import assert_true, assert_equal
 
 from vigilo.models import Event, Host, LowLevelService, StateName
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession
 
 from controller import ModelTest
 

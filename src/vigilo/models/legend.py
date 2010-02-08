@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Host"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from vigilo.models.configure import db_basename, DeclarativeBase
 
 __all__ = ('Legend', )
 
@@ -18,7 +16,7 @@ class Legend(DeclarativeBase, object):
     @ivar fillcolor: Couleur de remplissage.
     @ivar strokecolor: Couleur de bordure.
     """
-    __tablename__ = bdd_basename + 'legend'
+    __tablename__ = db_basename + 'legend'
 
     minthreshold = Column(
             Integer,

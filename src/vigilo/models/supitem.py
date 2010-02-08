@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table SupItem"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.orm import relation, aliased
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.sql import functions
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 from vigilo.models.secondary_tables import SUPITEM_TAG_TABLE
-from vigilo.models.session import DBSession
 
 __all__ = ('SupItem', )
 
@@ -23,7 +20,7 @@ class SupItem(DeclarativeBase, object):
         highlevelservice).
     @ivar tags: Libellés attachés à cet objet.
     """
-    __tablename__ = bdd_basename + 'supitem'
+    __tablename__ = db_basename + 'supitem'
 
     idsupitem = Column(
         Integer,
@@ -95,11 +92,25 @@ class SupItem(DeclarativeBase, object):
         from vigilo.models import Host, HighLevelService, LowLevelService
         from sqlalchemy.sql.expression import and_
 
-        from vigilo.common.logging import get_logger
-        from vigilo.common.gettext import translate
+        # Le module vigilo.common est utilisé par les composants
+        # qui fonctionnent en mode démon (corrélateur, connecteurs, etc.).
+        try:
+            from vigilo.common.logging import get_logger
+            from vigilo.common.gettext import translate
+            _ = translate(__name__)
+        except ImportError:
+            # Dans les applications TurboGears, on utilise les outils
+            # de Python + ceux du framework.
+            from logging import getLogger as get_logger
+            try:
+                from pylons.i18n import ugettext as _
+            except ImportError:
+                # Si pylons.i18n n'est pas disponible, il s'agit probablement
+                # des tests unitaires, on définit '_' comme une non-opération.
+                from gettext import NullTranslations
+                _ = NullTranslations().ugettext
 
         LOGGER = get_logger(__name__)
-        _ = translate(__name__)
         
         # Si le nom du service vaut None, l'item est un hôte.
         if not servicename:

@@ -7,10 +7,9 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename
-from .session import DBSession
-from .secondary_tables import HOST_HOSTCLASS_TABLE, \
-                                HOST_GROUP_TABLE
+from vigilo.models.configure import db_basename, DBSession
+from vigilo.models.secondary_tables import HOST_HOSTCLASS_TABLE, \
+                                            HOST_GROUP_TABLE
 from vigilo.models.supitem import SupItem
 
 __all__ = ('Host', )
@@ -36,13 +35,13 @@ class Host(SupItem):
     @ivar hostclasses: Classes d'hôtes attachées à l'hôte.
     @ivar services: Liste des services de bas niveau configurés sur cet hôte.
     """
-    __tablename__ = bdd_basename + 'host'
+    __tablename__ = db_basename + 'host'
     __mapper_args__ = {'polymorphic_identity': u'host'}
 
     idhost = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'supitem.idsupitem',
+            db_basename + 'supitem.idsupitem',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,

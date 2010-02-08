@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table User"""
-from __future__ import absolute_import
-
 from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime
 import hashlib
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
-from vigilo.common.conf import settings
-from .secondary_tables import USER_GROUP_TABLE
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.secondary_tables import USER_GROUP_TABLE
 
 __all__ = ('User', )
 
@@ -32,7 +28,7 @@ class User(DeclarativeBase, object):
         l'utilisateur courant appartient.
     """
 
-    __tablename__ = bdd_basename + 'user'
+    __tablename__ = db_basename + 'user'
 
     # XXX Faut-il renommer ce champ ?
     user_name = Column(
@@ -192,10 +188,20 @@ class User(DeclarativeBase, object):
         @type password: C{str}
         @return: Un booléen indiquant si le mot de passe est correct.
         @rtype: C{bool}
-
         """
-        if settings.get('USE_KERBEROS', False):
-            return True
+
+        try:
+            from tg import config
+        except ImportError:
+            from vigilo.common.conf import settings as config
+
+        try:
+            if config.has_key('use_kerberos') and \
+                config.as_bool('use_kerberos'):
+                return True
+        except AttributeError:
+            pass
+
         # Petite précaution
         if self._password is None:
             return False
@@ -215,7 +221,16 @@ class User(DeclarativeBase, object):
             Si la variable n'existe pas ou ne correspond pas à une classe
             valide du module hashlib, alors le mot de passe est stocké en clair.
         """
-        hash_method = settings.get('HASH_FUNCTION')
+
+        try:
+            from tg import config
+        except ImportError:
+            try:
+                from vigilo.common.conf import settings as config
+            except ImportError:
+                config = {}
+
+        hash_method = config.get('password_hashing_function')
         if not hash_method is None:
             hash_method = hashlib.__dict__.get(hash_method)
             if not callable(hash_method):
@@ -247,8 +262,14 @@ class User(DeclarativeBase, object):
         :return: La langue préférée de l'utilisateur.
         :rtype: C{str}
         """
+
+        try:
+            from tg import config
+        except ImportError:
+            from vigilo.common.conf import settings as config
+
         if self._language is None:
-            language = settings['VIGILO_ALL_DEFAULT_LANGUAGE']
+            language = config['lang']
             if language is None:
                 raise KeyError, "No default language in settings"
             return language

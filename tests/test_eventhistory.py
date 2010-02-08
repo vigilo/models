@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for EventHistory class"""
 from vigilo.models import EventHistory, Host, LowLevelService, Event
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession
 from datetime import datetime
 
 from controller import ModelTest

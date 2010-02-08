@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for Dependency class"""
 from vigilo.models import Dependency, Host, LowLevelService
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession
 
 from controller import ModelTest
 

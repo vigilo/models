@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table PerfDataSource"""
-from __future__ import absolute_import
-
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, UnicodeText, Float
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from vigilo.models.configure import db_basename, DeclarativeBase
 
-from .secondary_tables import GRAPH_PERFDATASOURCE_TABLE
+from vigilo.models.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 
 __all__ = ('PerfDataSource', )
 
@@ -27,7 +25,7 @@ class PerfDataSource(DeclarativeBase, object):
         (ex factor=8 pour conversion octets -> bits)
     """
 
-    __tablename__ = bdd_basename + 'perfdatasource'
+    __tablename__ = db_basename + 'perfdatasource'
 
     idperfdatasource = Column(
         Integer,
@@ -37,7 +35,7 @@ class PerfDataSource(DeclarativeBase, object):
     idservice = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'lowlevelservice.idservice',
+            db_basename + 'lowlevelservice.idservice',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,

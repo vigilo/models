@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """VigiloServer model"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('VigiloServer', )
 
@@ -21,7 +18,7 @@ class VigiloServer(DeclarativeBase, object):
     @ivar name: Nom complet (FQDN) du serveur hébergeant Vigilo.
     @ivar description: Une description intelligible du serveur.
     """
-    __tablename__ = bdd_basename + 'vigiloserver'
+    __tablename__ = db_basename + 'vigiloserver'
     
     
     idvigiloserver = Column(

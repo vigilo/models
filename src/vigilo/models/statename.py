@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table StateName"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('StateName', )
 
@@ -19,7 +16,7 @@ class StateName(DeclarativeBase, object):
         plus l'état a de l'importance et apparaîtra en début d'un
         tableau (cas des événements dans VigiBoard par exemple).
     """
-    __tablename__ = bdd_basename + 'statename'
+    __tablename__ = db_basename + 'statename'
 
     idstatename = Column(
         Integer,

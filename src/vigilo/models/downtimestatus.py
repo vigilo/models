@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table DowntimeStatus"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Text, DateTime, Integer, Unicode
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('DowntimeStatus', )
 
@@ -21,7 +18,7 @@ class DowntimeStatus(DeclarativeBase, object):
         Valeurs possibles : 'Scheduled', 'Active', 'Finished', 'Cancelled'.
     """
 
-    __tablename__ = bdd_basename + 'downtime_status'
+    __tablename__ = db_basename + 'downtime_status'
 
     idstatus = Column(
         Integer,

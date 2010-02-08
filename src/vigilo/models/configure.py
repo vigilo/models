@@ -14,20 +14,29 @@ même si ces composants n'ont pas besoin des fonctionnalités apportées
 par ZopeTransactionExtension.
 """
 
-from sqlalchemy.engine import engine_from_config
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from zope.sqlalchemy import ZopeTransactionExtension
 
-from vigilo.common.conf import settings
+__all__ = ('DBSession', 'metadata', 'DeclarativeBase', 'configure_db')
 
-__all__ = ('DBSession', )
-
-# ZTE session.
-# We must go through transaction (a zodb extraction) to commit, rollback.
-# There's also a session context to hold managed data, and the
-# ZopeTransactionExtension makes that mostly transparent.
-# The ZopeTransactionExtension prevents us
-# from committing, etc, the session directly.
+DeclarativeBase = declarative_base()
+metadata = DeclarativeBase.metadata
 DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False,
                 extension=ZopeTransactionExtension()))
-DBSession.bind = engine_from_config(settings['VIGILO_SQLALCHEMY'], prefix='')
+db_basename = ''
+
+def configure_db(config_obj, prefix):
+    from sqlalchemy.engine import engine_from_config
+
+    # ZTE session.
+    # We must go through transaction (a zodb extraction) to commit, rollback.
+    # There's also a session context to hold managed data, and the
+    # ZopeTransactionExtension makes that mostly transparent.
+    # The ZopeTransactionExtension prevents us
+    # from committing, etc, the session directly.
+    engine = engine_from_config(config_obj, prefix=prefix)
+    DBSession.configure(bind=engine)
+    metadata.bind = DBSession.bind
+    return engine
+

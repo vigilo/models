@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table UserGroup"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
-from .secondary_tables import USERGROUP_PERMISSION_TABLE, USER_GROUP_TABLE
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.secondary_tables import USERGROUP_PERMISSION_TABLE, \
+                                            USER_GROUP_TABLE
 
 __all__ = ('UserGroup', )
 
@@ -26,7 +24,7 @@ class UserGroup(DeclarativeBase, object):
     @ivar users: Liste des utilisateurs (L{User}) appartenant au groupe.
     """
 
-    __tablename__ = bdd_basename + 'usergroup'
+    __tablename__ = db_basename + 'usergroup'
 
     idgroup = Column(
         Integer,

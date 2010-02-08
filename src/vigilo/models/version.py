@@ -4,8 +4,7 @@
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 
-from vigilo.models.vigilo_bdd_config import bdd_basename, DeclarativeBase
-from vigilo.models.session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('Version', )
 
@@ -18,7 +17,7 @@ class Version(DeclarativeBase, object):
     @ivar version: Numéro de version du composant (valeur numérique
         uniquement).
     """
-    __tablename__ = bdd_basename + 'version'
+    __tablename__ = db_basename + 'version'
 
     name = Column(
         Unicode(64),

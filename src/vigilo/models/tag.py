@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Tag"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .secondary_tables import SUPITEM_TAG_TABLE
+from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.secondary_tables import SUPITEM_TAG_TABLE
 
 class Tag(DeclarativeBase, object):
     """
@@ -20,7 +18,7 @@ class Tag(DeclarativeBase, object):
         le tag est rattaché.
     """
 
-    __tablename__ = bdd_basename + 'tag'
+    __tablename__ = db_basename + 'tag'
 
     name = Column(
         Unicode(255),

@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Change"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime
 
 from datetime import datetime
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('Change', )
 
@@ -24,7 +21,7 @@ class Change(DeclarativeBase, object):
     @ivar element: Nom de la table.
     @ivar last_modified: Date de dernière modification.
     """
-    __tablename__ = bdd_basename + 'change'
+    __tablename__ = db_basename + 'change'
 
     element = Column(
         Unicode(255),

@@ -1,22 +1,19 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Group"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation, backref
 from sqlalchemy.schema import UniqueConstraint
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
-from .secondary_tables import GROUP_PERMISSION_TABLE, \
-                                HOST_GROUP_TABLE, \
-                                SERVICE_GROUP_TABLE, \
-                                MAP_GROUP_TABLE, \
-                                GRAPH_GROUP_TABLE#, \
-#                                APPLICATION_GROUP_TABLE, \
-#                                USAGE_TABLE
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.secondary_tables import GROUP_PERMISSION_TABLE, \
+                                            HOST_GROUP_TABLE, \
+                                            SERVICE_GROUP_TABLE, \
+                                            MAP_GROUP_TABLE, \
+                                            GRAPH_GROUP_TABLE#, \
+#                                            APPLICATION_GROUP_TABLE, \
+#                                            USAGE_TABLE
 
 __all__ = ('HostGroup', 'ServiceGroup', 'MapGroup')
 
@@ -40,7 +37,7 @@ class Group(DeclarativeBase, object):
     @ivar children: Liste des instances de groupes qui héritent du groupe
         courant.
     """
-    __tablename__ = bdd_basename + 'group'
+    __tablename__ = db_basename + 'group'
     __table_args__ = (
         UniqueConstraint('grouptype', 'name'),
         {}
@@ -64,7 +61,7 @@ class Group(DeclarativeBase, object):
 
     idparent = Column(
         'idparent', Integer,
-        ForeignKey(bdd_basename + 'group.idgroup'),
+        ForeignKey(db_basename + 'group.idgroup'),
     )
 
     # XXX We should make sure it's impossible to build cyclic graphs.

@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table HostClass"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
-from .secondary_tables import HOST_HOSTCLASS_TABLE
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.secondary_tables import HOST_HOSTCLASS_TABLE
 
 __all__ = ('HostClass', )
 
@@ -27,7 +24,7 @@ class HostClass(DeclarativeBase, object):
     @ivar hosts: Liste des L{Host}s auxquels la classe d'hôte courante
         est attachée.
     """
-    __tablename__ = bdd_basename + 'hostclass'
+    __tablename__ = db_basename + 'hostclass'
 
     idclass = Column(
         Integer,

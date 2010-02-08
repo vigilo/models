@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table State"""
-
-from __future__ import absolute_import
-
 import datetime
 
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, Text, DateTime
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from vigilo.models.configure import db_basename, DeclarativeBase
 
 class State(DeclarativeBase, object):
     """
@@ -24,12 +21,12 @@ class State(DeclarativeBase, object):
     @ivar message: Message d'état transmis par Nagios.
     """
 
-    __tablename__ = bdd_basename + 'state'
+    __tablename__ = db_basename + 'state'
 
     idsupitem = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'supitem.idsupitem',
+            db_basename + 'supitem.idsupitem',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         autoincrement=False, primary_key=True,
@@ -46,7 +43,7 @@ class State(DeclarativeBase, object):
     state = Column(
         'state', Integer,
         ForeignKey(
-            bdd_basename + 'statename.idstatename',
+            db_basename + 'statename.idstatename',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,

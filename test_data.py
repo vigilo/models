@@ -2,8 +2,16 @@
 """Insère des données de test dans la base de données."""
 
 import atexit
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession, configure_db
 from vigilo import models
+
+def config_db():
+    from ConfigParser import SafeConfigParser
+
+    parser = SafeConfigParser()
+    parser.read('settings.ini')
+    settings = dict(parser.items('vigilo.models'))
+    configure_db(settings, 'sqlalchemy.')
 
 def commit_on_exit():
     """
@@ -12,6 +20,8 @@ def commit_on_exit():
     """
     import transaction
     transaction.commit()
+
+config_db()
 atexit.register(commit_on_exit)
 
 # Noms des états

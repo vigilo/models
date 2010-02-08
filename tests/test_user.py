@@ -3,7 +3,6 @@
 from nose.tools import eq_
 
 from vigilo.models import User
-from vigilo.common.conf import settings
 
 from controller import ModelTest
 
@@ -34,9 +33,4 @@ class TestUser(ModelTest):
         """Users should be fetcheable by their username"""
         him = User.by_user_name(u"foobar")
         eq_(him, self.obj)
-
-    def test_default_language(self):
-        """Users' default language should be the configuration-defined one"""
-        default_language = settings['VIGILO_ALL_DEFAULT_LANGUAGE']
-        eq_(self.obj.language, default_language)
 

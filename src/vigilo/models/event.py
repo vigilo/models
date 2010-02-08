@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Event"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import synonym, relation, aliased
 from sqlalchemy.types import Text, DateTime, Integer
 
 from datetime import datetime
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .statename import StateName
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.statename import StateName
 
 __all__ = ('Event', )
 
@@ -36,7 +33,7 @@ class Event(DeclarativeBase, object):
     @ivar message: Le message transmis par Nagios avec l'événement.
     """
 
-    __tablename__ = bdd_basename + 'event'
+    __tablename__ = db_basename + 'event'
 
     idevent = Column(
         Integer,
@@ -48,7 +45,7 @@ class Event(DeclarativeBase, object):
     idsupitem = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'supitem.idsupitem',
+            db_basename + 'supitem.idsupitem',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
@@ -68,7 +65,7 @@ class Event(DeclarativeBase, object):
     _current_state = Column(
         'current_state', Integer,
         ForeignKey(
-            bdd_basename + 'statename.idstatename',
+            db_basename + 'statename.idstatename',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
@@ -107,7 +104,7 @@ class Event(DeclarativeBase, object):
     _initial_state = Column(
         'initial_state', Integer,
         ForeignKey(
-            bdd_basename + 'statename.idstatename',
+            db_basename + 'statename.idstatename',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
@@ -125,7 +122,7 @@ class Event(DeclarativeBase, object):
     _peak_state = Column(
         'peak_state', Integer,
         ForeignKey(
-            bdd_basename + 'statename.idstatename',
+            db_basename + 'statename.idstatename',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,

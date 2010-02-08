@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Downtime"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Text, DateTime, Integer, Unicode
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase
 
 __all__ = ('Downtime', )
 
@@ -30,7 +27,7 @@ class Downtime(DeclarativeBase, object):
     @ivar status: Instance du statut de la mise en silence.
     """
 
-    __tablename__ = bdd_basename + 'downtime'
+    __tablename__ = db_basename + 'downtime'
 
     iddowntime = Column(
         Integer,
@@ -40,7 +37,7 @@ class Downtime(DeclarativeBase, object):
     idsupitem = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'supitem.idsupitem',
+            db_basename + 'supitem.idsupitem',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
@@ -53,7 +50,7 @@ class Downtime(DeclarativeBase, object):
     author = Column(
         Unicode(255),
         ForeignKey(
-            bdd_basename + 'user.user_name',
+            db_basename + 'user.user_name',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
@@ -70,7 +67,7 @@ class Downtime(DeclarativeBase, object):
     idstatus = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'downtime_status.idstatus',
+            db_basename + 'downtime_status.idstatus',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,

@@ -2,16 +2,13 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table ApplicationLog"""
 
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, DateTime, UnicodeText, Unicode
 from sqlalchemy.exc import InvalidRequestError, IntegrityError
 from datetime import datetime
 import transaction
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('ApplicationLog', )
 
@@ -32,7 +29,7 @@ class ApplicationLog(DeclarativeBase, object):
     @ivar ip: Adresse IP de l'utilisateur lorsque l'événement a été enregistré.
     """
 
-    __tablename__ = bdd_basename + "application_log"
+    __tablename__ = db_basename + "application_log"
 
     idlog = Column(
         Integer,

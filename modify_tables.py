@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 import transaction
-from vigilo.models.vigilo_bdd_config import metadata
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession, metadata, configure_db
 
-metadata.bind = DBSession.bind
+def config_db():
+    from ConfigParser import SafeConfigParser
+
+    parser = SafeConfigParser()
+    parser.read('settings.ini')
+    settings = dict(parser.items('vigilo.models'))
+    configure_db(settings, 'sqlalchemy.')
 
 def drop():
     print "DROPping all tables"
@@ -11,7 +16,7 @@ def drop():
     transaction.commit()
 
 def truncate():
-    from vigilo.turbogears.websetup import populate_db
+    from vigilo.models.websetup import populate_db
 
     for table in metadata.tables.items():
         print "Truncating table '%s'" % table[0]
@@ -19,7 +24,7 @@ def truncate():
         DBSession.flush()
 
     print "Re-inserting default data in tables"
-    populate_db()
+    populate_db(None)
     transaction.commit()
 
 if __name__ == '__main__':
@@ -29,6 +34,7 @@ if __name__ == '__main__':
         print "Usage: python %s <drop/trunc>" % sys.argv[0]
         sys.exit(1)
 
+    config_db()
     action = sys.argv[1].lower()
 
     if action == 'drop':

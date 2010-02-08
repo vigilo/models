@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Application."""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-#from .secondary_tables import APPLICATION_GROUP_TABLE
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('Application', )
 
@@ -20,7 +16,7 @@ class Application(DeclarativeBase, object):
     @ivar idapp: Identifiant de l'application.
     @ivar name: Nom (unique) de l'application.
     """
-    __tablename__ = bdd_basename + 'application'
+    __tablename__ = db_basename + 'application'
 
     idapp = Column(
         Integer,

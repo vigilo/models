@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """Unit test suite for the models of the application."""
 from nose.tools import assert_equals
-from vigilo.models.vigilo_bdd_config import metadata
-from vigilo.models.session import DBSession
 from vigilo.models.statename import StateName
+from vigilo.models.configure import DBSession, metadata, configure_db
 
 from os import path, environ
 import sys
@@ -11,11 +10,17 @@ import nose
 
 __all__ = ['ModelTest', 'setup_db', 'teardown_db']
 
-metadata.bind = DBSession.bind
-
 #Create an empty database before we start our tests for this module
 def setup_db():
     """Crée toutes les tables du modèle dans la BDD."""
+    from ConfigParser import SafeConfigParser
+    parser = SafeConfigParser()
+    parser.read('test.ini')
+
+    settings = dict(parser.items('vigilo.models'))
+
+    configure_db(settings, 'sqlalchemy.')
+#    db_basename = settings['db_basename']
     metadata.create_all()
     
 #Teardown that database 

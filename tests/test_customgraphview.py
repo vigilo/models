@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for CustomGraphView class"""
 from vigilo.models import CustomGraphView, Host, Graph, User
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession
 
 from controller import ModelTest
 

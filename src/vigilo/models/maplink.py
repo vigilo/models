@@ -4,14 +4,11 @@
 Modèle pour la table maplink et ses tables dérivées par jointure 
 mapservicelink et mapsegment.
 """
-from __future__ import absolute_import
-
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('Link', )
 
@@ -27,7 +24,7 @@ class MapLink(DeclarativeBase, object):
     @ivar from_node: Instance du nœud de départ de la liaison.
     @ivar to_node: Instance du nœud d'arrivée de la liaison.
     """
-    __tablename__ = bdd_basename + 'maplink'
+    __tablename__ = db_basename + 'maplink'
 
     idmaplink = Column(
         Integer,
@@ -37,21 +34,21 @@ class MapLink(DeclarativeBase, object):
     idfrom_node = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'mapnode.idmapnode',
+            db_basename + 'mapnode.idmapnode',
             ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
     
     idto_node = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'mapnode.idmapnode',
+            db_basename + 'mapnode.idmapnode',
             ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
 
     idmap = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'map.idmap',
+            db_basename + 'map.idmap',
             onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False)
     
@@ -113,7 +110,7 @@ class MapServiceLink(MapLink):
     idmapservicelink = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'maplink.idmaplink',
+            db_basename + 'maplink.idmaplink',
             onupdate='CASCADE', ondelete='CASCADE'),
         primary_key=True,
         nullable=False
@@ -122,7 +119,7 @@ class MapServiceLink(MapLink):
     idref = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'lowlevelservice.idservice',
+            db_basename + 'lowlevelservice.idservice',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
@@ -133,7 +130,7 @@ class MapServiceLink(MapLink):
     idgraph = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'graph.idgraph',
+            db_basename + 'graph.idgraph',
             ondelete='CASCADE', onupdate='CASCADE')
         )
     
@@ -161,7 +158,7 @@ class MapSegment(MapLink):
     idmapsegment = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'maplink.idmaplink',
+            db_basename + 'maplink.idmaplink',
             onupdate='CASCADE', ondelete='CASCADE'),
         primary_key=True,
         nullable=False

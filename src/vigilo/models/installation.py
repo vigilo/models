@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table HostApplication."""
-from __future__ import absolute_import
-
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from vigilo.models.configure import db_basename, DeclarativeBase
 
 __all__ = ('Installation', )
 
@@ -25,12 +23,12 @@ class Installation(DeclarativeBase):
     @ivar jid: Identifiant Jabber (JID) à utiliser pour communiquer
         avec l'application via le bus XMPP.
     """
-    __tablename__ = bdd_basename + 'hostapp'
+    __tablename__ = db_basename + 'hostapp'
 
     idvigiloserver = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'vigiloserver.idvigiloserver',
+            db_basename + 'vigiloserver.idvigiloserver',
             onupdate="CASCADE", ondelete="CASCADE",
         ),
         index=True,
@@ -43,7 +41,7 @@ class Installation(DeclarativeBase):
     idapp = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'application.idapp',
+            db_basename + 'application.idapp',
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True,

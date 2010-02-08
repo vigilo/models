@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table ImpactedPath."""
-from __future__ import absolute_import
-
 from sqlalchemy import ForeignKey, Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
+from vigilo.models.configure import db_basename, DeclarativeBase
 
 __all__ = ('ImpactedPath', )
 
@@ -24,7 +22,7 @@ class ImpactedPath(DeclarativeBase, object):
         d'impactes.
     """
 
-    __tablename__ = bdd_basename + 'impactedpath'
+    __tablename__ = db_basename + 'impactedpath'
 
     idpath = Column(
         Integer,
@@ -36,7 +34,7 @@ class ImpactedPath(DeclarativeBase, object):
     idsupitem = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'supitem.idsupitem',
+            db_basename + 'supitem.idsupitem',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,

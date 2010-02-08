@@ -6,18 +6,13 @@ Modèle pour la table FileDeployment.
 Stocke le hash code d'un fichier déployé pour
 implémenter la mise à jour différentielle
 """
-from __future__ import absolute_import
+from datetime import datetime
+import hashlib
 
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, DateTime 
-from datetime import datetime
 
-import hashlib
-
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from vigilo.common.conf import settings
-
-from .session import DBSession
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
 
 __all__ = ('FileDeployment', )
 
@@ -25,7 +20,7 @@ class FileDeployment(DeclarativeBase, object):
     """ Model used to implement partial deployment.
     """
     
-    __tablename__ = bdd_basename + 'filedeployment'
+    __tablename__ = db_basename + 'filedeployment'
 
     idfiledeployment = Column(
         Integer,
@@ -86,5 +81,5 @@ class FileDeployment(DeclarativeBase, object):
     @classmethod
     def by_src_and_dest_pathes(cls, src_path, dest_path):
         """Renvoie une instance d'L{FileDeployment} à partir de son nom."""
-        return DBSession.query(cls).filter(cls.src_path == src_path)\
+        return DBSession.query(cls).filter(cls.src_path == src_path) \
                                    .filter(cls.dest_path == dest_path).first()

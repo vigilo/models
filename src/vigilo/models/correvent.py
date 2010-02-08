@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table CorrEvent"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column, DefaultClause, ForeignKey
 from sqlalchemy.types import Integer, Unicode, DateTime
 from sqlalchemy.orm import relation
 from datetime import datetime
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from vigilo.common.conf import settings
-from .secondary_tables import EVENTSAGGREGATE_TABLE
+from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.secondary_tables import EVENTSAGGREGATE_TABLE
 
 __all__ = ('CorrEvent', )
 
@@ -38,7 +35,7 @@ class CorrEvent(DeclarativeBase, object):
     @ivar events: Liste d'instances d'L{Event}s qui sont liés à cette alerte.
     """
 
-    __tablename__ = bdd_basename + 'correvent'
+    __tablename__ = db_basename + 'correvent'
 
     idcorrevent = Column(
         Integer,
@@ -49,7 +46,7 @@ class CorrEvent(DeclarativeBase, object):
     idcause = Column(
         Integer,
         ForeignKey(
-            bdd_basename + 'event.idevent',
+            db_basename + 'event.idevent',
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         autoincrement=False,
@@ -63,7 +60,7 @@ class CorrEvent(DeclarativeBase, object):
 
     priority = Column(
         Integer,
-        default=settings.get('UNKNOWN_PRIORITY_VALUE', 1),
+        nullable=False,
     )
 
     trouble_ticket = Column(Unicode(255))

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """Test suite for the CorrEvent class"""
-from vigilo.models import CorrEvent, Event, LowLevelService, Host
-from vigilo.models.session import DBSession
 from nose.tools import assert_true
-import re
 from datetime import datetime
+import re
 
+from vigilo.models import CorrEvent, Event, LowLevelService, Host
+from vigilo.models.configure import DBSession
 from controller import ModelTest
 
 class TestCorrEvent(ModelTest):
@@ -15,6 +15,7 @@ class TestCorrEvent(ModelTest):
     attrs = {
         'status': u'OK',
         'timestamp_active': datetime.now(),
+        'priority': 0,
     }
 
     def __init__(self):

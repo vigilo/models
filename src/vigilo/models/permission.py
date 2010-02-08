@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Permissions"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
-from .session import DBSession
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .secondary_tables import USERGROUP_PERMISSION_TABLE, \
-                                GROUP_PERMISSION_TABLE, \
-                                MAP_PERMISSION_TABLE
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.secondary_tables import USERGROUP_PERMISSION_TABLE, \
+                                            GROUP_PERMISSION_TABLE, \
+                                            MAP_PERMISSION_TABLE
 
 __all__ = ('Permission', )
 
@@ -35,7 +32,7 @@ class Permission(DeclarativeBase, object):
     @ivar maps: Liste des cartes accessibles grâce à cette permission.
     """
 
-    __tablename__ = bdd_basename + 'permission'
+    __tablename__ = db_basename + 'permission'
 
     idpermission = Column(
         Integer,

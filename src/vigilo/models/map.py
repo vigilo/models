@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Map"""
-from __future__ import absolute_import
-
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime, Integer
 from sqlalchemy.orm import relation
 
-from .vigilo_bdd_config import bdd_basename, DeclarativeBase
-from .session import DBSession
-from .secondary_tables import MAP_GROUP_TABLE, MAP_PERMISSION_TABLE
+from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.secondary_tables import MAP_GROUP_TABLE, \
+                                            MAP_PERMISSION_TABLE
 
 __all__ = ('Map', )
 
@@ -29,7 +27,7 @@ class Map(DeclarativeBase, object):
     @ivar segments: Liste des segments (L{MapSegment}) présents sur la carte.
     @ivar permissions: Liste des L{Permission}s donnant accès à la carte.
     """
-    __tablename__ = bdd_basename + 'map'
+    __tablename__ = db_basename + 'map'
 
     idmap = Column(
         Integer,

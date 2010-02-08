@@ -10,7 +10,7 @@ from nose.tools import assert_equal
 
 from vigilo.models import FileDeployment
 from .controller import ModelTest
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession
 
 import hashlib
 
@@ -57,7 +57,7 @@ class TestFileDeployment(ModelTest):
         shaob.update('sample_dep.dest')
         shaob.update("this is a sample file to deploy")
         
-        assert_equal(shaob.hexdigest(), obj.hashcode)
+        assert_equal(u'' + shaob.hexdigest(), obj.hashcode)
         
         # TODO: should be put in tearDown; bug ?
         shutil.rmtree(self.tmpdir)

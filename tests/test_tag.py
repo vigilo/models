@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for Tag class"""
 from vigilo.models import Tag, Host, LowLevelService
-from vigilo.models.session import DBSession
+from vigilo.models.configure import DBSession
 from nose.tools import assert_equals
 
 from controller import ModelTest
