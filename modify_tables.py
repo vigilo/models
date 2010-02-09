@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import transaction
 from vigilo.models.configure import DBSession, metadata, configure_db
+from vigilo.models.websetup import populate_db
 
 def config_db():
     from ConfigParser import SafeConfigParser
@@ -16,8 +17,6 @@ def drop():
     transaction.commit()
 
 def truncate():
-    from vigilo.models.websetup import populate_db
-
     for table in metadata.tables.items():
         print "Truncating table '%s'" % table[0]
         table[1].delete().execute()
@@ -27,15 +26,23 @@ def truncate():
     populate_db(None)
     transaction.commit()
 
+def create():
+    populate_db(None)
+    transaction.commit()
+
 if __name__ == '__main__':
     import sys
 
     if len(sys.argv) < 2:
-        print "Usage: python %s <drop/trunc>" % sys.argv[0]
+        print "Usage: python %s <create/drop/trunc>" % sys.argv[0]
         sys.exit(1)
 
     config_db()
     action = sys.argv[1].lower()
+
+    if action == 'create':
+        create()
+        sys.exit(0)
 
     if action == 'drop':
         drop()

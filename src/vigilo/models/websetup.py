@@ -76,7 +76,7 @@ def init_db():
 
     parser = OptionParser()
     parser.add_option('-c', '--config', dest='config_file',
-        default='/etc/vigilo/models/models.ini',
+        default='/etc/vigilo/models/settings.ini',
         help='Path to the INI configuration file to use.', metavar='FILE')
 
     options = parser.parse_args()[0]
