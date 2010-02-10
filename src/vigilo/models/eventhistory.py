@@ -26,6 +26,7 @@ class EventHistory(DeclarativeBase, object):
     @ivar value: Valeur associée a l'action. Il s'agira par exemple du
         nouvel état d'un élément supervisé, tel que transmis par Nagios.
     @ivar text: Commentaire sur l'action effectuée.
+    @ivar timestamp: Date à laquelle le changement a eu lieu.
     @ivar username: Nom d'utilisateur de la personne effectuant l'action.
     """
 
@@ -39,7 +40,7 @@ class EventHistory(DeclarativeBase, object):
     )
 
     type_action = Column(
-        MSEnum('Nagios update state', 'Acknowlegement change state',
+        MSEnum('Nagios update state', 'Acknowledgement change state',
             'New occurence', 'User comment', 'Ticket change', 'Oncall',
             'Forced state'),
         nullable=False,

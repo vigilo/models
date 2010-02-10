@@ -65,8 +65,8 @@ class CorrEvent(DeclarativeBase, object):
 
     trouble_ticket = Column(Unicode(255))
 
-    # État d'acquittement: None, Acknowleged ou AAClosed
-    # (Acknowleged And Closed).
+    # État d'acquittement: None, Acknowledged ou AAClosed
+    # (Acknowledged And Closed).
     status = Column(Unicode(16),
         nullable=False,
         server_default=DefaultClause('None', for_update=False))
