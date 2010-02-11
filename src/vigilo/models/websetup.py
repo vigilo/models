@@ -28,16 +28,19 @@ def populate_db(bind):
     manager.fullname = u'Manager'
     manager.password = u'managepass'
     DBSession.add(manager)
+    DBSession.flush()
 
     group = models.UserGroup()
     group.group_name = u'managers'
     group.users.append(manager)
     DBSession.add(group)
+    DBSession.flush()
 
     permission = models.Permission()
     permission.permission_name = u'manage'
     permission.usergroups.append(group)
     DBSession.add(permission)
+    DBSession.flush()
 
     editor = models.User()
     editor.user_name = u'editor'
@@ -45,23 +48,35 @@ def populate_db(bind):
     editor.fullname = u'Editor'
     editor.password = u'editpass'
     DBSession.add(editor)
+    DBSession.flush()
 
     group = models.UserGroup()
     group.group_name = u'editors'
     group.users.append(editor)
     DBSession.add(group)
+    DBSession.flush()
 
     permission = models.Permission()
     permission.permission_name = u'edit'
     permission.usergroups.append(group)
     DBSession.add(permission)
+    DBSession.flush()
 
     version = models.Version()
     version.name = u'vigilo.models'
     version.version = models.VIGILO_MODEL_VERSION
     DBSession.add(version)
-
     DBSession.flush()
+
+    DBSession.add(models.StateName(statename=u'OK', order=0))
+    DBSession.add(models.StateName(statename=u'UNKNOWN', order=1))
+    DBSession.add(models.StateName(statename=u'WARNING', order=2))
+    DBSession.add(models.StateName(statename=u'CRITICAL', order=3))
+    DBSession.add(models.StateName(statename=u'UP', order=0))
+    DBSession.add(models.StateName(statename=u'UNREACHABLE', order=1))
+    DBSession.add(models.StateName(statename=u'DOWN', order=3))
+    DBSession.flush()
+
     transaction.commit()
     print "Successfully setup"
 
