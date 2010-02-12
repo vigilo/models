@@ -1,5 +1,6 @@
 NAME := models
 all: build
+include ../glue/Makefile.common
 lint: lint_pylint
 tests: tests_nose
-include ../glue/Makefile.common
+clean: clean_python
