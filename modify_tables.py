@@ -2,6 +2,7 @@
 import transaction
 from vigilo.models.configure import DBSession, metadata, configure_db
 from vigilo.models.websetup import populate_db
+import sqlalchemy
 
 def config_db():
     from ConfigParser import SafeConfigParser
@@ -19,7 +20,10 @@ def drop():
 def truncate():
     for table in metadata.tables.items():
         print "Truncating table '%s'" % table[0]
-        table[1].delete().execute()
+        try:
+            table[1].delete().execute()
+        except sqlalchemy.exc.ProgrammingError:
+            print "Table %s does not exist" % table[0]
         DBSession.flush()
 
     print "Re-inserting default data in tables"
