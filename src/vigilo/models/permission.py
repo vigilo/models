@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 from vigilo.models.secondary_tables import USERGROUP_PERMISSION_TABLE, \
                                             GROUP_PERMISSION_TABLE, \
                                             MAP_PERMISSION_TABLE
@@ -32,7 +32,7 @@ class Permission(DeclarativeBase, object):
     @ivar maps: Liste des cartes accessibles grâce à cette permission.
     """
 
-    __tablename__ = db_basename + 'permission'
+    __tablename__ = 'permission'
 
     idpermission = Column(
         Integer,

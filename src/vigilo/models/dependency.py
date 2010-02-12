@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Dependency."""
-from sqlalchemy import ForeignKey, Column
+from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase, ForeignKey
+from vigilo.models.supitem import SupItem
 
 __all__ = ('Dependency', )
 
@@ -22,12 +23,12 @@ class Dependency(DeclarativeBase, object):
     @ivar supitem2: Instance d'élément supervisé marquée comme dépendance.
     """
 
-    __tablename__ = db_basename + 'dependency'
+    __tablename__ = 'dependency'
 
     idsupitem1 = Column(
         Integer,
         ForeignKey(
-            db_basename + 'supitem.idsupitem',
+            SupItem.idsupitem,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         primary_key=True, autoincrement=False,
@@ -40,7 +41,7 @@ class Dependency(DeclarativeBase, object):
     idsupitem2 = Column(
         Integer,
         ForeignKey(
-            db_basename + 'supitem.idsupitem',
+            SupItem.idsupitem,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         primary_key=True, autoincrement=False,

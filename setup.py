@@ -23,6 +23,7 @@ setup(name='vigilo-models',
         "SQLAlchemy",
         "zope.sqlalchemy >= 0.4",
         "PasteScript >= 1.7", # setup_requires has issues
+        "vigilo-common",
     ],
     extras_require ={
         'tests': tests_require

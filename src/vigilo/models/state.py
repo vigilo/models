@@ -3,11 +3,13 @@
 """Modèle pour la table State"""
 import datetime
 
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, Text, DateTime
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase, ForeignKey
+from vigilo.models.supitem import SupItem
+from vigilo.models.statename import StateName
 
 class State(DeclarativeBase, object):
     """
@@ -21,12 +23,12 @@ class State(DeclarativeBase, object):
     @ivar message: Message d'état transmis par Nagios.
     """
 
-    __tablename__ = db_basename + 'state'
+    __tablename__ = 'state'
 
     idsupitem = Column(
         Integer,
         ForeignKey(
-            db_basename + 'supitem.idsupitem',
+            SupItem.idsupitem,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         autoincrement=False, primary_key=True,
@@ -43,7 +45,7 @@ class State(DeclarativeBase, object):
     state = Column(
         'state', Integer,
         ForeignKey(
-            db_basename + 'statename.idstatename',
+            StateName.idstatename,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,

@@ -3,12 +3,15 @@
 """
 Modèle pour la table MapNode
 """
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, Boolean
 from sqlalchemy.orm import relation
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession, ForeignKey
 from vigilo.models.secondary_tables import SUB_MAP_NODE_MAP_TABLE
+from vigilo.models.map import Map
+from vigilo.models.host import Host
+from vigilo.models.service import LowLevelService
 
 __all__ = ('MapNodeHost', 'MapNodeService', 'MapNodePerformance')
 
@@ -30,7 +33,7 @@ class MapNode(DeclarativeBase, object):
     @ivar map: Relation vers la carte du nœud.
     @ivar submaps: Liste des sous-cartes associées au nœud.
     """
-    __tablename__ = db_basename + 'mapnode'
+    __tablename__ = 'mapnode'
 
     idmapnode = Column(
         Integer,
@@ -42,7 +45,7 @@ class MapNode(DeclarativeBase, object):
     idmap = Column(
         Integer,
         ForeignKey(
-            db_basename + 'map.idmap',
+            Map.idmap,
             onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False)
     
@@ -96,7 +99,7 @@ class MapNodeHost(MapNode):
     idmapnode = Column(
         Integer,
         ForeignKey(
-            db_basename + 'mapnode.idmapnode',
+            MapNode.idmapnode,
             onupdate='CASCADE', ondelete='CASCADE'),
         primary_key=True,
         nullable=False
@@ -105,7 +108,7 @@ class MapNodeHost(MapNode):
     idhost = Column(
         Integer, 
         ForeignKey(
-            db_basename + 'host.idhost',
+            Host.idhost,
             onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False)
 
@@ -141,7 +144,7 @@ class MapNodeService(MapNode):
     idmapnode = Column(
         Integer,
         ForeignKey(
-            db_basename + 'mapnode.idmapnode',
+            MapNode.idmapnode,
             onupdate='CASCADE', ondelete='CASCADE'), 
         primary_key=True,
         nullable=False
@@ -150,7 +153,7 @@ class MapNodeService(MapNode):
     idservice = Column(
         Integer,
         ForeignKey(
-            db_basename + 'lowlevelservice.idservice',
+            LowLevelService.idservice,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
@@ -180,7 +183,7 @@ class MapNodeService(MapNode):
 #    idmapnode = Column(
 #        Integer,
 #        ForeignKey(
-#            db_basename + 'mapnode.idmapnode',
+#            'mapnode.idmapnode',
 #            onupdate='CASCADE', ondelete='CASCADE'), 
 #        primary_key=True,
 #        nullable=False
@@ -188,7 +191,7 @@ class MapNodeService(MapNode):
 #    
 #    name = Column(
 #        Unicode(255),
-#        index=True, ForeignKey(db_basename + 'performance.name'),
+#        index=True, ForeignKey('performance.name'),
 #        ondelete='CASCADE', onupdate='CASCADE',
 #        nullable=False)     
 #    

@@ -4,7 +4,7 @@
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase
 
 __all__ = ('Legend', )
 
@@ -16,7 +16,7 @@ class Legend(DeclarativeBase, object):
     @ivar fillcolor: Couleur de remplissage.
     @ivar strokecolor: Couleur de bordure.
     """
-    __tablename__ = db_basename + 'legend'
+    __tablename__ = 'legend'
 
     minthreshold = Column(
             Integer,

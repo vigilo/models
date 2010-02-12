@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Event"""
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.orm import synonym, relation, aliased
 from sqlalchemy.types import Text, DateTime, Integer
 
 from datetime import datetime
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession, ForeignKey
 from vigilo.models.statename import StateName
+from vigilo.models.supitem import SupItem
 
 __all__ = ('Event', )
 
@@ -33,7 +34,7 @@ class Event(DeclarativeBase, object):
     @ivar message: Le message transmis par Nagios avec l'événement.
     """
 
-    __tablename__ = db_basename + 'event'
+    __tablename__ = 'event'
 
     idevent = Column(
         Integer,
@@ -45,7 +46,7 @@ class Event(DeclarativeBase, object):
     idsupitem = Column(
         Integer,
         ForeignKey(
-            db_basename + 'supitem.idsupitem',
+            SupItem.idsupitem,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
@@ -65,7 +66,7 @@ class Event(DeclarativeBase, object):
     _current_state = Column(
         'current_state', Integer,
         ForeignKey(
-            db_basename + 'statename.idstatename',
+            StateName.idstatename,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
@@ -104,7 +105,7 @@ class Event(DeclarativeBase, object):
     _initial_state = Column(
         'initial_state', Integer,
         ForeignKey(
-            db_basename + 'statename.idstatename',
+            StateName.idstatename,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
@@ -122,7 +123,7 @@ class Event(DeclarativeBase, object):
     _peak_state = Column(
         'peak_state', Integer,
         ForeignKey(
-            db_basename + 'statename.idstatename',
+            StateName.idstatename,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,

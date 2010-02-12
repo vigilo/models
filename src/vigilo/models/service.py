@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Service"""
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.types import UnicodeText, Unicode, Integer
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
 
-from vigilo.models.configure import db_basename, DBSession
+from vigilo.models.configure import DBSession, ForeignKey
 from vigilo.models.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.supitem import SupItem
 from vigilo.models.host import Host
@@ -25,12 +25,12 @@ class Service(SupItem):
     @ivar dependancies: Liste des services dont ce service dépend.
         Pour les services techniques, cette liste est toujours vide.
     """
-    __tablename__ = db_basename + 'service'
+    __tablename__ = 'service'
 
     idservice = Column(
         Integer,
         ForeignKey(
-            db_basename + 'supitem.idsupitem',
+            SupItem.idsupitem,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,
@@ -90,7 +90,7 @@ class LowLevelService(Service):
     @ivar weight: Poids affecté à ce service pour le calcul de l'état
         des services de haut niveau (L{HighLevelService}).
     """
-    __tablename__ = db_basename + 'lowlevelservice'
+    __tablename__ = 'lowlevelservice'
     __table_args__ = (
         UniqueConstraint('idservice', 'idhost'),
         {}
@@ -100,7 +100,7 @@ class LowLevelService(Service):
     idservice = Column(
         Integer,
         ForeignKey(
-            db_basename + 'service.idservice',
+            Service.idservice,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         autoincrement=False, primary_key=True,
@@ -109,7 +109,7 @@ class LowLevelService(Service):
     idhost = Column(
         Integer,
         ForeignKey(
-            db_basename + 'host.idhost',
+            Host.idhost,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
@@ -175,13 +175,13 @@ class HighLevelService(Service):
     @ivar impacts: Liste des services de haut niveau impactés par
         celui-ci.
     """
-    __tablename__ = db_basename + 'highlevelservice'
+    __tablename__ = 'highlevelservice'
     __mapper_args__ = {'polymorphic_identity': u'highlevel'}
 
     idservice = Column(
         Integer,
         ForeignKey(
-            db_basename + 'service.idservice',
+            Service.idservice,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         autoincrement=False, primary_key=True,

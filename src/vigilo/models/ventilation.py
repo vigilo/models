@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 """Modèle pour la table Ventilation."""
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation, backref
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase, ForeignKey
+from vigilo.models.host import Host
+from vigilo.models.vigiloserver import VigiloServer
+from vigilo.models.application import Application
 
 __all__ = ('CustomGraphView', )
 
@@ -24,12 +27,12 @@ class Ventilation(DeclarativeBase, object):
     @ivar application: Instance de l'L{Application} installée.
     """
     
-    __tablename__ = db_basename + 'ventilation'
+    __tablename__ = 'ventilation'
 
     idhost = Column(
         Integer,
         ForeignKey(
-            db_basename + 'host.idhost',
+            Host.idhost,
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True,
         primary_key=True,
@@ -41,7 +44,7 @@ class Ventilation(DeclarativeBase, object):
     idvigiloserver = Column(
         Integer,
         ForeignKey(
-            db_basename + 'vigiloserver.idvigiloserver',
+            VigiloServer.idvigiloserver,
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True,
         primary_key=True,
@@ -53,7 +56,7 @@ class Ventilation(DeclarativeBase, object):
     idapp = Column(
         Integer,
         ForeignKey(
-            db_basename + 'application.idapp',
+            Application.idapp,
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True,
         primary_key=True,

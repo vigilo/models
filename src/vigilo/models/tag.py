@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase
 from vigilo.models.secondary_tables import SUPITEM_TAG_TABLE
 
 class Tag(DeclarativeBase, object):
@@ -18,7 +18,7 @@ class Tag(DeclarativeBase, object):
         le tag est rattaché.
     """
 
-    __tablename__ = db_basename + 'tag'
+    __tablename__ = 'tag'
 
     name = Column(
         Unicode(255),

@@ -12,7 +12,7 @@ import hashlib
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, DateTime 
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 
 __all__ = ('FileDeployment', )
 
@@ -20,7 +20,7 @@ class FileDeployment(DeclarativeBase, object):
     """ Model used to implement partial deployment.
     """
     
-    __tablename__ = db_basename + 'filedeployment'
+    __tablename__ = 'filedeployment'
 
     idfiledeployment = Column(
         Integer,

@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase
 from vigilo.models.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 
@@ -23,7 +23,7 @@ class Graph(DeclarativeBase, object):
     @ivar perfdatasources: Liste des sources de données de performances
         rattachées à ce graphe.
     """
-    __tablename__ = db_basename + 'graph'
+    __tablename__ = 'graph'
     
     idgraph = Column(
         Integer,

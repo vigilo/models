@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 from vigilo.models.secondary_tables import HOST_HOSTCLASS_TABLE
 
 __all__ = ('HostClass', )
@@ -24,7 +24,7 @@ class HostClass(DeclarativeBase, object):
     @ivar hosts: Liste des L{Host}s auxquels la classe d'hôte courante
         est attachée.
     """
-    __tablename__ = db_basename + 'hostclass'
+    __tablename__ = 'hostclass'
 
     idclass = Column(
         Integer,

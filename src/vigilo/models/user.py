@@ -6,7 +6,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime
 import hashlib
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 from vigilo.models.secondary_tables import USER_GROUP_TABLE
 
 __all__ = ('User', )
@@ -28,7 +28,7 @@ class User(DeclarativeBase, object):
         l'utilisateur courant appartient.
     """
 
-    __tablename__ = db_basename + 'user'
+    __tablename__ = 'user'
 
     # XXX Faut-il renommer ce champ ?
     user_name = Column(

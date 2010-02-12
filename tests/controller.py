@@ -1,26 +1,22 @@
 # -*- coding: utf-8 -*-
 """Unit test suite for the models of the application."""
-from nose.tools import assert_equals
-from vigilo.models.statename import StateName
-from vigilo.models.configure import DBSession, metadata, configure_db
-
 from os import path, environ
 import sys
 import nose
+from nose.tools import assert_equals
+
+from vigilo.common.conf import settings
+
+settings.load_file('settings_tests.ini')
+
+from vigilo.models.configure import DBSession, metadata, configure_db
 
 __all__ = ['ModelTest', 'setup_db', 'teardown_db']
 
 #Create an empty database before we start our tests for this module
 def setup_db():
     """Crée toutes les tables du modèle dans la BDD."""
-    from ConfigParser import SafeConfigParser
-    parser = SafeConfigParser()
-    parser.read('settings_tests.ini')
-
-    settings = dict(parser.items('vigilo.models'))
-
-    configure_db(settings, 'sqlalchemy.')
-#    db_basename = settings['db_basename']
+    configure_db(settings['database'], 'sqlalchemy_')
     metadata.create_all()
     
 #Teardown that database 
@@ -65,11 +61,14 @@ class ModelTest(object):
         Use this method to pull in other objects that need to be created
         for this object to be build properly
         """
-        DBSession.add(StateName(statename=u'OK', order=0))
-        DBSession.add(StateName(statename=u'UNKNOWN', order=1))
-        DBSession.add(StateName(statename=u'WARNING', order=2))
-        DBSession.add(StateName(statename=u'CRITICAL', order=3))
-        DBSession.flush()
+        from vigilo.models import StateName
+        DBSession.add(StateName(statename=u'OK', order=1))
+        DBSession.add(StateName(statename=u'UNKNOWN', order=2))
+        DBSession.add(StateName(statename=u'WARNING', order=3))
+        DBSession.add(StateName(statename=u'CRITICAL', order=4))
+        DBSession.add(StateName(statename=u'UP', order=1))
+        DBSession.add(StateName(statename=u'UNREACHABLE', order=2))
+        DBSession.add(StateName(statename=u'DOWN', order=4))
         return {}
 
     def test_create_obj(self):

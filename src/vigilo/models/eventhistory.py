@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table EventHistory"""
-from sqlalchemy import ForeignKey, Column
+from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, UnicodeText, Unicode, Text, DateTime
 
 from sqlalchemy.databases.mysql import MSEnum
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase, ForeignKey
+from vigilo.models.event import Event
 
 __all__ = ('EventHistory', )
 
@@ -30,7 +31,7 @@ class EventHistory(DeclarativeBase, object):
     @ivar username: Nom d'utilisateur de la personne effectuant l'action.
     """
 
-    __tablename__ = db_basename + 'eventhistory'
+    __tablename__ = 'eventhistory'
 
     idhistory = Column(
         Integer,
@@ -48,9 +49,7 @@ class EventHistory(DeclarativeBase, object):
 
     idevent = Column(
         Integer,
-        ForeignKey(
-            db_basename + 'event.idevent'
-        ),
+        ForeignKey(Event.idevent),
         index=True, nullable=False, autoincrement=False,
     )
 

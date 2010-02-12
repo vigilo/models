@@ -3,11 +3,11 @@
 """Modèle pour la table Host"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
-from vigilo.models.configure import db_basename, DBSession
+from vigilo.models.configure import DBSession, ForeignKey
 from vigilo.models.secondary_tables import HOST_HOSTCLASS_TABLE, \
                                             HOST_GROUP_TABLE
 from vigilo.models.supitem import SupItem
@@ -35,13 +35,13 @@ class Host(SupItem):
     @ivar hostclasses: Classes d'hôtes attachées à l'hôte.
     @ivar services: Liste des services de bas niveau configurés sur cet hôte.
     """
-    __tablename__ = db_basename + 'host'
+    __tablename__ = 'host'
     __mapper_args__ = {'polymorphic_identity': u'host'}
 
     idhost = Column(
         Integer,
         ForeignKey(
-            db_basename + 'supitem.idsupitem',
+            SupItem.idsupitem,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,

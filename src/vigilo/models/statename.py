@@ -4,7 +4,7 @@
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 
 __all__ = ('StateName', )
 
@@ -16,7 +16,7 @@ class StateName(DeclarativeBase, object):
         plus l'état a de l'importance et apparaîtra en début d'un
         tableau (cas des événements dans VigiBoard par exemple).
     """
-    __tablename__ = db_basename + 'statename'
+    __tablename__ = 'statename'
 
     idstatename = Column(
         Integer,

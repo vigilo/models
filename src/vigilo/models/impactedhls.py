@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table ImpactedHLS."""
-from sqlalchemy import ForeignKey, Column
+from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase, ForeignKey
+from vigilo.models.impactedpath import ImpactedPath
+from vigilo.models.service import HighLevelService
 
 __all__ = ('ImpactedHLS', )
 
@@ -25,13 +27,13 @@ class ImpactedHLS(DeclarativeBase, object):
         distance est maximale sur le chemin).
     """
 
-    __tablename__ = db_basename + 'impactedhls'
+    __tablename__ = 'impactedhls'
 
 
     idpath = Column(
         Integer,
         ForeignKey(
-            db_basename + 'impactedpath.idpath',
+            ImpactedPath.idpath,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,
@@ -42,7 +44,7 @@ class ImpactedHLS(DeclarativeBase, object):
     idhls = Column(
         Integer,
         ForeignKey(
-            db_basename + 'highlevelservice.idservice',
+            HighLevelService.idservice,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,

@@ -8,7 +8,7 @@ from sqlalchemy.exc import InvalidRequestError, IntegrityError
 from datetime import datetime
 import transaction
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 
 __all__ = ('ApplicationLog', )
 
@@ -29,7 +29,7 @@ class ApplicationLog(DeclarativeBase, object):
     @ivar ip: Adresse IP de l'utilisateur lorsque l'événement a été enregistré.
     """
 
-    __tablename__ = db_basename + "application_log"
+    __tablename__ = "application_log"
 
     idlog = Column(
         Integer,

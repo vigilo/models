@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 """Modèle pour la table CustomGraphView."""
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.user import User
+from vigilo.models.graph import Graph
+from vigilo.models.host import Host
 
 __all__ = ('CustomGraphView', )
 
@@ -24,7 +27,7 @@ class CustomGraphView(DeclarativeBase, object):
     @ivar y_pos: Ordonnée du graphe à l'écran.
     """
 
-    __tablename__ = db_basename + 'customgraphview'
+    __tablename__ = 'customgraphview'
 
     viewname = Column(
         Unicode(255),
@@ -33,21 +36,21 @@ class CustomGraphView(DeclarativeBase, object):
     username = Column(
         Unicode(255),
         ForeignKey(
-            db_basename + 'user.user_name',
+            User.user_name,
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True, nullable=False, primary_key=True)
 
     idgraph = Column(
         Integer,
         ForeignKey(
-            db_basename + 'graph.idgraph',
+            Graph.idgraph,
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True, nullable=False, primary_key=True, autoincrement=False)
 
     hostname = Column(
         Unicode(255),
         ForeignKey(
-            db_basename + 'host.name',
+            Host.name,
             onupdate="CASCADE", ondelete="CASCADE"),
         index=True, nullable=False, primary_key=True)
 

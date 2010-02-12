@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 
 __all__ = ('Application', )
 
@@ -16,7 +16,7 @@ class Application(DeclarativeBase, object):
     @ivar idapp: Identifiant de l'application.
     @ivar name: Nom (unique) de l'application.
     """
-    __tablename__ = db_basename + 'application'
+    __tablename__ = 'application'
 
     idapp = Column(
         Integer,

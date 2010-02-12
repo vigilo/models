@@ -99,7 +99,7 @@ def init_db():
     ini_parser = SafeConfigParser()
     ini_parser.read(options.config_file)
 
-    settings = dict(ini_parser.items('vigilo.models'))
-    engine = configure_db(settings, 'sqlalchemy.')
+    settings = dict(ini_parser.items('database'))
+    engine = configure_db(settings, '')
     populate_db(engine)
 

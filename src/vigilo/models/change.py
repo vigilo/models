@@ -6,7 +6,7 @@ from sqlalchemy.types import Unicode, DateTime
 
 from datetime import datetime
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 
 __all__ = ('Change', )
 
@@ -21,7 +21,7 @@ class Change(DeclarativeBase, object):
     @ivar element: Nom de la table.
     @ivar last_modified: Date de dernière modification.
     """
-    __tablename__ = db_basename + 'change'
+    __tablename__ = 'change'
 
     element = Column(
         Unicode(255),

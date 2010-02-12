@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 from vigilo.models.secondary_tables import USERGROUP_PERMISSION_TABLE, \
                                             USER_GROUP_TABLE
 
@@ -24,7 +24,7 @@ class UserGroup(DeclarativeBase, object):
     @ivar users: Liste des utilisateurs (L{User}) appartenant au groupe.
     """
 
-    __tablename__ = db_basename + 'usergroup'
+    __tablename__ = 'usergroup'
 
     idgroup = Column(
         Integer,

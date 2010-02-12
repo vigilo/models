@@ -6,7 +6,7 @@ from sqlalchemy.orm import relation, aliased
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.sql import functions
 
-from vigilo.models.configure import db_basename, DeclarativeBase, DBSession
+from vigilo.models.configure import DeclarativeBase, DBSession
 from vigilo.models.secondary_tables import SUPITEM_TAG_TABLE
 
 __all__ = ('SupItem', )
@@ -20,7 +20,7 @@ class SupItem(DeclarativeBase, object):
         highlevelservice).
     @ivar tags: Libellés attachés à cet objet.
     """
-    __tablename__ = db_basename + 'supitem'
+    __tablename__ = 'supitem'
 
     idsupitem = Column(
         Integer,

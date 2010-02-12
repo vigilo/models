@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """Modèle pour la table BoardViewFilter."""
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Unicode, UnicodeText, Integer
 
-from vigilo.models.configure import db_basename, DeclarativeBase
+from vigilo.models.configure import DeclarativeBase, ForeignKey
+from vigilo.models.user import User
+from vigilo.models.service import LowLevelService
 
 __all__ = ('BoardViewFilter', )
 
@@ -21,7 +23,7 @@ class BoardViewFilter(DeclarativeBase, object):
     @ivar trouble_ticket: Ticket d'incident.
     """
 
-    __tablename__ = db_basename + 'boardviewfilter'
+    __tablename__ = 'boardviewfilter'
 
     filtername = Column(
         Unicode(255),
@@ -30,14 +32,14 @@ class BoardViewFilter(DeclarativeBase, object):
     username = Column(
         Unicode(255),
         ForeignKey(
-            db_basename + 'user.user_name',
+            User.user_name,
             onupdate="CASCADE", ondelete="CASCADE"),
         primary_key=True, index=True, nullable=False)
 
     idservice = Column(
         Integer,
         ForeignKey(
-            db_basename + 'lowlevelservice.idservice',
+            LowLevelService.idservice,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
