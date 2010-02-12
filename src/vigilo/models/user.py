@@ -194,6 +194,7 @@ class User(DeclarativeBase, object):
             from tg import config
         except ImportError:
             from vigilo.common.conf import settings as config
+            settings.load_module(__name__)
 
         try:
             if config.has_key('use_kerberos') and \
@@ -227,6 +228,7 @@ class User(DeclarativeBase, object):
         except ImportError:
             try:
                 from vigilo.common.conf import settings as config
+                settings.load_module(__name__)
             except ImportError:
                 config = {}
 
@@ -267,6 +269,7 @@ class User(DeclarativeBase, object):
             from tg import config
         except ImportError:
             from vigilo.common.conf import settings as config
+            settings.load_module(__name__)
 
         if self._language is None:
             language = config['lang']
