@@ -39,7 +39,7 @@ class Installation(DeclarativeBase):
     )
 
     vigiloserver = relation('VigiloServer')
-
+    
     idapp = Column(
         Integer,
         ForeignKey(
@@ -50,14 +50,14 @@ class Installation(DeclarativeBase):
         index=True,
         autoincrement=False,
     )
-
+    
     application = relation('Application')
-
+    
     jid = Column(
         Unicode(255),
         nullable=False,
     )
-
+    
     def __init__(self, **kwargs):
         """Initialise une instance de HostBusApplication."""
         if 'jid' not in kwargs:
