@@ -10,8 +10,8 @@ tests_require = [
 
 setup(name='vigilo-models',
     version='0.1',
-    author='Gabriel de Perthuis',
-    author_email='gabriel.de-perthuis@c-s.fr',
+    author='Vigilo Team',
+    author_email='contact@projet-vigilo.org',
     url='http://www.projet-vigilo.org/',
     description='vigilo models',
     license='http://www.gnu.org/licenses/gpl-2.0.html',
