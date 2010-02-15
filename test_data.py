@@ -2,16 +2,13 @@
 """Insère des données de test dans la base de données."""
 
 import atexit
+from vigilo.common.conf import settings
+settings.load_module('vigilo.models')
+
 from vigilo.models.configure import DBSession, configure_db
+configure_db(settings['database'], 'sqlalchemy_')
+
 from vigilo import models
-
-def config_db():
-    from ConfigParser import SafeConfigParser
-
-    parser = SafeConfigParser()
-    parser.read('settings.ini')
-    settings = dict(parser.items('vigilo.models'))
-    configure_db(settings, 'sqlalchemy.')
 
 def commit_on_exit():
     """
@@ -21,8 +18,8 @@ def commit_on_exit():
     import transaction
     transaction.commit()
 
-config_db()
 atexit.register(commit_on_exit)
+
 
 # Etats possibles de la mise en silence pour maintenance
 DBSession.add(models.DowntimeStatus(status=u'Planified',))

@@ -193,8 +193,9 @@ class User(DeclarativeBase, object):
         try:
             from tg import config
         except ImportError:
-            from vigilo.common.conf import settings as config
+            from vigilo.common.conf import settings
             settings.load_module(__name__)
+            config = settings['database']
 
         try:
             if config.has_key('use_kerberos') and \
@@ -226,11 +227,9 @@ class User(DeclarativeBase, object):
         try:
             from tg import config
         except ImportError:
-            try:
-                from vigilo.common.conf import settings as config
-                settings.load_module(__name__)
-            except ImportError:
-                config = {}
+            from vigilo.common.conf import settings
+            settings.load_module(__name__)
+            config = settings['database']
 
         hash_method = config.get('password_hashing_function')
         if not hash_method is None:
@@ -268,11 +267,12 @@ class User(DeclarativeBase, object):
         try:
             from tg import config
         except ImportError:
-            from vigilo.common.conf import settings as config
+            from vigilo.common.conf import settings
             settings.load_module(__name__)
+            config = settings['database']
 
         if self._language is None:
-            language = config['lang']
+            language = config.get('lang')
             if language is None:
                 raise KeyError, "No default language in settings"
             return language

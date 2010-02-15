@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 import transaction
+from vigilo.common.conf import settings
+settings.load_module('vigilo.models')
+
 from vigilo.models.configure import DBSession, metadata, configure_db
+configure_db(settings['database'], 'sqlalchemy_')
+
 from vigilo.models.websetup import populate_db
 import sqlalchemy
-
-def config_db():
-    from ConfigParser import SafeConfigParser
-
-    parser = SafeConfigParser()
-    parser.read('settings.ini')
-    settings = dict(parser.items('vigilo.models'))
-    configure_db(settings, 'sqlalchemy.')
 
 def drop():
     print "DROPping all tables"
@@ -37,11 +34,11 @@ def create():
 if __name__ == '__main__':
     import sys
 
+
     if len(sys.argv) < 2:
         print "Usage: python %s <create/drop/trunc>" % sys.argv[0]
         sys.exit(1)
 
-    config_db()
     action = sys.argv[1].lower()
 
     if action == 'create':
