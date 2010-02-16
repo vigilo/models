@@ -46,7 +46,11 @@ def _get_basename():
         # Turbogears n'est pas disponible, on essaye
         # avec vigilo.common.conf.
         from vigilo.common.conf import settings
-        return settings['database']['db_basename']
+        if "database" in settings and "db_basename" in settings["database"]:
+            return settings['database']['db_basename']
+        else:
+            # TODO: y'a un problème là
+            return ""
 
 
 class ForeignKey(SaForeignKey):
