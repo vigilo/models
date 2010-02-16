@@ -119,7 +119,7 @@ class SupItem(DeclarativeBase, object):
                         ).scalar()
 
             if not host:
-                LOGGER.error(_('Got a reference to a non configured ' +
+                LOGGER.error(_('Got a reference to a non configured '
                         'host (%r)') % (hostname, ))
 
             return host
@@ -131,7 +131,7 @@ class SupItem(DeclarativeBase, object):
                         ).scalar()
                     
             if not service:
-                LOGGER.error(_('Got a reference to a non configured ' +
+                LOGGER.error(_('Got a reference to a non configured '
                         'high level service (%r)') % (servicename, ))
 
             return service
@@ -148,8 +148,9 @@ class SupItem(DeclarativeBase, object):
                     ).scalar()
 
         if not service:
-            LOGGER.error(_('Got a reference to a non configured ' +
-                    'low level service (%r, %r)') % (hostname, servicename))
+            LOGGER.error(_('Got a reference to a non configured '
+                    'low level service (%(hostname)r, %(servicename)r)') % 
+                    {"hostname": hostname, "servicename": servicename})
 
         return service
 
