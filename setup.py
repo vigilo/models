@@ -41,10 +41,10 @@ setup(name='vigilo-models',
         ],
     },
     package_dir={'': 'src'},
-    data_files=[
-        ('/etc/vigilo/models/', [
-            'deployment/settings.ini',
-        ]),
-    ],
+#    data_files=[
+#        ('/etc/vigilo/models/', [
+#            'deployment/settings.ini',
+#        ]),
+#    ],
 )
 

@@ -55,7 +55,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f INSTALLED_FILES
 %defattr(-,root,root)
-%doc COPYING
+%doc COPYING deployment/settings.ini
 
 
 %changelog
