@@ -29,6 +29,26 @@ __all__ = (
     'ForeignKey',
 )
 
+def _get_basename():
+    has_tg = False
+    try:
+        # On tente d'obtenir le préfixe à utiliser à partir
+        # de la configuration de Turbogears.
+        from tg import config
+        if "db_basename" in config:
+            has_tg = True
+    except ImportError:
+        has_tg = False
+
+    if has_tg:
+        return config["db_basename"]
+    else:
+        # Turbogears n'est pas disponible, on essaye
+        # avec vigilo.common.conf.
+        from vigilo.common.conf import settings
+        return settings['database']['db_basename']
+
+
 class ForeignKey(SaForeignKey):
     """
     Une redéfinition des clés étrangères de SQLAlchemy
@@ -38,17 +58,7 @@ class ForeignKey(SaForeignKey):
 
     def __init__(self, name, *args, **kwargs):
         if isinstance(name, basestring):
-            # On tente d'obtenir le préfixe à utiliser à partir
-            # de la configuration de Turbogears.
-            try:
-                from tg import config
-            except ImportError:
-                # Turbogears n'est pas disponible, on essaye
-                # avec vigilo.common.conf.
-                from vigilo.common.conf import settings
-                config = settings['database']
-
-            name = config['db_basename'] + name
+            name = _get_basename() + name
         super(ForeignKey, self).__init__(name, *args, **kwargs)
 
 class Table(SaTable):
@@ -60,17 +70,7 @@ class Table(SaTable):
 
     def __init__(self, name, *args, **kwargs):
         if isinstance(name, basestring):
-            # On tente d'obtenir le préfixe à utiliser à partir
-            # de la configuration de Turbogears.
-            try:
-                from tg import config
-            except ImportError:
-                # Turbogears n'est pas disponible, on essaye
-                # avec vigilo.common.conf.
-                from vigilo.common.conf import settings
-                config = settings['database']
-
-            name = config['db_basename'] + name
+            name = _get_basename() + name
         super(Table, self).__init__(name, *args, **kwargs)
 
 class PrefixedTables(DeclarativeMeta):
@@ -83,18 +83,8 @@ class PrefixedTables(DeclarativeMeta):
 
     def __init__(cls, classname, bases, dict_):
         if '__tablename__' in dict_:
-            # On tente d'obtenir le préfixe à utiliser à partir
-            # de la configuration de Turbogears.
-            try:
-                from tg import config
-            except ImportError:
-                # Turbogears n'est pas disponible, on essaye
-                # avec vigilo.common.conf.
-                from vigilo.common.conf import settings
-                config = settings['database']
-
             cls.__tablename__ = dict_['__tablename__'] = \
-                config['db_basename'] + dict_['__tablename__']
+                _get_basename() + dict_['__tablename__']
         return DeclarativeMeta.__init__(cls, classname, bases, dict_)
 
 
