@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for LowLevelService & HighLevelService classes"""
+from nose.tools import assert_equals
+
 from vigilo.models import Host, LowLevelService, HighLevelService
 from vigilo.models.configure import DBSession
 
@@ -34,6 +36,11 @@ class TestLowLevelService(ModelTest):
         DBSession.add(host)
         DBSession.flush()
         return dict(host=host)
+    
+    def test_by_host_service_name(self):
+        ob = LowLevelService.by_host_service_name(u'myhost', u'myservice')
+        assert_equals(ob.weight, 100)
+        
 
 class TestHighLevelService(ModelTest):
     """Test de la classe HighLevelService."""
@@ -50,4 +57,8 @@ class TestHighLevelService(ModelTest):
 
     def __init__(self):
         ModelTest.__init__(self)
+    
+    def test_by_service_name(self):
+        ob = HighLevelService.by_service_name(u'myservice')
+        assert_equals(ob.critical_threshold, 80)
 

@@ -5,9 +5,9 @@ from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.supitem import SupItem
+from vigilo.models import SupItem, Host, LowLevelService
 
-from vigilo.models.configure import DeclarativeBase
+from vigilo.models.configure import DeclarativeBase, DBSession
 
 class ConfItem(DeclarativeBase, object):
     """
@@ -49,6 +49,50 @@ class ConfItem(DeclarativeBase, object):
     def __init__(self, **kwargs):
         """Initialise un confitem."""
         super(ConfItem, self).__init__(**kwargs)
+
+    @classmethod
+    def by_host_confitem_name(cls, hostname, name):
+        """
+        Renvoie le ConfItem dont le nom d'hôte
+        est L{hostname} et le nom est L{name}.
+        
+        @param hostname: Nom de l'hôte auquel est rattaché le confitem.
+        @type hostname: C{unicode}
+        @param name: Nom du confitem voulu.
+        @type name: C{unicode}
+        @return: Le ConfItem demandé.
+        @rtype: L{ConfItem} ou None
+        """
+        return DBSession.query(cls).join(
+                (Host, Host.idsupitem == cls.idsupitem)
+            ).filter(Host.name == hostname
+            ).filter(cls.name == name
+            ).first()
+
+    @classmethod
+    def by_host_service_confitem_name(cls, hostname, servicename, name):
+        """
+        Renvoie le ConfItem dont le nom d'hôte
+        est L{hostname} et le nom est L{name}.
+        
+        @param hostname: Nom de l'hôte auquel est rattaché le service.
+        @type hostname: C{unicode}
+        @param servicename: Nom du service voulu.
+        @type servicename: C{unicode}
+        @param name: Nom du confitem voulu.
+        @type name: C{unicode}
+        @return: Le ConfItem demandé.
+        @rtype: L{ConfItem} ou None
+        """
+        return DBSession.query(cls).join(
+                (LowLevelService, LowLevelService.idsupitem == cls.idsupitem)
+            ).join(
+                (Host, Host.idsupitem == LowLevelService.idhost)
+            ).filter(Host.name == hostname
+            ).filter(LowLevelService.servicename == servicename
+            ).filter(cls.name == name
+            ).first()
+
 
     def __unicode__(self):
         """
