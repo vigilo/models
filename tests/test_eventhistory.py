@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """Test suite for EventHistory class"""
+import re
+from datetime import datetime
+from nose.tools import assert_true
+
 from vigilo.models import EventHistory, Host, LowLevelService, Event
 from vigilo.models.configure import DBSession
-from datetime import datetime
 
 from controller import ModelTest
 
@@ -55,4 +58,16 @@ class TestEventHistory(ModelTest):
         DBSession.flush()
 
         return dict(idevent=DBSession.query(Event.idevent)[0].idevent)
+
+    def test_get_date(self):
+        """La fonction GetDate doit renvoyer un objet formaté"""
+        form1 = re.compile("^\w* \w* \d*:\d*:\d*$")
+        form2 = re.compile("^\w* \d*:\d*:\d*$")
+        assert_true(form1.match(self.obj.get_date("timestamp")) \
+                or form2.match(self.obj.get_date("timestamp")))
+
+    def test_get_since_date(self):
+        """La fonction GetSinceDate doit renvoyer un objet formaté"""
+        assert_true(re.compile("^\d*d \d*h \d'$").match(
+            self.obj.get_since_date("timestamp")))
 
