@@ -41,7 +41,10 @@ class Event(DeclarativeBase, object):
         primary_key=True, nullable=False, autoincrement=True
     )
 
-    timestamp = Column(DateTime(timezone=False))
+    timestamp = Column(
+        DateTime(timezone=False),
+        nullable=False,
+    )
 
     idsupitem = Column(
         Integer,
@@ -159,7 +162,7 @@ class Event(DeclarativeBase, object):
         @rtype: C{unicode}
         """
 
-        element = self.__dict__[element]
+        element = getattr(self, element)
         date = datetime.now() - element
         if date.days < 7 :
             return element.strftime('%a %H:%M:%S')
@@ -177,7 +180,7 @@ class Event(DeclarativeBase, object):
         @rtype: C{unicode}
         """
 
-        date = datetime.now() - self.__dict__[element]
+        date = datetime.now() - getattr(self, element)
         minutes = divmod(date.seconds, 60)[0]
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)

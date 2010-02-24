@@ -239,7 +239,7 @@ class User(DeclarativeBase, object):
 
         if hash_method is None:
             return password
-        return hash_method(password).hexdigest()
+        return u'' + hash_method(password).hexdigest()
 
     password = synonym('_password', descriptor=property(None,
                                                         _set_password))
