@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table HostApplication."""
+"""Modèle pour la table installation."""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
@@ -11,10 +11,10 @@ from vigilo.models.vigiloserver import VigiloServer
 
 __all__ = ('Installation', )
 
-class Installation(DeclarativeBase):
+class Installation(DeclarativeBase, object):
     """
     Étant donné un serveur Vigilo et une application,
-    cette table fournit l'identifiant Jabber à utiliser
+    cette table fournit l'identifiant jabber à utiliser
     pour communiquer avec l'application hébergée sur
     ce serveur.
 
@@ -25,7 +25,7 @@ class Installation(DeclarativeBase):
     @ivar jid: Identifiant Jabber (JID) à utiliser pour communiquer
         avec l'application via le bus XMPP.
     """
-    __tablename__ = 'hostapp'
+    __tablename__ = 'installation'
 
     idvigiloserver = Column(
         Integer,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table ConfItem"""
+"""Modèle pour la table confitem"""
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
@@ -11,7 +11,8 @@ from vigilo.models.configure import DeclarativeBase, DBSession
 
 class ConfItem(DeclarativeBase, object):
     """
-    Un confitem est associé à un élément supervisé.
+    Un confitem (élément de configuration) est associé à un élément
+    supervisé.
     
     Typiquement utilisé pour associer une directive nagios
     à un hote ou un service de bas niveau.

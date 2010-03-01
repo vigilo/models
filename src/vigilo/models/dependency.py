@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
-"""Modèle pour la table Dependency."""
+"""Modèle pour la table dependency."""
 from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer
