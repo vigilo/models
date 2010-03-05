@@ -1,7 +1,7 @@
 %define module  models
 %define name    vigilo-%{module}
 %define version 1.0
-%define release 1
+%define release 1%{?svn}
 
 Name:       %{name}
 Summary:    Vigilo data models (ORM)
@@ -14,12 +14,15 @@ BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
 License:    GPLv2
 
 BuildRequires:   python-setuptools
+BuildRequires:   python-babel
 
 Requires:   python >= 2.5
 Requires:   python-setuptools
 Requires:   vigilo-common
-
-Requires(pre): rpm-helper
+Requires:   python-psycopg2
+Requires:   python-sqlalchemy
+Requires:   python-zope.sqlalchemy
+Requires:   python-pastescript
 
 Buildarch:  noarch
 
@@ -42,20 +45,17 @@ make install \
 	SYSCONFDIR=%{_sysconfdir} \
 	PYTHON=%{_bindir}/python
 
-
-%post
-%_post_service %{name}
-
-%preun
-%_preun_service %{name}
+%find_lang %{name}
 
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -f INSTALLED_FILES
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc COPYING deployment/settings.ini
+%{_bindir}/*
+%{python_sitelib}/*
 
 
 %changelog
