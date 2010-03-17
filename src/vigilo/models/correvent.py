@@ -34,6 +34,9 @@ class CorrEvent(DeclarativeBase, object):
         est repassé dans un état d'erreur (ie. ni 'OK' ni 'UP') alors que
         l'opérateur avait marqué le problème comme résolu.
     @ivar events: Liste d'instances d'L{Event}s qui sont liés à cette alerte.
+
+    @note: Cette classe permet de répondre aux exigences suivantes :
+        VIGILO_EXIG_VIGILO_BAC_0010.
     """
 
     __tablename__ = 'correvent'

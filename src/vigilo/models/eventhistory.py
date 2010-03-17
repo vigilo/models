@@ -22,7 +22,8 @@ class EventHistory(DeclarativeBase, object):
     @ivar idhistory: Identifiant de l'entrée dans l'historique.
     @ivar type_action: Le type d'action effectue, peut etre
         'Nagios update state', 'Acknowlegement change state', 'New occurence',
-        'User comment', 'Ticket change', 'Oncall' ou 'Forced state'.
+        'User comment', 'Ticket change', 'Ticket change notification',
+        'Oncall' ou 'Forced state'.
     @ivar idevent: Identifiant de l'événement auquel se rapporte
         cette entrée d'historique.
     @ivar event: Instance de l'événement à laquelle se rapporte l'entrée.
@@ -31,6 +32,9 @@ class EventHistory(DeclarativeBase, object):
     @ivar text: Commentaire sur l'action effectuée.
     @ivar timestamp: Date à laquelle le changement a eu lieu.
     @ivar username: Nom d'utilisateur de la personne effectuant l'action.
+
+    @note: Cette classe permet de répondre aux exigences suivantes :
+        VIGILO_EXIG_VIGILO_BAC_0020.
     """
 
     __tablename__ = 'eventhistory'

@@ -16,7 +16,7 @@ __all__ = ('Event', )
 
 class Event(DeclarativeBase, object):
     """
-    événement brut ou correle.
+    Événement brut ou correle.
 
     @ivar idevent: Identifiant de l'événement, tel que fourni par Nagios
         ou genere par le correlateur.
@@ -32,6 +32,9 @@ class Event(DeclarativeBase, object):
     @ivar peak_state: L'etat du service/hote, tel que transmis
         par Nagios, sous forme numérique.
     @ivar message: Le message transmis par Nagios avec l'événement.
+
+    @note: Cette classe permet de répondre aux exigences suivantes :
+        VIGILO_EXIG_VIGILO_BAC_0010.
     """
 
     __tablename__ = 'event'
