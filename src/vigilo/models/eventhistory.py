@@ -44,8 +44,8 @@ class EventHistory(DeclarativeBase, object):
 
     type_action = Column(
         MSEnum('Nagios update state', 'Acknowledgement change state',
-            'New occurence', 'User comment', 'Ticket change', 'Oncall',
-            'Forced state'),
+            'New occurence', 'User comment', 'Ticket change',
+            'Ticket change notification', 'Oncall', 'Forced state'),
         nullable=False,
     )
 
