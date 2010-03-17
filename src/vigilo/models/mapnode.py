@@ -63,6 +63,14 @@ class MapNode(DeclarativeBase, object):
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
     
     type_node = Column('type_node', Unicode(16), nullable=False)
+    
+    links_from = relation('MapLink', foreign_keys=[idmapnode],
+                    primaryjoin='MapLink.idfrom_node == ' + \
+                        'MapNode.idmapnode')
+    
+    links_to = relation('MapLink', foreign_keys=[idmapnode],
+                    primaryjoin='MapLink.idto_node == ' + \
+                        'MapNode.idmapnode')
 
     __mapper_args__ = {'polymorphic_on': type_node}
     
