@@ -1,7 +1,7 @@
 [database]
 sqlalchemy_url=postgres://vigilo:vigilo@localhost/vigilo
-db_basename=vigilo_
-;password_hashing_function=md5
+db_basename=
+#password_hashing_function=md5
 lang=fr
 external_auth=False
 

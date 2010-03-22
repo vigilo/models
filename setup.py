@@ -34,6 +34,7 @@ setup(name='vigilo-models',
     long_description='Definition of the Vigilo data model.',
     zip_safe=False,
     install_requires=[
+        "Babel >= 0.9.4",
         "setuptools",
         "psycopg2",
         "SQLAlchemy",
@@ -54,6 +55,7 @@ setup(name='vigilo-models',
     entry_points={
         'console_scripts': [
             'vigilo-models-init-db = vigilo.models.websetup:init_db',
+            'vigilo-models-clean-vigiboard = vigilo.models.websetup:clean_vigiboard',
         ],
     },
     package_dir={'': 'src'},

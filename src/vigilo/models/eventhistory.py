@@ -55,7 +55,11 @@ class EventHistory(DeclarativeBase, object):
 
     idevent = Column(
         Integer,
-        ForeignKey(Event.idevent),
+        ForeignKey(
+            Event.idevent,
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+        ),
         index=True, nullable=False, autoincrement=False,
     )
 
