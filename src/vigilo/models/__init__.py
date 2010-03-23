@@ -10,7 +10,7 @@ __all__ = (
     'SupItem', 'LowLevelService', 'HighLevelService',
     'Dependency', 'Version', 'State', 'Permission',
     'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
-    'ApplicationLog', 'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost',
+    'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost',
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
     'Application', 'VigiloServer', 'Ventilation', 'Installation',
     'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
@@ -44,7 +44,6 @@ from .user import User
 from .boardviewfilter import BoardViewFilter
 from .customgraphview import CustomGraphView
 from .tag import Tag
-from .applicationlog import ApplicationLog
 from .mapnode import MapNode, MapNodeHost, MapNodeService
 from .map import Map
 from .maplink import MapLink, MapServiceLink, MapSegment
