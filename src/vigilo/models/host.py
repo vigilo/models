@@ -122,5 +122,5 @@ class Host(SupItem):
     def get_key(self):
         """ Clé utile pour implémenter la détection de changement.
         """
-        return "h:%s" % self.hostname
+        return "h:%s" % self.name
 
