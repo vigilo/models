@@ -53,6 +53,11 @@ class Dependency(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         super(Dependency, self).__init__(**kwargs)
+    
+    def get_key(self):
+        """ Clé utile pour implémenter la détection de changement.
+        """
+        return "%s>%s" % (self.supitem1.get_key(), self.supitem2.get_key())
 
     def __unicode__(self):
         return 'Dependency from %s on %s' % \

@@ -154,6 +154,11 @@ class LowLevelService(Service):
     def __unicode__(self):
         """Représentation unicode de l'objet."""
         return "%s (%s)" % (self.servicename, self.host.name)
+    
+    def get_key(self):
+        """ Clé utile pour implémenter la détection de changement.
+        """
+        return "lls:%s:%s" % (self.host.name, self.servicename)
 
 
 class HighLevelService(Service):
@@ -230,4 +235,9 @@ class HighLevelService(Service):
         """
         return DBSession.query(cls).filter(
             cls.servicename == servicename).first()
+    
+    def get_key(self):
+        """ Clé utile pour implémenter la détection de changement.
+        """
+        return "hls:%s" % self.servicename
 

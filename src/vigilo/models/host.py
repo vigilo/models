@@ -118,4 +118,9 @@ class Host(SupItem):
         @rtype: L{Host}
         """
         return DBSession.query(cls).filter(cls.name == hostname).first()
+    
+    def get_key(self):
+        """ Clé utile pour implémenter la détection de changement.
+        """
+        return "h:%s" % self.hostname
 
