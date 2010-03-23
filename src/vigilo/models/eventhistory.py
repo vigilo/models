@@ -46,12 +46,7 @@ class EventHistory(DeclarativeBase, object):
         autoincrement=True,
     )
 
-    type_action = Column(
-        MSEnum('Nagios update state', 'Acknowledgement change state',
-            'New occurence', 'User comment', 'Ticket change',
-            'Ticket change notification', 'Oncall', 'Forced state'),
-        nullable=False,
-    )
+    type_action = Column(Unicode(64), nullable=False, index=True)
 
     idevent = Column(
         Integer,
