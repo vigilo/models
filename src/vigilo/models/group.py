@@ -88,6 +88,20 @@ class Group(DeclarativeBase, object):
         """
         return self.name
 
+    @classmethod
+    def get_top_groups(cls):
+        """
+        Renvoie les groupes de premier niveau.
+        
+        Groupes dont l'attribut parent est nul.
+
+        @param cls: La classe à utiliser, c'est-à-dire L{Group}.
+        @type cls: C{class}
+        @return: Les groupes de premier niveau.
+        @rtype: L{list}
+        """
+        return DBSession.query(cls).filter(cls.idparent == None).all()
+
 
     @classmethod
     def by_group_name(cls, groupname):

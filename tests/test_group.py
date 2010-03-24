@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for ServiceGroup class"""
+from nose.tools import assert_equal
+
 from vigilo.models import ServiceGroup, GraphGroup, MapGroup, HostGroup
 from vigilo.models.configure import DBSession
 
@@ -39,6 +41,14 @@ class TestHostGroups(ModelTest):
 
     def __init__(self):
         ModelTest.__init__(self)
+    
+    def test_get_top_groups(self):
+        """Test méthode get_top_groups"""
+        assert_equal(self.obj, DBSession.query(HostGroup).first())
+        
+        tops = self.klass.get_top_groups()
+        assert_equal(len(tops), 1)
+        assert_equal(tops[0], self.obj)
         
 class TestGraphGroup(ModelTest):
     """Test de la table GraphGroup"""
