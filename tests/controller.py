@@ -7,7 +7,7 @@ from nose.tools import assert_equals
 
 from vigilo.common.conf import settings
 
-settings.load_file('settings_tests.ini')
+settings.load_file('../settings_tests.ini')
 
 from vigilo.models.configure import DBSession, metadata, configure_db
 
