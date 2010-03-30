@@ -20,10 +20,21 @@ class EventHistory(DeclarativeBase, object):
     à un événement (nouvelle occurrence, changement d'acquittement, etc.).
 
     @ivar idhistory: Identifiant de l'entrée dans l'historique.
-    @ivar type_action: Le type d'action effectue, peut etre
-        'Nagios update state', 'Acknowlegement change state', 'New occurence',
-        'User comment', 'Ticket change', 'Ticket change notification',
-        'Oncall' ou 'Forced state'.
+    @ivar type_action: Le type d'action effectué, peut être : 
+        - 'New occurence' : Création d'un évènement 
+            corrélé à la réception d'une alerte Nagios ;
+        - 'Nagios update state' : Mise à jour de l'état
+            de l'item et de l'évènement corrélé suite 
+            à la réception d'une alerte Nagios ; 
+        - 'Acknowlegement change state' : Remise à zéro de 
+            l'état d'un évènement corrélé acquitté par l'opérateur
+            alors que Nagios continue à envoyer des alertes ;
+        - 'Ticket change' : Changement du ticket d'incident par l'opérateur ; 
+        - 'Ticket change notification' : Réception d'une
+            notification de la modification d'un ticket d'incident ;
+        - 'User comment' : plus utilisé ? ; 
+        - 'Oncall' : plus utilisé ? ;
+        - 'Forced state' : plus utilisé ?.
     @ivar idevent: Identifiant de l'événement auquel se rapporte
         cette entrée d'historique.
     @ivar event: Instance de l'événement à laquelle se rapporte l'entrée.
