@@ -48,12 +48,14 @@ class FileDeployment(DeclarativeBase, object):
         super(FileDeployment, self).__init__(**kwargs)
         
     def _get_actual_hashcode(self, sub_func=None):
-        """ Returns the hash code with
-              - src_path
-              - dest_path
-              - file content
-            @param sub_func substitution function (to ignore rev changes)
-            @type sub_func C{function}
+        """
+        Returns the hash code with
+            - src_path
+            - dest_path
+            - file content
+
+        @param sub_func: substitution function (to ignore rev changes)
+        @type sub_func: C{function}
         """
         ob = hashlib.sha1(self.src_path)
         ob.update(self.dest_path)

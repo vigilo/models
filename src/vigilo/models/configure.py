@@ -30,6 +30,14 @@ __all__ = (
 )
 
 def _get_basename():
+    """
+    Tente de récupérer le préfixe des tables à utiliser
+    en fonction des paquetages disponibles.
+    
+    @return: Préfixe à utiliser pour les tables de Vigilo.
+    @rtype: C{basestring}
+    """
+
     has_tg = False
     try:
         # On tente d'obtenir le préfixe à utiliser à partir
@@ -61,6 +69,10 @@ class ForeignKey(SaForeignKey):
     """
 
     def __init__(self, name, *args, **kwargs):
+        """
+        Instancie la ForeignKey en ajoutant le préfixe
+        des tables de Vigilo.
+        """
         if isinstance(name, basestring):
             name = _get_basename() + name
         super(ForeignKey, self).__init__(name, *args, **kwargs)
@@ -73,6 +85,10 @@ class Table(SaTable):
     """
 
     def __init__(self, name, *args, **kwargs):
+        """
+        Instancie la Table en ajoutant le préfixe
+        des tables de Vigilo.
+        """
         if isinstance(name, basestring):
             name = _get_basename() + name
         super(Table, self).__init__(name, *args, **kwargs)
@@ -86,6 +102,11 @@ class PrefixedTables(DeclarativeMeta):
     """
 
     def __init__(cls, classname, bases, dict_):
+        """
+        Permet l'ajout automatique du préfixe aux tables
+        du modèle, lorsque celles-ci sont définies
+        en utilisant le mode "Declarative" de SQLAlchemy.
+        """
         if '__tablename__' in dict_:
             cls.__tablename__ = dict_['__tablename__'] = \
                 _get_basename() + dict_['__tablename__']
@@ -93,7 +114,16 @@ class PrefixedTables(DeclarativeMeta):
 
 
 def configure_db(config_obj, prefix):
-    """Permet de configurer la base de données."""
+    """
+    Permet de configurer la base de données.
+    
+    @param config_obj: Objet contenant la configuration.
+    @type config_obj: C{ConfigObj}
+    @param prefix: Préfixe des paramètres de configuration
+        liés à la base de données.
+    @type prefix: C{basestring}
+    @return: L'Engine configuré, utilisable par SQLAlchemy.
+    """
 
     import sys
     from sqlalchemy.engine import engine_from_config
