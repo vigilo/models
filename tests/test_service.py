@@ -2,8 +2,8 @@
 """Test suite for LowLevelService & HighLevelService classes"""
 from nose.tools import assert_equals
 
-from vigilo.models import Host, LowLevelService, HighLevelService
-from vigilo.models.configure import DBSession
+from vigilo.models.tables import Host, LowLevelService, HighLevelService
+from vigilo.models.session import DBSession
 
 from controller import ModelTest
 

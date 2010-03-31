@@ -2,8 +2,8 @@
 """Test suite for Ventilation class"""
 from nose.tools import assert_equals
 
-from vigilo.models import Ventilation, Host, VigiloServer, Application
-from vigilo.models.configure import DBSession
+from vigilo.models.tables import Ventilation, Host, VigiloServer, Application
+from vigilo.models.session import DBSession
 
 from controller import ModelTest
 

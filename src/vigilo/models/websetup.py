@@ -16,17 +16,18 @@ def populate_db(bind):
     import logging
     LOGGER = logging.getLogger(__name__)
 
-    from vigilo.models.configure import DBSession, metadata
+    from vigilo.models.session import DBSession, metadata
 
     # Chargement du modèle.
-    from vigilo import models
+    from vigilo.models import tables
+    from vigilo.models import VIGILO_MODEL_VERSION
 
     # Création des tables
     print "Creating tables"
     metadata.create_all(bind=bind)
 
     # Création d'un jeu de données par défaut.
-    manager = models.User()
+    manager = tables.User()
     manager.user_name = u'manager'
     manager.email = u'manager@somedomain.com'
     manager.fullname = u'Manager'
@@ -34,19 +35,19 @@ def populate_db(bind):
     DBSession.add(manager)
     DBSession.flush()
 
-    group = models.UserGroup()
+    group = tables.UserGroup()
     group.group_name = u'managers'
     group.users.append(manager)
     DBSession.add(group)
     DBSession.flush()
 
-    permission = models.Permission()
+    permission = tables.Permission()
     permission.permission_name = u'manage'
     permission.usergroups.append(group)
     DBSession.add(permission)
     DBSession.flush()
 
-    editor = models.User()
+    editor = tables.User()
     editor.user_name = u'editor'
     editor.email = u'editor@somedomain.com'
     editor.fullname = u'Editor'
@@ -54,31 +55,31 @@ def populate_db(bind):
     DBSession.add(editor)
     DBSession.flush()
 
-    group = models.UserGroup()
+    group = tables.UserGroup()
     group.group_name = u'editors'
     group.users.append(editor)
     DBSession.add(group)
     DBSession.flush()
 
-    permission = models.Permission()
+    permission = tables.Permission()
     permission.permission_name = u'edit'
     permission.usergroups.append(group)
     DBSession.add(permission)
     DBSession.flush()
 
-    version = models.Version()
+    version = tables.Version()
     version.name = u'vigilo.models'
-    version.version = models.VIGILO_MODEL_VERSION
+    version.version = VIGILO_MODEL_VERSION
     DBSession.add(version)
     DBSession.flush()
 
-    DBSession.add(models.StateName(statename=u'OK', order=0))
-    DBSession.add(models.StateName(statename=u'UNKNOWN', order=1))
-    DBSession.add(models.StateName(statename=u'WARNING', order=2))
-    DBSession.add(models.StateName(statename=u'CRITICAL', order=3))
-    DBSession.add(models.StateName(statename=u'UP', order=0))
-    DBSession.add(models.StateName(statename=u'UNREACHABLE', order=1))
-    DBSession.add(models.StateName(statename=u'DOWN', order=3))
+    DBSession.add(tables.StateName(statename=u'OK', order=0))
+    DBSession.add(tables.StateName(statename=u'UNKNOWN', order=1))
+    DBSession.add(tables.StateName(statename=u'WARNING', order=2))
+    DBSession.add(tables.StateName(statename=u'CRITICAL', order=3))
+    DBSession.add(tables.StateName(statename=u'UP', order=0))
+    DBSession.add(tables.StateName(statename=u'UNREACHABLE', order=1))
+    DBSession.add(tables.StateName(statename=u'DOWN', order=3))
     DBSession.flush()
 
     transaction.commit()
@@ -117,7 +118,8 @@ def clean_vigiboard(*args):
     settings.load_module(__name__)
 
     from vigilo.models.configure import configure_db
-    engine = configure_db(settings['database'], 'sqlalchemy_')
+    engine = configure_db(settings['database'], 'sqlalchemy_',
+        settings['database']['db_basename'])
 
     from vigilo.common.logging import get_logger
     LOGGER = get_logger(__name__)
@@ -125,8 +127,8 @@ def clean_vigiboard(*args):
     from vigilo.common.gettext import translate
     _ = translate(__name__)
 
-    from vigilo.models.configure import DBSession
-    from vigilo.models import Event, CorrEvent, StateName
+    from vigilo.models.session import DBSession
+    from vigilo.models.tables import Event, CorrEvent, StateName
 
     parser = OptionParser()
     parser.add_option("-d", "--days", action="store", dest="days",

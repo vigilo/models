@@ -4,8 +4,8 @@ import re
 from datetime import datetime
 from nose.tools import assert_true
 
-from vigilo.models import EventHistory, Host, LowLevelService, Event
-from vigilo.models.configure import DBSession
+from vigilo.models.session import DBSession
+from vigilo.models.tables import EventHistory, Host, LowLevelService, Event
 
 from controller import ModelTest
 

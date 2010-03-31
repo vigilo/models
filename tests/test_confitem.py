@@ -2,10 +2,9 @@
 """Test suite for ConfItem class"""
 from nose.tools import assert_equals
 
-from vigilo.models.configure import DBSession
-from vigilo.models import Host, LowLevelService
-from vigilo.models import ConfItem
-
+from vigilo.models.session import DBSession
+from vigilo.models.tables import Host, LowLevelService
+from vigilo.models.tables import ConfItem
 from controller import ModelTest
 
 class TestServiceConfItem(ModelTest):

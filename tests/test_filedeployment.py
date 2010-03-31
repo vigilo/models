@@ -3,16 +3,15 @@
 import os
 import tempfile
 import shutil
-
 from datetime import datetime
+import hashlib
 
 from nose.tools import assert_equal
 
-from vigilo.models import FileDeployment
-from .controller import ModelTest
-from vigilo.models.configure import DBSession
+from vigilo.models.session import DBSession
+from vigilo.models.tables import FileDeployment
+from controller import ModelTest
 
-import hashlib
 
 class TestFileDeployment(ModelTest):
     

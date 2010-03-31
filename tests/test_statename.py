@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for StateName class"""
 from nose.tools import assert_equals
-from vigilo.models import StateName
-from vigilo.models.configure import DBSession
+
+from vigilo.models.tables import StateName
+from vigilo.models.session import DBSession
 
 from controller import ModelTest
 

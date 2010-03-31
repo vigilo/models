@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for BoardViewFilter class"""
-from vigilo.models import BoardViewFilter, Host, LowLevelService, User
-from vigilo.models.configure import DBSession
+from vigilo.models.tables import BoardViewFilter, Host, LowLevelService, User
+from vigilo.models.session import DBSession
 
 from controller import ModelTest
 

@@ -2,8 +2,8 @@
 """Test suite for ServiceGroup class"""
 from nose.tools import assert_equal
 
-from vigilo.models import ServiceGroup, GraphGroup, MapGroup, HostGroup
-from vigilo.models.configure import DBSession
+from vigilo.models.tables import ServiceGroup, GraphGroup, MapGroup, HostGroup
+from vigilo.models.session import DBSession
 
 from controller import ModelTest
 

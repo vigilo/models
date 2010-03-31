@@ -5,18 +5,14 @@ import sys
 import nose
 from nose.tools import assert_equals
 
-from vigilo.common.conf import settings
-
-settings.load_file('settings_tests.ini')
-
-from vigilo.models.configure import DBSession, metadata, configure_db
+from vigilo.models.session import DBSession, metadata
+from vigilo.models.tables import StateName
 
 __all__ = ['ModelTest', 'setup_db', 'teardown_db']
 
 #Create an empty database before we start our tests for this module
 def setup_db():
     """Crée toutes les tables du modèle dans la BDD."""
-    configure_db(settings['database'], 'sqlalchemy_')
     metadata.create_all()
     
 #Teardown that database 
@@ -61,7 +57,6 @@ class ModelTest(object):
         Use this method to pull in other objects that need to be created
         for this object to be build properly
         """
-        from vigilo.models import StateName
         DBSession.add(StateName(statename=u'OK', order=1))
         DBSession.add(StateName(statename=u'UNKNOWN', order=2))
         DBSession.add(StateName(statename=u'WARNING', order=3))

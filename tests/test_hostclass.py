@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for HostClass class"""
-from vigilo.models import Host, HostClass
-from vigilo.models.configure import DBSession
+from vigilo.models.session import DBSession
+from vigilo.models.tables import Host, HostClass
 
 from controller import ModelTest
 

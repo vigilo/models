@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for State class"""
-from vigilo.models import State, Host
-from vigilo.models.configure import DBSession
-
 from datetime import datetime
+
+from vigilo.models.session import DBSession
+from vigilo.models.tables import State, Host
 
 from controller import ModelTest
 

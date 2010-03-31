@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for UserGroup class"""
-from vigilo.models import UserGroup
+from vigilo.models.tables import UserGroup
 
 from controller import ModelTest
 

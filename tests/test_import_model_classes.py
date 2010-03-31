@@ -8,7 +8,7 @@ def test_import_model_classes():
     Ceci permet de détecter des erreurs dans la définition
     de la variable spéciale __all__.
     """
-    from vigilo import models
-    for table in models.__all__:
-        getattr(models, table)
+    from vigilo.models import tables
+    for table in tables.__all__:
+        getattr(tables, table)
 

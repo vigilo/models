@@ -2,8 +2,8 @@
 """Test suite for State class"""
 from datetime import datetime
 
-from vigilo.models import State, Host, LowLevelService
-from vigilo.models.configure import DBSession
+from vigilo.models.tables import State, Host, LowLevelService
+from vigilo.models.session import DBSession
 
 from controller import ModelTest
 

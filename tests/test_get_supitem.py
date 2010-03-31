@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """Test suite for StateName class"""
-
 import unittest
 from nose.tools import assert_equals
 
-from vigilo.models.configure import DBSession
-from vigilo.models import Host, LowLevelService, HighLevelService, SupItem
+from vigilo.models.session import DBSession
+from vigilo.models.tables import Host, LowLevelService, HighLevelService, SupItem
 
 class TestGetSupItem(unittest.TestCase):
     """Test de la méthode get_supitem de la classe 'SupItem'"""

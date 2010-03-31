@@ -2,7 +2,7 @@
 """Test suite for User class"""
 from nose.tools import eq_
 
-from vigilo.models import User
+from vigilo.models.tables import User
 
 from controller import ModelTest
 

@@ -4,8 +4,8 @@ from nose.tools import assert_true
 from datetime import datetime
 import re
 
-from vigilo.models import CorrEvent, Event, LowLevelService, Host
-from vigilo.models.configure import DBSession
+from vigilo.models.session import DBSession
+from vigilo.models.tables import CorrEvent, Event, LowLevelService, Host
 from controller import ModelTest
 
 class TestCorrEvent(ModelTest):

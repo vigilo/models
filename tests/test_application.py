@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for Application class"""
 from nose.tools import assert_equal
-from vigilo.models import Application
+from vigilo.models.tables import Application
 
 from controller import ModelTest
 

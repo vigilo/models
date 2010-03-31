@@ -2,7 +2,7 @@
 """Test suite for VigiloServer class"""
 from nose.tools import assert_equals
 
-from vigilo.models import VigiloServer
+from vigilo.models.tables import VigiloServer
 
 from controller import ModelTest
 
