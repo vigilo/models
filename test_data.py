@@ -5,10 +5,12 @@ import atexit
 from vigilo.common.conf import settings
 settings.load_module('vigilo.models')
 
-from vigilo.models.configure import DBSession, configure_db
-configure_db(settings['database'], 'sqlalchemy_')
+from vigilo.models.configure import configure_db
+configure_db(settings['database'], 'sqlalchemy_',
+	settings['database']['db_basename'])
 
-from vigilo import models
+from vigilo.models.session import DBSession
+from vigilo.models import tables
 
 def commit_on_exit():
     """
@@ -22,19 +24,19 @@ atexit.register(commit_on_exit)
 
 
 # Etats possibles de la mise en silence pour maintenance
-DBSession.add(models.DowntimeStatus(status=u'Planified',))
-DBSession.add(models.DowntimeStatus(status=u'Enabled',))
-DBSession.add(models.DowntimeStatus(status=u'Finished',))
-DBSession.add(models.DowntimeStatus(status=u'Cancelled',))
+DBSession.add(tables.DowntimeStatus(status=u'Planified',))
+DBSession.add(tables.DowntimeStatus(status=u'Enabled',))
+DBSession.add(tables.DowntimeStatus(status=u'Finished',))
+DBSession.add(tables.DowntimeStatus(status=u'Cancelled',))
 DBSession.flush()
 
 # Permissions
-collect = models.Permission(
+collect = tables.Permission(
     permission_name=u'collect',
     description=u'Autorise les utilisateurs à lancer une demande de collecte',
 )
 DBSession.add(collect)
-downtime = models.Permission(
+downtime = tables.Permission(
     permission_name=u'downtime',
     description=u'Autorise les utilisateurs à planifier une maintenance',
 )
@@ -42,7 +44,7 @@ DBSession.add(downtime)
 DBSession.flush()
 
 # Affectation des permissions aux groupes d'utilisateurs.
-managers = models.UserGroup.by_group_name(u'managers')
+managers = tables.UserGroup.by_group_name(u'managers')
 managers.permissions.append(collect)
 managers.permissions.append(downtime)
 
@@ -50,7 +52,7 @@ managers.permissions.append(downtime)
 def add_Host(name):
     name = u'' + name
 
-    DBSession.add(models.Host(
+    DBSession.add(tables.Host(
         name=name,
         checkhostcmd=u'checkcmd',
         snmpcommunity=u'public',
@@ -103,12 +105,12 @@ def add_LowLevelService(name, hostident, weight=100):
     if isinstance(hostident, int):
         kwargs['idhost'] = hostident
     elif isinstance(hostident, basestring):
-        host = models.Host.by_host_name(u'' + hostident)
+        host = tables.Host.by_host_name(u'' + hostident)
         kwargs['host'] = host
     else:
         kwargs['host'] = hostident
 
-    DBSession.add(models.LowLevelService(**kwargs))
+    DBSession.add(tables.LowLevelService(**kwargs))
     DBSession.flush()
 
 add_LowLevelService('Interface eth0', 'host1.example.com')
@@ -152,7 +154,7 @@ add_LowLevelService('RAM', 'host1.example.com')
 add_LowLevelService('RAM', 'host2.example.com')
 
 # HighLevelService
-DBSession.add(models.HighLevelService(
+DBSession.add(tables.HighLevelService(
     servicename=u'Connexion',
     op_dep=u'+',
     message=u'Ouch',
@@ -163,7 +165,7 @@ DBSession.add(models.HighLevelService(
 ))
 DBSession.flush()
 
-DBSession.add(models.HighLevelService(
+DBSession.add(tables.HighLevelService(
     servicename=u'Portail web',
     op_dep=u'&',
     message=u'Ouch',
@@ -184,12 +186,12 @@ def add_Dependency(dependent, depended):
         host, service = dependent
         if host is None:        # HLS
             kwargs['supitem1'] = \
-                models.HighLevelService.by_service_name(u'' + service)
+                tables.HighLevelService.by_service_name(u'' + service)
         elif service is None:   # Host
-            kwargs['supitem1'] = models.Host.by_host_name(u'' + host)
+            kwargs['supitem1'] = tables.Host.by_host_name(u'' + host)
         else:                   # LLS
             kwargs['supitem1'] = \
-                models.LowLevelService.by_host_service_name(
+                tables.LowLevelService.by_host_service_name(
                     u'' + host, u'' + service)
 
     if isinstance(depended, int):
@@ -198,15 +200,15 @@ def add_Dependency(dependent, depended):
         host, service = depended
         if host is None:        # HLS
             kwargs['supitem2'] = \
-                models.HighLevelService.by_service_name(u'' + service)
+                tables.HighLevelService.by_service_name(u'' + service)
         elif service is None:   # Host
-            kwargs['supitem2'] = models.Host.by_host_name(u'' + host)
+            kwargs['supitem2'] = tables.Host.by_host_name(u'' + host)
         else:                   # LLS
             kwargs['supitem2'] = \
-                models.LowLevelService.by_host_service_name(
+                tables.LowLevelService.by_host_service_name(
                     u'' + host, u'' + service)
 
-    DBSession.add(models.Dependency(**kwargs))
+    DBSession.add(tables.Dependency(**kwargs))
     DBSession.flush()
 
 add_Dependency((None, 'Connexion'), ('host2.example.com', 'Interface eth0'))
@@ -232,27 +234,27 @@ add_Dependency(('routeur1', 'Interface eth1'), ('routeur1', 'Interface eth0'))
 add_Dependency(('routeur2', 'Interface eth1'), ('routeur2', 'Interface eth0'))
 
 # HostGroup
-servers = models.HostGroup(
+servers = tables.HostGroup(
     name=u'Serveurs',
     parent=None,
 )
 DBSession.add(servers)
 DBSession.flush()
 
-DBSession.add(models.HostGroup(
+DBSession.add(tables.HostGroup(
     name=u'Serveurs Linux',
     parent=servers,
 ))
 DBSession.flush()
 
-DBSession.add(models.HostGroup(
+DBSession.add(tables.HostGroup(
     name=u'Serveurs Windows',
     parent=servers,
 ))
 DBSession.flush()
 
 # ServiceGroup
-DBSession.add(models.ServiceGroup(
+DBSession.add(tables.ServiceGroup(
     name=u'Services',
     parent=None,
 ))
@@ -261,10 +263,10 @@ DBSession.flush()
 # Affectation des permissions aux groupes d'hôtes.
 def add_HostGroupPermission(group, perm):
     if isinstance(group, basestring):
-        group = models.HostGroup.by_group_name(u'' + group)
+        group = tables.HostGroup.by_group_name(u'' + group)
 
     if isinstance(perm, basestring):
-        perm = models.Permission.by_permission_name(u'' + perm)
+        perm = tables.Permission.by_permission_name(u'' + perm)
 
     group.permissions.append(perm)
     DBSession.flush()
@@ -275,10 +277,10 @@ add_HostGroupPermission('Serveurs Linux', 'manage')
 # Affectation des permissions aux groupes de services.
 def add_ServiceGroupPermission(group, perm):
     if isinstance(group, basestring):
-        group = models.ServiceGroup.by_group_name(u'' + group)
+        group = tables.ServiceGroup.by_group_name(u'' + group)
 
     if isinstance(perm, basestring):
-        perm = models.Permission.by_permission_name(u'' + perm)
+        perm = tables.Permission.by_permission_name(u'' + perm)
 
     group.permissions.append(perm)
     DBSession.flush()
@@ -289,10 +291,10 @@ add_ServiceGroupPermission('Services', 'manage')
 # Affectation des hôtes aux groupes d'hôtes.
 def add_Host2HostGroup(host, group):
     if isinstance(group, basestring):
-        group = models.HostGroup.by_group_name(u'' + group)
+        group = tables.HostGroup.by_group_name(u'' + group)
 
     if isinstance(host, basestring):
-        host = models.Host.by_host_name(u'' + host)
+        host = tables.Host.by_host_name(u'' + host)
 
     group.hosts.append(host)
     DBSession.flush()
@@ -327,11 +329,11 @@ add_Host2HostGroup('firewall', 'Serveurs Linux')
 # Affectation des services aux groupes de services.
 def add_Service2ServiceGroup(lls, group):
     if isinstance(group, basestring):
-        group = models.ServiceGroup.by_group_name(u'' + group)
+        group = tables.ServiceGroup.by_group_name(u'' + group)
 
     if isinstance(lls, tuple):
         host, service = lls
-        lls = models.LowLevelService.by_host_service_name(
+        lls = tables.LowLevelService.by_host_service_name(
             u'' + host, u'' + service)
 
     group.services.append(lls)
@@ -368,7 +370,7 @@ add_Service2ServiceGroup(('routeur2', 'Interface eth1'), 'Services')
 
 # Application
 def add_Application(name):
-    DBSession.add(models.Application(name=u'' + name))
+    DBSession.add(tables.Application(name=u'' + name))
     DBSession.flush()
 
 add_Application('nagios')
@@ -377,7 +379,7 @@ add_Application('connector-nagios')
 
 # VigiloServer
 def add_VigiloServer(name, description=None):
-    DBSession.add(models.VigiloServer(
+    DBSession.add(tables.VigiloServer(
         name=u'' + name,
         description=description,
     ))
@@ -392,14 +394,14 @@ def add_Ventilation(host, vigiloserver, app):
     kwargs = {}
 
     if isinstance(host, basestring):
-        kwargs['host'] = models.Host.by_host_name(u'' + host)
+        kwargs['host'] = tables.Host.by_host_name(u'' + host)
     elif isinstance(host, int):
         kwargs['idhost'] = host
     else:
         kwargs['host'] = host
 
     if isinstance(vigiloserver, basestring):
-        kwargs['vigiloserver'] = models.VigiloServer.by_vigiloserver_name(
+        kwargs['vigiloserver'] = tables.VigiloServer.by_vigiloserver_name(
                                         u'' + vigiloserver)
     elif isinstance(vigiloserver, int):
         kwargs['idvigiloserver'] = vigiloserver
@@ -407,13 +409,13 @@ def add_Ventilation(host, vigiloserver, app):
         kwargs['vigiloserver'] = vigiloserver
 
     if isinstance(app, basestring):
-        kwargs['application'] = models.Application.by_app_name(u'' + app)
+        kwargs['application'] = tables.Application.by_app_name(u'' + app)
     elif isinstance(app, int):
         kwargs['idapp'] = app
     else:
         kwargs['application'] = app
 
-    DBSession.add(models.Ventilation(**kwargs))
+    DBSession.add(tables.Ventilation(**kwargs))
     DBSession.flush()
 
 add_Ventilation('host1.example.com', 'foo', 'nagios')
@@ -425,7 +427,7 @@ def add_Installation(vigiloserver, app, jid):
     kwargs = {}
 
     if isinstance(vigiloserver, basestring):
-        kwargs['vigiloserver'] = models.VigiloServer.by_vigiloserver_name(
+        kwargs['vigiloserver'] = tables.VigiloServer.by_vigiloserver_name(
                                         u'' + vigiloserver)
     elif isinstance(vigiloserver, int):
         kwargs['idvigiloserver'] = vigiloserver
@@ -433,7 +435,7 @@ def add_Installation(vigiloserver, app, jid):
         kwargs['vigiloserver'] = vigiloserver
 
     if isinstance(app, basestring):
-        kwargs['application'] = models.Application.by_app_name(u'' + app)
+        kwargs['application'] = tables.Application.by_app_name(u'' + app)
     elif isinstance(app, int):
         kwargs['idapp'] = app
     else:
@@ -441,7 +443,7 @@ def add_Installation(vigiloserver, app, jid):
 
     kwargs['jid'] = u'' + jid
 
-    DBSession.add(models.Installation(**kwargs))
+    DBSession.add(tables.Installation(**kwargs))
     DBSession.flush()
 
 add_Installation('foo', 'nagios', 'connector-nagios@localhost')

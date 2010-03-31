@@ -21,12 +21,9 @@ def configure_db(config_obj, prefix, db_basename):
     """
 
     # Doit être fait en tout premier.
-    # vigilo.models.prefix dépend de l'initialisation de cette valeur.
-    DB_BASENAME = db_basename
-
-    import sys
-    from sqlalchemy.engine import engine_from_config
-    import vigilo.models.session as session
+    # vigilo.models.session dépend de l'initialisation de cette valeur.
+    from vigilo.models import configure
+    configure.DB_BASENAME = db_basename
 
     # ZTE session.
     # We must go through transaction (a zodb extraction) to commit, rollback.
@@ -34,7 +31,10 @@ def configure_db(config_obj, prefix, db_basename):
     # ZopeTransactionExtension makes that mostly transparent.
     # The ZopeTransactionExtension prevents us
     # from committing, etc, the session directly.
+    from sqlalchemy.engine import engine_from_config
     engine = engine_from_config(config_obj, prefix=prefix)
+
+    import vigilo.models.session as session
     session.DBSession.configure(bind=engine)
     session.metadata.bind = session.DBSession.bind
     return engine

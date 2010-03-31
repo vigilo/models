@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 import transaction
+import sqlalchemy
+
 from vigilo.common.conf import settings
 settings.load_module('vigilo.models')
 
-from vigilo.models.configure import DBSession, metadata, configure_db
-configure_db(settings['database'], 'sqlalchemy_')
+from vigilo.models.configure import configure_db
+configure_db(settings['database'], 'sqlalchemy_',
+    settings['database']['db_basename'])
 
+from vigilo.models.session import DBSession, metadata
 from vigilo.models.websetup import populate_db
-import sqlalchemy
 
 def drop():
     print "DROPping all tables"
