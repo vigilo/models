@@ -208,17 +208,24 @@ class User(DeclarativeBase, object):
 
         try:
             from tg import config
+            from paste.deploy.converters import asbool
         except ImportError:
+            # TurboGears n'est pas utilisé,
+            # on utilise vigilo.common.conf
+            # et on convertit en booléen
+            # depuis l'objet ConfigObj.
             from vigilo.common.conf import settings
             settings.load_module(__name__)
             config = settings['database']
-
-        try:
             if config.has_key('use_kerberos') and \
                 config.as_bool('use_kerberos'):
                 return True
-        except AttributeError:
-            pass
+        else:
+            # Dans le cas où on utilise la configuration
+            # de TurboGears, on doit utiliser paste.deploy
+            # pour convertir en booléen.
+            if asbool(config.get('use_kerberos', True)):
+                return True
 
         # Petite précaution
         if self._password is None:
