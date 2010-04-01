@@ -44,11 +44,8 @@ def configure_db(config_obj, prefix, db_basename):
     # from committing, etc, the session directly.
     from sqlalchemy.engine import engine_from_config
     engine = engine_from_config(config_obj, prefix=prefix)
-    print "engine from config_db = %s" % id(engine)
 
     session.DBSession.configure(bind=engine)
     session.metadata.bind = session.DBSession.bind
-    print "m.c: session had bind %s" % id(session.DBSession.bind)
-    print "m.c: metadata had bind %s" % id(session.metadata.bind)
     return engine
 
