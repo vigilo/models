@@ -2,7 +2,7 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table Map"""
 from sqlalchemy import Column
-from sqlalchemy.types import Unicode, DateTime, Integer
+from sqlalchemy.types import Unicode, DateTime, Integer, Boolean
 from sqlalchemy.orm import relation
 
 from vigilo.models.session import DeclarativeBase, DBSession
@@ -44,6 +44,10 @@ class Map(DeclarativeBase, object):
     background_image = Column(Unicode(255))
     background_position = Column(Unicode(255))
     background_repeat = Column(Unicode(255))
+    generated =  Column(
+        Boolean, 
+        default = False,
+        nullable = False)
     
     groups = relation('MapGroup', secondary=MAP_GROUP_TABLE,
                          back_populates='maps', lazy=True)
