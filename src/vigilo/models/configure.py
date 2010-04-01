@@ -29,6 +29,13 @@ def configure_db(config_obj, prefix, db_basename):
     from vigilo.models import configure
     configure.DB_BASENAME = db_basename
 
+    import vigilo.models.session as session
+
+    # Si la connexion à la base de données est déjà configurée,
+    # on se contente de renvoyer l'objet déjà configuré.
+    if session.metadata.bind is not None:
+        return session.metadata.bind
+
     # ZTE session.
     # We must go through transaction (a zodb extraction) to commit, rollback.
     # There's also a session context to hold managed data, and the
@@ -37,9 +44,11 @@ def configure_db(config_obj, prefix, db_basename):
     # from committing, etc, the session directly.
     from sqlalchemy.engine import engine_from_config
     engine = engine_from_config(config_obj, prefix=prefix)
+    print "engine from config_db = %s" % id(engine)
 
-    import vigilo.models.session as session
     session.DBSession.configure(bind=engine)
     session.metadata.bind = session.DBSession.bind
+    print "m.c: session had bind %s" % id(session.DBSession.bind)
+    print "m.c: metadata had bind %s" % id(session.metadata.bind)
     return engine
 
