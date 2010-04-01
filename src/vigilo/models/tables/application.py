@@ -3,7 +3,6 @@
 """Modèle pour la table Application."""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation
 
 from vigilo.models.session import DeclarativeBase, DBSession
 

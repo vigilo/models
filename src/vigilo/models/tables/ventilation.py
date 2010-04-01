@@ -2,7 +2,7 @@
 """Modèle pour la table Ventilation."""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation, backref
+from sqlalchemy.orm import relation
 
 from vigilo.models.session import DeclarativeBase, ForeignKey
 from vigilo.models.tables.host import Host

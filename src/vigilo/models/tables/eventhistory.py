@@ -7,8 +7,6 @@ from sqlalchemy.types import Integer, UnicodeText, Unicode, Text, DateTime
 
 from datetime import datetime
 
-from sqlalchemy.databases.mysql import MSEnum
-
 from vigilo.models.session import DeclarativeBase, ForeignKey
 from vigilo.models.tables.event import Event
 

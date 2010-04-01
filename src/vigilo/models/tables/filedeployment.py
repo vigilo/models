@@ -33,10 +33,10 @@ class FileDeployment(DeclarativeBase, object):
         nullable=False,
     )
     
-    hashcode = Column(Unicode(40),nullable=False)
+    hashcode = Column(Unicode(40), nullable=False)
     
-    src_path = Column(Unicode(255),nullable=False)
-    dest_path = Column(Unicode(255),nullable=False)
+    src_path = Column(Unicode(255), nullable=False)
+    dest_path = Column(Unicode(255), nullable=False)
 
     def __init__(self, **kwargs):
         """

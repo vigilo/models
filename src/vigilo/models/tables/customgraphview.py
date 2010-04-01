@@ -68,6 +68,14 @@ class CustomGraphView(DeclarativeBase, object):
 
     @classmethod
     def by_view_and_user(cls, viewname, username):
+        """
+        Renvoie l'instance de CustomGraphView associée aux paramètres.
+
+        @param viewname: Nom de la vue à retourner.
+        @type viewname: C{unicode}
+        @param username: Nom de l'utilisateur à qui appartient la vue.
+        @type username: C{unicode}
+        """
         return DBSession.query(cls
             ).filter(cls.viewname == viewname
             ).filter(cls.username == username

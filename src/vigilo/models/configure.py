@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 # vim: set fileencoding=utf-8 sw=4 ts=4 et :
+"""
+Module permettant de configurer l'accès à la base de données
+en vue de l'utilisation des tables du modèle de Vigilo.
+"""
 
 __all__ = (
     'DB_BASENAME',

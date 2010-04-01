@@ -3,9 +3,8 @@
 """VigiloServer model"""
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
-from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, DBSession
 
 __all__ = ('VigiloServer', )
 

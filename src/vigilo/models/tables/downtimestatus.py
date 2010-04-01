@@ -2,10 +2,9 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table DowntimeStatus"""
 from sqlalchemy import Column
-from sqlalchemy.orm import relation
-from sqlalchemy.types import Text, DateTime, Integer, Unicode
+from sqlalchemy.types import Integer, Unicode
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, DBSession
 
 __all__ = ('DowntimeStatus', )
 
