@@ -79,7 +79,7 @@ class Map(DeclarativeBase, object):
         return self.title
 
     @classmethod
-    def by_title_name(cls, maptitle):
+    def by_map_title(cls, maptitle):
         """
         Renvoie la carte dont le titre est L{maptitle}.
         
