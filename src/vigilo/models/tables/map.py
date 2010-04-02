@@ -70,23 +70,23 @@ class Map(DeclarativeBase, object):
         """
         Formatte un C{Map} pour l'afficher dans les formulaires.
 
-        Le nom de la carte est utilisé pour représenter la carte
+        Le titre de la carte est utilisé pour représenter la carte
         dans les formulaires.
 
-        @return: Le nom de la carte.
+        @return: Le titre de la carte.
         @rtype: C{unicode}
         """
-        return self.name
+        return self.title
 
     @classmethod
-    def by_map_name(cls, mapname):
+    def by_title_name(cls, maptitle):
         """
-        Renvoie la carte dont le nom est L{mapname}.
+        Renvoie la carte dont le titre est L{maptitle}.
         
-        @param mapname: Nom de la carte voulue.
-        @type mapname: C{unicode}
+        @param maptitle: Titre de la carte voulue.
+        @type maptitle: C{unicode}
         @return: L'instance correspondant à la carte demandée.
         @rtype: L{Map}
         """
-        return DBSession.query(cls).filter(cls.name == mapname).first()
+        return DBSession.query(cls).filter(cls.title == maptitle).first()
 

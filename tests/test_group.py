@@ -49,6 +49,10 @@ class TestHostGroups(ModelTest):
         tops = self.klass.get_top_groups()
         assert_equal(len(tops), 1)
         assert_equal(tops[0], self.obj)
+    
+    def test_group_relations(self):
+        assert_equal(self.obj.parent, None)
+        assert_equal(self.obj.children, [])
         
 class TestGraphGroup(ModelTest):
     """Test de la table GraphGroup"""
