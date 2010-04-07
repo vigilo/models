@@ -11,7 +11,7 @@ from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
 from vigilo.models.tables.secondary_tables import SUB_MAP_NODE_MAP_TABLE
 from vigilo.models.tables.map import Map
 from vigilo.models.tables.host import Host
-from vigilo.models.tables.service import LowLevelService
+from vigilo.models.tables.service import Service
 
 __all__ = ('MapNodeHost', 'MapNodeService', 'MapNodePerformance')
 
@@ -140,8 +140,8 @@ class MapNodeService(MapNode):
     Classe chargée de la représentation graphique d'un service dans VigiMap.
 
     @ivar idmapnode: Identifiant du modèle de service (séquence). 
-    @ivar idservice: Identifiant du L{LowLevelService} représenté.
-    @ivar service: Instance du L{LowLevelService} représenté.
+    @ivar idservice: Identifiant du L{Service} représenté.
+    @ivar service: Instance du L{Service} représenté.
     @ivar serviceicon: Nom de l'icône du service.
     @ivar servicestateicon: ¢tat de l'icône du service.
     """
@@ -161,13 +161,13 @@ class MapNodeService(MapNode):
     idservice = Column(
         Integer,
         ForeignKey(
-            LowLevelService.idservice,
+            Service.idservice,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
     )
 
-    service = relation('LowLevelService')
+    service = relation('Service')
 
     serviceicon = Column(
         Unicode(255)
