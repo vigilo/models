@@ -11,6 +11,7 @@ configure_db(settings['database'], 'sqlalchemy_',
 
 from vigilo.models.session import DBSession, metadata
 from vigilo.models.websetup import populate_db
+from vigilo.models import tables
 
 def drop():
     print "DROPping all tables"
@@ -36,7 +37,6 @@ def create():
 
 if __name__ == '__main__':
     import sys
-
 
     if len(sys.argv) < 2:
         print "Usage: python %s <create/drop/trunc>" % sys.argv[0]
