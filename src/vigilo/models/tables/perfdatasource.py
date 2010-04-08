@@ -68,3 +68,16 @@ class PerfDataSource(DeclarativeBase, object):
         """Initialisation de la source de données de performance."""
         super(PerfDataSource, self).__init__(**kwargs)
 
+    @classmethod
+    def by_service_and_source_name(cls, service, sourcename):
+        if isinstance(service, int):
+            return DBSession.query(cls
+                ).filter(cls.idservice == service
+                ).filter(cls.name == sourcename
+                ).first()
+
+        return DBSession.query(cls
+            ).filter(cls.service == service
+            ).filter(cls.name == sourcename
+            ).first()
+

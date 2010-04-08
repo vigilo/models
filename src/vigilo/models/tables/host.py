@@ -8,8 +8,7 @@ from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
 from vigilo.models.session import DBSession, ForeignKey
-from vigilo.models.tables.secondary_tables import HOST_HOSTCLASS_TABLE, \
-                                                    HOST_GROUP_TABLE
+from vigilo.models.tables.secondary_tables import HOST_HOSTCLASS_TABLE
 from vigilo.models.tables.supitem import SupItem
 
 __all__ = ('Host', )
@@ -82,9 +81,6 @@ class Host(SupItem):
         Integer,
         nullable=False,
     )
-
-    groups = relation('HostGroup', secondary=HOST_GROUP_TABLE,
-                back_populates='hosts', lazy=True)
 
     hostclasses = relation('HostClass', secondary=HOST_HOSTCLASS_TABLE,
         back_populates='hosts', lazy=True)

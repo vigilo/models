@@ -7,7 +7,8 @@ from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.sql import functions
 
 from vigilo.models.session import DeclarativeBase, DBSession
-from vigilo.models.tables.secondary_tables import SUPITEM_TAG_TABLE
+from vigilo.models.tables.secondary_tables import SUPITEM_TAG_TABLE, \
+                                                    SUPITEM_GROUP_TABLE
 
 __all__ = ('SupItem', )
 
@@ -35,6 +36,9 @@ class SupItem(DeclarativeBase, object):
 
     tags = relation('Tag', secondary=SUPITEM_TAG_TABLE,
         back_populates='supitems', lazy=True)
+
+    groups = relation('SupItemGroup', secondary=SUPITEM_GROUP_TABLE,
+                back_populates='supitems', lazy=True)
 
     __mapper_args__ = {'polymorphic_on': _itemtype}
 

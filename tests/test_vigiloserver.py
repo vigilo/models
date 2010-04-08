@@ -19,6 +19,8 @@ class TestVigiloServer(ModelTest):
         ModelTest.__init__(self)
     
     def test_by_vigiloserver_name(self):
+        """Récupération d'un serveur Vigilo par son nom."""
         ob = VigiloServer.by_vigiloserver_name(u'supserver.example.com')
-        assert_equals(ob.description, u'a vigilo supervision server')
+        assert_equals(self.obj, ob)
+        assert_equals(u'a vigilo supervision server', ob.description)
 

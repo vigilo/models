@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase
+from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 
@@ -53,4 +53,8 @@ class Graph(DeclarativeBase, object):
 
     def __unicode__(self):
         return self.name
+
+    @classmethod
+    def by_graph_name(cls, graph):
+        return DBSession.query(cls).filter(cls.name == graph).first()
 

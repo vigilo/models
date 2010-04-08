@@ -121,22 +121,10 @@ HOST_HOSTCLASS_TABLE = Table(
             primary_key=True, autoincrement=False)
 )
 
-HOST_GROUP_TABLE = Table(
-    'hostgroup', metadata,
-    Column('idhost', Integer, ForeignKey(
-                'host.idhost',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('idgroup', Integer, ForeignKey(
-                'group.idgroup',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
-)
-
-SERVICE_GROUP_TABLE = Table(
-    'servicegroup', metadata,
-    Column('idservice', Integer, ForeignKey(
-                'service.idservice',
+SUPITEM_GROUP_TABLE = Table(
+    'supitemgroup', metadata,
+    Column('idsupitem', Integer, ForeignKey(
+                'supitem.idsupitem',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False),
     Column('idgroup', Integer, ForeignKey(

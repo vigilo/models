@@ -7,7 +7,6 @@ from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
 
 from vigilo.models.session import DBSession, ForeignKey
-from vigilo.models.tables.secondary_tables import SERVICE_GROUP_TABLE
 from vigilo.models.tables.supitem import SupItem
 from vigilo.models.tables.host import Host
 
@@ -45,9 +44,6 @@ class Service(SupItem):
         Unicode(1),
         nullable=False,
     )
-
-    groups = relation('ServiceGroup', secondary=SERVICE_GROUP_TABLE,
-                back_populates='services')
 
     @property
     def dependancies(self):

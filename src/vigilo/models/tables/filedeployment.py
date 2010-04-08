@@ -66,7 +66,7 @@ class FileDeployment(DeclarativeBase, object):
         
         ob.update(content)
         
-        return ob.hexdigest()
+        return unicode(ob.hexdigest())
         
     def process_hashcode(self, sub_func=None):
         """ Updates the hashcode attribute.

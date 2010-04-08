@@ -3,9 +3,8 @@
 """Modèles pour les tables SQL utilisées dans Vigilo."""
 
 __all__ = (
-    'EventHistory', 'Event', 'CorrEvent',
-    'GraphGroup', 'Graph', 'HostGroup', 'Host', 'HostClass',
-    'PerfDataSource', 'ServiceGroup',
+    'EventHistory', 'Event', 'CorrEvent', 'GroupHierarchy',
+    'GraphGroup', 'Graph', 'Host', 'HostClass', 'PerfDataSource',
     'SupItem', 'LowLevelService', 'HighLevelService',
     'Dependency', 'Version', 'State', 'Permission',
     'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
@@ -13,7 +12,7 @@ __all__ = (
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
     'Application', 'VigiloServer', 'Ventilation', 'Installation',
     'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
-    'FileDeployment', 'Change', 'ConfItem'
+    'FileDeployment', 'Change', 'ConfItem',
 )
 
 from .eventhistory import EventHistory
@@ -23,7 +22,8 @@ from .graph import Graph
 from .host import Host
 from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
-from .group import HostGroup, ServiceGroup, MapGroup, GraphGroup
+from .group import MapGroup, GraphGroup, SupItemGroup
+from .grouphierarchy import GroupHierarchy
 from .supitem import SupItem
 from .service import LowLevelService, HighLevelService, Service
 from .dependency import Dependency
@@ -51,3 +51,4 @@ from .installation import Installation
 from .filedeployment import FileDeployment
 from .change import Change
 from .confitem import ConfItem
+

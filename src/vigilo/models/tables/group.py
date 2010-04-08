@@ -8,21 +8,22 @@ from sqlalchemy.schema import UniqueConstraint
 
 from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
 from vigilo.models.tables.secondary_tables import GROUP_PERMISSION_TABLE, \
-                                                HOST_GROUP_TABLE, \
-                                                SERVICE_GROUP_TABLE, \
                                                 MAP_GROUP_TABLE, \
-                                                GRAPH_GROUP_TABLE#, \
+                                                GRAPH_GROUP_TABLE, \
+                                                SUPITEM_GROUP_TABLE#, \
 #                                                APPLICATION_GROUP_TABLE, \
 #                                                USAGE_TABLE
 
-__all__ = ('HostGroup', 'ServiceGroup', 'MapGroup')
+__all__ = ('SupItemGroup', 'MapGroup')
 
 class Group(DeclarativeBase, object):
     """
-    Gère des groupes (récursifs).
+    Gère des groupes.
     Cette classe est abstraite. Utilisez les classes spécialisées
     (L{HostGroup}, L{ServiceGroup}, L{MapGroup}, L{GraphGroup}, etc.)
     pour créer des instances.
+    En combinant cette classe à la classe GroupHierarchy, il est possible
+    de créer une arborescence de groupes.
     
     @ivar idgroup: Identifiant (auto-généré) du groupe.
     @ivar _grouptype: Discriminant pour savoir le type de groupe manipulé.
@@ -31,11 +32,6 @@ class Group(DeclarativeBase, object):
         la fonction isinstance() de Python.
         Exemple: isinstance(grp, HostGroup).
     @ivar name: Nom du groupe, unique pour un type de groupe considéré.
-    @ivar idparent: Identifiant du groupe dont le groupe courant est un
-        fils. Vaut None si le groupe courant n'a pas de parent.
-    @ivar parent: Instance de groupe dont ce groupe hérite.
-    @ivar children: Liste des instances de groupes qui héritent du groupe
-        courant.
     """
     __tablename__ = 'group'
     __table_args__ = (
@@ -59,15 +55,6 @@ class Group(DeclarativeBase, object):
         nullable=False,
     )
 
-    idparent = Column(
-        'idparent', Integer,
-        ForeignKey(idgroup),
-    )
-
-    # XXX We should make sure it's impossible to build cyclic graphs.
-    children = relation('Group', backref=backref('parent',
-                    remote_side=[idgroup]))
-
     __mapper_args__ = {'polymorphic_on': _grouptype}
 
     def __init__(self, **kwargs):
@@ -89,21 +76,6 @@ class Group(DeclarativeBase, object):
         return self.name
 
     @classmethod
-    def get_top_groups(cls):
-        """
-        Renvoie les groupes de premier niveau.
-        
-        Groupes dont l'attribut parent est nul.
-
-        @param cls: La classe à utiliser, c'est-à-dire L{Group}.
-        @type cls: C{class}
-        @return: Les groupes de premier niveau.
-        @rtype: L{list}
-        """
-        return DBSession.query(cls).filter(cls.idparent == None).all()
-
-
-    @classmethod
     def by_group_name(cls, groupname):
         """
         Renvoie le groupe dont le nom est C{groupname}.
@@ -116,41 +88,6 @@ class Group(DeclarativeBase, object):
         @rtype: Une instance de la classe L{Group}
         """
         return DBSession.query(cls).filter(cls.name == groupname).first()
-
-
-class HostGroup(Group):
-    """
-    Groupe d'hôtes.
-
-    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
-        groupe d'hôtes.
-    @ivar hosts: Liste des L{Host}s appartenant à ce groupe.
-    """
-
-    __mapper_args__ = {'polymorphic_identity': u'hostgroup'}
-
-    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='hostgroups')
-
-    hosts = relation('Host', secondary=HOST_GROUP_TABLE,
-                back_populates='groups')
-
-class ServiceGroup(Group):
-    """
-    Groupe de services.
-
-    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
-        groupe de services.
-    @ivar services: Liste des L{Service}s appartenant à ce groupe.
-    """
-
-    __mapper_args__ = {'polymorphic_identity': u'servicegroup'}
-
-    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='servicegroups')
-
-    services = relation('Service', secondary=SERVICE_GROUP_TABLE,
-                    back_populates='groups')
 
 class MapGroup(Group):
     """
@@ -168,7 +105,14 @@ class MapGroup(Group):
     permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='mapgroups')
 
-    subgroups = relation('MapGroup', order_by="MapGroup.name")
+    @property
+    def subgroups(self):
+        return DBSession.query(MapGroup).join(
+            (GroupHierarchy, GroupHierarchy.idchild == MapGroup.idgroup),
+        ).filter(GroupHierarchy.idparent == self.idgroup
+        ).filter(GroupHierarchy.hops == 1
+        ).order_by(MapGroup.name.asc()
+        ).all()
 
     maps = relation('Map', secondary=MAP_GROUP_TABLE,
                     back_populates='groups',
@@ -177,6 +121,10 @@ class MapGroup(Group):
 class GraphGroup(Group):
     """
     Groupe de graphes.
+
+    ATTENTION : les groupes de graphes NE SONT PAS récursifs.
+    Ils utilisent cependant la même classe de base pour simplifier
+    le reste du code (gestion des permissions, etc.).
 
     @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
         groupe de graphes.
@@ -190,4 +138,34 @@ class GraphGroup(Group):
 
     graphs = relation('Graph', secondary=GRAPH_GROUP_TABLE,
                     back_populates='groups')
+
+class SupItemGroup(Group):
+    """
+    Groupe d'hôtes.
+
+    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
+        groupe d'hôtes.
+    @ivar hosts: Liste des L{Host}s appartenant à ce groupe.
+    """
+    __mapper_args__ = {'polymorphic_identity': u'supitemgroup'}
+
+    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
+                    back_populates='supitemgroups')
+
+    supitems = relation('SupItem', secondary=SUPITEM_GROUP_TABLE,
+                back_populates='groups')
+
+    @classmethod
+    def get_top_groups(cls):
+        from vigilo.models.tables import GroupHierarchy
+        # On récupère tous les groupes qui ont un parent.
+        children = DBSession.query(cls).distinct(
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idchild == cls.idgroup)
+            ).filter(GroupHierarchy.hops > 0)
+
+        # Ensuite on les exclut de la liste des groupes,
+        # pour ne garder que ceux qui sont au sommet de l'arbre
+        # et qui constituent nos "top groups".
+        return DBSession.query(cls).except_(children).order_by(cls.name).all()
 

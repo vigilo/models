@@ -94,7 +94,8 @@ def init_db():
     settings.load_module(__name__)
 
     from vigilo.models.configure import configure_db
-    engine = configure_db(settings['database'], 'sqlalchemy_')
+    engine = configure_db(settings['database'], 'sqlalchemy_',
+        settings['database']['db_basename'])
     populate_db(engine)
 
 

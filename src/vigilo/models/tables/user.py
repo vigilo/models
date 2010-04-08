@@ -7,7 +7,11 @@ from sqlalchemy.types import Unicode, DateTime
 import hashlib
 
 from vigilo.models.session import DeclarativeBase, DBSession
-from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE
+from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE, \
+                                            GROUP_PERMISSION_TABLE, \
+                                            USERGROUP_PERMISSION_TABLE
+from vigilo.models.tables import SupItemGroup, GroupHierarchy, \
+                                    Permission, UserGroup
 
 __all__ = ('User', )
 
@@ -109,6 +113,33 @@ class User(DeclarativeBase, object):
         return perms
 
     @property
+    def supitemgroups(self):
+        groups = DBSession.query(
+                SupItemGroup.idgroup
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idparent == \
+                    SupItemGroup.idgroup),
+                # En théorie, on devrait faire une jointure intermédiaire
+                # sur un 2ème SupItemGroup. Ici, on peut l'éviter, ce qui
+                # simplifie la requête SQL générée d'une part et simplifie
+                # le code Python d'autre part (évite l'ajout d'aliases).
+                (GROUP_PERMISSION_TABLE, GROUP_PERMISSION_TABLE.c.idgroup == \
+                    GroupHierarchy.idchild),
+                (Permission, Permission.idpermission == \
+                    GROUP_PERMISSION_TABLE.c.idpermission),
+                (USERGROUP_PERMISSION_TABLE, \
+                    USERGROUP_PERMISSION_TABLE.c.idpermission == \
+                    Permission.idpermission),
+                (UserGroup, UserGroup.idgroup == \
+                    USERGROUP_PERMISSION_TABLE.c.idgroup),
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                    UserGroup.idgroup),
+            ).filter(
+                USER_GROUP_TABLE.c.username == self.user_name
+            ).all()
+        return [g.idgroup for g in groups]
+
+    @property
     def groups(self):
         """
         Renvoie l'ensemble des identifiants des groupes
@@ -136,22 +167,8 @@ class User(DeclarativeBase, object):
         groups = set()
         for ug in self.usergroups:
             for p in ug.permissions:
-                # HostGroup
-                for g in p.hostgroups:
-                    node = g
-                    while not node is None:
-                        groups = groups | set([node.idgroup])
-                        node = node.parent
-
                 # MapGroup
                 for g in p.mapgroups:
-                    node = g
-                    while not node is None:
-                        groups = groups | set([node.idgroup])
-                        node = node.parent
-
-                # ServiceGroup
-                for g in p.servicegroups:
                     node = g
                     while not node is None:
                         groups = groups | set([node.idgroup])

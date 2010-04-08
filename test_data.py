@@ -91,6 +91,7 @@ add_Host('host3.example.com')
 add_Host('routeur1')
 add_Host('routeur2')
 add_Host('firewall')
+add_Host('localhost')
 
 # LowLevelService
 def add_LowLevelService(name, hostident, weight=100):
@@ -152,6 +153,8 @@ add_LowLevelService('RAM', 'proto4')
 add_LowLevelService('RAM', 'brouteur')
 add_LowLevelService('RAM', 'host1.example.com')
 add_LowLevelService('RAM', 'host2.example.com')
+add_LowLevelService('perfdatasource', 'localhost')
+
 
 # HighLevelService
 DBSession.add(tables.HighLevelService(
@@ -233,37 +236,38 @@ add_Dependency(('firewall', 'Interface eth0'), ('routeur2', 'Interface eth1'))
 add_Dependency(('routeur1', 'Interface eth1'), ('routeur1', 'Interface eth0'))
 add_Dependency(('routeur2', 'Interface eth1'), ('routeur2', 'Interface eth0'))
 
-# HostGroup
-servers = tables.HostGroup(
-    name=u'Serveurs',
-    parent=None,
-)
+# SupItemGroup
+servers = tables.SupItemGroup(name=u'Serveurs')
 DBSession.add(servers)
 DBSession.flush()
 
-DBSession.add(tables.HostGroup(
-    name=u'Serveurs Linux',
-    parent=servers,
-))
+linux = tables.SupItemGroup(name=u'Serveurs Linux')
+DBSession.add(linux)
 DBSession.flush()
 
-DBSession.add(tables.HostGroup(
-    name=u'Serveurs Windows',
-    parent=servers,
-))
+windows = tables.SupItemGroup(name=u'Serveurs Windows')
+DBSession.add(windows)
 DBSession.flush()
 
-# ServiceGroup
-DBSession.add(tables.ServiceGroup(
-    name=u'Services',
-    parent=None,
-))
+# GraphGroup
+DBSession.add(tables.GraphGroup(name=u'Graphes'))
+DBSession.flush()
+
+
+# Ajout des boucles.
+DBSession.add(tables.GroupHierarchy(parent=servers, child=servers, hops=0))
+DBSession.add(tables.GroupHierarchy(parent=linux, child=linux, hops=0))
+DBSession.add(tables.GroupHierarchy(parent=windows, child=windows, hops=0))
+
+# Ajout de la hiérarchie.
+DBSession.add(tables.GroupHierarchy(parent=servers, child=linux, hops=1))
+DBSession.add(tables.GroupHierarchy(parent=servers, child=windows, hops=1))
 DBSession.flush()
 
 # Affectation des permissions aux groupes d'hôtes.
-def add_HostGroupPermission(group, perm):
+def add_SupItemGroupPermission(group, perm):
     if isinstance(group, basestring):
-        group = tables.HostGroup.by_group_name(u'' + group)
+        group = tables.SupItemGroup.by_group_name(u'' + group)
 
     if isinstance(perm, basestring):
         perm = tables.Permission.by_permission_name(u'' + perm)
@@ -271,13 +275,13 @@ def add_HostGroupPermission(group, perm):
     group.permissions.append(perm)
     DBSession.flush()
 
-add_HostGroupPermission('Serveurs', 'edit')
-add_HostGroupPermission('Serveurs Linux', 'manage')
+add_SupItemGroupPermission('Serveurs', 'edit')
+add_SupItemGroupPermission('Serveurs Linux', 'manage')
 
-# Affectation des permissions aux groupes de services.
-def add_ServiceGroupPermission(group, perm):
+# Affectation des permissions aux groupes de graphes.
+def add_GraphGroupPermission(group, perm):
     if isinstance(group, basestring):
-        group = tables.ServiceGroup.by_group_name(u'' + group)
+        group = tables.GraphGroup.by_group_name(u'' + group)
 
     if isinstance(perm, basestring):
         perm = tables.Permission.by_permission_name(u'' + perm)
@@ -285,88 +289,46 @@ def add_ServiceGroupPermission(group, perm):
     group.permissions.append(perm)
     DBSession.flush()
 
-add_ServiceGroupPermission('Services', 'edit')
-add_ServiceGroupPermission('Services', 'manage')
+add_GraphGroupPermission('Graphes', 'manage')
 
 # Affectation des hôtes aux groupes d'hôtes.
-def add_Host2HostGroup(host, group):
+def add_Host2SupItemGroup(host, group):
     if isinstance(group, basestring):
-        group = tables.HostGroup.by_group_name(u'' + group)
+        group = tables.SupItemGroup.by_group_name(u'' + group)
 
     if isinstance(host, basestring):
         host = tables.Host.by_host_name(u'' + host)
 
-    group.hosts.append(host)
+    group.supitems.append(host)
     DBSession.flush()
 
-add_Host2HostGroup('ajc.fw.1', 'Serveurs')
-add_Host2HostGroup('ajc.linux1', 'Serveurs')
-add_Host2HostGroup('ajc.sw.1', 'Serveurs')
-add_Host2HostGroup('bdx.fw.1', 'Serveurs')
-add_Host2HostGroup('bdx.linux1', 'Serveurs')
-add_Host2HostGroup('brouteur', 'Serveurs')
-add_Host2HostGroup('bst.fw.1', 'Serveurs')
-add_Host2HostGroup('bst.unix0', 'Serveurs')
-add_Host2HostGroup('bst.unix1', 'Serveurs')
-add_Host2HostGroup('bst.win0', 'Serveurs Linux')
-add_Host2HostGroup('messagerie', 'Serveurs Linux')
-add_Host2HostGroup('par.fw.1', 'Serveurs Linux')
-add_Host2HostGroup('par.linux0', 'Serveurs Linux')
-add_Host2HostGroup('par.linux1', 'Serveurs Linux')
-add_Host2HostGroup('par.unix0', 'Serveurs Linux')
-add_Host2HostGroup('proto4', 'Serveurs Linux')
-add_Host2HostGroup('server.mails', 'Serveurs Linux')
-add_Host2HostGroup('testaix', 'Serveurs Linux')
-add_Host2HostGroup('testnortel', 'Serveurs Linux')
-add_Host2HostGroup('testsolaris', 'Serveurs Linux')
-add_Host2HostGroup('host1.example.com', 'Serveurs Linux')
-add_Host2HostGroup('host2.example.com', 'Serveurs Linux')
-add_Host2HostGroup('host3.example.com', 'Serveurs Linux')
-add_Host2HostGroup('routeur1', 'Serveurs Linux')
-add_Host2HostGroup('routeur2', 'Serveurs Linux')
-add_Host2HostGroup('firewall', 'Serveurs Linux')
-
-# Affectation des services aux groupes de services.
-def add_Service2ServiceGroup(lls, group):
-    if isinstance(group, basestring):
-        group = tables.ServiceGroup.by_group_name(u'' + group)
-
-    if isinstance(lls, tuple):
-        host, service = lls
-        lls = tables.LowLevelService.by_host_service_name(
-            u'' + host, u'' + service)
-
-    group.services.append(lls)
-    DBSession.flush()
-
-add_Service2ServiceGroup(('brouteur', 'UpTime'), 'Services')
-add_Service2ServiceGroup(('brouteur', 'CPU'), 'Services')
-add_Service2ServiceGroup(('brouteur', 'Processes'), 'Services')
-add_Service2ServiceGroup(('firewall', 'Interface eth0'), 'Services')
-add_Service2ServiceGroup(('firewall', 'Interface eth1'), 'Services')
-add_Service2ServiceGroup(('host1.example.com', 'CPU'), 'Services')
-add_Service2ServiceGroup(('host1.example.com', 'Load'), 'Services')
-add_Service2ServiceGroup(('host1.example.com', 'Processes'), 'Services')
-add_Service2ServiceGroup(('host1.example.com', 'HTTPD'), 'Services')
-add_Service2ServiceGroup(('host1.example.com', 'RAM'), 'Services')
-add_Service2ServiceGroup(('host1.example.com', 'Interface eth0'), 'Services')
-add_Service2ServiceGroup(('host2.example.com', 'Interface eth0'), 'Services')
-add_Service2ServiceGroup(('host2.example.com', 'Interface eth1'), 'Services')
-add_Service2ServiceGroup(('host2.example.com', 'Interface eth2'), 'Services')
-add_Service2ServiceGroup(('host2.example.com', 'HTTPD'), 'Services')
-add_Service2ServiceGroup(('host3.example.com', 'Interface eth1'), 'Services')
-add_Service2ServiceGroup(('messagerie', 'CPU'), 'Services')
-add_Service2ServiceGroup(('messagerie', 'Interface eth0'), 'Services')
-add_Service2ServiceGroup(('messagerie', 'Processes'), 'Services')
-add_Service2ServiceGroup(('messagerie', 'RAM'), 'Services')
-add_Service2ServiceGroup(('messagerie', 'UpTime'), 'Services')
-add_Service2ServiceGroup(('proto4', 'Processes'), 'Services')
-add_Service2ServiceGroup(('proto4', 'UpTime'), 'Services')
-add_Service2ServiceGroup(('proto4', 'CPU'), 'Services')
-add_Service2ServiceGroup(('routeur1', 'Interface eth0'), 'Services')
-add_Service2ServiceGroup(('routeur1', 'Interface eth1'), 'Services')
-add_Service2ServiceGroup(('routeur2', 'Interface eth0'), 'Services')
-add_Service2ServiceGroup(('routeur2', 'Interface eth1'), 'Services')
+add_Host2SupItemGroup('ajc.fw.1', 'Serveurs')
+add_Host2SupItemGroup('ajc.linux1', 'Serveurs Linux')
+add_Host2SupItemGroup('ajc.sw.1', 'Serveurs')
+add_Host2SupItemGroup('bdx.fw.1', 'Serveurs')
+add_Host2SupItemGroup('bdx.linux1', 'Serveurs Linux')
+add_Host2SupItemGroup('brouteur', 'Serveurs')
+add_Host2SupItemGroup('bst.fw.1', 'Serveurs')
+add_Host2SupItemGroup('bst.unix0', 'Serveurs')
+add_Host2SupItemGroup('bst.unix1', 'Serveurs Linux')
+add_Host2SupItemGroup('bst.win0', 'Serveurs Windows')
+add_Host2SupItemGroup('messagerie', 'Serveurs Linux')
+add_Host2SupItemGroup('par.fw.1', 'Serveurs Linux')
+add_Host2SupItemGroup('par.linux0', 'Serveurs Linux')
+add_Host2SupItemGroup('par.linux1', 'Serveurs Linux')
+add_Host2SupItemGroup('par.unix0', 'Serveurs Linux')
+add_Host2SupItemGroup('proto4', 'Serveurs Linux')
+add_Host2SupItemGroup('server.mails', 'Serveurs Linux')
+add_Host2SupItemGroup('testaix', 'Serveurs Windows')
+add_Host2SupItemGroup('testnortel', 'Serveurs Windows')
+add_Host2SupItemGroup('testsolaris', 'Serveurs Windows')
+add_Host2SupItemGroup('host1.example.com', 'Serveurs Linux')
+add_Host2SupItemGroup('host2.example.com', 'Serveurs Linux')
+add_Host2SupItemGroup('host3.example.com', 'Serveurs Linux')
+add_Host2SupItemGroup('routeur1', 'Serveurs Linux')
+add_Host2SupItemGroup('routeur2', 'Serveurs Linux')
+add_Host2SupItemGroup('firewall', 'Serveurs Linux')
+add_Host2SupItemGroup('localhost', 'Serveurs Linux')
 
 # Application
 def add_Application(name):
@@ -374,6 +336,7 @@ def add_Application(name):
     DBSession.flush()
 
 add_Application('nagios')
+add_Application('rrdgraph')
 add_Application('collector')
 add_Application('connector-nagios')
 
@@ -388,6 +351,7 @@ def add_VigiloServer(name, description=None):
 add_VigiloServer('foo')
 add_VigiloServer('bar')
 add_VigiloServer('baz')
+add_VigiloServer('http://192.168.251.45/vigilo/')
 
 # Ventilation
 def add_Ventilation(host, vigiloserver, app):
@@ -421,6 +385,7 @@ def add_Ventilation(host, vigiloserver, app):
 add_Ventilation('host1.example.com', 'foo', 'nagios')
 add_Ventilation('host2.example.com', 'bar', 'nagios')
 add_Ventilation('host3.example.com', 'baz', 'nagios')
+add_Ventilation('localhost', 'http://192.168.251.45/vigilo/', 'rrdgraph')
 
 # Installation
 def add_Installation(vigiloserver, app, jid):
@@ -449,4 +414,65 @@ def add_Installation(vigiloserver, app, jid):
 add_Installation('foo', 'nagios', 'connector-nagios@localhost')
 add_Installation('bar', 'nagios', 'connector-nagios@localhost')
 add_Installation('baz', 'nagios', 'connector-nagios@localhost')
+
+# Sources de données de métrologie (PerfDataSource)
+def add_PerfDataSource(service, name, type='COUNTER', factor=1):
+    kwargs = {
+        'name': unicode(name),
+        'type': unicode(type),
+        'factor': factor,
+    }
+
+    if isinstance(service, tuple):
+        kwargs['service'] = tables.LowLevelService. \
+                                by_host_service_name(*service)
+    elif isinstance(service, int):
+        kwargs['idservice'] = service
+    else:
+        kwargs['service'] = service
+
+    DBSession.add(tables.PerfDataSource(**kwargs))
+    DBSession.flush()
+
+def add_Graph(name, template='graph', vlabel='vlabel'):
+    DBSession.add(tables.Graph(
+        name=u'' + name,
+        template=template,
+        vlabel=vlabel,
+    ))
+    DBSession.flush()
+
+def add_Graph2GraphGroup(graph, group):
+    if isinstance(group, basestring):
+        group = tables.GraphGroup.by_group_name(u'' + group)
+
+    if isinstance(graph, basestring):
+        graph = tables.Graph.by_graph_name(u'' + graph)
+
+    group.graphs.append(graph)
+    DBSession.flush()
+
+def add_PerfDataSource2Graph(source, graph):
+    if isinstance(graph, basestring):
+        graph = tables.Graph.by_graph_name(u'' + graph)
+
+    if isinstance(source, tuple):
+        source = tables.PerfDataSource.by_service_and_source_name(*source)
+
+    graph.perfdatasources.append(source)
+    DBSession.flush()
+
+service = ('localhost', 'perfdatasource')
+source1 = add_PerfDataSource(service, 'Load 01')
+source2 = add_PerfDataSource(service, 'Load 05')
+source3 = add_PerfDataSource(service, 'Load 15')
+source4 = add_PerfDataSource(service, 'sysUpTime')
+add_Graph('UpTime')
+add_Graph('Load')
+add_Graph2GraphGroup('UpTime', 'Graphes')
+add_Graph2GraphGroup('Load', 'Graphes')
+add_PerfDataSource2Graph(source1, 'Load')
+add_PerfDataSource2Graph(source2, 'Load')
+add_PerfDataSource2Graph(source3, 'Load')
+add_PerfDataSource2Graph(source4, 'UpTime')
 
