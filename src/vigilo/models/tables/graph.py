@@ -55,6 +55,17 @@ class Graph(DeclarativeBase, object):
         return self.name
 
     @classmethod
-    def by_graph_name(cls, graph):
-        return DBSession.query(cls).filter(cls.name == graph).first()
+    def by_graph_name(cls, graphname):
+        """
+        Renvoie le graphe dont le nom est L{graphname}.
+
+        @param cls: Classe à utiliser pour récupérer le graphe,
+            c'est-à-dire L{Graph}.
+        @type cls: C{type}
+        @param graphname: Nom du graphe à retourner.
+        @type graphname: C{unicode}
+        @return: Le graphe demandé.
+        @rtype: L{Graph}
+        """
+        return DBSession.query(cls).filter(cls.name == graphname).first()
 

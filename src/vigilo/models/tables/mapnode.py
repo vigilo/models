@@ -7,7 +7,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, Boolean
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, ForeignKey
 from vigilo.models.tables.secondary_tables import SUB_MAP_NODE_MAP_TABLE
 from vigilo.models.tables.map import Map
 from vigilo.models.tables.host import Host
@@ -184,7 +184,8 @@ class MapNodeService(MapNode):
 #TODO: Classe en préparation
 #class MapNodePerformance(MapNode):
 #    
-#    Classe chargée de la représentation graphique d'un modèle Performance dans vigimap 
+#    Classe chargée de la représentation graphique d'un modèle
+#    Performance dans vigimap 
 
 #    __mapper_args__ = {'polymorphic_identity': u'performance'}
 #    

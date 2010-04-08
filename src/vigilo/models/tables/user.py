@@ -114,6 +114,30 @@ class User(DeclarativeBase, object):
 
     @property
     def supitemgroups(self):
+        """
+        Renvoie la liste des identifiants des groupes d'éléments supervisés
+        auxquels l'utilisateur a accès.
+
+        Les groupes sont récursifs.
+        Si le groupe HG1 hérite du groupe HG et que l'utilisateur
+        a les permissions sur le groupe HG1, alors il reçoit aussi
+        (automatiquement) l'accès aux éléments rattachés à HG.
+
+        Autrement dit:
+        HG <- lié à un hôte H
+        |
+        HG1 <- lié à un hôte H1
+
+        Si l'utilisateur U a les permissions sur HG (mais pas sur HG1),
+        et l'utilisateur U1 a les permissions sur HG1 (mais pas sur HG).
+        Alors U ne peut voir que les hôtes rattachés à HG (ici, H),
+        tandis que U1 peut voir les hôtes rattachés soit à HG, soit à HG1
+        (ou aux deux), c'est-à-dire H et H1.
+
+        @return: Liste des identifiants des groupes d'éléments supervisés
+            auxquels l'utilisateur a accès.
+        @rtype: C{list} of C{int}
+        """
         groups = DBSession.query(
                 SupItemGroup.idgroup
             ).join(

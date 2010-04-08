@@ -76,16 +76,40 @@ class Group(DeclarativeBase, object):
         return self.name
 
     @classmethod
+    def get_top_groups(cls):
+        """
+        Renvoie les groupes de premier niveau.
+
+        @param cls: La classe à utiliser, c'est-à-dire L{Group}.
+        @type cls: C{class}
+        @return: Les groupes de premier niveau.
+        @rtype: L{list}
+        """
+        from vigilo.models.tables import GroupHierarchy
+
+        # On récupère tous les groupes qui ont un parent.
+        children = DBSession.query(cls).distinct(
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idchild == cls.idgroup)
+            ).filter(GroupHierarchy.hops > 0)
+
+        # Ensuite on les exclut de la liste des groupes,
+        # pour ne garder que ceux qui sont au sommet de l'arbre
+        # et qui constituent nos "top groups".
+        return DBSession.query(cls).except_(children).order_by(cls.name).all()
+
+    @classmethod
     def by_group_name(cls, groupname):
         """
         Renvoie le groupe dont le nom est C{groupname}.
 
-        @param cls: La classe à utiliser, c'est-à-dire L{Group}.
+        @param cls: La classe à utiliser, c'est-à-dire une classe
+            qui hérite de L{Group}.
         @type cls: C{class}
         @param groupname: Le nom du groupe que l'on souhaite récupérer.
         @type groupname: C{str}
         @return: Le groupe demandé.
-        @rtype: Une instance de la classe L{Group}
+        @rtype: L{Group}
         """
         return DBSession.query(cls).filter(cls.name == groupname).first()
 
@@ -107,6 +131,7 @@ class MapGroup(Group):
 
     @property
     def subgroups(self):
+        from vigilo.models.tables import GroupHierarchy
         return DBSession.query(MapGroup).join(
             (GroupHierarchy, GroupHierarchy.idchild == MapGroup.idgroup),
         ).filter(GroupHierarchy.idparent == self.idgroup
@@ -141,11 +166,11 @@ class GraphGroup(Group):
 
 class SupItemGroup(Group):
     """
-    Groupe d'hôtes.
+    Groupe d'éléments supervisés.
 
     @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
-        groupe d'hôtes.
-    @ivar hosts: Liste des L{Host}s appartenant à ce groupe.
+        groupe d'éléments supervisés.
+    @ivar supitems: Liste des L{SupItem}s appartenant à ce groupe.
     """
     __mapper_args__ = {'polymorphic_identity': u'supitemgroup'}
 
@@ -154,18 +179,4 @@ class SupItemGroup(Group):
 
     supitems = relation('SupItem', secondary=SUPITEM_GROUP_TABLE,
                 back_populates='groups')
-
-    @classmethod
-    def get_top_groups(cls):
-        from vigilo.models.tables import GroupHierarchy
-        # On récupère tous les groupes qui ont un parent.
-        children = DBSession.query(cls).distinct(
-            ).join(
-                (GroupHierarchy, GroupHierarchy.idchild == cls.idgroup)
-            ).filter(GroupHierarchy.hops > 0)
-
-        # Ensuite on les exclut de la liste des groupes,
-        # pour ne garder que ceux qui sont au sommet de l'arbre
-        # et qui constituent nos "top groups".
-        return DBSession.query(cls).except_(children).order_by(cls.name).all()
 

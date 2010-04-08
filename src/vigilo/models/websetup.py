@@ -100,6 +100,13 @@ def init_db():
 
 
 class pg_database_size(sqlfuncs.GenericFunction):
+    """
+    Fonction permettant d'utiliser l'expression "pg_database_size"
+    de PostgreSQL afin de déterminer la taille occupée sur le disque
+    par la base de données.
+
+    @note: Cette fonction est spécifique à PostgreSQL.
+    """
     __return_type__ = sqltypes.Integer
 
     def __init__(self, arg, **kwargs):
@@ -113,7 +120,6 @@ def clean_vigiboard(*args):
 
     from datetime import datetime
     from optparse import OptionParser
-    from sqlalchemy import and_
 
     from vigilo.common.conf import settings
     settings.load_module(__name__)
