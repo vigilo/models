@@ -74,6 +74,40 @@ class Group(DeclarativeBase, object):
         @rtype: C{str}
         """
         return self.name
+    
+    def remove_children(self):
+        """
+        """
+        from vigilo.models.tables import GroupHierarchy
+        DBSession.query(GroupHierarchy)\
+            .filter(GroupHierarchy.idparent == self.idgroup)\
+            .delete()
+    
+    def has_parent(self):
+        from vigilo.models.tables import GroupHierarchy
+        return (DBSession.query(GroupHierarchy)\
+            .filter(GroupHierarchy.idchild == self.idgroup)\
+            .count() > 0)
+    
+    def get_parent(self):
+        from vigilo.models.tables import GroupHierarchy
+        q = DBSession.query(GroupHierarchy)\
+            .filter(GroupHierarchy.idchild == self.idgroup)
+        if q.count() == 0:
+            return None
+        return q.one().parent
+    
+    def set_parent(self, group):
+        """ positionne un groupe en tant que parent
+        """
+        from vigilo.models.tables import GroupHierarchy
+        # on détruit un éventuel lien de parenté existant
+        DBSession.query(GroupHierarchy
+                            ).filter(GroupHierarchy.idchild == self.idgroup
+                            ).filter(GroupHierarchy.idparent == group.idgroup
+                            ).delete()
+        gh = GroupHierarchy(parent=group, child=self, hops=1)
+        DBSession.add(gh)
 
     @classmethod
     def get_top_groups(cls):
@@ -179,4 +213,33 @@ class SupItemGroup(Group):
 
     supitems = relation('SupItem', secondary=SUPITEM_GROUP_TABLE,
                 back_populates='groups')
+    
+    def has_children(self):
+        """
+        """
+        from vigilo.models.tables import GroupHierarchy
+        return ( DBSession.query(SupItemGroup).join(
+            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
+        ).filter(GroupHierarchy.idparent == self.idgroup
+        ).count() > 0 )
+    
+    def get_children(self, hops=1):
+        """
+        """
+        from vigilo.models.tables import GroupHierarchy
+        return DBSession.query(SupItemGroup).join(
+            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
+        ).filter(GroupHierarchy.idparent == self.idgroup
+        ).filter(GroupHierarchy.hops == 1
+        ).all()
+    
+    def get_hosts(self):
+        """
+        """
+        from vigilo.models.tables import Host
+        hosts = []
+        for si in self.supitems:
+            if si.__class__ == Host:
+                hosts.append(si)
+        return hosts
 
