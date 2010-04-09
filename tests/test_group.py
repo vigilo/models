@@ -141,6 +141,41 @@ class TestSupItemGroups(ModelTest):
         tops = self.klass.get_top_groups()
         assert_equal(len(tops), 1)
         assert_equal(tops[0], self.obj)
+        
+    def test_has_children(self):
+        """
+        """
+        assert_equal( False, self.obj.has_children() )
+        
+        child = self.klass(name=u"achild")
+        DBSession.add(child)
+        DBSession.add(GroupHierarchy(
+            parent=self.obj,
+            child=child,
+            hops=1,
+        ))
+        DBSession.flush()
+        
+        assert_equal( True, self.obj.has_children() )
+    
+    def test_get_children(self):
+        """
+        """
+        child = self.klass(name=u"achild")
+        DBSession.add(child)
+        DBSession.add(GroupHierarchy(
+            parent=self.obj,
+            child=child,
+            hops=1,
+        ))
+        DBSession.flush()
+        
+        assert_equal( [child, ], self.obj.get_children() )
+    
+    def test_get_hosts(self):
+        """
+        """
+        assert_equal( [], self.obj.get_hosts() )
 
 class TestGraphGroup(ModelTest):
     """Test de la table GraphGroup"""
