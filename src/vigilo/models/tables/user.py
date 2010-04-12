@@ -112,19 +112,20 @@ class User(DeclarativeBase, object):
             perms = perms | set(g.permissions)
         return perms
 
-    @property
-    def supitemgroups(self):
+    def supitemgroups(self, drill_up=False):
         """
         Renvoie la liste des identifiants des groupes d'éléments supervisés
         auxquels l'utilisateur a accès.
 
         Les groupes sont récursifs.
+        On suppose que l'attribut drill_up est mis à True.
         Si le groupe HG1 hérite du groupe HG et que l'utilisateur
         a les permissions sur le groupe HG1, alors il reçoit aussi
         (automatiquement) l'accès aux éléments rattachés à HG.
 
         Autrement dit:
         HG <- lié à un hôte H
+        ^
         |
         HG1 <- lié à un hôte H1
 
@@ -134,21 +135,37 @@ class User(DeclarativeBase, object):
         tandis que U1 peut voir les hôtes rattachés soit à HG, soit à HG1
         (ou aux deux), c'est-à-dire H et H1.
 
+        @param drill_up: Indique le sens de parcours du graphe.
+            Si cette valeur vaut True, le parcours se fait du bas du graphe
+            (des feuilles) vers le haut. Sinon (par défaut), il se fait du
+            haut de l'arbre vers le bas (vers les feuilles).
+        @type drill_up: C{bool}
         @return: Liste des identifiants des groupes d'éléments supervisés
             auxquels l'utilisateur a accès.
         @rtype: C{list} of C{int}
         """
-        groups = DBSession.query(
-                SupItemGroup.idgroup
-            ).join(
+        joins = []
+
+        # En théorie, on devrait faire une jointure intermédiaire
+        # sur un 2ème SupItemGroup. Ici, on peut l'éviter, ce qui
+        # simplifie la requête SQL générée d'une part et simplifie
+        # le code Python d'autre part (évite l'ajout d'aliases).
+        if drill_up:
+            joins.extend([
                 (GroupHierarchy, GroupHierarchy.idparent == \
                     SupItemGroup.idgroup),
-                # En théorie, on devrait faire une jointure intermédiaire
-                # sur un 2ème SupItemGroup. Ici, on peut l'éviter, ce qui
-                # simplifie la requête SQL générée d'une part et simplifie
-                # le code Python d'autre part (évite l'ajout d'aliases).
                 (GROUP_PERMISSION_TABLE, GROUP_PERMISSION_TABLE.c.idgroup == \
                     GroupHierarchy.idchild),
+            ])
+        else:
+            joins.extend([
+                (GroupHierarchy, GroupHierarchy.idchild == \
+                    SupItemGroup.idgroup),
+                (GROUP_PERMISSION_TABLE, GROUP_PERMISSION_TABLE.c.idgroup == \
+                    GroupHierarchy.idparent),
+            ])
+
+        joins.extend([
                 (Permission, Permission.idpermission == \
                     GROUP_PERMISSION_TABLE.c.idpermission),
                 (USERGROUP_PERMISSION_TABLE, \
@@ -158,7 +175,11 @@ class User(DeclarativeBase, object):
                     USERGROUP_PERMISSION_TABLE.c.idgroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                     UserGroup.idgroup),
-            ).filter(
+        ])
+
+        groups = DBSession.query(
+                SupItemGroup.idgroup
+            ).join(*joins).filter(
                 USER_GROUP_TABLE.c.username == self.user_name
             ).all()
         return [g.idgroup for g in groups]
