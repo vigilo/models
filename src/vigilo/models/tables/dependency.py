@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.supitem import SupItem
 
 __all__ = ('Dependency', )
@@ -53,6 +53,21 @@ class Dependency(DeclarativeBase, object):
 
     def __init__(self, **kwargs):
         super(Dependency, self).__init__(**kwargs)
+
+    @classmethod
+    def get_or_create(cls, supitem1, supitem2):
+        """ création sans doublon
+        """
+        q = DBSession.query(cls
+                        ).filter(cls.supitem1 == supitem1  
+                        ).filter(cls.supitem2 == supitem2          
+                        )
+        if q.count() == 0:
+            dep = cls(supitem1=supitem1, supitem2=supitem2)
+            DBSession.add(dep)
+            return dep
+        else:
+            return q.one()
     
     def get_key(self):
         """ Clé utile pour implémenter la détection de changement.
