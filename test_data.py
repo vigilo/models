@@ -250,7 +250,8 @@ DBSession.add(windows)
 DBSession.flush()
 
 # GraphGroup
-DBSession.add(tables.GraphGroup(name=u'Graphes'))
+graphes = tables.GraphGroup(name=u'Graphes')
+DBSession.add(graphes)
 DBSession.flush()
 
 
@@ -258,6 +259,7 @@ DBSession.flush()
 DBSession.add(tables.GroupHierarchy(parent=servers, child=servers, hops=0))
 DBSession.add(tables.GroupHierarchy(parent=linux, child=linux, hops=0))
 DBSession.add(tables.GroupHierarchy(parent=windows, child=windows, hops=0))
+DBSession.add(tables.GroupHierarchy(parent=graphes, child=graphes, hops=0))
 
 # Ajout de la hiérarchie.
 DBSession.add(tables.GroupHierarchy(parent=servers, child=linux, hops=1))
@@ -352,6 +354,7 @@ add_VigiloServer('foo')
 add_VigiloServer('bar')
 add_VigiloServer('baz')
 add_VigiloServer('http://192.168.251.45/vigilo/')
+add_VigiloServer('http://localhost/vigilo/')
 
 # Ventilation
 def add_Ventilation(host, vigiloserver, app):
@@ -385,7 +388,8 @@ def add_Ventilation(host, vigiloserver, app):
 add_Ventilation('host1.example.com', 'foo', 'nagios')
 add_Ventilation('host2.example.com', 'bar', 'nagios')
 add_Ventilation('host3.example.com', 'baz', 'nagios')
-add_Ventilation('localhost', 'http://192.168.251.45/vigilo/', 'rrdgraph')
+add_Ventilation('localhost', 'http://localhost/vigilo/', 'rrdgraph')
+add_Ventilation('proto4', 'http://localhost/vigilo/', 'rrdgraph')
 
 # Installation
 def add_Installation(vigiloserver, app, jid):
@@ -431,16 +435,21 @@ def add_PerfDataSource(service, name, type='COUNTER', factor=1):
     else:
         kwargs['service'] = service
 
-    DBSession.add(tables.PerfDataSource(**kwargs))
+    pds = tables.PerfDataSource(**kwargs)
+    DBSession.add(pds)
     DBSession.flush()
 
+    return pds
+
 def add_Graph(name, template='graph', vlabel='vlabel'):
-    DBSession.add(tables.Graph(
+    graph = tables.Graph(
         name=u'' + name,
-        template=template,
-        vlabel=vlabel,
-    ))
+        template=u'' + template,
+        vlabel=u'' + vlabel,
+    )
+    DBSession.add(graph)
     DBSession.flush()
+    return graph
 
 def add_Graph2GraphGroup(graph, group):
     if isinstance(group, basestring):
@@ -462,11 +471,13 @@ def add_PerfDataSource2Graph(source, graph):
     graph.perfdatasources.append(source)
     DBSession.flush()
 
-service = ('localhost', 'perfdatasource')
-source1 = add_PerfDataSource(service, 'Load 01')
-source2 = add_PerfDataSource(service, 'Load 05')
-source3 = add_PerfDataSource(service, 'Load 15')
-source4 = add_PerfDataSource(service, 'sysUpTime')
+service1 = (u'proto4', u'UpTime')
+service2 = (u'proto4', u'Load')
+source1 = add_PerfDataSource(service2, 'Load 01')
+source2 = add_PerfDataSource(service2, 'Load 05')
+source3 = add_PerfDataSource(service2, 'Load 15')
+source4 = add_PerfDataSource(service1, 'sysUpTime')
+
 add_Graph('UpTime')
 add_Graph('Load')
 add_Graph2GraphGroup('UpTime', 'Graphes')
