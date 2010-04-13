@@ -192,9 +192,6 @@ class GraphGroup(Group):
 
     __mapper_args__ = {'polymorphic_identity': u'graphgroup'}
 
-    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='graphgroups')
-
     graphs = relation('Graph', secondary=GRAPH_GROUP_TABLE,
                     back_populates='groups')
 

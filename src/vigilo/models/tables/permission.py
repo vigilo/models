@@ -58,9 +58,6 @@ class Permission(DeclarativeBase, object):
     mapgroups = relation('MapGroup', secondary=GROUP_PERMISSION_TABLE,
                     back_populates='permissions', lazy=True)
     
-    graphgroups = relation('GraphGroup', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='permissions', lazy=True)
-
     maps = relation('Map', secondary=MAP_PERMISSION_TABLE,
                     back_populates='permissions', lazy=True)
 
