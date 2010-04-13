@@ -51,4 +51,5 @@ from .installation import Installation
 from .filedeployment import FileDeployment
 from .change import Change
 from .confitem import ConfItem
+from .hlshistory import HLSHistory
 
