@@ -2,10 +2,10 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table HLSHistory."""
 from sqlalchemy import Column
-from sqlalchemy.types import Unicode, Integer, DateTime
+from sqlalchemy.types import Integer, DateTime
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, ForeignKey
 from vigilo.models.tables import HighLevelService, StateName
 
 __all__ = ('HLSHistory', )

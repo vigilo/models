@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, UnicodeText, Float
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.tables.service import LowLevelService
 
@@ -70,6 +70,21 @@ class PerfDataSource(DeclarativeBase, object):
 
     @classmethod
     def by_service_and_source_name(cls, service, sourcename):
+        """
+        Renvoie une source de données concernant un service donné
+        en fonction de son nom.
+        
+        @param cls: Classe à utiliser pour la récupération de la source.
+        @type cls: C{type}
+        @param service: Instance de L{LowLevelService} ou identifiant
+            du service sur lequel porte la source de données.
+        @type service: C{int} ou L{LowLevelService}
+        @param sourcename: Nom de la source de données à récupérer.
+        @type sourcename: C{unicode}
+        @return: La source de données de performances dont le nom est
+            C{sourcename} et qui porte sur le service C{service}.
+        @rtype: L{PerfDataSource}
+        """
         if isinstance(service, int):
             return DBSession.query(cls
                 ).filter(cls.idservice == service

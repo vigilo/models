@@ -135,7 +135,7 @@ def clean_vigiboard(*args):
     _ = translate(__name__)
 
     from vigilo.models.session import DBSession
-    from vigilo.models.tables import Event, CorrEvent, StateName
+    from vigilo.models.tables import Event, CorrEvent, StateName, HLSHistory
 
     parser = OptionParser()
     parser.add_option("-d", "--days", action="store", dest="days",
@@ -184,6 +184,20 @@ def clean_vigiboard(*args):
                             'days': options.days,
                         })
 
+            # On supprime les entrées d'historique concernant les changements
+            # d'état des services de haut niveau qui ont été ajoutées avant
+            # old_date.
+            nb_deleted = DBSession.query(
+                                HLSHistory
+                            ).filter(HLSHistory.timestamp <= old_date
+                            ).delete()
+            LOGGER.info(_("Deleted %(nb_deleted)d entries in the history "
+                        "for high level services which were at least "
+                        "%(days)d days old.") % {
+                            'nb_deleted': nb_deleted,
+                            'days': options.days,
+                        })
+
     if options.size is not None:
         if options.size > 0:
             # Calcule la taille actuelle de la base de données Vigilo.
@@ -194,11 +208,14 @@ def clean_vigiboard(*args):
             if dbsize > options.size:
                 LOGGER.info(_("The database is %(size)d bytes big, which is "
                     "more than the limit (%(limit)d bytes). I will now delete "
-                    "old closed events to make room for new ones.") % {
+                    "old closed events and history entries to make room for "
+                    "new ones.") % {
                         'size': dbsize,
                         'limit': options.size,
                     })
 
+            # On supprime les événements clos en commençant par
+            # les plus anciens.
             total_deleted = 0
             while dbsize > options.size:
                 idevent = DBSession.query(
@@ -213,7 +230,7 @@ def clean_vigiboard(*args):
 
                 nb_deleted = DBSession.query(Event).filter(
                                 Event.idevent == idevent).delete()
-                LOGGER.info(_("Delete closed event #%d to make room for "
+                LOGGER.info(_("Deleted closed event #%d to make room for "
                                 "new events.") % idevent)
                 if not nb_deleted:
                     break
@@ -228,6 +245,33 @@ def clean_vigiboard(*args):
                     'size': dbsize,
                     'limit': options.size,
                 })
+
+            # On supprime les entrées d'historique concernant les changements
+            # d'état des services de haut niveau, en commençant par les plus
+            # anciens.
+            total_deleted = 0
+            while dbsize > options.size:
+                idhistory = DBSession.query(HLSHistory.idhistory
+                                ).order_by(HLSHistory.timestamp.asc()
+                                ).scalar()
+                if idhistory is None:
+                    break
+
+                nb_deleted = DBSession.query(HLSHistory).filter(
+                                HLSHistory.idhistory == idhistory).delete()
+                if not nb_deleted:
+                    break
+                total_deleted += nb_deleted
+
+            # Affichage de statistiques actualisées.
+            dbsize = DBSession.query(pg_database_size(url.database)).scalar()
+            LOGGER.info(_("Deleted %(nb_deleted)d history entries on "
+                        "high level services. The database is now %(size)d "
+                        "bytes big (limit: %(limit)d bytes)") % {
+                            'nb_deleted': total_deleted,
+                            'size': dbsize,
+                            'limit': options.size,
+                        })
 
     transaction.commit()
     sys.exit(0)
