@@ -59,6 +59,8 @@ class MapNode(DeclarativeBase, object):
         default = False,
         nullable = False)
 
+    widget = Column(Unicode(32), nullable=False, default=u"SimpleElement")
+
     map = relation('Map', back_populates='nodes')
     
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
