@@ -8,11 +8,11 @@ __all__ = (
     'SupItem', 'LowLevelService', 'HighLevelService',
     'Dependency', 'Version', 'State', 'Permission',
     'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
-    'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost',
+    'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost', 'MapNodeHls',
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
     'Application', 'VigiloServer', 'Ventilation', 'Installation',
     'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
-    'FileDeployment', 'Change', 'ConfItem',
+    'FileDeployment', 'Change', 'ConfItem',  'MapNodeLls', 'MapNodeService',
 )
 
 from .eventhistory import EventHistory
@@ -36,7 +36,8 @@ from .user import User
 from .boardviewfilter import BoardViewFilter
 from .customgraphview import CustomGraphView
 from .tag import Tag
-from .mapnode import MapNode, MapNodeHost, MapNodeService
+from .mapnode import MapNode, MapNodeHost, MapNodeService, \
+        MapNodeHls, MapNodeLls
 from .map import Map
 from .maplink import MapLink, MapServiceLink, MapSegment
 from .legend import Legend

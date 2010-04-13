@@ -13,7 +13,8 @@ from vigilo.models.tables.map import Map
 from vigilo.models.tables.host import Host
 from vigilo.models.tables.service import Service
 
-__all__ = ('MapNodeHost', 'MapNodeService', 'MapNodePerformance')
+__all__ = ('MapNodeHost', 'MapNodeService', 'MapNodeLls', 'MapNodeHls', 
+           'MapNodePerformance')
 
 class MapNode(DeclarativeBase, object):
     """
@@ -109,7 +110,7 @@ class MapNodeHost(MapNode):
         ForeignKey(
             MapNode.idmapnode,
             onupdate='CASCADE', ondelete='CASCADE'),
-        primary_key=True,
+        autoincrement=True, primary_key=True,
         nullable=False
     )
     
@@ -146,15 +147,13 @@ class MapNodeService(MapNode):
     @ivar servicestateicon: ¢tat de l'icône du service.
     """
     __tablename__ = 'mapnodeservice'
-    __mapper_args__ = {'polymorphic_identity': u'service'}
-    #__mapper_args__ = {'concrete':True}
     
     idmapnode = Column(
         Integer,
         ForeignKey(
             MapNode.idmapnode,
             onupdate='CASCADE', ondelete='CASCADE'), 
-        primary_key=True,
+        autoincrement=False, primary_key=True,
         nullable=False
     )
 
@@ -180,6 +179,28 @@ class MapNodeService(MapNode):
     
     def __init__(self, **kwargs):
         super(MapNodeService, self).__init__(**kwargs)
+
+
+class MapNodeLls(MapNodeService):
+    """
+    Classe chargée de la représentation graphique d'un service de bas niveau
+    dans VigiMap.
+ 
+    """
+    
+    __mapper_args__ = {'polymorphic_identity': u'service'}
+    
+    
+    
+class MapNodeHls(MapNodeService):
+    """
+    Classe chargée de la représentation graphique d'un service de haut niveau
+    dans VigiMap.
+
+    """
+
+    __mapper_args__ = {'polymorphic_identity': u'hls'}
+    
 
 #TODO: Classe en préparation
 #class MapNodePerformance(MapNode):
