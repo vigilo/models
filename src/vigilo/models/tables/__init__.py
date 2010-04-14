@@ -3,7 +3,7 @@
 """Modèles pour les tables SQL utilisées dans Vigilo."""
 
 __all__ = (
-    'EventHistory', 'Event', 'CorrEvent', 'GroupHierarchy',
+    'EventHistory', 'Event', 'CorrEvent',
     'GraphGroup', 'Graph', 'Host', 'HostClass', 'PerfDataSource',
     'SupItem', 'LowLevelService', 'HighLevelService',
     'Dependency', 'Version', 'State', 'Permission',
@@ -23,7 +23,6 @@ from .host import Host
 from .hostclass import HostClass
 from .perfdatasource import PerfDataSource
 from .group import MapGroup, GraphGroup, SupItemGroup
-from .grouphierarchy import GroupHierarchy
 from .supitem import SupItem
 from .service import LowLevelService, HighLevelService, Service
 from .dependency import Dependency

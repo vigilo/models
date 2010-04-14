@@ -5,7 +5,7 @@ from nose.tools import assert_equal
 from vigilo.models.session import DBSession
 
 from vigilo.models.tables import GraphGroup, MapGroup, SupItemGroup
-from vigilo.models.tables import GroupHierarchy
+from vigilo.models.tables.grouphierarchy import GroupHierarchy
 
 from controller import ModelTest
 

@@ -78,20 +78,20 @@ class Group(DeclarativeBase, object):
     def remove_children(self):
         """
         """
-        from vigilo.models.tables import GroupHierarchy
+        from .grouphierarchy import GroupHierarchy
         DBSession.query(GroupHierarchy)\
             .filter(GroupHierarchy.idparent == self.idgroup)\
             .delete()
     
     def has_parent(self):
-        from vigilo.models.tables import GroupHierarchy
+        from .grouphierarchy import GroupHierarchy
         return (DBSession.query(GroupHierarchy)\
             .filter(GroupHierarchy.idchild == self.idgroup)\
             .filter(GroupHierarchy.hops > 0)\
             .count() > 0)
     
     def get_parent(self):
-        from vigilo.models.tables import GroupHierarchy
+        from .grouphierarchy import GroupHierarchy
         q = DBSession.query(GroupHierarchy)\
             .filter(GroupHierarchy.idchild == self.idgroup)
         if q.count() == 0:
@@ -101,7 +101,7 @@ class Group(DeclarativeBase, object):
     def set_parent(self, group):
         """ positionne un groupe en tant que parent
         """
-        from vigilo.models.tables import GroupHierarchy
+        from .grouphierarchy import GroupHierarchy
         # on détruit un éventuel lien de parenté existant
         DBSession.query(GroupHierarchy
                             ).filter(GroupHierarchy.idchild == self.idgroup
@@ -113,6 +113,8 @@ class Group(DeclarativeBase, object):
     @classmethod
     def create(cls, name, parent=None, flush=True):
         """ méthode de création d'un groupe.
+        
+        TODO: construire les liens hops > 1
         
         @param name: nom du groupe
         @type nom: C{str}
@@ -140,6 +142,26 @@ class Group(DeclarativeBase, object):
         if flush:
             DBSession.flush()
         return group
+    
+    def get_all_children(self):
+        """ renvoie la liste  des descendants
+        """
+        from .grouphierarchy import GroupHierarchy
+        children = DBSession.query(
+                self.__class__
+            ).distinct(
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idchild == self.__class__.idgroup)
+            ).filter(GroupHierarchy.hops > 0)
+        return children
+    
+    """ TODO:
+        topgroups = DBSession.query(
+                SupItemGroup,
+            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
+            ).except_(children).order_by(SupItemGroup.name).all()
+        topgroups = [(sig.name, str(sig.idgroup)) for sig in topgroups]
+    """
 
     @classmethod
     def get_top_groups(cls):
@@ -151,7 +173,7 @@ class Group(DeclarativeBase, object):
         @return: Les groupes de premier niveau.
         @rtype: L{list}
         """
-        from vigilo.models.tables import GroupHierarchy
+        from .grouphierarchy import GroupHierarchy
 
         # On récupère tous les groupes qui ont un parent.
         children = DBSession.query(cls).distinct(
@@ -197,7 +219,7 @@ class MapGroup(Group):
 
     @property
     def subgroups(self):
-        from vigilo.models.tables import GroupHierarchy
+        from .grouphierarchy import GroupHierarchy
         return DBSession.query(MapGroup).join(
             (GroupHierarchy, GroupHierarchy.idchild == MapGroup.idgroup),
         ).filter(GroupHierarchy.idparent == self.idgroup
@@ -246,7 +268,7 @@ class SupItemGroup(Group):
     def has_children(self):
         """ renvoie True si le groupe a des enfants
         """
-        from vigilo.models.tables import GroupHierarchy
+        from .grouphierarchy import GroupHierarchy
         return ( DBSession.query(SupItemGroup).join(
             (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
         ).filter(GroupHierarchy.idparent == self.idgroup
@@ -255,7 +277,7 @@ class SupItemGroup(Group):
     def get_children(self, hops=1):
         """ renvoie la liste des enfants d'un groupe
         """
-        from vigilo.models.tables import GroupHierarchy
+        from .grouphierarchy import GroupHierarchy
         return DBSession.query(SupItemGroup).join(
             (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
         ).filter(GroupHierarchy.idparent == self.idgroup
@@ -286,4 +308,19 @@ class SupItemGroup(Group):
                 if level in ('all', 'high'):
                     services.append(si)
         return services
-
+    
+    """ TODO:
+        hostgroups = DBSession.query(
+                SupItemGroup.name,
+                SupItemGroup.idgroup,
+            ).distinct().join(
+                (GroupHierarchy, GroupHierarchy.idchild == \
+                    SupItemGroup.idgroup),
+            ).filter(GroupHierarchy.idparent == maingroupid
+            ).filter(GroupHierarchy.hops == 1
+            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
+            ).order_by(
+                SupItemGroup.name.asc(),
+            ).all()
+        hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups]
+    """

@@ -10,8 +10,9 @@ from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE, \
                                             GROUP_PERMISSION_TABLE, \
                                             USERGROUP_PERMISSION_TABLE
-from vigilo.models.tables import SupItemGroup, GroupHierarchy, \
+from vigilo.models.tables import SupItemGroup, \
                                     Permission, UserGroup
+from .grouphierarchy import GroupHierarchy
 
 __all__ = ('User', )
 
