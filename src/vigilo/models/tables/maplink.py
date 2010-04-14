@@ -12,7 +12,7 @@ from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
 from vigilo.models.tables.mapnode import MapNode
 from vigilo.models.tables.map import Map
 from vigilo.models.tables.graph import Graph
-from vigilo.models.tables.service import LowLevelService
+from vigilo.models.tables.service import Service
 
 __all__ = ('Link', )
 
@@ -109,7 +109,6 @@ class MapServiceLink(MapLink):
     @ivar map: Relation vers la carte.
     """
     __tablename__ = 'mapservicelink'
-    __mapper_args__ = {'polymorphic_identity': u'mapservicelink'}
     
     idmapservicelink = Column(
         Integer,
@@ -123,13 +122,13 @@ class MapServiceLink(MapLink):
     idref = Column(
         Integer,
         ForeignKey(
-            LowLevelService.idservice,
+            Service.idservice,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
     )
 
-    reference = relation('LowLevelService')
+    reference = relation('Service')
 
     idgraph = Column(
         Integer,
@@ -143,10 +142,28 @@ class MapServiceLink(MapLink):
     
         
     def __init__(self, **kwargs):
-        """Initialisation d'une liaison concernant un L{LowLevelService}."""
+        """Initialisation d'une liaison concernant un L{Service}."""
         super(MapServiceLink, self).__init__(**kwargs)
         
-        
+ 
+class MapLlsLink(MapServiceLink):
+    """
+    Classe chargée de la représentation graphique d'une
+    liaison de type Service de Bas Niveau dans VigiMap.
+    """
+    
+    __mapper_args__ = {'polymorphic_identity': u'mapllslink'}
+    
+    
+class MapHlsLink(MapServiceLink):
+    """
+    Classe chargée de la représentation graphique d'une
+    liaison de type Service de Bas Niveau dans VigiMap.
+    """
+    
+    __mapper_args__ = {'polymorphic_identity': u'maphlslink'}
+           
+
 class MapSegment(MapLink):
     """
     Classe chargée de la représentation graphique d'un segment dans VigiMap.

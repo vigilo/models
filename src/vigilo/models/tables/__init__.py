@@ -38,7 +38,8 @@ from .tag import Tag
 from .mapnode import MapNode, MapNodeHost, MapNodeService, \
         MapNodeHls, MapNodeLls
 from .map import Map
-from .maplink import MapLink, MapServiceLink, MapSegment
+from .maplink import MapLink, MapServiceLink, MapSegment, MapLlsLink, \
+        MapHlsLink
 from .legend import Legend
 from .application import Application
 from .impactedpath import ImpactedPath
