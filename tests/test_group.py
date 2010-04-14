@@ -21,6 +21,22 @@ class TestGroup(ModelTest):
     def __init__(self):
         ModelTest.__init__(self)
     
+    def test_create(self):
+        """ test de la méthode Group.create
+        """
+        group = self.klass.create(u'a group')
+        DBSession.query(GroupHierarchy
+                        ).filter(GroupHierarchy.idparent == group.idgroup
+                        ).filter(GroupHierarchy.idchild == group.idgroup
+                        ).filter(GroupHierarchy.hops == 0
+                        ).one()
+        child = self.klass.create(name=u'a child', parent=group)
+        DBSession.query(GroupHierarchy
+                        ).filter(GroupHierarchy.idparent == group.idgroup
+                        ).filter(GroupHierarchy.idchild == child.idgroup
+                        ).filter(GroupHierarchy.hops == 1
+                        ).one()
+    
     def test_remove_children(self):
         """ test méthode remove_children
         """

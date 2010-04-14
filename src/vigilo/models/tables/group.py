@@ -109,6 +109,37 @@ class Group(DeclarativeBase, object):
                             ).delete()
         gh = GroupHierarchy(parent=group, child=self, hops=1)
         DBSession.add(gh)
+    
+    @classmethod
+    def create(cls, name, parent=None, flush=True):
+        """ méthode de création d'un groupe.
+        
+        @param name: nom du groupe
+        @type nom: C{str}
+        @param parent: groupe parent
+        @type parent: C{Group}
+        @param flush: invoque l'appel au flush db
+        @type flush: C{Boolean}
+        """
+        from .grouphierarchy import GroupHierarchy
+        group = cls(name=name)
+        DBSession.add(group)
+    
+        DBSession.add(GroupHierarchy(
+            parent=group,
+            child=group,
+            hops=0,
+        ))
+        if parent:
+            DBSession.add(GroupHierarchy(
+                parent=parent,
+                child=group,
+                hops=1,
+            ))
+            
+        if flush:
+            DBSession.flush()
+        return group
 
     @classmethod
     def get_top_groups(cls):
