@@ -87,6 +87,7 @@ class Group(DeclarativeBase, object):
         from vigilo.models.tables import GroupHierarchy
         return (DBSession.query(GroupHierarchy)\
             .filter(GroupHierarchy.idchild == self.idgroup)\
+            .filter(GroupHierarchy.hops > 0)\
             .count() > 0)
     
     def get_parent(self):
@@ -212,7 +213,7 @@ class SupItemGroup(Group):
                 back_populates='groups')
     
     def has_children(self):
-        """
+        """ renvoie True si le groupe a des enfants
         """
         from vigilo.models.tables import GroupHierarchy
         return ( DBSession.query(SupItemGroup).join(
@@ -221,7 +222,7 @@ class SupItemGroup(Group):
         ).count() > 0 )
     
     def get_children(self, hops=1):
-        """
+        """ renvoie la liste des enfants d'un groupe
         """
         from vigilo.models.tables import GroupHierarchy
         return DBSession.query(SupItemGroup).join(
@@ -231,7 +232,7 @@ class SupItemGroup(Group):
         ).all()
     
     def get_hosts(self):
-        """
+        """ renvoie les hôtes appartenant au groupe
         """
         from vigilo.models.tables import Host
         hosts = []
@@ -239,4 +240,19 @@ class SupItemGroup(Group):
             if si.__class__ == Host:
                 hosts.append(si)
         return hosts
+    
+    def get_services(self, level='all'):
+        """ renvoie les services appartenant au groupe
+        level = all | low | high
+        """
+        from vigilo.models.tables import LowLevelService, HighLevelService
+        services = []
+        for si in self.supitems:
+            if si.__class__ == LowLevelService:
+                if level in ('all', 'low'):
+                    services.append(si)
+            elif si.__class__ == HighLevelService:
+                if level in ('all', 'high'):
+                    services.append(si)
+        return services
 
