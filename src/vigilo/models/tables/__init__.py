@@ -2,7 +2,7 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèles pour les tables SQL utilisées dans Vigilo."""
 
-__all__ = (
+__all__ = [
     'EventHistory', 'Event', 'CorrEvent',
     'GraphGroup', 'Graph', 'Host', 'HostClass', 'PerfDataSource',
     'SupItem', 'LowLevelService', 'HighLevelService',
@@ -13,7 +13,7 @@ __all__ = (
     'Application', 'VigiloServer', 'Ventilation', 'Installation',
     'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
     'FileDeployment', 'Change', 'ConfItem',  'MapNodeLls', 'MapNodeService',
-)
+]
 
 from .eventhistory import EventHistory
 from .event import Event
@@ -53,4 +53,14 @@ from .filedeployment import FileDeployment
 from .change import Change
 from .confitem import ConfItem
 from .hlshistory import HLSHistory
+
+# Spécifique projets
+from pkg_resources import working_set
+for entry in working_set.iter_entry_points("vigilo.models.tables"):
+    # Charge les tables spécifiques
+    tables_ext = entry.load()
+    # Importe toutes les tables spécifiques (comme ci-dessus)
+    for t in tables_ext.__all__:
+        globals()[t] = getattr(tables_ext, t)
+        __all__.append(t)
 
