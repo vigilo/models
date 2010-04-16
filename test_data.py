@@ -11,6 +11,7 @@ configure_db(settings['database'], 'sqlalchemy_',
 
 from vigilo.models.session import DBSession
 from vigilo.models import tables
+from vigilo.models.tables.grouphierarchy import GroupHierarchy
 
 def commit_on_exit():
     """
@@ -256,14 +257,14 @@ DBSession.flush()
 
 
 # Ajout des boucles.
-DBSession.add(tables.GroupHierarchy(parent=servers, child=servers, hops=0))
-DBSession.add(tables.GroupHierarchy(parent=linux, child=linux, hops=0))
-DBSession.add(tables.GroupHierarchy(parent=windows, child=windows, hops=0))
-DBSession.add(tables.GroupHierarchy(parent=graphes, child=graphes, hops=0))
+DBSession.add(GroupHierarchy(parent=servers, child=servers, hops=0))
+DBSession.add(GroupHierarchy(parent=linux, child=linux, hops=0))
+DBSession.add(GroupHierarchy(parent=windows, child=windows, hops=0))
+DBSession.add(GroupHierarchy(parent=graphes, child=graphes, hops=0))
 
 # Ajout de la hiérarchie.
-DBSession.add(tables.GroupHierarchy(parent=servers, child=linux, hops=1))
-DBSession.add(tables.GroupHierarchy(parent=servers, child=windows, hops=1))
+DBSession.add(GroupHierarchy(parent=servers, child=linux, hops=1))
+DBSession.add(GroupHierarchy(parent=servers, child=windows, hops=1))
 DBSession.flush()
 
 # Affectation des permissions aux groupes d'hôtes.
@@ -277,21 +278,8 @@ def add_SupItemGroupPermission(group, perm):
     group.permissions.append(perm)
     DBSession.flush()
 
-add_SupItemGroupPermission('Serveurs', 'edit')
-add_SupItemGroupPermission('Serveurs Linux', 'manage')
-
-# Affectation des permissions aux groupes de graphes.
-def add_GraphGroupPermission(group, perm):
-    if isinstance(group, basestring):
-        group = tables.GraphGroup.by_group_name(u'' + group)
-
-    if isinstance(perm, basestring):
-        perm = tables.Permission.by_permission_name(u'' + perm)
-
-    group.permissions.append(perm)
-    DBSession.flush()
-
-add_GraphGroupPermission('Graphes', 'manage')
+add_SupItemGroupPermission('Serveurs', 'manage')
+add_SupItemGroupPermission('Serveurs Linux', 'edit')
 
 # Affectation des hôtes aux groupes d'hôtes.
 def add_Host2SupItemGroup(host, group):
