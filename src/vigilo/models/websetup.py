@@ -27,6 +27,7 @@ def populate_db(bind):
     metadata.create_all(bind=bind)
 
     # Création d'un jeu de données par défaut.
+    print "Setting up the generic tables"
     manager = tables.User()
     manager.user_name = u'manager'
     manager.email = u'manager@somedomain.com'
@@ -81,6 +82,14 @@ def populate_db(bind):
     DBSession.add(tables.StateName(statename=u'UNREACHABLE', order=1))
     DBSession.add(tables.StateName(statename=u'DOWN', order=3))
     DBSession.flush()
+
+    # Spécifique projets
+    from pkg_resources import working_set
+    for entry in working_set.iter_entry_points("vigilo.models", "populate_db"):
+        # Charge les tables spécifiques
+        pop_db = entry.load()
+        print "Setting up for %s" % entry.dist.project_name
+        pop_db(bind)
 
     transaction.commit()
     print "Successfully setup"

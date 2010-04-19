@@ -56,7 +56,7 @@ from .hlshistory import HLSHistory
 
 # Spécifique projets
 from pkg_resources import working_set
-for entry in working_set.iter_entry_points("vigilo.models.tables"):
+for entry in working_set.iter_entry_points("vigilo.models", "tables"):
     # Charge les tables spécifiques
     tables_ext = entry.load()
     # Importe toutes les tables spécifiques (comme ci-dessus)
