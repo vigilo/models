@@ -155,6 +155,10 @@ add_LowLevelService('RAM', 'brouteur')
 add_LowLevelService('RAM', 'host1.example.com')
 add_LowLevelService('RAM', 'host2.example.com')
 add_LowLevelService('perfdatasource', 'localhost')
+add_LowLevelService('SSH', 'localhost')
+add_LowLevelService('HTTP', 'localhost')
+add_LowLevelService('Root Partition', 'localhost')
+add_LowLevelService('Swap Usage', 'localhost')
 
 
 # HighLevelService
@@ -318,7 +322,20 @@ add_Host2SupItemGroup('host3.example.com', 'Serveurs Linux')
 add_Host2SupItemGroup('routeur1', 'Serveurs Linux')
 add_Host2SupItemGroup('routeur2', 'Serveurs Linux')
 add_Host2SupItemGroup('firewall', 'Serveurs Linux')
-add_Host2SupItemGroup('localhost', 'Serveurs Linux')
+add_Host2SupItemGroup('localhost', 'Serveurs Windows')
+
+# Affectation des hôtes aux groupes d'hôtes.
+def add_LowLevelService2SupItemGroup(lls, group):
+    if isinstance(group, basestring):
+        group = tables.SupItemGroup.by_group_name(u'' + group)
+
+    if isinstance(lls, tuple):
+        lls = tables.LowLevelService.by_host_service_name(*lls)
+
+    group.supitems.append(lls)
+    DBSession.flush()
+
+add_LowLevelService2SupItemGroup((u'localhost', u'SSH'), 'Serveurs Linux')
 
 # Application
 def add_Application(name):
@@ -343,6 +360,7 @@ add_VigiloServer('bar')
 add_VigiloServer('baz')
 add_VigiloServer('http://192.168.251.45/vigilo/')
 add_VigiloServer('http://localhost/vigilo/')
+add_VigiloServer('http://localhost/nagios/')
 
 # Ventilation
 def add_Ventilation(host, vigiloserver, app):
@@ -378,6 +396,7 @@ add_Ventilation('host2.example.com', 'bar', 'nagios')
 add_Ventilation('host3.example.com', 'baz', 'nagios')
 add_Ventilation('localhost', 'http://localhost/vigilo/', 'rrdgraph')
 add_Ventilation('proto4', 'http://localhost/vigilo/', 'rrdgraph')
+add_Ventilation('localhost', 'http://localhost/nagios/', 'nagios')
 
 # Installation
 def add_Installation(vigiloserver, app, jid):
