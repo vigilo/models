@@ -64,6 +64,8 @@ class PerfDataSource(DeclarativeBase, object):
         Float(precision=None, asdecimal=False),
         default=0.0, nullable=False)
 
+    max = Column(Float(precision=None, asdecimal=False))
+
     def __init__(self, **kwargs):
         """Initialisation de la source de données de performance."""
         super(PerfDataSource, self).__init__(**kwargs)
