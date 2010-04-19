@@ -20,7 +20,7 @@ def populate_db(bind):
 
     # Chargement du modèle.
     from vigilo.models import tables
-    from vigilo.models import VIGILO_MODEL_VERSION
+    from vigilo.models import VIGILO_MODELS_VERSION
 
     # Création des tables
     print "Creating tables"
@@ -69,7 +69,7 @@ def populate_db(bind):
 
     version = tables.Version()
     version.name = u'vigilo.models'
-    version.version = VIGILO_MODEL_VERSION
+    version.version = VIGILO_MODELS_VERSION
     DBSession.add(version)
     DBSession.flush()
 
