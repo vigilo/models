@@ -41,7 +41,8 @@ class PerfDataSource(DeclarativeBase, object):
         nullable=False,
     )
 
-    service = relation('LowLevelService')
+    service = relation('LowLevelService', back_populates="perfdatasources",
+                       lazy=True)
     
     graphs = relation('Graph', secondary=GRAPH_PERFDATASOURCE_TABLE,
                          back_populates='perfdatasources', lazy=True)

@@ -124,6 +124,10 @@ class LowLevelService(Service):
         nullable=False,
     )
 
+    perfdatasources = relation('PerfDataSource', lazy=True,
+                        back_populates='service')
+
+
     def __init__(self, **kwargs):
         """Initialisation de l'objet."""
         super(LowLevelService, self).__init__(**kwargs)

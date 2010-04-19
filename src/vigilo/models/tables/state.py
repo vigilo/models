@@ -34,7 +34,7 @@ class State(DeclarativeBase, object):
         autoincrement=False, primary_key=True,
     )
 
-    supitem = relation('SupItem')
+    supitem = relation('SupItem', back_populates="state", lazy=True)
 
     timestamp = Column(
             DateTime(timezone=False),
@@ -50,6 +50,7 @@ class State(DeclarativeBase, object):
         ),
         nullable=False,
     )
+    name = relation("StateName", uselist=False)
 
     attempt = Column(
         Integer,
