@@ -33,11 +33,6 @@ class VigiloServer(DeclarativeBase, object):
         nullable=False,
     )
     
-    description = Column(
-        UnicodeText,
-        nullable=True,
-    )
-
     def __init__(self, **kwargs):
         """
         Initialise l'instance avec les informations du serveur.

@@ -348,19 +348,13 @@ add_Application('collector')
 add_Application('connector-nagios')
 
 # VigiloServer
-def add_VigiloServer(name, description=None):
+def add_VigiloServer(name):
     DBSession.add(tables.VigiloServer(
         name=u'' + name,
-        description=description,
     ))
     DBSession.flush()
 
-add_VigiloServer('foo')
-add_VigiloServer('bar')
-add_VigiloServer('baz')
-add_VigiloServer('http://192.168.251.45/vigilo/')
-add_VigiloServer('http://localhost/vigilo/')
-add_VigiloServer('http://localhost/nagios/')
+add_VigiloServer('localhost')
 
 # Ventilation
 def add_Ventilation(host, vigiloserver, app):
@@ -391,12 +385,11 @@ def add_Ventilation(host, vigiloserver, app):
     DBSession.add(tables.Ventilation(**kwargs))
     DBSession.flush()
 
-add_Ventilation('host1.example.com', 'foo', 'nagios')
-add_Ventilation('host2.example.com', 'bar', 'nagios')
-add_Ventilation('host3.example.com', 'baz', 'nagios')
-add_Ventilation('localhost', 'http://localhost/vigilo/', 'rrdgraph')
-add_Ventilation('proto4', 'http://localhost/vigilo/', 'rrdgraph')
-add_Ventilation('localhost', 'http://localhost/nagios/', 'nagios')
+# add_Ventilation(h1, h2, app)
+# L'appli app pour h1 se trouve sur h2.
+add_Ventilation('localhost', 'localhost', 'rrdgraph')
+add_Ventilation('localhost', 'localhost', 'nagios')
+add_Ventilation('proto4', 'localhost', 'rrdgraph')
 
 # Installation
 def add_Installation(vigiloserver, app, jid):
@@ -422,9 +415,6 @@ def add_Installation(vigiloserver, app, jid):
     DBSession.add(tables.Installation(**kwargs))
     DBSession.flush()
 
-add_Installation('foo', 'nagios', 'connector-nagios@localhost')
-add_Installation('bar', 'nagios', 'connector-nagios@localhost')
-add_Installation('baz', 'nagios', 'connector-nagios@localhost')
 
 # Sources de données de métrologie (PerfDataSource)
 def add_PerfDataSource(service, name, type='COUNTER', factor=1):
