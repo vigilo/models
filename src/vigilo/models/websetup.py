@@ -44,29 +44,36 @@ def populate_db(bind):
 
     permission = tables.Permission()
     permission.permission_name = u'manage'
+    permission.description = u'Gives access to everything. Use with caution!'
     permission.usergroups.append(group)
     DBSession.add(permission)
     DBSession.flush()
 
-    editor = tables.User()
-    editor.user_name = u'editor'
-    editor.email = u'editor@somedomain.com'
-    editor.fullname = u'Editor'
-    editor.password = u'editpass'
-    DBSession.add(editor)
-    DBSession.flush()
+    applications = [
+        u'vigiboard',
+        u'vigicore',
+        u'vigimap',
+        u'vigigraph',
+        u'vigireport',
+    ]
 
-    group = tables.UserGroup()
-    group.group_name = u'editors'
-    group.users.append(editor)
-    DBSession.add(group)
-    DBSession.flush()
+    actions = {
+        'read': 'reading',
+        'write': 'writing',
+        'admin': 'administrative',
+    }
 
-    permission = tables.Permission()
-    permission.permission_name = u'edit'
-    permission.usergroups.append(group)
-    DBSession.add(permission)
-    DBSession.flush()
+    for application in applications:
+        application = application.lower()
+        for action in actions:
+            DBSession.add(tables.Permission(
+                permission_name=u'%s-%s' % (application, action),
+                description=u'Gives %(access)s access to %(application)s' % {
+                    'access': actions[action],
+                    'application': application,
+                }
+            ))
+        DBSession.flush()
 
     version = tables.Version()
     version.name = u'vigilo.models'

@@ -23,31 +23,15 @@ def commit_on_exit():
 
 atexit.register(commit_on_exit)
 
-
-# Etats possibles de la mise en silence pour maintenance
-DBSession.add(tables.DowntimeStatus(status=u'Planified',))
-DBSession.add(tables.DowntimeStatus(status=u'Enabled',))
-DBSession.add(tables.DowntimeStatus(status=u'Finished',))
-DBSession.add(tables.DowntimeStatus(status=u'Cancelled',))
-DBSession.flush()
-
-# Permissions
-collect = tables.Permission(
-    permission_name=u'collect',
-    description=u'Autorise les utilisateurs à lancer une demande de collecte',
-)
-DBSession.add(collect)
-downtime = tables.Permission(
-    permission_name=u'downtime',
-    description=u'Autorise les utilisateurs à planifier une maintenance',
-)
-DBSession.add(downtime)
-DBSession.flush()
+## Etats possibles de la mise en silence pour maintenance
+#DBSession.add(tables.DowntimeStatus(status=u'Planified',))
+#DBSession.add(tables.DowntimeStatus(status=u'Enabled',))
+#DBSession.add(tables.DowntimeStatus(status=u'Finished',))
+#DBSession.add(tables.DowntimeStatus(status=u'Cancelled',))
+#DBSession.flush()
 
 # Affectation des permissions aux groupes d'utilisateurs.
 managers = tables.UserGroup.by_group_name(u'managers')
-managers.permissions.append(collect)
-managers.permissions.append(downtime)
 
 # Host
 def add_Host(name):
@@ -283,7 +267,6 @@ def add_SupItemGroupPermission(group, perm):
     DBSession.flush()
 
 add_SupItemGroupPermission('Serveurs', 'manage')
-add_SupItemGroupPermission('Serveurs Linux', 'edit')
 
 # Affectation des hôtes aux groupes d'hôtes.
 def add_Host2SupItemGroup(host, group):
