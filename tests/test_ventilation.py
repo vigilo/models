@@ -29,15 +29,10 @@ class TestVentilation(ModelTest):
             weight=42,
         ))
         
-        vserver = VigiloServer(
-           name=u'supserver1',
-           description=u'a vigilo server'
-        )
+        vserver = VigiloServer(name=u'supserver.example.com')
         DBSession.add(vserver)
         
-        app = Application(
-           name=u'app',
-        )
+        app = Application(name=u'app')
         DBSession.add(app)
 
         DBSession.flush()

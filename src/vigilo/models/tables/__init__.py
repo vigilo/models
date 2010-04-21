@@ -10,7 +10,7 @@ __all__ = [
     'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
     'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost', 'MapNodeHls',
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
-    'Application', 'VigiloServer', 'Ventilation', 'Installation',
+    'Application', 'VigiloServer', 'Ventilation',
     'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
     'FileDeployment', 'Change', 'ConfItem',  'MapNodeLls', 'MapNodeService',
 ]
@@ -48,7 +48,6 @@ from .downtime import Downtime
 from .downtimestatus import DowntimeStatus
 from .vigiloserver import VigiloServer
 from .ventilation import Ventilation
-from .installation import Installation
 from .filedeployment import FileDeployment
 from .change import Change
 from .confitem import ConfItem
