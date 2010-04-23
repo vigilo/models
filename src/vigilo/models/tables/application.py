@@ -48,6 +48,10 @@ class Application(DeclarativeBase, object):
         """
         return self.name
 
+    def __str__(self):
+        return str(self.name)
+
+
     @classmethod
     def by_app_name(cls, app):
         """Renvoie une instance d'L{Application} à partir de son nom."""
