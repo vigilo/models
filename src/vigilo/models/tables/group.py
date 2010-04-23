@@ -20,8 +20,8 @@ class Group(DeclarativeBase, object):
     """
     Gère des groupes.
     Cette classe est abstraite. Utilisez les classes spécialisées
-    (L{HostGroup}, L{ServiceGroup}, L{MapGroup}, L{GraphGroup}, etc.)
-    pour créer des instances.
+    (L{SupItemGroup}, L{MapGroup}, L{GraphGroup}, etc.) pour créer
+    des instances.
     En combinant cette classe à la classe GroupHierarchy, il est possible
     de créer une arborescence de groupes.
     
@@ -117,7 +117,7 @@ class Group(DeclarativeBase, object):
         TODO: construire les liens hops > 1
         
         @param name: nom du groupe
-        @type nom: C{str}
+        @type name: C{str}
         @param parent: groupe parent
         @type parent: C{Group}
         @param flush: invoque l'appel au flush db
