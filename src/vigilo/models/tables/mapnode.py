@@ -190,7 +190,7 @@ class MapNodeLls(MapNodeService):
  
     """
     
-    __mapper_args__ = {'polymorphic_identity': u'service'}
+    __mapper_args__ = {'polymorphic_identity': u'lls'}
     
     
     
