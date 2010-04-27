@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.group import Group
 
 class GroupHierarchy(DeclarativeBase):
@@ -67,3 +67,19 @@ class GroupHierarchy(DeclarativeBase):
         """
         super(GroupHierarchy, self).__init__(**kwargs)
 
+    @classmethod
+    def get_or_create(cls, parent, child, hops):
+        """
+        création sans doublon
+        """
+        q = DBSession.query(cls
+                        ).filter(cls.parent == parent  
+                        ).filter(cls.child == child          
+                        )
+        if q.count() == 0:
+            gh = cls(parent=parent, child=child, hops=hops)
+            DBSession.add(gh)
+            return gh
+        else:
+            return q.one()
+    

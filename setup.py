@@ -53,6 +53,7 @@ setup(name='vigilo-models',
         'console_scripts': [
             'vigilo-models-init-db = vigilo.models.websetup:init_db',
             'vigilo-models-clean-vigiboard = vigilo.models.websetup:clean_vigiboard',
+            'vigilo-models-demo = vigilo.models.demo:run_demo',
         ],
     },
     package_dir={'': 'src'},
