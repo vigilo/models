@@ -225,6 +225,23 @@ def add_map(name):
         DBSession.add(m)
     return m
 
+def add_mapgroup(name):
+    name = unicode(name)
+    g = tables.MapGroup.by_group_name(name)
+    if not g:
+        g = tables.MapGroup(name=name)
+        DBSession.add(g)
+        DBSession.flush()
+    return g
+
+def add_map2group(map, group):
+    if isinstance(group, basestring):
+        group = tables.GraphGroup.by_group_name(unicode(group))
+    if isinstance(map, basestring):
+        map = tables.Map.by_map_title(unicode(map))
+    if map not in group.maps:
+        group.maps.append(map)
+        DBSession.flush()
 
 def add_node_hls(hls, label, map, submaps, widget="ServiceElement"):
     n = DBSession.query(tables.MapNodeHls).join(
@@ -304,7 +321,7 @@ def add_graphgroup(name):
         DBSession.flush()
     return g
 
-def add_graph2graphgroup(graph, group):
+def add_graph2group(graph, group):
     if isinstance(group, basestring):
         group = tables.GraphGroup.by_group_name(unicode(group))
     if isinstance(graph, basestring):
