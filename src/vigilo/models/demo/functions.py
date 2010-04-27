@@ -222,9 +222,7 @@ def add_svc_state(service, statename, message):
 #
 
 def add_map(name):
-    m = DBSession.query(tables.Map).filter(
-            tables.Map.title == unicode(name)
-        ).first()
+    m = tables.Map.by_map_title(unicode(name))
     if not m:
         m = tables.Map(
                 mtime=datetime.today(),
@@ -256,27 +254,70 @@ def add_map2group(map, group):
         group.maps.append(map)
         DBSession.flush()
 
-def add_node_hls(hls, label, map, submaps, widget="ServiceElement"):
-    n = DBSession.query(tables.MapNodeHls).join(
-            (tables.HighLevelService,
-             tables.HighLevelService.idservice == tables.MapNodeHls.idservice)
-        ).filter(
-            and_(
-                tables.MapNodeHls.idservice == hls.idservice,
-                tables.MapNodeHls.idmap == map.idmap
-            )).first()
-    if n:
-        n = DBSession.merge(n)
-    else:
-        n = tables.MapNodeHls(label=unicode(label), idmap=map.idmap,
-                              x_pos=None, y_pos=None, widget=unicode(widget),
-                              idservice=hls.idservice, serviceicon=None)
+def add_node_host(host, label, map, widget="ServiceElement", x=None, y=None, icon=None, submaps=[]):
+    if isinstance(host, basestring):
+        host = tables.Host.by_host_name(unicode(host))
+    if isinstance(map, basestring):
+        map = tables.Map.by_map_title(unicode(map))
+    n = tables.MapNodeHost.by_map_label(map, unicode(label))
+    if not n:
+        n = tables.MapNodeHost(label=unicode(label), idmap=map.idmap,
+                              x_pos=x, y_pos=y, widget=unicode(widget),
+                              idhost=host.idhost, icon=icon)
         DBSession.add(n)
     for submap in submaps:
         if submap.idmap not in [s.idmap for s in n.submaps]:
             n.submaps.append(submap)
     DBSession.flush()
     return n
+
+def add_node_hls(hls, label, map, widget="ServiceElement", x=None, y=None, icon=None, submaps=[]):
+    if isinstance(hls, basestring):
+        hls = tables.HighLevelService.by_service_name(hls)
+    if isinstance(map, basestring):
+        map = tables.Map.by_map_title(unicode(map))
+    n = tables.MapNodeHls.by_map_label(map, unicode(label))
+    if not n:
+        n = tables.MapNodeHls(label=unicode(label), idmap=map.idmap,
+                              x_pos=x, y_pos=y, widget=unicode(widget),
+                              idservice=hls.idservice, icon=icon)
+        DBSession.add(n)
+    for submap in submaps:
+        if submap.idmap not in [s.idmap for s in n.submaps]:
+            n.submaps.append(submap)
+    DBSession.flush()
+    return n
+
+def add_mapsegment(from_node, to_node, map):
+    if isinstance(map, basestring):
+        map = tables.Map.by_map_title(unicode(map))
+    if isinstance(from_node, basestring):
+        from_node = tables.MapNode.by_map_label(map, unicode(from_node))
+    if isinstance(to_node, basestring):
+        to_node = tables.MapNode.by_map_label(map, unicode(to_node))
+    ms = tables.MapSegment(idfrom_node=from_node.idmapnode,
+                           idto_node=to_node.idmapnode,
+                           idmap=map.idmap)
+    DBSession.merge(ms)
+    DBSession.flush()
+    return ms
+
+def add_mapservicelink(from_node, to_node, map, lls):
+    if isinstance(map, basestring):
+        map = tables.Map.by_map_title(unicode(map))
+    if isinstance(from_node, basestring):
+        from_node = tables.MapNode.by_map_label(map, unicode(from_node))
+    if isinstance(to_node, basestring):
+        to_node = tables.MapNode.by_map_label(map, unicode(to_node))
+    if isinstance(lls, tuple):
+        lls = [unicode(s) for s in lls]
+        lls = tables.LowLevelService.by_host_service_name(*lls)
+    ms = tables.MapServiceLink(idfrom_node=from_node.idmapnode,
+                               idto_node=to_node.idmapnode,
+                               idref=lls.idservice, idmap=map.idmap)
+    DBSession.merge(ms)
+    DBSession.flush()
+    return ms
 
 
 #

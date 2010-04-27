@@ -98,6 +98,16 @@ class MapNode(DeclarativeBase, object):
         """
         return self.name
 
+    @classmethod
+    def by_map_label(cls, idmap, label):
+        if not isinstance(idmap, int):
+            idmap = idmap.idmap
+        return DBSession.query(cls).filter(
+                    cls.idmap == idmap
+                ).filter(
+                    cls.label == label
+                ).first()
+
 
 class MapNodeHost(MapNode):
     """
