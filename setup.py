@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 sw=4 ts=4 et :
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 tests_require = [
     'coverage',
@@ -48,10 +48,7 @@ setup(name='vigilo-models',
     namespace_packages = [
         'vigilo',
     ],
-    packages=[
-        'vigilo',
-        'vigilo.models',
-    ],
+    packages=find_packages("src"),
     entry_points={
         'console_scripts': [
             'vigilo-models-init-db = vigilo.models.websetup:init_db',
