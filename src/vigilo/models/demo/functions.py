@@ -87,6 +87,19 @@ def add_dependency(dependent, depended):
     tables.Dependency.get_or_create(supitem1, supitem2)
     DBSession.flush()
 
+def add_tag(name):
+    t = tables.Tag(name=unicode(name), value=u"1")
+    DBSession.merge(t)
+    DBSession.flush()
+    return t
+
+def add_tag2supitem(tag, supitem):
+    if isinstance(supitem, tuple):
+        supitem = tables.SupItem.get_supitem(supitem)
+    if tag not in supitem.tags:
+        supitem.tags.append(tag)
+    DBSession.flush()
+
 
 #
 # Groupes
