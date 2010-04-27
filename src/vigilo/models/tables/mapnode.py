@@ -31,6 +31,7 @@ class MapNode(DeclarativeBase, object):
     @ivar type_node: Le type de nœud, peut etre
         'host', 'service',  ou 'performance'.
     @ivar idmap: Référence vers un identifiant de carte.
+    @ivar icon: Nom de l'icône du noeud.
     @ivar map: Relation vers la carte du nœud.
     @ivar submaps: Liste des sous-cartes associées au nœud.
     """
@@ -65,7 +66,11 @@ class MapNode(DeclarativeBase, object):
     
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
     
-    type_node = Column('type_node', Unicode(16), nullable=False)
+    type_node = Column('type_node', Unicode(16))
+    
+    icon = Column(
+        Unicode(255)
+        )
     
     links_from = relation('MapLink', foreign_keys=[idmapnode],
                     primaryjoin='MapLink.idfrom_node == ' + \
@@ -101,8 +106,6 @@ class MapNodeHost(MapNode):
     @ivar idmapnode: Identifiant du modèle de l'hôte (séquence). 
     @ivar idhost: Identifiant de l'L{Host} représenté.
     @ivar host: Instance de l'L{Host} représenté.
-    @ivar hosticon: Nom de l'icône de l'hôte. 
-    @ivar hoststateicon: État de l'icône de l'hôte.
     """
     __tablename__ = 'mapnodehost'
     __mapper_args__ = {'polymorphic_identity': u'host'}
@@ -122,14 +125,6 @@ class MapNodeHost(MapNode):
             Host.idhost,
             onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False)
-
-    hosticon = Column(
-        Unicode(255)
-        )
-    
-    hoststateicon = Column(
-        Unicode(255)
-        )
     
     host = relation('Host', lazy=True)
     
@@ -145,9 +140,7 @@ class MapNodeService(MapNode):
     @ivar idmapnode: Identifiant du modèle de service (séquence). 
     @ivar idservice: Identifiant du L{Service} représenté.
     @ivar service: Instance du L{Service} représenté.
-    @ivar serviceicon: Nom de l'icône du service.
-    @ivar servicestateicon: ¢tat de l'icône du service.
-    """
+     """
     __tablename__ = 'mapnodeservice'
     
     idmapnode = Column(
@@ -169,14 +162,6 @@ class MapNodeService(MapNode):
     )
 
     service = relation('Service')
-
-    serviceicon = Column(
-        Unicode(255)
-        )
-    
-    servicestateicon = Column(
-        Unicode(255)
-        )
 
     
     def __init__(self, **kwargs):
