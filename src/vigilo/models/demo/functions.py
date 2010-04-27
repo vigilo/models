@@ -95,7 +95,7 @@ def add_tag(name):
 
 def add_tag2supitem(tag, supitem):
     if isinstance(supitem, tuple):
-        supitem = tables.SupItem.get_supitem(supitem)
+        supitem = tables.SupItem.get_supitem(*supitem)
     if tag not in supitem.tags:
         supitem.tags.append(tag)
     DBSession.flush()
