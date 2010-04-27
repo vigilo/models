@@ -95,7 +95,8 @@ def add_tag(name):
 
 def add_tag2supitem(tag, supitem):
     if isinstance(supitem, tuple):
-        supitem = tables.SupItem.get_supitem(*supitem)
+        idsupitem = tables.SupItem.get_supitem(*supitem)
+        supitem = tables.SupItem(idsupitem=idsupitem)
     if tag not in supitem.tags:
         supitem.tags.append(tag)
     DBSession.flush()
@@ -263,7 +264,7 @@ def add_node_host(host, label, map, widget="ServiceElement", x=None, y=None, ico
     if not n:
         n = tables.MapNodeHost(label=unicode(label), idmap=map.idmap,
                               x_pos=x, y_pos=y, widget=unicode(widget),
-                              idhost=host.idhost, icon=icon)
+                              idhost=host.idhost, icon=unicode(icon))
         DBSession.add(n)
     for submap in submaps:
         if submap.idmap not in [s.idmap for s in n.submaps]:
@@ -280,7 +281,7 @@ def add_node_hls(hls, label, map, widget="ServiceElement", x=None, y=None, icon=
     if not n:
         n = tables.MapNodeHls(label=unicode(label), idmap=map.idmap,
                               x_pos=x, y_pos=y, widget=unicode(widget),
-                              idservice=hls.idservice, icon=icon)
+                              idservice=hls.idservice, icon=unicode(icon))
         DBSession.add(n)
     for submap in submaps:
         if submap.idmap not in [s.idmap for s in n.submaps]:
@@ -302,7 +303,7 @@ def add_mapsegment(from_node, to_node, map):
     DBSession.flush()
     return ms
 
-def add_mapservicelink(from_node, to_node, map, lls):
+def add_mapllslink(from_node, to_node, lls, map):
     if isinstance(map, basestring):
         map = tables.Map.by_map_title(unicode(map))
     if isinstance(from_node, basestring):
@@ -312,7 +313,7 @@ def add_mapservicelink(from_node, to_node, map, lls):
     if isinstance(lls, tuple):
         lls = [unicode(s) for s in lls]
         lls = tables.LowLevelService.by_host_service_name(*lls)
-    ms = tables.MapServiceLink(idfrom_node=from_node.idmapnode,
+    ms = tables.MapLlsLink(idfrom_node=from_node.idmapnode,
                                idto_node=to_node.idmapnode,
                                idref=lls.idservice, idmap=map.idmap)
     DBSession.merge(ms)
