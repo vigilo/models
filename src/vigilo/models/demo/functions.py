@@ -87,14 +87,17 @@ def add_dependency(dependent, depended):
     tables.Dependency.get_or_create(supitem1, supitem2)
     DBSession.flush()
 
-def add_tag(name):
+def add_tag(name, supitem=None):
     t = tables.Tag(name=unicode(name), value=u"1")
     DBSession.merge(t)
     DBSession.flush()
+    if supitem is not None:
+        add_tag2supitem(t, supitem)
     return t
 
 def add_tag2supitem(tag, supitem):
     if isinstance(supitem, tuple):
+        supitem = map(unicode, supitem)
         idsupitem = tables.SupItem.get_supitem(*supitem)
         supitem = tables.SupItem(idsupitem=idsupitem)
     if tag not in supitem.tags:
@@ -207,6 +210,11 @@ def add_ventilation(host, server, application):
 #
 
 def add_svc_state(service, statename, message):
+    if isinstance(service, tuple):
+        service = map(unicode, service)
+        service = tables.LowLevelService.by_host_service_name(*service)
+    elif isinstance(service, basestring):
+        service = tables.HighLevelService.by_service_name(service)
     s = DBSession.query(tables.State).filter(
                 tables.State.idsupitem == service.idservice
             ).first()
@@ -237,18 +245,22 @@ def add_map(name):
         DBSession.add(m)
     return m
 
-def add_mapgroup(name):
+def add_mapgroup(name, parent=None):
     name = unicode(name)
     g = tables.MapGroup.by_group_name(name)
     if not g:
         g = tables.MapGroup(name=name)
         DBSession.add(g)
+        if parent:
+            if isinstance(parent, basestring):
+                parent = tables.MapGroup.by_group_name(unicode(parent))
+            g.set_parent(parent)
         DBSession.flush()
     return g
 
 def add_map2group(map, group):
     if isinstance(group, basestring):
-        group = tables.GraphGroup.by_group_name(unicode(group))
+        group = tables.MapGroup.by_group_name(unicode(group))
     if isinstance(map, basestring):
         map = tables.Map.by_map_title(unicode(map))
     if map not in group.maps:
@@ -265,6 +277,26 @@ def add_node_host(host, label, map, widget="ServiceElement", x=None, y=None, ico
         n = tables.MapNodeHost(label=unicode(label), idmap=map.idmap,
                               x_pos=x, y_pos=y, widget=unicode(widget),
                               idhost=host.idhost, icon=unicode(icon))
+        DBSession.add(n)
+    for submap in submaps:
+        if submap.idmap not in [s.idmap for s in n.submaps]:
+            n.submaps.append(submap)
+    DBSession.flush()
+    return n
+
+def add_node_lls(lls, label, map, widget="ServiceElement", x=None, y=None, icon=None, submaps=[]):
+    if isinstance(lls, basestring):
+        raise ValueError("I need a host name too !")
+    if isinstance(lls, tuple):
+        lls = [unicode(s) for s in lls]
+        lls = tables.LowLevelService.by_host_service_name(*lls)
+    if isinstance(map, basestring):
+        map = tables.Map.by_map_title(unicode(map))
+    n = tables.MapNodeLls.by_map_label(map, unicode(label))
+    if not n:
+        n = tables.MapNodeLls(label=unicode(label), idmap=map.idmap,
+                              x_pos=x, y_pos=y, widget=unicode(widget),
+                              idservice=lls.idservice, icon=unicode(icon))
         DBSession.add(n)
     for submap in submaps:
         if submap.idmap not in [s.idmap for s in n.submaps]:
