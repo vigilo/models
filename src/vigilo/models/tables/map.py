@@ -3,11 +3,11 @@
 """Modèle pour la table Map"""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime, Integer, Boolean
-from sqlalchemy.orm import relation
+from sqlalchemy.orm import relation, aliased
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
-                                            MAP_PERMISSION_TABLE
+                        MAP_PERMISSION_TABLE, SUB_MAP_NODE_MAP_TABLE
 
 __all__ = ('Map', )
 
@@ -90,3 +90,29 @@ class Map(DeclarativeBase, object):
         """
         return DBSession.query(cls).filter(cls.title == maptitle).first()
 
+    @classmethod
+    def has_submaps(cls, idmap):
+        from .mapnode import MapNode
+        MAlias = aliased(Map)
+        return (DBSession.query(MAlias)\
+            .join((SUB_MAP_NODE_MAP_TABLE, 
+                   SUB_MAP_NODE_MAP_TABLE.c.idmap == MAlias.idmap))\
+            .join((MapNode, 
+                   MapNode.idmapnode == SUB_MAP_NODE_MAP_TABLE.c.mapnodeid))\
+            .join((cls, cls.idmap == MapNode.idmap))\
+            .filter(cls.idmap == idmap)\
+            .count() > 0)
+
+    @classmethod
+    def get_submaps(cls, idmap):
+        from .mapnode import MapNode
+        MAlias = aliased(Map)
+        return (DBSession.query(MAlias)\
+            .join((SUB_MAP_NODE_MAP_TABLE, 
+                   SUB_MAP_NODE_MAP_TABLE.c.idmap == MAlias.idmap))\
+            .join((MapNode, 
+                   MapNode.idmapnode == SUB_MAP_NODE_MAP_TABLE.c.mapnodeid))\
+            .join((cls, cls.idmap == MapNode.idmap))\
+            .filter(cls.idmap == idmap).distinct().order_by(Map.title).all())
+                   
+            
