@@ -31,6 +31,8 @@ def main():
     add_host('host1.example.com')
     add_host('host2.example.com')
     add_host('host3.example.com')
+    add_host('host4.example.com')
+    add_host('host5.example.com')
     add_host('routeur1')
     add_host('routeur2')
     add_host('firewall')
@@ -45,10 +47,12 @@ def main():
     # LowLevelService
     add_lowlevelservice('host1.example.com', 'Interface eth0')
     add_lowlevelservice('host2.example.com', 'Interface eth0')
+    add_lowlevelservice('host5.example.com', 'Interface eth0')
     add_lowlevelservice('messagerie', 'Interface eth0')
     add_lowlevelservice('routeur1', 'Interface eth0')
     add_lowlevelservice('routeur2', 'Interface eth0')
     add_lowlevelservice('firewall', 'Interface eth0')
+    add_lowlevelservice('proto4', 'Interface eth0')
     add_lowlevelservice('host2.example.com', 'Interface eth1', weight=120)
     add_lowlevelservice('host3.example.com', 'Interface eth1')
     add_lowlevelservice('routeur1', 'Interface eth1')
@@ -70,6 +74,7 @@ def main():
     add_lowlevelservice('messagerie', 'Load')
     add_lowlevelservice('host1.example.com', 'Load')
     add_lowlevelservice('host2.example.com', 'Load')
+    add_lowlevelservice('host4.example.com', 'Load')
     add_lowlevelservice('brouteur', 'Processes')
     add_lowlevelservice('messagerie', 'Processes')
     add_lowlevelservice('proto4', 'Processes')
@@ -185,10 +190,13 @@ def main():
     # Métrologie
     service1 = ('proto4', 'UpTime')
     service2 = ('proto4', 'Load')
+    service3 = ('proto4', 'Interface eth0')
     source1 = add_perfdatasource('Load 01', service2)
     source2 = add_perfdatasource('Load 05', service2)
     source3 = add_perfdatasource('Load 15', service2)
     source4 = add_perfdatasource('sysUpTime', service1)
+    source4 = add_perfdatasource('ineth0', service3, max=512000)
+    source4 = add_perfdatasource('outeth0', service3, max=512000)
 
     add_graph('UpTime')
     add_graph('Load')
@@ -217,7 +225,8 @@ def main():
     add_map2group(maps[1], 'Groupe 2.1')
     add_map2group(maps[2], 'Groupe 2.1')
 
-    n1 = add_node_host("host1.example.com", 'Host 1', maps[0], "ServiceElement", 220, 350, 'server', maps[0:3])
+    #n1 = add_node_host("host1.example.com", 'Host 1', maps[0], "ServiceElement", 220, 350, 'server', maps[0:3])
+    n1 = add_node_host("proto4", 'Proto 4', maps[0], "ServiceElement", 220, 350, 'server', maps[0:3])
     n2 = add_node_host("host2.example.com", 'Host 2', maps[0], "ServiceElement", 350, 140, 'firewall', maps[0:2])
     n3 = add_node_host("host3.example.com", 'Host 3', maps[0], "ServiceElement", 350, 250, 'switch', maps[0:2])
     n4 = add_node_host("host4.example.com", 'Host 4', maps[0], "ServiceElement", 590, 140, 'router', maps[0:2])
@@ -225,7 +234,7 @@ def main():
 
     n6 = add_node_lls(('host1.example.com', 'Interface eth0'), "Internet", maps[0], "ServiceElement", 590, 350, 'network-cloud', maps[0:3])
 
-    l1 = add_mapllslink(n1, n3, ('host1.example.com', 'Interface eth0'), maps[0])
+    l1 = add_mapllslink(n1, n3, ('proto4', 'Interface eth0'), maps[0])
     l2 = add_mapllslink(n2, n3, ('host1.example.com', 'Interface eth0'), maps[0])
     l3 = add_mapllslink(n4, n2, ('host1.example.com', 'Interface eth0'), maps[0])
     l4 = add_mapllslink(n5, n3, ('host1.example.com', 'Interface eth0'), maps[0])

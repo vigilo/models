@@ -47,6 +47,7 @@ def add_lowlevelservice(host, servicename, statename="OK", message="", weight=10
                 op_dep=u"")
         DBSession.add(s)
         DBSession.flush()
+        add_svc_state((host.name, servicename), statename, message)
     return s
 
 def add_highlevelservice(servicename, op_dep="", message="", priority=1):
@@ -215,15 +216,11 @@ def add_svc_state(service, statename, message):
         service = tables.LowLevelService.by_host_service_name(*service)
     elif isinstance(service, basestring):
         service = tables.HighLevelService.by_service_name(service)
-    s = DBSession.query(tables.State).filter(
-                tables.State.idsupitem == service.idservice
-            ).first()
-    if not s:
-        s = tables.State(idsupitem=service.idservice,
-                        state=tables.StateName.statename_to_value(statename),
-                        message=message)
-        s = DBSession.merge(s)
-        DBSession.flush()
+    s = tables.State(idsupitem=service.idservice,
+                    state=tables.StateName.statename_to_value(statename),
+                    message=message)
+    s = DBSession.merge(s)
+    DBSession.flush()
 
 
 #
