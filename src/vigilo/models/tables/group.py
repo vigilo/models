@@ -132,13 +132,18 @@ class Group(DeclarativeBase, object):
             child=group,
             hops=0,
         ))
+
         if parent:
-            DBSession.add(GroupHierarchy(
-                parent=parent,
-                child=group,
-                hops=1,
-            ))
-            
+            inherited = DBSession.query(GroupHierarchy
+                ).filter(GroupHierarchy.child == parent
+                ).all()
+            for g in inherited:
+                DBSession.add(GroupHierarchy(
+                    parent=g.parent,
+                    child=group,
+                    hops=g.hops + 1,
+                ))
+
         if flush:
             DBSession.flush()
         return group

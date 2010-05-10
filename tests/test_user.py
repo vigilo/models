@@ -2,7 +2,8 @@
 """Test suite for User class"""
 from nose.tools import eq_
 
-from vigilo.models.tables import User
+from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup
+from vigilo.models.session import DBSession
 
 from controller import ModelTest
 
@@ -33,4 +34,29 @@ class TestUser(ModelTest):
         """Users should be fetcheable by their username"""
         him = User.by_user_name(u"foobar")
         eq_(him, self.obj)
+
+    def test_get_supitemgroups(self):
+        """Récupération des groupes d'éléments supervisés accessibles."""
+        user = User(user_name=u'manager', email=u'', fullname=u'')
+        DBSession.flush()
+
+        usergroup = UserGroup(group_name=u'managers')
+        usergroup.users.append(user)
+        DBSession.flush()
+
+        root = SupItemGroup.create(u'root')
+        sub1 = SupItemGroup.create(u'sub1', parent=root)
+        sub2 = SupItemGroup.create(u'sub2', parent=sub1)
+        sub3 = SupItemGroup.create(u'sub3', parent=sub2)
+        sub4 = SupItemGroup.create(u'sub4', parent=sub3)
+
+        perm = Permission(permission_name=u'manage')
+        perm.usergroups.append(usergroup)
+        perm.supitemgroups.append(sub2)
+        DBSession.flush()
+
+        eq_([sub2.idgroup, sub3.idgroup, sub4.idgroup],
+            user.supitemgroups(False))
+        eq_([root.idgroup, sub1.idgroup, sub2.idgroup],
+            user.supitemgroups(True))
 
