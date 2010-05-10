@@ -114,8 +114,6 @@ class Group(DeclarativeBase, object):
     def create(cls, name, parent=None, flush=True):
         """ méthode de création d'un groupe.
         
-        TODO: construire les liens hops > 1
-        
         @param name: nom du groupe
         @type name: C{str}
         @param parent: groupe parent
