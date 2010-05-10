@@ -413,4 +413,13 @@ def add_graph2group(graph, group):
     if graph not in group.graphs:
         group.graphs.append(graph)
         DBSession.flush()
+        
+# Affectation des permissions aux groupes de cartes.
+def add_MapGroupPermission(group, perm):
+    if isinstance(group, basestring):
+        group = tables.MapGroup.by_group_name(unicode(group))
+    if isinstance(perm, basestring):
+        perm = tables.Permission.by_permission_name(unicode(perm))
+    group.permissions.append(perm)
+    DBSession.flush()
 

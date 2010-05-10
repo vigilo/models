@@ -2,7 +2,7 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table User"""
 from sqlalchemy.orm import synonym, relation
-from sqlalchemy import Column
+from sqlalchemy import Column, and_
 from sqlalchemy.types import Unicode, DateTime
 import hashlib
 
@@ -10,7 +10,7 @@ from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE, \
                                             GROUP_PERMISSION_TABLE, \
                                             USERGROUP_PERMISSION_TABLE
-from vigilo.models.tables import SupItemGroup, \
+from vigilo.models.tables import SupItemGroup, MapGroup, \
                                     Permission, UserGroup
 from .grouphierarchy import GroupHierarchy
 
@@ -112,6 +112,7 @@ class User(DeclarativeBase, object):
         for g in self.usergroups:
             perms = perms | set(g.permissions)
         return perms
+
 
     def supitemgroups(self, drill_up=False):
         """
@@ -220,6 +221,153 @@ class User(DeclarativeBase, object):
                         groups = groups | set([node.idgroup])
                         node = node.parent
         return groups
+
+    def mapgroups(self, only_id=True):
+        """
+        Renvoie l'ensemble des groupes ou identifiants de groupe
+        de cartes auxquels l'utilisateur a accès.
+
+        Les groupes sont récursifs.
+        Si le groupe HG1 hérite du groupe HG et que l'utilisateur
+        a les permissions sur le groupe HG1, alors il reçoit aussi
+        (automatiquement) l'accès aux éléments rattachés à HG.
+
+        Autrement dit:
+        HG <- lié à un hôte H
+        |
+        HG1 <- lié à un hôte H1
+
+        Si l'utilisateur U a les permissions sur HG (mais pas sur HG1),
+        et l'utilisateur U1 a les permissions sur HG1 (mais pas sur HG).
+        Alors U ne peut voir que les hôtes rattachés à HG (ici, H),
+        tandis que U1 peut voir les hôtes rattachés soit à HG, soit à HG1
+        (ou aux deux), c'est-à-dire H et H1.
+        
+        @param only_id: Indique le type de retour de la fonction.
+        Si cette valeur vaut True, la fonction renvoit la liste 
+        des identifiants de groupe.
+        Sinon, la fonction renvoie la liste des groupes 
+        @type only_id: C{bool}
+
+        @return: Les groupes de cartes auxquels l'utilisateur a accès.
+        @rtype: C{set} of C{Group}
+        """
+        
+        joins = []
+
+        # En théorie, on devrait faire une jointure intermédiaire
+        # sur un 2ème MapGroup. Ici, on peut l'éviter, ce qui
+        # simplifie la requête SQL générée d'une part et simplifie
+        # le code Python d'autre part (évite l'ajout d'aliases).
+        
+        joins.extend([
+                (GroupHierarchy, GroupHierarchy.idparent == \
+                    MapGroup.idgroup),
+                (GROUP_PERMISSION_TABLE, GROUP_PERMISSION_TABLE.c.idgroup == \
+                    GroupHierarchy.idchild),
+            ])
+        """
+        joins.extend([
+            (GroupHierarchy, GroupHierarchy.idchild == \
+                MapGroup.idgroup),
+            (GROUP_PERMISSION_TABLE, GROUP_PERMISSION_TABLE.c.idgroup == \
+                GroupHierarchy.idparent),
+        ])
+        """
+
+        joins.extend([
+                (Permission, Permission.idpermission == \
+                    GROUP_PERMISSION_TABLE.c.idpermission),
+                (USERGROUP_PERMISSION_TABLE, \
+                    USERGROUP_PERMISSION_TABLE.c.idpermission == \
+                    Permission.idpermission),
+                (UserGroup, UserGroup.idgroup == \
+                    USERGROUP_PERMISSION_TABLE.c.idgroup),
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                    UserGroup.idgroup),
+        ])
+
+        groups = DBSession.query(
+                MapGroup
+            ).join(*joins).filter(
+                USER_GROUP_TABLE.c.username == self.user_name
+            ).order_by(MapGroup.name).all()
+            
+        if only_id:
+            return [g.idgroup for g in groups]
+        else:
+            return groups
+        
+    def mapgroups_one_parent_max(self, only_id=True):
+        """
+        TODO: fonction à supprimer si inutilisée (utiliser plutôt mapgroups)
+        Renvoie l'ensemble des groupes ou identifiants de groupe
+        de cartes auxquels l'utilisateur a accès.
+
+        Les groupes sont récursifs.
+        Si le groupe HG1 hérite du groupe HG et que l'utilisateur
+        a les permissions sur le groupe HG1, alors il reçoit aussi
+        (automatiquement) l'accès aux éléments rattachés à HG.
+
+        Autrement dit:
+        HG <- lié à un hôte H
+        |
+        HG1 <- lié à un hôte H1
+
+        Si l'utilisateur U a les permissions sur HG (mais pas sur HG1),
+        et l'utilisateur U1 a les permissions sur HG1 (mais pas sur HG).
+        Alors U ne peut voir que les hôtes rattachés à HG (ici, H),
+        tandis que U1 peut voir les hôtes rattachés soit à HG, soit à HG1
+        (ou aux deux), c'est-à-dire H et H1.
+        
+        @param only_id: Indique le type de retour de la fonction.
+        Si cette valeur vaut True, la fonction renvoit la liste 
+        des identifiants de groupe.
+        Sinon, la fonction renvoie la liste des groupes 
+        @type only_id: C{bool}
+
+        @return: Les groupes de cartes auxquels l'utilisateur a accès.
+        @rtype: C{set} of C{Group}
+        """
+        
+        groups = set()
+        for ug in self.usergroups:
+            for p in ug.permissions:
+                # MapGroup
+                for g in p.mapgroups:
+                    node = g
+                    while not node is None:
+                        groups = groups | set([node])
+                        node = node.get_parent()
+            
+        if only_id:
+            return [g.idgroup for g in groups]
+        else:
+            return groups
+           
+    
+    def maps(self, only_id=True):
+        """
+        Renvoie l'ensemble des identifiants des cartes
+        auxquelles l'utilisateur a accès.
+
+        @return: Les cartes auxquelles l'utilisateur a accès.
+        @rtype: C{set} of C{int}
+        """
+        maps = set()
+        for ms in [group.maps for group in self.mapgroups(False)]:
+            for m in ms:
+                maps = maps | set([m])
+        for ug in self.usergroups:
+            for p in ug.permissions:
+                # Map
+                for m in p.maps:
+                    maps = maps | set([m])
+                    
+        if only_id:
+            return [m.idmap for m in maps]
+        else:
+            return maps
 
     @classmethod
     def by_email_address(cls, email):

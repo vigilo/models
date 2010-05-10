@@ -213,6 +213,9 @@ def main():
     add_mapgroup('Groupe 1.2', 'Groupe 1')
     add_mapgroup('Groupe 2')
     add_mapgroup('Groupe 2.1', 'Groupe 2')
+    add_mapgroup('Groupe 1.1.1', 'Groupe 1.1')
+    add_mapgroup('Groupe 1.1.1.1', 'Groupe 1.1.1')
+    add_mapgroup('Groupe 3')
 
     maps = []
     for i in range(1, 4):
@@ -240,3 +243,10 @@ def main():
     l4 = add_mapllslink(n5, n3, ('host1.example.com', 'Interface eth0'), maps[0])
     l5 = add_mapllslink(n5, n1, ('host1.example.com', 'Interface eth0'), maps[0])
     l6 = add_mapllslink(n4, n6, ('host1.example.com', 'Interface eth0'), maps[0])
+
+    add_MapGroupPermission('Groupe 1', 'manage')
+    add_MapGroupPermission('Groupe 1.1', 'manage')
+    add_MapGroupPermission('Groupe 1.2', 'manage')
+    add_MapGroupPermission('Groupe 1.1.1', 'manage')
+    add_MapGroupPermission('Groupe 1.1.1.1', 'manage')
+    add_MapGroupPermission('Groupe 3', 'manage')
