@@ -96,7 +96,7 @@ def main():
     # HighLevelService
     add_highlevelservice("Connexion", op_dep="+",
                          message="Ouch", priority=3)
-    add_highlevelservice("Portail web", op_dep="y",
+    add_highlevelservice("Portail web", op_dep="&",
                          message="Ouch", priority=1)
 
     # State
