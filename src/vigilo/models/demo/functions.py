@@ -421,3 +421,35 @@ def add_MapGroupPermission(group, perm):
     group.permissions.append(perm)
     DBSession.flush()
 
+# Ajout de user et et son groupe associé.    
+def add_user(username, email, fullname, password, groupname):
+    name = unicode(username)
+    user = tables.User.by_user_name(name)
+    if not user:
+        user = tables.User(user_name=name,
+                           email=email,
+                           fullname=fullname,
+                           password=password)
+        DBSession.add(user)
+        
+    groupname = unicode(groupname)
+    group = tables.UserGroup.by_group_name(name)
+    if not group:
+        group = tables.User()
+    
+    group = tables.UserGroup(group_name=groupname)
+    if not user in group.users:
+        group.users.append(user) 
+        DBSession.add(group) 
+    DBSession.flush()
+
+# Ajout d'une permission dans un groupe de users    
+def add_usergroup_permission(group, perm):
+    if isinstance(group, basestring):
+        group = tables.UserGroup.by_group_name(unicode(group))
+    if isinstance(perm, basestring):
+        perm = tables.Permission.by_permission_name(unicode(perm))   
+    perm.usergroups.append(group)
+    DBSession.add(perm)
+    DBSession.flush()
+

@@ -2,7 +2,8 @@
 """Test suite for User class"""
 from nose.tools import eq_
 
-from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup
+from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup,\
+                                MapGroup
 from vigilo.models.session import DBSession
 
 from controller import ModelTest
@@ -59,4 +60,34 @@ class TestUser(ModelTest):
             user.supitemgroups(False))
         eq_([root.idgroup, sub1.idgroup, sub2.idgroup],
             user.supitemgroups(True))
+        
+    def test_mapgroups(self):
+        """Récupération des groupes de cartes accessibles"""
+        user = User(user_name=u'manager', email=u'', fullname=u'')
+        DBSession.flush()
+        
+        usergroup = UserGroup(group_name=u'managers')
+        usergroup.users.append(user)
+        DBSession.flush()
+        
+        g1 = MapGroup.create(u'groupe 1')
+        g11 = MapGroup.create(u'groupe 1.1', parent=g1)
+        g111 = MapGroup.create(u'groupe 1.1.1', parent=g11)
+        g1111 = MapGroup.create(u'groupe 1.1.1.1', parent=g111)
+        
+        perm = Permission(permission_name=u'manage')
+        perm.usergroups.append(usergroup)
+        perm.mapgroups.append(g111)
+        DBSession.flush()
+        
+        print "user.mapgroups(True)",user.mapgroups(True)
+        print "g111.idgroup", g111.idgroup
+        
+        eq_([g111.idgroup, g1111.idgroup],
+            user.mapgroups(True))
+        
+        eq_([g111, g1111],
+            user.mapgroups(False))
+        
+        
 
