@@ -246,12 +246,10 @@ def add_mapgroup(name, parent=None):
     name = unicode(name)
     g = tables.MapGroup.by_group_name(name)
     if not g:
-        g = tables.MapGroup(name=name)
-        DBSession.add(g)
         if parent:
             if isinstance(parent, basestring):
                 parent = tables.MapGroup.by_group_name(unicode(parent))
-            g.set_parent(parent)
+        g = tables.MapGroup.create(name, parent)
         DBSession.flush()
     return g
 
