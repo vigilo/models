@@ -138,6 +138,9 @@ def main():
 
     # Affectation des permissions aux groupes d'hôtes.
     add_supitemgrouppermission('Serveurs', 'manage')
+    add_supitemgrouppermission('Serveurs', 'vigimap-write')
+    add_supitemgrouppermission('Serveurs', 'vigimap-read')
+    
 
     # Affectation des hôtes aux groupes d'hôtes.
     add_host2group('ajc.fw.1', 'Serveurs')

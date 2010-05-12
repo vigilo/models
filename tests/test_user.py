@@ -3,7 +3,7 @@
 from nose.tools import eq_
 
 from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup,\
-                                MapGroup
+                                MapGroup, Map
 from vigilo.models.session import DBSession
 
 from controller import ModelTest
@@ -88,6 +88,30 @@ class TestUser(ModelTest):
         
         eq_([g111, g1111],
             user.mapgroups(False))
+        
+    def test_maps(self):
+        """Récupération des cartes accessibles"""
+        user = User(user_name=u'editor', email=u'', fullname=u'')
+        DBSession.flush()
+        
+        usergroup = UserGroup(group_name=u'editors')
+        usergroup.users.append(user)
+        DBSession.flush()
+        
+        m1 = Map(title=u'Carte 1')
+        m2 = Map(title=u'Carte 2')
+        
+        perm = Permission(permission_name=u'edit')
+        perm.usergroups.append(usergroup)
+        perm.maps.append(m1)
+        
+        DBSession.flush()
+        eq_([m1.idmap], 
+            user.maps(True))
+        
+        eq_(set([m1]), 
+            user.maps(False))
+        
         
         
 
