@@ -248,8 +248,13 @@ def main():
     add_MapGroupPermission('Groupe 2', 'vigimap-write')
     add_MapGroupPermission('Groupe 3', 'manage')
     add_MapGroupPermission('Groupe 3', 'vigimap-read')
-    # Ajout de l'utilisateur 'editor' et de ses permissions limitées.
+    # Ajout des l'utilisateur 'editor' et 'reader' et de ses permissions limitées.
     # Utilisé pour vérifier la gestion des permissions.
     add_user('editor', u'editor@somedomain.com', u'Editor', u'editpass', 'editors')
     add_usergroup_permission('editors', 'vigimap-read')
+    add_usergroup_permission('editors', 'vigimap-write')
+    
+    add_user('reader', u'reader@somedomain.com', u'Reader', u'readpass', 'readers')
+    add_usergroup_permission('readers', 'vigimap-read')
+
     
