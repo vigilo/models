@@ -137,21 +137,8 @@ def clean_vigiboard(*args):
     from datetime import datetime
     from optparse import OptionParser
 
-    from vigilo.common.conf import settings
-    settings.load_module(__name__)
-
-    from vigilo.models.configure import configure_db
-    configure_db(settings['database'], 'sqlalchemy_',
-        settings['database']['db_basename'])
-
-    from vigilo.common.logging import get_logger
-    LOGGER = get_logger(__name__)
-
     from vigilo.common.gettext import translate
     _ = translate(__name__)
-
-    from vigilo.models.session import DBSession
-    from vigilo.models.tables import Event, CorrEvent, StateName, HLSHistory
 
     parser = OptionParser()
     parser.add_option("-d", "--days", action="store", dest="days",
@@ -161,12 +148,35 @@ def clean_vigiboard(*args):
         type="int", default=None, help=_("Remove closed events, starting "
         "with the oldest ones, when the Vigilo database starts occupying "
         "more then SIZE bytes. SIZE must be a positive non-zero integer."))
+    parser.add_option("-c", "--config", action="store", dest="config",
+        type="string", default=None, help=_("Load configuration from "
+        "this file."))
 
     (options, args) = parser.parse_args()
+
+    from vigilo.common.conf import settings
+    if options.config:
+        settings.load_file(options.config)
+    else:
+        settings.load_module(__name__)
+
+    from vigilo.common.logging import get_logger
+    LOGGER = get_logger(__name__)
 
     if args:
         LOGGER.error(_('Too many arguments'))
         sys.exit(1)
+
+    from vigilo.models.configure import configure_db
+    try:
+        configure_db(settings['database'], 'sqlalchemy_',
+            settings['database']['db_basename'])
+    except KeyError:
+        LOGGER.error(_('No database configuration found'))
+        sys.exit(1)
+
+    from vigilo.models.session import DBSession
+    from vigilo.models.tables import Event, CorrEvent, StateName, HLSHistory
 
     if options.days is None and options.size is None:
         parser.print_usage()

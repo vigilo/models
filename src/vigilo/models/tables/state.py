@@ -69,3 +69,6 @@ class State(DeclarativeBase, object):
         """Initialise un état."""
         super(State, self).__init__(**kwargs)
 
+    def __unicode__(self):
+        return "%s [%s]" % (unicode(self.supitem), unicode(self.name))
+
