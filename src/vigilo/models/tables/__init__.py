@@ -7,7 +7,7 @@ __all__ = [
     'GraphGroup', 'Graph', 'Host', 'HostClass', 'PerfDataSource',
     'SupItem', 'LowLevelService', 'HighLevelService',
     'Dependency', 'Version', 'State', 'Permission',
-    'UserGroup', 'User', 'BoardViewFilter', 'CustomGraphView', 'Tag',
+    'UserGroup', 'User', 'Tag',
     'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost', 'MapNodeHls',
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
     'Application', 'VigiloServer', 'Ventilation',
@@ -32,8 +32,6 @@ from .statename import StateName
 from .permission import Permission
 from .usergroup import UserGroup
 from .user import User
-from .boardviewfilter import BoardViewFilter
-from .customgraphview import CustomGraphView
 from .tag import Tag
 from .mapnode import MapNode, MapNodeHost, MapNodeService, \
         MapNodeHls, MapNodeLls

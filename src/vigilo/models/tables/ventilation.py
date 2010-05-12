@@ -9,7 +9,7 @@ from vigilo.models.tables.host import Host
 from vigilo.models.tables.vigiloserver import VigiloServer
 from vigilo.models.tables.application import Application
 
-__all__ = ('CustomGraphView', )
+__all__ = ('Ventilation', )
 
 class Ventilation(DeclarativeBase, object):
     """

@@ -27,8 +27,6 @@ class User(DeclarativeBase, object):
     @ivar language: Langage utilisé par l'utilisateur.
     @ivar last_changed: Date de dernière mise à jour des informations
         de l'utilisateur.
-    @ivar customgraphviews: Liste des vues personnalisées de l'utilisateur
-        dans VigiGraph.
     @ivar usergroups: Liste des groupes d'utilisateurs auxquels
         l'utilisateur courant appartient.
     """
@@ -72,9 +70,6 @@ class User(DeclarativeBase, object):
         DateTime(timezone=False),
 #        nullable=False,
     )
-
-    customgraphviews = relation('CustomGraphView',
-        cascade='delete', lazy=True)
 
     usergroups = relation('UserGroup', secondary=USER_GROUP_TABLE,
         back_populates='users', lazy=True)
