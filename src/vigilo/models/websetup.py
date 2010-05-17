@@ -42,13 +42,6 @@ def populate_db(bind):
     DBSession.add(group)
     DBSession.flush()
 
-    permission = tables.Permission()
-    permission.permission_name = u'manage'
-    permission.description = u'Gives access to everything. Use with caution!'
-    permission.usergroups.append(group)
-    DBSession.add(permission)
-    DBSession.flush()
-
     version = tables.Version()
     version.name = u'vigilo.models'
     version.version = VIGILO_MODELS_VERSION

@@ -7,7 +7,7 @@ from sqlalchemy.orm import relation, aliased
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
-                        MAP_PERMISSION_TABLE, SUB_MAP_NODE_MAP_TABLE
+                                                SUB_MAP_NODE_MAP_TABLE
 
 __all__ = ('Map', )
 
@@ -25,7 +25,6 @@ class Map(DeclarativeBase, object):
     @ivar links: Liste des liaisons (L{MapServiceLink}) présentes sur la carte.
     @ivar nodes: Liste des nœuds (L{MapNode}) présents sur la carte.
     @ivar segments: Liste des segments (L{MapSegment}) présents sur la carte.
-    @ivar permissions: Liste des L{Permission}s donnant accès à la carte.
     """
     __tablename__ = 'map'
 
@@ -58,9 +57,6 @@ class Map(DeclarativeBase, object):
     
     segments = relation('MapSegment', back_populates='map', lazy=True)
     
-    permissions = relation('Permission', secondary=MAP_PERMISSION_TABLE,
-                            back_populates='maps', lazy=True)
-
 
     def __init__(self, **kwargs):
         """Initialise une carte."""

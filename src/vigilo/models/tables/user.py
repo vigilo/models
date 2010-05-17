@@ -8,10 +8,9 @@ import hashlib
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE, \
-                                            GROUP_PERMISSION_TABLE, \
                                             USERGROUP_PERMISSION_TABLE
-from vigilo.models.tables import SupItemGroup, MapGroup, \
-                                    Permission, UserGroup
+from vigilo.models.tables import SupItemGroup, UserGroup, MapGroup, \
+                                    Permission, DataPermission
 from .grouphierarchy import GroupHierarchy
 
 __all__ = ('User', )
@@ -109,77 +108,55 @@ class User(DeclarativeBase, object):
         return perms
 
 
-    def supitemgroups(self, drill_up=False):
+    def supitemgroups(self):
         """
         Renvoie la liste des identifiants des groupes d'éléments supervisés
         auxquels l'utilisateur a accès.
 
-        Les groupes sont récursifs.
-        On suppose que l'attribut drill_up est mis à True.
-        Si le groupe HG1 hérite du groupe HG et que l'utilisateur
-        a les permissions sur le groupe HG1, alors il reçoit aussi
-        (automatiquement) l'accès aux éléments rattachés à HG.
-
-        Autrement dit:
-        HG <- lié à un hôte H
-        ^
-        |
-        HG1 <- lié à un hôte H1
-
-        Si l'utilisateur U a les permissions sur HG (mais pas sur HG1),
-        et l'utilisateur U1 a les permissions sur HG1 (mais pas sur HG).
-        Alors U ne peut voir que les hôtes rattachés à HG (ici, H),
-        tandis que U1 peut voir les hôtes rattachés soit à HG, soit à HG1
-        (ou aux deux), c'est-à-dire H et H1.
-
-        @param drill_up: Indique le sens de parcours du graphe.
-            Si cette valeur vaut True, le parcours se fait du bas du graphe
-            (des feuilles) vers le haut. Sinon (par défaut), il se fait du
-            haut de l'arbre vers le bas (vers les feuilles).
-        @type drill_up: C{bool}
         @return: Liste des identifiants des groupes d'éléments supervisés
             auxquels l'utilisateur a accès.
         @rtype: C{list} of C{int}
         """
-        joins = []
+        result = {}
+        columns = None
 
-        # En théorie, on devrait faire une jointure intermédiaire
-        # sur un 2ème SupItemGroup. Ici, on peut l'éviter, ce qui
-        # simplifie la requête SQL générée d'une part et simplifie
-        # le code Python d'autre part (évite l'ajout d'aliases).
-        if drill_up:
-            joins.extend([
-                (GroupHierarchy, GroupHierarchy.idparent == \
-                    SupItemGroup.idgroup),
-                (GROUP_PERMISSION_TABLE, GROUP_PERMISSION_TABLE.c.idgroup == \
-                    GroupHierarchy.idchild),
-            ])
-        else:
-            joins.extend([
-                (GroupHierarchy, GroupHierarchy.idchild == \
-                    SupItemGroup.idgroup),
-                (GROUP_PERMISSION_TABLE, GROUP_PERMISSION_TABLE.c.idgroup == \
-                    GroupHierarchy.idparent),
-            ])
+        # Groupes de cartes auxquels l'utilisateur a directement accès.
+        direct = DBSession.query(SupItemGroup.idgroup).distinct(
+            ).join(
+                (DataPermission, DataPermission.idgroup == SupItemGroup.idgroup),
+                (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
+            ).filter(USER_GROUP_TABLE.c.username == self.user_name
+            ).all()
+        direct_ids = [sig.idgroup for sig in direct]
 
-        joins.extend([
-                (Permission, Permission.idpermission == \
-                    GROUP_PERMISSION_TABLE.c.idpermission),
-                (USERGROUP_PERMISSION_TABLE, \
-                    USERGROUP_PERMISSION_TABLE.c.idpermission == \
-                    Permission.idpermission),
-                (UserGroup, UserGroup.idgroup == \
-                    USERGROUP_PERMISSION_TABLE.c.idgroup),
-                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
-                    UserGroup.idgroup),
-        ])
+        # Groupes de cartes auxquels l'utilisateur a accès indirectement
+        # (droit de passage, mais pas de droit de lecture).
+        indirect = DBSession.query(SupItemGroup.idgroup).distinct(
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idparent == SupItemGroup.idgroup),
+            ).filter(GroupHierarchy.idchild.in_(direct_ids)
+            ).filter(GroupHierarchy.hops > 0
+            ).all()
 
-        groups = DBSession.query(
-                SupItemGroup.idgroup
-            ).join(*joins).filter(
+        for sig in indirect:
+            result[sig.idgroup] = (sig.idgroup, False)
+        for sig in direct:
+            result[sig.idgroup] = (sig.idgroup, True)
+
+        return result.values()
+
+
+        supitemgroups = DBSession.query(SupItemGroup.idgroup).distinct(
+            ).join(
+                (DataPermission, DataPermission.idgroup == SupItemGroup.idgroup),
+                (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
+            ).filter(
                 USER_GROUP_TABLE.c.username == self.user_name
             ).all()
-        return [g.idgroup for g in groups]
+
+        return [sig.idgroup for sig in supitemgroups]
 
     @property
     def groups(self):
@@ -239,74 +216,53 @@ class User(DeclarativeBase, object):
         (ou aux deux), c'est-à-dire H et H1.
         
         @param only_id: Indique le type de retour de la fonction.
-        Si cette valeur vaut True, la fonction renvoit la liste 
-        des identifiants de groupe.
-        Sinon, la fonction renvoie la liste des groupes 
+            Si cette valeur vaut True, la fonction renvoie la liste 
+            des identifiants de groupe.
+            Sinon, la fonction renvoie la liste des groupes 
         @type only_id: C{bool}
 
         @return: Les groupes de cartes auxquels l'utilisateur a accès.
         @rtype: C{set} of C{Group}
         """
-        
-        joins = []
+        result = {}
+        columns = None
 
-        # En théorie, on devrait faire une jointure intermédiaire
-        # sur un 2ème MapGroup. Ici, on peut l'éviter, ce qui
-        # simplifie la requête SQL générée d'une part et simplifie
-        # le code Python d'autre part (évite l'ajout d'aliases).
-
-        joins.extend([
-            (GroupHierarchy, GroupHierarchy.idchild == \
-                MapGroup.idgroup),
-            (GROUP_PERMISSION_TABLE, GROUP_PERMISSION_TABLE.c.idgroup == \
-                GroupHierarchy.idparent),
-        ])
-
-        joins.extend([
-                (Permission, Permission.idpermission == \
-                    GROUP_PERMISSION_TABLE.c.idpermission),
-                (USERGROUP_PERMISSION_TABLE, \
-                    USERGROUP_PERMISSION_TABLE.c.idpermission == \
-                    Permission.idpermission),
-                (UserGroup, UserGroup.idgroup == \
-                    USERGROUP_PERMISSION_TABLE.c.idgroup),
-                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
-                    UserGroup.idgroup),
-        ])
-
-        groups = DBSession.query(
-                MapGroup
-            ).join(*joins).filter(
-                USER_GROUP_TABLE.c.username == self.user_name
-            ).order_by(MapGroup.name).all()
-            
         if only_id:
-            return [g.idgroup for g in groups]
+            columns = MapGroup.idgroup
         else:
-            return groups
-        
-    def maps(self, only_id=True):
-        """
-        Renvoie l'ensemble des identifiants des cartes
-        auxquelles l'utilisateur a accès.
+            columns = MapGroup
 
-        @return: Les cartes auxquelles l'utilisateur a accès.
-        @rtype: C{set} of C{int}
-        """
-        maps = set()
-        for ms in [group.maps for group in self.mapgroups(False)]:
-            for m in ms:
-                maps = maps | set([m])
-        for ug in self.usergroups:
-            for p in ug.permissions:
-                # Map
-                for m in p.maps:
-                    maps = maps | set([m])
-                    
+        # Groupes de cartes auxquels l'utilisateur a directement accès.
+        direct = DBSession.query(columns).distinct(
+            ).join(
+                (DataPermission, DataPermission.idgroup == MapGroup.idgroup),
+                (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
+            ).filter(USER_GROUP_TABLE.c.username == self.user_name
+            ).all()
+        direct_ids = [mg.idgroup for mg in direct]
+
+        # Groupes de cartes auxquels l'utilisateur a accès indirectement
+        # (droit de passage, mais pas de droit de lecture).
+        indirect = DBSession.query(columns).distinct(
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idparent == MapGroup.idgroup),
+            ).filter(GroupHierarchy.idchild.in_(direct_ids)
+            ).filter(GroupHierarchy.hops > 0
+            ).all()
+
         if only_id:
-            return [m.idmap for m in maps]
+            for mg in indirect:
+                result[mg.idgroup] = (mg.idgroup, False)
+            for mg in direct:
+                result[mg.idgroup] = (mg.idgroup, True)
         else:
-            return maps
+            for mg in indirect:
+                result[mg.idgroup] = (mg, False)
+            for mg in direct:
+                result[mg.idgroup] = (mg, True)
+
+        return result.values()
 
     @classmethod
     def by_email_address(cls, email):

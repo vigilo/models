@@ -6,9 +6,7 @@ from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
 
 from vigilo.models.session import DeclarativeBase, DBSession
-from vigilo.models.tables.secondary_tables import USERGROUP_PERMISSION_TABLE, \
-                                            GROUP_PERMISSION_TABLE, \
-                                            MAP_PERMISSION_TABLE
+from vigilo.models.tables.secondary_tables import USERGROUP_PERMISSION_TABLE
 
 __all__ = ('Permission', )
 
@@ -51,16 +49,6 @@ class Permission(DeclarativeBase, object):
 
     usergroups = relation('UserGroup', secondary=USERGROUP_PERMISSION_TABLE,
                       back_populates='permissions', lazy=True)
-
-    supitemgroups = relation('SupItemGroup', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='permissions', lazy=True)
-
-    mapgroups = relation('MapGroup', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='permissions', lazy=True)
-    
-    maps = relation('Map', secondary=MAP_PERMISSION_TABLE,
-                    back_populates='permissions', lazy=True)
-
 
     def __init__(self, **kwargs):
         """Initialisation des informations concernant la permission."""

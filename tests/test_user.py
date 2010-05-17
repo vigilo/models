@@ -3,7 +3,7 @@
 from nose.tools import eq_
 
 from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup,\
-                                MapGroup, Map
+                                MapGroup, Map, DataPermission
 from vigilo.models.session import DBSession
 
 from controller import ModelTest
@@ -48,18 +48,32 @@ class TestUser(ModelTest):
         root = SupItemGroup.create(u'root')
         sub1 = SupItemGroup.create(u'sub1', parent=root)
         sub2 = SupItemGroup.create(u'sub2', parent=sub1)
-        sub3 = SupItemGroup.create(u'sub3', parent=sub2)
-        sub4 = SupItemGroup.create(u'sub4', parent=sub3)
 
         perm = Permission(permission_name=u'manage')
         perm.usergroups.append(usergroup)
-        perm.supitemgroups.append(sub2)
         DBSession.flush()
 
-        eq_([sub2.idgroup, sub3.idgroup, sub4.idgroup],
-            user.supitemgroups(False))
-        eq_([root.idgroup, sub1.idgroup, sub2.idgroup],
-            user.supitemgroups(True))
+        dataperm = DataPermission(
+            usergroup=usergroup,
+            group=sub2,
+            access=u'r',
+        )
+        DBSession.add(dataperm)
+        DBSession.flush()
+
+        dataperm = DataPermission(
+            usergroup=usergroup,
+            group=root,
+            access=u'r',
+        )
+        DBSession.add(dataperm)
+        DBSession.flush()
+
+        eq_([
+                (root.idgroup, True),
+                (sub1.idgroup, False),
+                (sub2.idgroup, True),
+            ], user.supitemgroups())
         
     def test_mapgroups(self):
         """Récupération des groupes de cartes accessibles"""
@@ -76,42 +90,24 @@ class TestUser(ModelTest):
         g1111 = MapGroup.create(u'groupe 1.1.1.1', parent=g111)
         
         perm = Permission(permission_name=u'manage')
+        DBSession.add(perm)
         perm.usergroups.append(usergroup)
-        perm.mapgroups.append(g111)
+        DBSession.flush()
+
+        dataperm = DataPermission(
+            idusergroup=usergroup.idgroup,
+            idgroup=g111.idgroup,
+            access=u'r',
+        )
+        DBSession.add(dataperm)
         DBSession.flush()
         
         print "user.mapgroups(True)",user.mapgroups(True)
         print "g111.idgroup", g111.idgroup
         
-        eq_([g111.idgroup, g1111.idgroup],
+        eq_([(g1.idgroup, False), (g11.idgroup, False), (g111.idgroup, True)],
             user.mapgroups(True))
-        
-        eq_([g111, g1111],
+
+        eq_([(g1, False), (g11, False), (g111, True)],
             user.mapgroups(False))
-        
-    def test_maps(self):
-        """Récupération des cartes accessibles"""
-        user = User(user_name=u'editor', email=u'', fullname=u'')
-        DBSession.flush()
-        
-        usergroup = UserGroup(group_name=u'editors')
-        usergroup.users.append(user)
-        DBSession.flush()
-        
-        m1 = Map(title=u'Carte 1')
-        m2 = Map(title=u'Carte 2')
-        
-        perm = Permission(permission_name=u'edit')
-        perm.usergroups.append(usergroup)
-        perm.maps.append(m1)
-        
-        DBSession.flush()
-        eq_([m1.idmap], 
-            user.maps(True))
-        
-        eq_(set([m1]), 
-            user.maps(False))
-        
-        
-        
 

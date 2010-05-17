@@ -40,6 +40,9 @@ class UserGroup(DeclarativeBase, object):
     permissions = relation('Permission', secondary=USERGROUP_PERMISSION_TABLE,
                       back_populates='usergroups', lazy=True)
 
+    datapermissions = relation('DataPermission',
+                      back_populates='usergroup', lazy=True)
+
     users = relation('User', secondary=USER_GROUP_TABLE,
         back_populates='usergroups', lazy=True)
 

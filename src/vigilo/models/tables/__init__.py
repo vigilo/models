@@ -30,6 +30,7 @@ from .version import Version
 from .state import State
 from .statename import StateName
 from .permission import Permission
+from .datapermission import DataPermission
 from .usergroup import UserGroup
 from .user import User
 from .tag import Tag

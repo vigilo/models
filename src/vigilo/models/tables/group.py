@@ -7,8 +7,7 @@ from sqlalchemy.orm import relation, backref
 from sqlalchemy.schema import UniqueConstraint
 
 from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
-from vigilo.models.tables.secondary_tables import GROUP_PERMISSION_TABLE, \
-                                                MAP_GROUP_TABLE, \
+from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
                                                 GRAPH_GROUP_TABLE, \
                                                 SUPITEM_GROUP_TABLE#, \
 #                                                APPLICATION_GROUP_TABLE, \
@@ -56,6 +55,9 @@ class Group(DeclarativeBase, object):
     )
 
     __mapper_args__ = {'polymorphic_on': _grouptype}
+
+    datapermissions = relation('DataPermission',
+                      back_populates='group', lazy=True)
 
     def __init__(self, **kwargs):
         """
@@ -208,17 +210,12 @@ class MapGroup(Group):
     """
     Groupe de cartes.
 
-    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
-        groupe de cartes.
     @ivar subgroups: Liste des L{MapGroup} qui sont des fils
         du groupe courant.
     @ivar maps: Liste des L{Map}s appartenant à ce groupe.
     """
 
     __mapper_args__ = {'polymorphic_identity': u'mapgroup'}
-
-    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='mapgroups')
 
     @property
     def subgroups(self):
@@ -242,8 +239,6 @@ class GraphGroup(Group):
     Ils utilisent cependant la même classe de base pour simplifier
     le reste du code (gestion des permissions, etc.).
 
-    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
-        groupe de graphes.
     @ivar graphs: Liste des L{Graph}es appartenant à ce groupe.
     """
 
@@ -256,14 +251,9 @@ class SupItemGroup(Group):
     """
     Groupe d'éléments supervisés.
 
-    @ivar permissions: Liste des L{Permission}s qui donnent accès à ce
-        groupe d'éléments supervisés.
     @ivar supitems: Liste des L{SupItem}s appartenant à ce groupe.
     """
     __mapper_args__ = {'polymorphic_identity': u'supitemgroup'}
-
-    permissions = relation('Permission', secondary=GROUP_PERMISSION_TABLE,
-                    back_populates='supitemgroups')
 
     supitems = relation('SupItem', secondary=SUPITEM_GROUP_TABLE,
                 back_populates='groups')

@@ -49,18 +49,6 @@ EVENTSAGGREGATE_TABLE = Table(
             primary_key=True, autoincrement=False),
 )
 
-GROUP_PERMISSION_TABLE = Table(
-    'grouppermissions', metadata,
-    Column('idgroup', Integer, ForeignKey(
-                'group.idgroup',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('idpermission', Integer, ForeignKey(
-                'permission.idpermission',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
-)
-
 USER_GROUP_TABLE = Table(
     'usertousergroups', metadata,
     Column('username', Unicode(255), ForeignKey(
@@ -71,18 +59,6 @@ USER_GROUP_TABLE = Table(
                 'usergroup.idgroup',
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True)
-)
-
-MAP_PERMISSION_TABLE = Table(
-    'mappermissions', metadata,
-    Column('idmap', Integer, ForeignKey(
-                'map.idmap',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idpermission', Integer, ForeignKey(
-                'permission.idpermission',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
 )
 
 MAP_GROUP_TABLE = Table(
