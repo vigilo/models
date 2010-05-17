@@ -27,35 +27,44 @@ def populate_db(bind):
     metadata.create_all(bind=bind)
 
     # Création d'un jeu de données par défaut.
-    print "Setting up the generic tables"
-    manager = tables.User()
-    manager.user_name = u'manager'
-    manager.email = u'manager@somedomain.com'
-    manager.fullname = u'Manager'
-    manager.password = u'managepass'
-    DBSession.add(manager)
-    DBSession.flush()
+    print "Checking for an already existing model"
+    version = DBSession.query(tables.Version.version).filter(
+                    tables.Version.name == u'vigilo.models'
+                ).scalar()
 
-    group = tables.UserGroup()
-    group.group_name = u'managers'
-    group.users.append(manager)
-    DBSession.add(group)
-    DBSession.flush()
+    if version:
+        print "Version %s of the model is already installed" % version
 
-    version = tables.Version()
-    version.name = u'vigilo.models'
-    version.version = VIGILO_MODELS_VERSION
-    DBSession.add(version)
-    DBSession.flush()
+    else:
+        print "Setting up the generic tables"
+        manager = tables.User()
+        manager.user_name = u'manager'
+        manager.email = u'manager@somedomain.com'
+        manager.fullname = u'Manager'
+        manager.password = u'managepass'
+        DBSession.add(manager)
+        DBSession.flush()
 
-    DBSession.add(tables.StateName(statename=u'OK', order=0))
-    DBSession.add(tables.StateName(statename=u'UNKNOWN', order=1))
-    DBSession.add(tables.StateName(statename=u'WARNING', order=2))
-    DBSession.add(tables.StateName(statename=u'CRITICAL', order=3))
-    DBSession.add(tables.StateName(statename=u'UP', order=0))
-    DBSession.add(tables.StateName(statename=u'UNREACHABLE', order=1))
-    DBSession.add(tables.StateName(statename=u'DOWN', order=3))
-    DBSession.flush()
+        group = tables.UserGroup()
+        group.group_name = u'managers'
+        group.users.append(manager)
+        DBSession.add(group)
+        DBSession.flush()
+
+        version = tables.Version()
+        version.name = u'vigilo.models'
+        version.version = VIGILO_MODELS_VERSION
+        DBSession.add(version)
+        DBSession.flush()
+
+        DBSession.add(tables.StateName(statename=u'OK', order=0))
+        DBSession.add(tables.StateName(statename=u'UNKNOWN', order=1))
+        DBSession.add(tables.StateName(statename=u'WARNING', order=2))
+        DBSession.add(tables.StateName(statename=u'CRITICAL', order=3))
+        DBSession.add(tables.StateName(statename=u'UP', order=0))
+        DBSession.add(tables.StateName(statename=u'UNREACHABLE', order=1))
+        DBSession.add(tables.StateName(statename=u'DOWN', order=3))
+        DBSession.flush()
 
     # Spécifique projets
     from pkg_resources import working_set
