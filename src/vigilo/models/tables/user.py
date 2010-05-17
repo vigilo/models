@@ -127,6 +127,7 @@ class User(DeclarativeBase, object):
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
             ).filter(USER_GROUP_TABLE.c.username == self.user_name
+            ).filter(DataPermission.access.in_(u'r', u'w')
             ).all()
         direct_ids = [sig.idgroup for sig in direct]
 
@@ -239,6 +240,7 @@ class User(DeclarativeBase, object):
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
             ).filter(USER_GROUP_TABLE.c.username == self.user_name
+            ).filter(DataPermission.access.in_(u'r', u'w')
             ).all()
         direct_ids = [mg.idgroup for mg in direct]
 
