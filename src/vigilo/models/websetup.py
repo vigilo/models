@@ -49,32 +49,6 @@ def populate_db(bind):
     DBSession.add(permission)
     DBSession.flush()
 
-    applications = [
-        u'vigiboard',
-        u'vigicore',
-        u'vigimap',
-        u'vigigraph',
-        u'vigireport',
-    ]
-
-    actions = {
-        'read': 'reading',
-        'write': 'writing',
-        'admin': 'administrative',
-    }
-
-    for application in applications:
-        application = application.lower()
-        for action in actions:
-            DBSession.add(tables.Permission(
-                permission_name=u'%s-%s' % (application, action),
-                description=u'Gives %(access)s access to %(application)s' % {
-                    'access': actions[action],
-                    'application': application,
-                }
-            ))
-        DBSession.flush()
-
     version = tables.Version()
     version.name = u'vigilo.models'
     version.version = VIGILO_MODELS_VERSION
