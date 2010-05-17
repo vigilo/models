@@ -137,10 +137,9 @@ def main():
     graphes = add_graphgroup("Graphes")
 
     # Affectation des permissions aux groupes d'hôtes.
-    add_supitemgrouppermission('Serveurs', 'manage')
-    add_supitemgrouppermission('Serveurs', 'vigimap-write')
-    add_supitemgrouppermission('Serveurs', 'vigimap-read')
-    
+    add_supitemgrouppermission('Serveurs', 'managers')
+    add_supitemgrouppermission('Serveurs Linux', 'managers')
+    add_supitemgrouppermission('Serveurs Windows', 'managers')
 
     # Affectation des hôtes aux groupes d'hôtes.
     add_host2group('ajc.fw.1', 'Serveurs')
@@ -247,17 +246,15 @@ def main():
     l5 = add_mapllslink(n5, n1, ('host1.example.com', 'Interface eth0'), maps[0])
     l6 = add_mapllslink(n4, n6, ('host1.example.com', 'Interface eth0'), maps[0])
 
-    add_MapGroupPermission('Groupe 1', 'manage')
-    add_MapGroupPermission('Groupe 2', 'vigimap-write')
-    add_MapGroupPermission('Groupe 3', 'manage')
-    add_MapGroupPermission('Groupe 3', 'vigimap-read')
+    add_MapGroupPermission('Groupe 1', 'managers', 'r')
+    add_MapGroupPermission('Groupe 2', 'managers', 'w')
+    add_MapGroupPermission('Groupe 3', 'managers', 'r')
     # Ajout des l'utilisateur 'editor' et 'reader' et de ses permissions limitées.
     # Utilisé pour vérifier la gestion des permissions.
     add_user('editor', u'editor@somedomain.com', u'Editor', u'editpass', 'editors')
-    add_usergroup_permission('editors', 'vigimap-read')
-    add_usergroup_permission('editors', 'vigimap-write')
+    add_usergroup_permission('editors', 'vigimap-access')
+    add_usergroup_permission('editors', 'vigimap-edit')
     
     add_user('reader', u'reader@somedomain.com', u'Reader', u'readpass', 'readers')
-    add_usergroup_permission('readers', 'vigimap-read')
+    add_usergroup_permission('readers', 'vigimap-access')
 
-    

@@ -123,7 +123,6 @@ def add_supitemgroup(name, parent=None):
         DBSession.add(g)
         DBSession.add(tables.grouphierarchy.GroupHierarchy(
                       parent=g, child=g, hops=0))
-        g.permissions.append(tables.Permission.by_permission_name(u"manage"))
         DBSession.flush()
     return g
 
@@ -136,14 +135,16 @@ def add_supitemgroup_parent(child, parent):
                         parent=parent, child=child, hops=1)
     DBSession.flush()
 
-def add_supitemgrouppermission(group, perm):
+def add_supitemgrouppermission(group, usergroup, access='r'):
     if isinstance(group, basestring):
         group = tables.SupItemGroup.by_group_name(unicode(group))
-    if isinstance(perm, basestring):
-        perm = tables.Permission.by_permission_name(unicode(perm))
-    if perm not in group.permissions:
-        group.permissions.append(perm)
-        DBSession.flush()
+    if isinstance(usergroup, basestring):
+        usergroup = tables.UserGroup.by_group_name(unicode(usergroup))
+    DBSession.add(tables.DataPermission(
+        group=group,
+        usergroup=usergroup,
+        access=unicode(access),
+    ))
 
 def add_host2group(host, group):
     if isinstance(host, basestring):
@@ -413,12 +414,16 @@ def add_graph2group(graph, group):
         DBSession.flush()
         
 # Affectation des permissions aux groupes de cartes.
-def add_MapGroupPermission(group, perm):
+def add_MapGroupPermission(group, usergroup, access='w'):
     if isinstance(group, basestring):
         group = tables.MapGroup.by_group_name(unicode(group))
-    if isinstance(perm, basestring):
-        perm = tables.Permission.by_permission_name(unicode(perm))
-    group.permissions.append(perm)
+    if isinstance(usergroup, basestring):
+        usergroup = tables.UserGroup.by_group_name(unicode(usergroup))
+    DBSession.add(tables.DataPermission(
+        group=group,
+        usergroup=usergroup,
+        access=unicode(access),
+    ))
     DBSession.flush()
 
 # Ajout de user et et son groupe associé.    
