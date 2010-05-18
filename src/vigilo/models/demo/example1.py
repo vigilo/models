@@ -210,14 +210,14 @@ def main():
     add_perfdatasource2graph(source4, 'UpTime')
 
     # Cartographie
-    add_mapgroup('Groupe 1')
+    add_mapgroup('Groupe 1', 'Root')
     add_mapgroup('Groupe 1.1', 'Groupe 1')
     add_mapgroup('Groupe 1.2', 'Groupe 1')
-    add_mapgroup('Groupe 2')
+    add_mapgroup('Groupe 2', 'Root')
     add_mapgroup('Groupe 2.1', 'Groupe 2')
     add_mapgroup('Groupe 1.1.1', 'Groupe 1.1')
     add_mapgroup('Groupe 1.1.1.1', 'Groupe 1.1.1')
-    add_mapgroup('Groupe 3')
+    add_mapgroup('Groupe 3', 'Root')
 
     maps = []
     for i in range(1, 4):

@@ -195,7 +195,7 @@ class User(DeclarativeBase, object):
                         node = node.parent
         return groups
 
-    def mapgroups(self, only_id=True):
+    def mapgroups(self, only_id=True, only_direct=False):
         """
         Renvoie l'ensemble des groupes ou identifiants de groupe
         de cartes auxquels l'utilisateur a accès.
@@ -221,6 +221,12 @@ class User(DeclarativeBase, object):
             des identifiants de groupe.
             Sinon, la fonction renvoie la liste des groupes 
         @type only_id: C{bool}
+        
+        @param only_direct: Indique si on retourne uniquement les groupes de cartes
+            auxquels l'utilisateur à directement accés ou tous les groupes
+            y compris ceux auxquels il a indirectement accés (droit de passage,
+            mais pas droit de lecture)
+        @rtype: C{bool}
 
         @return: Les groupes de cartes auxquels l'utilisateur a accès.
         @rtype: C{set} of C{Group}
@@ -234,6 +240,7 @@ class User(DeclarativeBase, object):
             columns = MapGroup
 
         # Groupes de cartes auxquels l'utilisateur a directement accès.
+
         direct = DBSession.query(columns).distinct(
             ).join(
                 (DataPermission, DataPermission.idgroup == MapGroup.idgroup),
@@ -252,19 +259,18 @@ class User(DeclarativeBase, object):
             ).filter(GroupHierarchy.idchild.in_(direct_ids)
             ).filter(GroupHierarchy.hops > 0
             ).all()
+        
+        groups = None
+        if only_direct:
+            groups = direct
+        else:
+            groups = indirect
 
         if only_id:
-            for mg in indirect:
-                result[mg.idgroup] = (mg.idgroup, False)
-            for mg in direct:
-                result[mg.idgroup] = (mg.idgroup, True)
+            return [g.idgroup for g in groups]
         else:
-            for mg in indirect:
-                result[mg.idgroup] = (mg, False)
-            for mg in direct:
-                result[mg.idgroup] = (mg, True)
+            return groups
 
-        return result.values()
 
     @classmethod
     def by_email_address(cls, email):
