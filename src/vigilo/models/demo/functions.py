@@ -140,11 +140,20 @@ def add_supitemgrouppermission(group, usergroup, access='r'):
         group = tables.SupItemGroup.by_group_name(unicode(group))
     if isinstance(usergroup, basestring):
         usergroup = tables.UserGroup.by_group_name(unicode(usergroup))
-    DBSession.add(tables.DataPermission(
-        group=group,
-        usergroup=usergroup,
-        access=unicode(access),
-    ))
+    p = DBSession.query(tables.DataPermission).filter(
+            tables.DataPermission.idgroup == group.idgroup
+        ).filter(
+            tables.DataPermission.idusergroup == usergroup.idgroup
+        ).first()
+    if not p:
+        p = tables.DataPermission(
+                group=group,
+                usergroup=usergroup,
+                access=unicode(access),
+            )
+        DBSession.add(p)
+        DBSession.flush()
+    return p
 
 def add_host2group(host, group):
     if isinstance(host, basestring):
@@ -419,12 +428,20 @@ def add_MapGroupPermission(group, usergroup, access='w'):
         group = tables.MapGroup.by_group_name(unicode(group))
     if isinstance(usergroup, basestring):
         usergroup = tables.UserGroup.by_group_name(unicode(usergroup))
-    DBSession.add(tables.DataPermission(
-        group=group,
-        usergroup=usergroup,
-        access=unicode(access),
-    ))
-    DBSession.flush()
+    p = DBSession.query(tables.DataPermission).filter(
+            tables.DataPermission.idgroup == group.idgroup
+        ).filter(
+            tables.DataPermission.idusergroup == usergroup.idgroup
+        ).first()
+    if not p:
+        p = tables.DataPermission(
+                group=group,
+                usergroup=usergroup,
+                access=unicode(access),
+            )
+        DBSession.add(p)
+        DBSession.flush()
+    return p
 
 # Ajout de user et et son groupe associé.    
 def add_user(username, email, fullname, password, groupname):
@@ -436,13 +453,15 @@ def add_user(username, email, fullname, password, groupname):
                            fullname=fullname,
                            password=password)
         DBSession.add(user)
+        DBSession.flush()
         
     groupname = unicode(groupname)
-    group = tables.UserGroup.by_group_name(name)
+    group = tables.UserGroup.by_group_name(groupname)
     if not group:
-        group = tables.User()
+        group = tables.UserGroup(group_name=groupname)
+        DBSession.add(group)
+        DBSession.flush()
     
-    group = tables.UserGroup(group_name=groupname)
     if not user in group.users:
         group.users.append(user) 
         DBSession.add(group) 
