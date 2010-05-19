@@ -102,12 +102,10 @@ class TestUser(ModelTest):
         DBSession.add(dataperm)
         DBSession.flush()
         
-        print "user.mapgroups(True)",user.mapgroups(True)
-        print "g111.idgroup", g111.idgroup
         
-        eq_([(g1.idgroup, False), (g11.idgroup, False), (g111.idgroup, True)],
+        eq_([g1.idgroup, g11.idgroup, g111.idgroup],
             user.mapgroups(True))
 
-        eq_([(g1, False), (g11, False), (g111, True)],
-            user.mapgroups(False))
+        eq_([g111],
+            user.mapgroups(False, True))
 

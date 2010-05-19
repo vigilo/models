@@ -257,7 +257,6 @@ class User(DeclarativeBase, object):
             ).join(
                 (GroupHierarchy, GroupHierarchy.idparent == MapGroup.idgroup),
             ).filter(GroupHierarchy.idchild.in_(direct_ids)
-            ).filter(GroupHierarchy.hops > 0
             ).all()
         
         groups = None
