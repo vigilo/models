@@ -53,8 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(-,root,root)
-%doc COPYING deployment/settings.ini
+%doc COPYING
 %{_bindir}/*
+%config(noreplace) %{_sysconfdir}/vigilo
 %{python_sitelib}/*
 
 
