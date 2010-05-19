@@ -246,10 +246,7 @@ def main():
     l5 = add_mapllslink(n5, n1, ('host1.example.com', 'Interface eth0'), maps[0])
     l6 = add_mapllslink(n4, n6, ('host1.example.com', 'Interface eth0'), maps[0])
 
-    add_MapGroupPermission('Groupe 1', 'managers', 'r')
-    add_MapGroupPermission('Groupe 2', 'managers', 'w')
-    add_MapGroupPermission('Groupe 3', 'managers', 'r')
-    # Ajout des l'utilisateur 'editor' et 'reader' et de ses permissions limitées.
+        # Ajout des l'utilisateur 'editor' et 'reader' et de ses permissions limitées.
     # Utilisé pour vérifier la gestion des permissions.
     add_user('editor', u'editor@somedomain.com', u'Editor', u'editpass', 'editors')
     add_usergroup_permission('editors', 'vigimap-access')
@@ -257,4 +254,12 @@ def main():
     
     add_user('reader', u'reader@somedomain.com', u'Reader', u'readpass', 'readers')
     add_usergroup_permission('readers', 'vigimap-access')
+
+    add_MapGroupPermission('Groupe 1', 'managers', 'r')
+    add_MapGroupPermission('Groupe 2', 'managers', 'w')
+    add_MapGroupPermission('Groupe 3', 'managers', 'r')
+    add_MapGroupPermission('Groupe 1', 'editors', 'w')
+    add_MapGroupPermission('Groupe 3', 'editors', 'w')
+    add_MapGroupPermission('Groupe 1', 'readers', 'r')
+
 
