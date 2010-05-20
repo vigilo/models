@@ -88,10 +88,13 @@ def add_dependency(dependent, depended):
     tables.Dependency.get_or_create(supitem1, supitem2)
     DBSession.flush()
 
+
 def add_tag(name, supitem=None):
-    t = tables.Tag(name=unicode(name), value=u"1")
-    DBSession.merge(t)
-    DBSession.flush()
+    t = tables.Tag.by_tag_name(unicode(name))
+    if not t:
+        t = tables.Tag(name=unicode(name), value=u"1")
+        DBSession.add(t)
+        DBSession.flush()
     if supitem is not None:
         add_tag2supitem(t, supitem)
     return t
@@ -100,7 +103,9 @@ def add_tag2supitem(tag, supitem):
     if isinstance(supitem, tuple):
         supitem = map(unicode, supitem)
         idsupitem = tables.SupItem.get_supitem(*supitem)
-        supitem = tables.SupItem(idsupitem=idsupitem)
+        if not idsupitem:
+            return
+        supitem = DBSession.query(tables.SupItem).get(idsupitem)
     if tag not in supitem.tags:
         supitem.tags.append(tag)
     DBSession.flush()

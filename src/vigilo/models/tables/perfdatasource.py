@@ -19,10 +19,12 @@ class PerfDataSource(DeclarativeBase, object):
     @ivar name: Nom de la source de données.
     @ivar type: Type de la source de données
         (COUNTER, DERIVE, ABSOLUTE, GAUGE).
-    @ivar label: Label affiché sur le graphique.
+    @ivar label: Label affiché sur le graphique généré.
         (ex name=ineth0 -> label=Données en entrée sur la carte réseau eth0)
-    @ivar factor: Facteur de multiplication pour les valeurs stockés.
+    @ivar factor: Facteur de multiplication pour les valeurs en ordonnées.
         (ex factor=8 pour conversion octets -> bits)
+    @ivar max: Valeur maximale possible. Utilisée pour calculer un pourcentage
+        d'utilisation de la ressource.
     """
 
     __tablename__ = 'perfdatasource'
@@ -56,14 +58,13 @@ class PerfDataSource(DeclarativeBase, object):
         UnicodeText,
         default=u'', nullable=False)
 
-    # pour l'affichage du nom sur le graphique généré
     label = Column(
         UnicodeText,
         default=u'')
 
     factor = Column(
         Float(precision=None, asdecimal=False),
-        default=0.0, nullable=False)
+        default=1.0, nullable=False)
 
     max = Column(Float(precision=None, asdecimal=False))
 

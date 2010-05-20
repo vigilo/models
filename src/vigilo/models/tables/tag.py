@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Unicode
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase
+from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import SUPITEM_TAG_TABLE
 
 class Tag(DeclarativeBase, object):
@@ -42,4 +42,16 @@ class Tag(DeclarativeBase, object):
         @rtype: C{unicode}
         """
         return self.name
+
+    @classmethod
+    def by_tag_name(cls, tagname):
+        """
+        Récupère un tag par son nom.
+
+        @param tagname: Nom du tag à récupérer.
+        @type tagname: C{unicode}
+        @return: Instance du Tag.
+        @rtype: L{Tag}
+        """
+        return DBSession.query(cls).filter(cls.name == tagname).first()
 
