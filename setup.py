@@ -60,6 +60,6 @@ setup(name='vigilo-models',
     },
     package_dir={'': 'src'},
     data_files=install_i18n("i18n", "/usr/share/locale") +
-        [(os.path.join(sysconfdir, "vigilo/models"), ["settings.ini"])],
+        [(os.path.join(sysconfdir, "vigilo/models"), ["deployment/settings.ini"])],
 )
 
