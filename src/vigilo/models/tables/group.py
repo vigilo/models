@@ -94,8 +94,11 @@ class Group(DeclarativeBase, object):
     
     def get_parent(self):
         from .grouphierarchy import GroupHierarchy
-        q = DBSession.query(GroupHierarchy)\
-            .filter(GroupHierarchy.idchild == self.idgroup)
+        q = DBSession.query(GroupHierarchy).filter(
+                    GroupHierarchy.idchild == self.idgroup
+                ).filter(
+                    GroupHierarchy.hops == 1
+                )
         if q.count() == 0:
             return None
         return q.one().parent
@@ -265,6 +268,7 @@ class SupItemGroup(Group):
         return ( DBSession.query(SupItemGroup).join(
             (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
         ).filter(GroupHierarchy.idparent == self.idgroup
+        ).filter(GroupHierarchy.hops == 1
         ).count() > 0 )
     
     def get_children(self, hops=1):
