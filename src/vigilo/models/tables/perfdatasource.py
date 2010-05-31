@@ -7,7 +7,7 @@ from sqlalchemy.types import Integer, UnicodeText, Float
 
 from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
-from vigilo.models.tables.service import LowLevelService
+from vigilo.models.tables.host import Host
 
 __all__ = ('PerfDataSource', )
 
@@ -16,6 +16,8 @@ class PerfDataSource(DeclarativeBase, object):
     Informations sur une source de donnée d'un service.
 
     @ivar idperfdatasource: Identifiant auto-généré de la source de données.
+    @ivar idhost: Identifiant de l'hôte auquel l'indicateur est rattaché.
+    @ivar host: Instance de l'hôte auquel l'indicateur est rattaché.
     @ivar name: Nom de la source de données.
     @ivar type: Type de la source de données
         (COUNTER, DERIVE, ABSOLUTE, GAUGE).
@@ -34,16 +36,16 @@ class PerfDataSource(DeclarativeBase, object):
         primary_key=True, autoincrement=True,
     )
 
-    idservice = Column(
+    idhost = Column(
         Integer,
         ForeignKey(
-            LowLevelService.idservice,
+            Host.idhost,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         nullable=False,
     )
 
-    service = relation('LowLevelService', back_populates="perfdatasources",
+    host = relation('Host', back_populates="perfdatasources",
                        lazy=True)
     
     graphs = relation('Graph', secondary=GRAPH_PERFDATASOURCE_TABLE,
@@ -73,30 +75,30 @@ class PerfDataSource(DeclarativeBase, object):
         super(PerfDataSource, self).__init__(**kwargs)
 
     @classmethod
-    def by_service_and_source_name(cls, service, sourcename):
+    def by_host_and_source_name(cls, host, sourcename):
         """
         Renvoie une source de données concernant un service donné
         en fonction de son nom.
         
         @param cls: Classe à utiliser pour la récupération de la source.
         @type cls: C{type}
-        @param service: Instance de L{LowLevelService} ou identifiant
-            du service sur lequel porte la source de données.
-        @type service: C{int} ou L{LowLevelService}
+        @param host: Instance de L{Host} ou identifiant
+            de l'hôte sur lequel porte la source de données.
+        @type service: C{int} ou L{Host}
         @param sourcename: Nom de la source de données à récupérer.
         @type sourcename: C{unicode}
         @return: La source de données de performances dont le nom est
             C{sourcename} et qui porte sur le service C{service}.
         @rtype: L{PerfDataSource}
         """
-        if isinstance(service, int):
+        if isinstance(host, int):
             return DBSession.query(cls
-                ).filter(cls.idservice == service
+                ).filter(cls.idhost == host
                 ).filter(cls.name == sourcename
                 ).first()
 
         return DBSession.query(cls
-            ).filter(cls.service == service
+            ).filter(cls.host == host
             ).filter(cls.name == sourcename
             ).first()
 

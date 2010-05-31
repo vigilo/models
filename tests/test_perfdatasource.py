@@ -29,15 +29,6 @@ class TestPerfDataSource(ModelTest):
             weight=42,
         )
         DBSession.add(host)
-
-        service = LowLevelService(
-            host=host,
-            servicename=u'myservice',
-            command=u'halt',
-            op_dep=u'+',
-            weight=42,
-        )
-        DBSession.add(service)
         DBSession.flush()
-        return dict(service=service)
+        return dict(host=host)
 

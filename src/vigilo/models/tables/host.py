@@ -88,6 +88,10 @@ class Host(SupItem):
     services = relation('LowLevelService', lazy=True,
         primaryjoin='Host.idhost == LowLevelService.idhost')
 
+    perfdatasources = relation('PerfDataSource', lazy=True,
+                        back_populates='host')
+
+
     def __init__(self, **kwargs):
         """Initialise un hôte."""
         super(Host, self).__init__(**kwargs)
