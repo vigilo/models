@@ -73,6 +73,13 @@ class PerfDataSource(DeclarativeBase, object):
     def __init__(self, **kwargs):
         """Initialisation de la source de données de performance."""
         super(PerfDataSource, self).__init__(**kwargs)
+    
+    def get_key(self):
+        """ Clé métier.
+        @return: Clé métier.
+        @rtype: C{Str}
+        """
+        return "pds:%s:%s" % (self.host.name, self.name)
 
     @classmethod
     def by_host_and_source_name(cls, host, sourcename):
