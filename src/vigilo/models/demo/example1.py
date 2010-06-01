@@ -193,12 +193,12 @@ def main():
     service1 = ('proto4', 'UpTime')
     service2 = ('proto4', 'Load')
     service3 = ('proto4', 'Interface eth0')
-    source1 = add_perfdatasource('Load 01', service2)
-    source2 = add_perfdatasource('Load 05', service2)
-    source3 = add_perfdatasource('Load 15', service2)
-    source4 = add_perfdatasource('sysUpTime', service1)
-    source4 = add_perfdatasource('ineth0', service3, max=512000)
-    source4 = add_perfdatasource('outeth0', service3, max=512000)
+    source1 = add_perfdatasource('Load 01', 'proto4')
+    source2 = add_perfdatasource('Load 05', 'proto4')
+    source3 = add_perfdatasource('Load 15', 'proto4')
+    source4 = add_perfdatasource('sysUpTime', 'proto4')
+    source4 = add_perfdatasource('ineth0', 'proto4', max=512000)
+    source4 = add_perfdatasource('outeth0', 'proto4', max=512000)
 
     add_graph('UpTime')
     add_graph('Load')
@@ -246,7 +246,7 @@ def main():
     l5 = add_mapllslink(n5, n1, ('host1.example.com', 'Interface eth0'), maps[0])
     l6 = add_mapllslink(n4, n6, ('host1.example.com', 'Interface eth0'), maps[0])
 
-        # Ajout des l'utilisateur 'editor' et 'reader' et de ses permissions limitées.
+    # Ajout des l'utilisateur 'editor' et 'reader' avec des permissions limitées.
     # Utilisé pour vérifier la gestion des permissions.
     add_user('editor', u'editor@somedomain.com', u'Editor', u'editpass', 'editors')
     add_usergroup_permission('editors', 'vigimap-access')

@@ -367,20 +367,17 @@ def add_mapllslink(from_node, to_node, lls, map):
 # Métrologie
 #
 
-def add_perfdatasource(name, lls, label=None, max=None):
+def add_perfdatasource(name, host, label=None, max=None):
     name = unicode(name)
-    if isinstance(lls, basestring):
-        raise ValueError("I need a host name too !")
-    elif isinstance(lls, tuple):
-        lls = map(unicode, lls)
-        lls = tables.LowLevelService.by_host_service_name(*lls)
-    ds = tables.PerfDataSource.by_service_and_source_name(lls, name)
+    if isinstance(host, basestring):
+        host = tables.Host.by_host_name(unicode(host))
+    ds = tables.PerfDataSource.by_host_and_source_name(host, name)
     if not ds:
         if label:
             label = unicode(label)
         ds = tables.PerfDataSource(name=name,
                                    type=u"GAUGE",
-                                   idservice=lls.idservice,
+                                   host=host,
                                    label=label,
                                    max=max,
                                    )
@@ -404,7 +401,7 @@ def add_perfdatasource2graph(ds, graph):
     if isinstance(graph, basestring):
         graph = tables.Graph.by_graph_name(unicode(graph))
     if isinstance(ds, tuple):
-        ds = tables.PerfDataSource.by_service_and_source_name(*ds)
+        ds = tables.PerfDataSource.by_host_and_source_name(*ds)
     if ds not in graph.perfdatasources:
         graph.perfdatasources.append(ds)
         DBSession.flush()
