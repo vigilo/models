@@ -17,7 +17,6 @@ class Service(SupItem):
     Service générique.
 
     @ivar idservice: Identifiant du service.
-    @ivar servicename: Nom du service.
     @ivar op_dep: Le type d'opération à appliquer aux dépendances de ce
         service de haut niveau ('+', '&' ou '|').
     @ivar groups: Liste des groupes de services auxquels ce service appartient.
@@ -33,11 +32,6 @@ class Service(SupItem):
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         primary_key=True, autoincrement=False,
-    )
-
-    servicename = Column(
-        Unicode(255),
-        index=True, nullable=False,
     )
 
     op_dep = Column(
@@ -80,6 +74,7 @@ class LowLevelService(Service):
     Service de bas niveau (service technique).
 
     @ivar idservice: Identifiant du service.
+    @ivar servicename: Nom du service.
     @ivar idhost: Identifiant de l'L{Host} sur lequel ce service est configuré.
     @ivar host: Instande de l'L{Host} sur lequel ce service est configuré.
     @ivar command: Commande à exécuter pour vérifier l'état du service.
@@ -88,7 +83,7 @@ class LowLevelService(Service):
     """
     __tablename__ = 'lowlevelservice'
     __table_args__ = (
-        UniqueConstraint('idservice', 'idhost'),
+        UniqueConstraint('servicename', 'idhost'),
         {}
     )
     __mapper_args__ = {'polymorphic_identity': u'lowlevel'}
@@ -100,6 +95,11 @@ class LowLevelService(Service):
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         autoincrement=False, primary_key=True,
+    )
+
+    servicename = Column(
+        Unicode(255),
+        index=True, nullable=False,
     )
 
     idhost = Column(
@@ -163,6 +163,7 @@ class HighLevelService(Service):
     Service de haut niveau.
 
     @ivar idservice: Identifiant du service.
+    @ivar servicename: Nom du service.
     @ivar message: Message à afficher dans Vigiboard lorsque le service
         passe dans un état autre que OK.
     @ivar warning_threshold: Seuil à partir duquel le service passe de
@@ -187,6 +188,12 @@ class HighLevelService(Service):
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         autoincrement=False, primary_key=True,
+    )
+
+    servicename = Column(
+        Unicode(255),
+        index=True, nullable=False,
+        unique=True,
     )
 
     message = Column(
