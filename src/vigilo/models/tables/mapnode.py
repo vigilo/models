@@ -66,7 +66,7 @@ class MapNode(DeclarativeBase, object):
     
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
     
-    type_node = Column('type_node', Unicode(16))
+    type_node = Column('type_node', Unicode(16), nullable=False)
     
     icon = Column(
         Unicode(255)
