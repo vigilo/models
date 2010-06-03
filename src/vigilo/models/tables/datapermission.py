@@ -32,6 +32,8 @@ class DataPermission(DeclarativeBase, object):
         autoincrement=False, primary_key=True,
     )
 
+    usergroup = relation('UserGroup', back_populates='datapermissions')
+
     idgroup = Column(
         Integer,
         ForeignKey(
@@ -41,15 +43,17 @@ class DataPermission(DeclarativeBase, object):
         autoincrement=False, primary_key=True,
     )
 
+    group = relation('Group', back_populates='datapermissions')
+
     access = Column(
         Unicode(1),
         nullable=False,
     )
 
-    usergroup = relation('UserGroup', back_populates='datapermissions')
-    group = relation('Group', back_populates='datapermissions')
-
     def __init__(self, **kwargs):
         """Initialisation des informations concernant la permission."""
         super(DataPermission, self).__init__(**kwargs)
+
+    def __unicode__(self):
+        return "<%s - %s>" % (unicode(self.group), unicode(self.usergroup))
 
