@@ -32,6 +32,7 @@ class GroupHierarchy(DeclarativeBase):
             ondelete='CASCADE',
             onupdate='CASCADE',
         ),
+        nullable=False,
         primary_key=True,
     )
 
@@ -42,6 +43,7 @@ class GroupHierarchy(DeclarativeBase):
             ondelete='CASCADE',
             onupdate='CASCADE',
         ),
+        nullable=False,
         primary_key=True,
     )
 

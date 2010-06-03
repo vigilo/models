@@ -30,7 +30,8 @@ class ImpactedPath(DeclarativeBase, object):
         primary_key=True, autoincrement=True,
     )
 
-    impacted_hls = relation('ImpactedHLS', back_populates='path', lazy=True)
+    impacted_hls = relation('ImpactedHLS', back_populates='path',
+                            lazy=True, cascade="all")
 
     idsupitem = Column(
         Integer,

@@ -56,7 +56,7 @@ class Group(DeclarativeBase, object):
 
     __mapper_args__ = {'polymorphic_on': _grouptype}
 
-    datapermissions = relation('DataPermission',
+    datapermissions = relation('DataPermission', cascade="all",
                       back_populates='group', lazy=True)
 
     def __init__(self, **kwargs):
@@ -76,6 +76,9 @@ class Group(DeclarativeBase, object):
         @rtype: C{str}
         """
         return self.name
+
+    def __repr__(self):
+        return "<%s \"%s\">" % (self.__class__.__name__, str(self.name))
     
     def remove_children(self):
         """

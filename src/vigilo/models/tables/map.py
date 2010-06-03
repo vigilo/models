@@ -51,11 +51,14 @@ class Map(DeclarativeBase, object):
     groups = relation('MapGroup', secondary=MAP_GROUP_TABLE,
                          back_populates='maps', lazy=True)
 
-    links = relation('MapServiceLink', back_populates='map', lazy=True)
+    links = relation('MapServiceLink', back_populates='map',
+                     lazy=True, cascade="all")
     
-    nodes = relation('MapNode', back_populates='map', lazy=True)
+    nodes = relation('MapNode', back_populates='map',
+                     lazy=True, cascade="all")
     
-    segments = relation('MapSegment', back_populates='map', lazy=True)
+    segments = relation('MapSegment', back_populates='map',
+                        lazy=True, cascade="all")
     
 
     def __init__(self, **kwargs):

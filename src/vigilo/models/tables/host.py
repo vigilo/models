@@ -85,10 +85,10 @@ class Host(SupItem):
     hostclasses = relation('HostClass', secondary=HOST_HOSTCLASS_TABLE,
         back_populates='hosts', lazy=True)
 
-    services = relation('LowLevelService', lazy=True,
+    services = relation('LowLevelService', lazy=True, cascade="all",
         primaryjoin='Host.idhost == LowLevelService.idhost')
 
-    perfdatasources = relation('PerfDataSource', lazy=True,
+    perfdatasources = relation('PerfDataSource', lazy=True, cascade="all",
                         back_populates='host')
 
 

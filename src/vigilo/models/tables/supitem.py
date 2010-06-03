@@ -40,7 +40,7 @@ class SupItem(DeclarativeBase, object):
     groups = relation('SupItemGroup', secondary=SUPITEM_GROUP_TABLE,
                 back_populates='supitems', lazy=True)
 
-    state = relation('State', back_populates="supitem",
+    state = relation('State', back_populates="supitem", cascade="all",
                      lazy=True, uselist=False)
 
     __mapper_args__ = {'polymorphic_on': _itemtype}
