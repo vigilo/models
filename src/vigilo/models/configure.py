@@ -7,27 +7,70 @@ en vue de l'utilisation des tables du modèle de Vigilo.
 
 __all__ = (
     'DB_BASENAME',
+    'DEFAULT_LANG',
+    'HASHING_FUNC',
+    'EXTERNAL_AUTH',
     'configure_db',
 )
 
 DB_BASENAME = ''
+DEFAULT_LANG = None
+HASHING_FUNC = None
+EXTERNAL_AUTH = False
 
 def configure_db(config_obj, prefix, db_basename):
     """
     Permet de configurer la base de données.
     
     @param config_obj: Objet contenant la configuration.
-    @type config_obj: C{ConfigObj}
+    @type config_obj: C{ConfigObj} ou C{PylonsConfig}
     @param prefix: Préfixe des paramètres de configuration
         liés à la base de données.
     @type prefix: C{basestring}
+    @param db_basename: Préfixe des noms de tables de Vigilo.
+    @type db_basename: C{basestring}
     @return: L'Engine configuré, utilisable par SQLAlchemy.
+    @note: Le paramètre L{db_basename} N'EST PLUS utilisé.
+        À la place, la valeur de la clé "db_basename" dans
+        config_obj est automatiquement utilisée.
     """
 
-    # Doit être fait en tout premier.
-    # vigilo.models.session dépend de l'initialisation de cette valeur.
+    # Permet de déterminer si l'objet config_obj est une configuration
+    # de TurboGears (Pylons) ou bien un objet ConfigObj plus standard.
+    using_tg = False
+    try:
+        from config import ConfigObj
+    except ImportError:
+        using_tg = True
+    else:
+        using_tg = (not isinstance(config_obj, ConfigObj))
+
+    # Paramétrage du modèle. Doit être fait en tout premier.
+    # vigilo.models.session dépend de cette initialisation.
     from vigilo.models import configure
-    configure.DB_BASENAME = db_basename
+
+    # Préfixe des noms de tables.
+    configure.DB_BASENAME = config_obj.get('db_basename', '')
+
+    # Langue par défaut des utilisateurs.
+    configure.DEFAULT_LANG = config_obj.get('lang', None)
+
+    # Fonction de hachage des mots de passe.
+    configure.HASHING_FUNC = config_obj.get(
+        'password_hashing_function', None)
+
+    # Utilisation ou non d'une authentification externe (ex: Kerberos).
+    # Note de rétro-compatibilité : si la clé "external_auth" n'est
+    # pas définie, on se rabat sur la clé "use_kerberos".
+    if using_tg:
+        from paste.deploy.converters import asbool
+        external_auth = 'external_auth' in config_obj and \
+            config_obj['external_auth'] or config_obj['use_kerberos']
+        configure.EXTERNAL_AUTH = asbool(external_auth)
+    else:
+        configure.EXTERNAL_AUTH = 'external_auth' in config_obj and \
+            config_obj.as_bool('external_auth') or \
+            config_obj.as_bool('use_kerberos')
 
     import vigilo.models.session as session
 

@@ -318,27 +318,9 @@ class User(DeclarativeBase, object):
         @return: Un booléen indiquant si le mot de passe est correct.
         @rtype: C{bool}
         """
-
-        try:
-            from tg import config
-            from paste.deploy.converters import asbool
-        except ImportError:
-            # TurboGears n'est pas utilisé,
-            # on utilise vigilo.common.conf
-            # et on convertit en booléen
-            # depuis l'objet ConfigObj.
-            from vigilo.common.conf import settings
-            settings.load_module(__name__)
-            config = settings['database']
-            if config.has_key('use_kerberos') and \
-                config.as_bool('use_kerberos'):
-                return True
-        else:
-            # Dans le cas où on utilise la configuration
-            # de TurboGears, on doit utiliser paste.deploy
-            # pour convertir en booléen.
-            if asbool(config.get('use_kerberos', True)):
-                return True
+        from vigilo.models.configure import EXTERNAL_AUTH
+        if EXTERNAL_AUTH:
+            return True
 
         # Petite précaution
         if self._password is None:
@@ -359,15 +341,8 @@ class User(DeclarativeBase, object):
             Si la variable n'existe pas ou ne correspond pas à une classe
             valide du module hashlib, alors le mot de passe est stocké en clair.
         """
+        from vigilo.models.configure import HASHING_FUNC as hash_method
 
-        try:
-            from tg import config
-        except ImportError:
-            from vigilo.common.conf import settings
-            settings.load_module(__name__)
-            config = settings['database']
-
-        hash_method = config.get('password_hashing_function')
         if not hash_method is None:
             hash_method = hashlib.__dict__.get(hash_method)
             if not callable(hash_method):
@@ -399,20 +374,13 @@ class User(DeclarativeBase, object):
         :return: La langue préférée de l'utilisateur.
         :rtype: C{str}
         """
+        from vigilo.models.configure import DEFAULT_LANG
+        if self._language is not None:
+            return self._language
 
-        try:
-            from tg import config
-        except ImportError:
-            from vigilo.common.conf import settings
-            settings.load_module(__name__)
-            config = settings['database']
-
-        if self._language is None:
-            language = config.get('lang')
-            if language is None:
-                raise KeyError, "No default language in settings"
-            return language
-        return self._language
+        if not DEFAULT_LANG:
+            raise KeyError, "No default language in settings"
+        return DEFAULT_LANG
 
     language = synonym('_language', descriptor=property(_get_language,
                                                         _set_language))
