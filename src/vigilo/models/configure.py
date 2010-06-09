@@ -64,13 +64,18 @@ def configure_db(config_obj, prefix, db_basename):
     # pas définie, on se rabat sur la clé "use_kerberos".
     if using_tg:
         from paste.deploy.converters import asbool
-        external_auth = 'external_auth' in config_obj and \
-            config_obj['external_auth'] or config_obj['use_kerberos']
+        external_auth = \
+            'external_auth' in config_obj and config_obj['external_auth'] or \
+            'use_kerberos' in config_obj and config_obj['use_kerberos'] or \
+            None
         configure.EXTERNAL_AUTH = asbool(external_auth)
     else:
-        configure.EXTERNAL_AUTH = 'external_auth' in config_obj and \
+        configure.EXTERNAL_AUTH = \
+            'external_auth' in config_obj and \
             config_obj.as_bool('external_auth') or \
-            config_obj.as_bool('use_kerberos')
+            'use_kerberos' in config_obj and \
+            config_obj.as_bool('use_kerberos') or \
+            None
 
     import vigilo.models.session as session
 
