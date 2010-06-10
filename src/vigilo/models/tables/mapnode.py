@@ -96,7 +96,10 @@ class MapNode(DeclarativeBase, object):
         @return: Le nom du node.
         @rtype: C{str}
         """
-        return self.name
+        return self.idmapnode
+
+    def __repr__(self):
+        return "<%s %d>" % (self.__class__.__name__, self.idmapnode)
 
     @classmethod
     def by_map_label(cls, idmap, label):
@@ -142,6 +145,14 @@ class MapNodeHost(MapNode):
     def __init__(self, **kwargs):
         super(MapNodeHost, self).__init__(**kwargs)
         
+    def __unicode__(self):
+        """
+        Formatte un C{MapNode} pour l'afficher dans les formulaires.
+        @return: Le nom du node.
+        @rtype: C{str}
+        """
+        return _("Node %s of host %s") % (self.idmapnode, self.host.name)
+
         
 class MapNodeService(MapNode):
     """
@@ -176,6 +187,14 @@ class MapNodeService(MapNode):
     
     def __init__(self, **kwargs):
         super(MapNodeService, self).__init__(**kwargs)
+
+    def __unicode__(self):
+        """
+        Formatte un C{MapNode} pour l'afficher dans les formulaires.
+        @return: Le nom du node.
+        @rtype: C{str}
+        """
+        return _("Node %s of service %s") % (self.idmapnode, self.service.servicename)
 
 
 class MapNodeLls(MapNodeService):
