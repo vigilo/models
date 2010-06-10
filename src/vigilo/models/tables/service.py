@@ -22,6 +22,9 @@ class Service(SupItem):
     @ivar groups: Liste des groupes de services auxquels ce service appartient.
     @ivar dependancies: Liste des services dont ce service dépend.
         Pour les services techniques, cette liste est toujours vide.
+    @note: Le nom du service a été déplacé au niveau des classes filles
+        afin de permettre l'ajout de contraintes SQL supplémentaires
+        (ex: unicité du nom du service pour un hôte donné).
     """
     __tablename__ = 'service'
 
