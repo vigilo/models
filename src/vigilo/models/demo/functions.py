@@ -355,9 +355,13 @@ def add_mapllslink(from_node, to_node, lls, map):
     if isinstance(lls, tuple):
         lls = [unicode(s) for s in lls]
         lls = tables.LowLevelService.by_host_service_name(*lls)
+    pds_in = add_perfdatasource('ineth0', lls.host)
+    pds_out = add_perfdatasource('outeth0', lls.host)
     ms = tables.MapLlsLink(idfrom_node=from_node.idmapnode,
                                idto_node=to_node.idmapnode,
-                               idref=lls.idservice, idmap=map.idmap)
+                               idref=lls.idservice, idmap=map.idmap,
+                               ds_from_to_to=pds_out,
+                               ds_to_to_from=pds_in)
     DBSession.merge(ms)
     DBSession.flush()
     return ms
@@ -382,6 +386,7 @@ def add_perfdatasource(name, host, label=None, max=None):
                                    max=max,
                                    )
         DBSession.add(ds)
+        add_ventilation(host, 'localhost', 'rrdgraph')
         DBSession.flush()
     return ds
 
