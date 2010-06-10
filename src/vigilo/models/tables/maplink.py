@@ -13,6 +13,7 @@ from vigilo.models.tables.mapnode import MapNode
 from vigilo.models.tables.map import Map
 from vigilo.models.tables.graph import Graph
 from vigilo.models.tables.service import Service
+from vigilo.models.tables.perfdatasource import PerfDataSource
 
 __all__ = ('Link', )
 
@@ -134,9 +135,38 @@ class MapServiceLink(MapLink):
         Integer,
         ForeignKey(
             Graph.idgraph,
-            ondelete='CASCADE', onupdate='CASCADE')
-        )
+            ondelete='CASCADE', onupdate='CASCADE'
+        ),
+    )
+
+    idds_from_to_to = Column(
+        Integer,
+        ForeignKey(
+            PerfDataSource.idperfdatasource,
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+        ),
+    )
+
+    idds_to_to_from = Column(
+        Integer,
+        ForeignKey(
+            PerfDataSource.idperfdatasource,
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+        ),
+    )
+
+    ds_from_to_to = relation('PerfDataSource', foreign_keys=[idds_from_to_to],
+                       primaryjoin='PerfDataSource.idperfdatasource == '
+                                    'MapServiceLink.idds_from_to_to',
+                         lazy=True)
     
+    ds_to_to_from = relation('PerfDataSource', foreign_keys=[idds_to_to_from],
+                       primaryjoin='PerfDataSource.idperfdatasource == '
+                                    'MapServiceLink.idds_to_to_from',
+                       lazy=True)
+ 
     map = relation('Map',
         back_populates='links', lazy=True) 
     
