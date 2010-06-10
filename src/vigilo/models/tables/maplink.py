@@ -139,6 +139,7 @@ class MapServiceLink(MapLink):
         ),
     )
 
+    # TODO: renommer en idds_out (on se place toujours du point de vue du from)
     idds_from_to_to = Column(
         Integer,
         ForeignKey(
@@ -148,6 +149,7 @@ class MapServiceLink(MapLink):
         ),
     )
 
+    # TODO: renommer en idds_in (on se place toujours du point de vue du from)
     idds_to_to_from = Column(
         Integer,
         ForeignKey(
@@ -157,11 +159,13 @@ class MapServiceLink(MapLink):
         ),
     )
 
+    # TODO: renommer en ds_out (on se place toujours du point de vue du from)
     ds_from_to_to = relation('PerfDataSource', foreign_keys=[idds_from_to_to],
                        primaryjoin='PerfDataSource.idperfdatasource == '
                                     'MapServiceLink.idds_from_to_to',
                          lazy=True)
     
+    # TODO: renommer en ds_in (on se place toujours du point de vue du from)
     ds_to_to_from = relation('PerfDataSource', foreign_keys=[idds_to_to_from],
                        primaryjoin='PerfDataSource.idperfdatasource == '
                                     'MapServiceLink.idds_to_to_from',
