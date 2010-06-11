@@ -392,19 +392,17 @@ def add_perfdatasource(name, host, label=None, max=None):
 
 def add_graph(name, vlabel="", template="graph"):
     name = unicode(name)
-    gr = tables.Graph.by_graph_name(name)
-    if not gr:
-        gr = tables.Graph(name=name,
-                          vlabel=unicode(vlabel),
-                          template=unicode(template),
-                          )
-        DBSession.add(gr)
-        DBSession.flush()
+    gr = tables.Graph(name=name,
+                      vlabel=unicode(vlabel),
+                      template=unicode(template),
+                      )
+    DBSession.add(gr)
+    DBSession.flush()
     return gr
 
 def add_perfdatasource2graph(ds, graph):
-    if isinstance(graph, basestring):
-        graph = tables.Graph.by_graph_name(unicode(graph))
+    if isinstance(graph, int):
+        graph = DBSession.query(tables.Graph).get(graph)
     if isinstance(ds, tuple):
         ds = tables.PerfDataSource.by_host_and_source_name(*ds)
     if ds not in graph.perfdatasources:
@@ -423,8 +421,8 @@ def add_graphgroup(name):
 def add_graph2group(graph, group):
     if isinstance(group, basestring):
         group = tables.GraphGroup.by_group_name(unicode(group))
-    if isinstance(graph, basestring):
-        graph = tables.Graph.by_graph_name(unicode(graph))
+    if isinstance(graph, int):
+        graph = DBSession.query(tables.Graph).get(graph)
     if graph not in group.graphs:
         group.graphs.append(graph)
         DBSession.flush()

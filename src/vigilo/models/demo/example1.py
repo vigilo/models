@@ -200,14 +200,14 @@ def main():
     source4 = add_perfdatasource('ineth0', 'proto4', max=512000)
     source4 = add_perfdatasource('outeth0', 'proto4', max=512000)
 
-    add_graph('UpTime')
-    add_graph('Load')
-    add_graph2group('UpTime', 'Graphes')
-    add_graph2group('Load', 'Graphes')
-    add_perfdatasource2graph(source1, 'Load')
-    add_perfdatasource2graph(source2, 'Load')
-    add_perfdatasource2graph(source3, 'Load')
-    add_perfdatasource2graph(source4, 'UpTime')
+    graph_UpTime = add_graph('UpTime')
+    graph_Load = add_graph('Load')
+    add_graph2group(graph_UpTime, 'Graphes')
+    add_graph2group(graph_Load, 'Graphes')
+    add_perfdatasource2graph(source1, graph_Load)
+    add_perfdatasource2graph(source2, graph_Load)
+    add_perfdatasource2graph(source3, graph_Load)
+    add_perfdatasource2graph(source4, graph_UpTime)
 
     # Cartographie
     add_mapgroup('Groupe 1', 'Root')
