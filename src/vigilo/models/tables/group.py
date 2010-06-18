@@ -110,6 +110,13 @@ class Group(DeclarativeBase, object):
         """ positionne un groupe en tant que parent
         """
         from .grouphierarchy import GroupHierarchy
+        if group is None:
+            # passage au plus haut niveau (pas de parent)
+            DBSession.query(GroupHierarchy
+                                ).filter(GroupHierarchy.idchild == self.idgroup
+                                ).filter(GroupHierarchy.hops != 0
+                                ).delete()
+            return
         # on détruit un éventuel lien de parenté existant
         DBSession.query(GroupHierarchy
                             ).filter(GroupHierarchy.idchild == self.idgroup

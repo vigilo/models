@@ -81,6 +81,10 @@ class PerfDataSource(DeclarativeBase, object):
         """
         return "pds:%s:%s" % (self.host.name, self.name)
 
+    def __repr__(self):
+        return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
+                                          str(self.name), str(self.host.name))
+    
     @classmethod
     def by_host_and_source_name(cls, host, sourcename):
         """

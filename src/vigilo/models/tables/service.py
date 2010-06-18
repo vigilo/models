@@ -71,6 +71,10 @@ class Service(SupItem):
         """
         return self.servicename
 
+    def __repr__(self):
+        return "<%s \"%s\">" % (self.__class__.__name__,
+                                str(self.servicename))
+
 
 class LowLevelService(Service):
     """
@@ -160,6 +164,10 @@ class LowLevelService(Service):
         """
         return "lls:%s:%s" % (self.host.name, self.servicename)
 
+    def __repr__(self):
+        return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
+                        str(self.servicename), str(self.host.name))
+    
 
 class HighLevelService(Service):
     """
