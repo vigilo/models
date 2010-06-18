@@ -130,16 +130,16 @@ class Group(DeclarativeBase, object):
         # ajout des liens hops > 1
         for gh in DBSession.query(GroupHierarchy
                                 ).filter(GroupHierarchy.idchild == group.idgroup
-                                ).filter(GroupHierarchy.hops > 1):
+                                ).filter(GroupHierarchy.hops > 0):
             # ajout des liens hops > 1 coté parent pour le groupe self
-            newgh = GroupHierarchy.get_or_create(gh, self, gh.hops + 1)
+            newgh = GroupHierarchy.get_or_create(gh.parent, self, gh.hops + 1)
             
-            # ajout des liens hops > 1 des enfants de self
+            # ajout des liens hops > 1 des enfants
             for gh2 in DBSession.query(GroupHierarchy
                                     ).filter(GroupHierarchy.idparent == self.idgroup
-                                    ).filter(GroupHierarchy.hops != 0):
-                GroupHierarchy.get_or_create(gh, gh2, gh.hops + gh2.hops)
-        
+                                    ).filter(GroupHierarchy.hops > 0):
+                GroupHierarchy.get_or_create(gh.parent, gh2.child, gh.hops + gh2.hops + 1)
+    
     
     @classmethod
     def create(cls, name, parent=None, flush=True):

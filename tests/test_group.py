@@ -118,6 +118,57 @@ class TestGroup(ModelTest):
                         ).filter(GroupHierarchy.idchild == self.obj.idgroup
                         ).filter(GroupHierarchy.hops == 1
                         ).one()
+    
+    def test_set_parent2(self):
+        """ test méthode set_parent avec hiérarchies coté enfant et parent
+        """
+        # on créé un parent sur self.obj
+        parent = self.klass(name=u"aparent")
+        DBSession.add(parent)
+        self.obj.set_parent(parent)
+        
+        # on créé un groupe avec son enfant
+        child = self.klass(name=u"achild")
+        DBSession.add(child)
+        lchild = self.klass(name=u"alittlechild")
+        DBSession.add(lchild)
+        lchild.set_parent(child)
+        
+        # on raccorde self.obj et l'enfant
+        child.set_parent(self.obj)
+        
+        # vérification liens ayeuls
+        DBSession.query(GroupHierarchy
+                        ).filter(GroupHierarchy.idparent == child.idgroup
+                        ).filter(GroupHierarchy.idchild == lchild.idgroup
+                        ).filter(GroupHierarchy.hops == 1
+                        ).one()
+        
+        DBSession.query(GroupHierarchy
+                        ).filter(GroupHierarchy.idparent == parent.idgroup
+                        ).filter(GroupHierarchy.idchild == self.obj.idgroup
+                        ).filter(GroupHierarchy.hops == 1
+                        ).one()
+        for gh in DBSession.query(GroupHierarchy).all():
+            print gh.parent.name, gh.child.name, gh.hops
+        
+        DBSession.query(GroupHierarchy
+                        ).filter(GroupHierarchy.idparent == parent.idgroup
+                        ).filter(GroupHierarchy.idchild == lchild.idgroup
+                        ).filter(GroupHierarchy.hops == 3
+                        ).one()
+        
+        DBSession.query(GroupHierarchy
+                        ).filter(GroupHierarchy.idparent == self.obj.idgroup
+                        ).filter(GroupHierarchy.idchild == child.idgroup
+                        ).filter(GroupHierarchy.hops == 1
+                        ).one()
+        
+        DBSession.query(GroupHierarchy
+                        ).filter(GroupHierarchy.idparent == self.obj.idgroup
+                        ).filter(GroupHierarchy.idchild == lchild.idgroup
+                        ).filter(GroupHierarchy.hops == 2
+                        ).one()
 
 
 class TestMapGroup(ModelTest):
