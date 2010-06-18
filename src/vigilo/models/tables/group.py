@@ -105,40 +105,52 @@ class Group(DeclarativeBase, object):
         return q.one().parent
     
     def set_parent(self, group):
-        """ positionne un groupe en tant que parent
+        """
+        Positionne un groupe en tant que parent du groupe courant.
+        Cette méthode ne peut gérer qu'un unique parent, elle ne convient
+        donc pas pour les L{SupItemGroup}.
+
+        @param group: Nouveau parent du groupe courant.
+        @type group: L{Group}
+        @note: Si un groupe était déjà marqué comme parent du groupe courant,
+            alors cette association est rompue et une nouvelle hiérarchie
+            de groupe est construite pour le nouveau parent.
         """
         from .grouphierarchy import GroupHierarchy
-        if group is None:
-            # passage au plus haut niveau (pas de parent)
+
+        # On récupère tous nos enfants, petits-enfants, etc..
+        children = DBSession.query(GroupHierarchy).filter(
+                        GroupHierarchy.parent == self)
+
+        # Supprime tous les liens de parenté du groupe courant
+        # et de ses enfants (sans limite de profondeur) vers nos
+        # parents (sans limite de profondeur).
+        for c in children:
             DBSession.query(GroupHierarchy
-                                ).filter(GroupHierarchy.idchild == self.idgroup
-                                ).filter(GroupHierarchy.hops != 0
-                                ).delete()
-            return
-        # on détruit un éventuel lien de parenté existant
-        DBSession.query(GroupHierarchy
-                            ).filter(GroupHierarchy.idchild == self.idgroup
-                            ).filter(GroupHierarchy.idparent == group.idgroup
-                            ).delete()
-        gh = GroupHierarchy(parent=group, child=self, hops=1)
-        DBSession.add(gh)
-        
-        # liste des liens enfants de self
-        ghchildren = list(DBSession.query(GroupHierarchy
-                                ).filter(GroupHierarchy.idparent == self.idgroup
-                                ).filter(GroupHierarchy.hops != 0))
-        # ajout des liens hops > 1
-        for gh in DBSession.query(GroupHierarchy
-                                ).filter(GroupHierarchy.idchild == group.idgroup
-                                ).filter(GroupHierarchy.hops > 0):
-            # ajout des liens hops > 1 coté parent pour le groupe self
-            newgh = GroupHierarchy.get_or_create(gh.parent, self, gh.hops + 1)
-            
-            # ajout des liens hops > 1 des enfants
-            for gh2 in DBSession.query(GroupHierarchy
-                                    ).filter(GroupHierarchy.idparent == self.idgroup
-                                    ).filter(GroupHierarchy.hops > 0):
-                GroupHierarchy.get_or_create(gh.parent, gh2.child, gh.hops + gh2.hops + 1)
+                ).filter(GroupHierarchy.idchild == c.idchild
+                ).filter(GroupHierarchy.hops > c.hops
+                ).delete()
+
+        # Si un groupe doit devenir le nouveau parent.
+        if group:
+            # Récupère les parents, grands-parents, etc. de notre parent.
+            parents = DBSession.query(GroupHierarchy
+                ).filter(GroupHierarchy.child == group
+                ).all()
+
+            for p in parents:
+                # Nos enfants [et petits ...] et nous-même héritons de
+                # l'arborescence de nos parents [et grands ...] à une
+                # distance augmentée de 1.
+                for c in children:
+                    DBSession.add(GroupHierarchy(
+                        idparent=p.idparent,
+                        idchild=c.idchild,
+                        hops=p.hops + c.hops + 1,
+                    ))
+        DBSession.flush()
+
+    parent = property(get_parent, set_parent)
     
     
     @classmethod
@@ -324,18 +336,16 @@ class SupItemGroup(Group):
                     services.append(si)
         return services
 
-# @TODO:
-#        hostgroups = DBSession.query(
-#                SupItemGroup.name,
-#                SupItemGroup.idgroup,
-#            ).distinct().join(
-#                (GroupHierarchy, GroupHierarchy.idchild == \
-#                    SupItemGroup.idgroup),
-#            ).filter(GroupHierarchy.idparent == maingroupid
-#            ).filter(GroupHierarchy.hops == 1
-#            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
-#            ).order_by(
-#                SupItemGroup.name.asc(),
-#            ).all()
-#        hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups]
+    # On surcharge les méthodes de Group qui ne sont pas pertinentes ici
+    # (elles ne gèrent qu'un seul parent, alors qu'un SupItemGroup peut
+    # en avoir plusieurs).
+    def get_parent(self):
+        raise NotImplemented(self.__class__.__name__ +
+                            " has no get_parent() method")
+
+    def set_parent(self, group):
+        raise NotImplemented(self.__class__.__name__ +
+                            " has no set_parent() method")
+
+    parent = property(get_parent, set_parent)
 
