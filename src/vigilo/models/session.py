@@ -13,7 +13,8 @@ même si ces composants n'ont pas besoin des fonctionnalités apportées
 par ZopeTransactionExtension.
 """
 
-from sqlalchemy import ForeignKey as SaForeignKey
+from sqlalchemy import ForeignKey as SaForeignKey, \
+                        ForeignKeyConstraint as SaForeignKeyConstraint
 from sqlalchemy import Table as SaTable
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -44,6 +45,23 @@ class ForeignKey(SaForeignKey):
         if isinstance(name, basestring):
             name = configure.DB_BASENAME + name
         super(ForeignKey, self).__init__(name, *args, **kwargs)
+
+class ForeignKeyConstraint(SaForeignKeyConstraint):
+    """
+    Une redéfinition des clés étrangères de SQLAlchemy
+    qui ajoute automatiquement le préfixe des tables de
+    Vigilo lorsque cela est nécessaire.
+    """
+
+    def __init__(self, columns, refcolumns, name=None, *args, **kwargs):
+        """
+        Instancie la ForeignKey en ajoutant le préfixe
+        des tables de Vigilo.
+        """
+        if isinstance(name, basestring):
+            name = configure.DB_BASENAME + name
+        super(ForeignKeyConstraint, self).__init__(
+            columns, refcolumns, name, *args, **kwargs)
 
 class Table(SaTable):
     """
