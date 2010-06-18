@@ -66,18 +66,22 @@ class MapNode(DeclarativeBase, object):
     
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
     
-    type_node = Column('type_node', Unicode(16), nullable=False)
+    # Il est possible de créer des éléments sur la carte
+    # qui n'ont pas de relations avec les SupItem, mais
+    # permettent juste d'ajouter un label, une image et
+    # éventuellement des liens vers des sous-cartes.
+    type_node = Column('type_node', Unicode(16), nullable=True)
     
     icon = Column(
         Unicode(255)
         )
     
     links_from = relation('MapLink', foreign_keys=[idmapnode],
-                    primaryjoin='MapLink.idfrom_node == ' + \
+                    primaryjoin='MapLink.idfrom_node == '
                         'MapNode.idmapnode')
     
     links_to = relation('MapLink', foreign_keys=[idmapnode],
-                    primaryjoin='MapLink.idto_node == ' + \
+                    primaryjoin='MapLink.idto_node == '
                         'MapNode.idmapnode')
 
     __mapper_args__ = {'polymorphic_on': type_node}
@@ -103,6 +107,22 @@ class MapNode(DeclarativeBase, object):
 
     @classmethod
     def by_map_label(cls, idmap, label):
+        """
+        Retourne un élément de la carte dont le libellé correspond
+        à celui donné.
+
+        @param cls: La classe de l'instance à retourner (ex: L{MapNode}).
+        @type cls: C{type}
+        @param idmap: Identifiant de la carte sur lequel l'élément apparaît.
+        @type idmap: C{int}
+        @param label: Libellé de l'élément sur la carte.
+        @type label: C{unicode}
+        @return: Instance de la classe correspondant à l'élément demandé.
+        @rtype: C{cls}
+        @note: Le libellé des éléments n'est pas unique sur une carte.
+            Cette fonction ne retourne que le premier élément trouvé en
+            base de données. Mieux vaut donc l'utiliser avec précautions.
+        """
         if not isinstance(idmap, int):
             idmap = idmap.idmap
         return DBSession.query(cls).filter(
@@ -151,7 +171,10 @@ class MapNodeHost(MapNode):
         @return: Le nom du node.
         @rtype: C{str}
         """
-        return _("Node %s of host %s") % (self.idmapnode, self.host.name)
+        return "%(hostname)s [#%(idmapnode)d]" % {
+            'idmapnode': self.idmapnode,
+            'hostname':  self.host.name,
+        }
 
         
 class MapNodeService(MapNode):
@@ -194,7 +217,10 @@ class MapNodeService(MapNode):
         @return: Le nom du node.
         @rtype: C{str}
         """
-        return _("Node %s of service %s") % (self.idmapnode, self.service.servicename)
+        return "%(servicename)s [#%(idmapnode)d]" % {
+            'idmapnode': self.idmapnode,
+            'servicename':  self.service.servicename,
+        }
 
 
 class MapNodeLls(MapNodeService):
@@ -203,7 +229,6 @@ class MapNodeLls(MapNodeService):
     dans VigiMap.
  
     """
-    
     __mapper_args__ = {'polymorphic_identity': u'lls'}
     
     
@@ -214,34 +239,5 @@ class MapNodeHls(MapNodeService):
     dans VigiMap.
 
     """
-
     __mapper_args__ = {'polymorphic_identity': u'hls'}
-    
-
-#TODO: Classe en préparation
-#class MapNodePerformance(MapNode):
-#    
-#    Classe chargée de la représentation graphique d'un modèle
-#    Performance dans vigimap 
-
-#    __mapper_args__ = {'polymorphic_identity': u'performance'}
-#    
-#    idmapnode = Column(
-#        Integer,
-#        ForeignKey(
-#            'mapnode.idmapnode',
-#            onupdate='CASCADE', ondelete='CASCADE'), 
-#        primary_key=True,
-#        nullable=False
-#    )
-#    
-#    name = Column(
-#        Unicode(255),
-#        index=True, ForeignKey('performance.name'),
-#        ondelete='CASCADE', onupdate='CASCADE',
-#        nullable=False)     
-#    
-#    
-#    def __init__(self, **kwargs):
-#        super(MapNodeService, self).__init__(**kwargs)
 

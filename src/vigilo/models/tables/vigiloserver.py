@@ -2,7 +2,7 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """VigiloServer model"""
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, Unicode, UnicodeText
+from sqlalchemy.types import Integer, Unicode
 
 from vigilo.models.session import DeclarativeBase, DBSession
 

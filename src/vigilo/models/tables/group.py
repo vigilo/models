@@ -3,15 +3,13 @@
 """Modèle pour la table Group"""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation, backref
+from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
                                                 GRAPH_GROUP_TABLE, \
-                                                SUPITEM_GROUP_TABLE#, \
-#                                                APPLICATION_GROUP_TABLE, \
-#                                                USAGE_TABLE
+                                                SUPITEM_GROUP_TABLE
 
 __all__ = ('SupItemGroup', 'MapGroup')
 
@@ -172,14 +170,6 @@ class Group(DeclarativeBase, object):
                 (GroupHierarchy, GroupHierarchy.idchild == self.__class__.idgroup)
             ).filter(GroupHierarchy.hops > 0)
         return children
-    
-    """ TODO:
-        topgroups = DBSession.query(
-                SupItemGroup,
-            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
-            ).except_(children).order_by(SupItemGroup.name).all()
-        topgroups = [(sig.name, str(sig.idgroup)) for sig in topgroups]
-    """
 
     @classmethod
     def get_top_groups(cls):
@@ -315,19 +305,19 @@ class SupItemGroup(Group):
                 if level in ('all', 'high'):
                     services.append(si)
         return services
-    
-    """ TODO:
-        hostgroups = DBSession.query(
-                SupItemGroup.name,
-                SupItemGroup.idgroup,
-            ).distinct().join(
-                (GroupHierarchy, GroupHierarchy.idchild == \
-                    SupItemGroup.idgroup),
-            ).filter(GroupHierarchy.idparent == maingroupid
-            ).filter(GroupHierarchy.hops == 1
-            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
-            ).order_by(
-                SupItemGroup.name.asc(),
-            ).all()
-        hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups]
-    """
+
+# @TODO:
+#        hostgroups = DBSession.query(
+#                SupItemGroup.name,
+#                SupItemGroup.idgroup,
+#            ).distinct().join(
+#                (GroupHierarchy, GroupHierarchy.idchild == \
+#                    SupItemGroup.idgroup),
+#            ).filter(GroupHierarchy.idparent == maingroupid
+#            ).filter(GroupHierarchy.hops == 1
+#            ).filter(SupItemGroup.idgroup.in_(supitemgroups)
+#            ).order_by(
+#                SupItemGroup.name.asc(),
+#            ).all()
+#        hostgroups = [(hg.name, str(hg.idgroup)) for hg in hostgroups]
+

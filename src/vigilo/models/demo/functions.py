@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import os
 from datetime import datetime
-
-from sqlalchemy import and_
 
 from vigilo.models.session import DBSession
 from vigilo.models import tables
-
 
 #
 # Base
@@ -28,7 +24,8 @@ def add_host(hostname):
         DBSession.flush()
     return h
 
-def add_lowlevelservice(host, servicename, statename="OK", message="", weight=100):
+def add_lowlevelservice(host, servicename, statename="OK",
+                        message="", weight=100):
     if isinstance(host, basestring):
         hostname = host
         host = tables.Host.by_host_name(unicode(hostname))
@@ -277,7 +274,8 @@ def add_map2group(map, group):
         group.maps.append(map)
         DBSession.flush()
 
-def add_node_host(host, label, map, widget="ServiceElement", x=None, y=None, icon=None, submaps=[]):
+def add_node_host(host, label, map, widget="ServiceElement",
+                    x=None, y=None, icon=None, submaps=[]):
     if isinstance(host, basestring):
         host = tables.Host.by_host_name(unicode(host))
     if isinstance(map, basestring):
@@ -294,7 +292,8 @@ def add_node_host(host, label, map, widget="ServiceElement", x=None, y=None, ico
     DBSession.flush()
     return n
 
-def add_node_lls(lls, label, map, widget="ServiceElement", x=None, y=None, icon=None, submaps=[]):
+def add_node_lls(lls, label, map, widget="ServiceElement",
+                    x=None, y=None, icon=None, submaps=[]):
     if isinstance(lls, basestring):
         raise ValueError("I need a host name too !")
     if isinstance(lls, tuple):
@@ -314,7 +313,8 @@ def add_node_lls(lls, label, map, widget="ServiceElement", x=None, y=None, icon=
     DBSession.flush()
     return n
 
-def add_node_hls(hls, label, map, widget="ServiceElement", x=None, y=None, icon=None, submaps=[]):
+def add_node_hls(hls, label, map, widget="ServiceElement",
+                    x=None, y=None, icon=None, submaps=[]):
     if isinstance(hls, basestring):
         hls = tables.HighLevelService.by_service_name(hls)
     if isinstance(map, basestring):

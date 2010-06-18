@@ -123,9 +123,11 @@ class User(DeclarativeBase, object):
         # Groupes de cartes auxquels l'utilisateur a directement accès.
         direct = DBSession.query(SupItemGroup.idgroup).distinct(
             ).join(
-                (DataPermission, DataPermission.idgroup == SupItemGroup.idgroup),
+                (DataPermission, DataPermission.idgroup == \
+                    SupItemGroup.idgroup),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
-                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                    UserGroup.idgroup),
             ).filter(USER_GROUP_TABLE.c.username == self.user_name
             ).filter(DataPermission.access.in_([u'r', u'w'])
             ).all()
@@ -135,7 +137,8 @@ class User(DeclarativeBase, object):
         # (droit de passage, mais pas de droit de lecture).
         indirect = DBSession.query(SupItemGroup.idgroup).distinct(
             ).join(
-                (GroupHierarchy, GroupHierarchy.idparent == SupItemGroup.idgroup),
+                (GroupHierarchy, GroupHierarchy.idparent == \
+                    SupItemGroup.idgroup),
             ).filter(GroupHierarchy.idchild.in_(direct_ids)
             ).filter(GroupHierarchy.hops > 0
             ).all()
@@ -150,9 +153,11 @@ class User(DeclarativeBase, object):
 
         supitemgroups = DBSession.query(SupItemGroup.idgroup).distinct(
             ).join(
-                (DataPermission, DataPermission.idgroup == SupItemGroup.idgroup),
+                (DataPermission, DataPermission.idgroup == \
+                    SupItemGroup.idgroup),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
-                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                    UserGroup.idgroup),
             ).filter(
                 USER_GROUP_TABLE.c.username == self.user_name
             ).all()
@@ -245,7 +250,8 @@ class User(DeclarativeBase, object):
             ).join(
                 (DataPermission, DataPermission.idgroup == MapGroup.idgroup),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
-                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == UserGroup.idgroup),
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                    UserGroup.idgroup),
             ).filter(USER_GROUP_TABLE.c.username == self.user_name
             ).filter(DataPermission.access.in_([u'r', u'w'])
             ).all()

@@ -92,26 +92,27 @@ class Map(DeclarativeBase, object):
     @classmethod
     def has_submaps(cls, idmap):
         from .mapnode import MapNode
-        MAlias = aliased(Map)
-        return (DBSession.query(MAlias)\
-            .join((SUB_MAP_NODE_MAP_TABLE, 
-                   SUB_MAP_NODE_MAP_TABLE.c.idmap == MAlias.idmap))\
-            .join((MapNode, 
-                   MapNode.idmapnode == SUB_MAP_NODE_MAP_TABLE.c.mapnodeid))\
-            .join((cls, cls.idmap == MapNode.idmap))\
-            .filter(cls.idmap == idmap)\
-            .count() > 0)
+        map_alias = aliased(Map)
+        return (DBSession.query(
+                    map_alias
+                ).join(
+                    (SUB_MAP_NODE_MAP_TABLE, SUB_MAP_NODE_MAP_TABLE.c.idmap == \
+                        map_alias.idmap),
+                    (MapNode, MapNode.idmapnode == \
+                        SUB_MAP_NODE_MAP_TABLE.c.mapnodeid),
+                    (cls, cls.idmap == MapNode.idmap),
+                ).filter(cls.idmap == idmap
+                ).count() > 0)
 
     @classmethod
     def get_submaps(cls, idmap):
         from .mapnode import MapNode
-        MAlias = aliased(Map)
-        return (DBSession.query(MAlias)\
+        map_alias = aliased(Map)
+        return (DBSession.query(map_alias) \
             .join((SUB_MAP_NODE_MAP_TABLE, 
-                   SUB_MAP_NODE_MAP_TABLE.c.idmap == MAlias.idmap))\
+                   SUB_MAP_NODE_MAP_TABLE.c.idmap == map_alias.idmap)) \
             .join((MapNode, 
-                   MapNode.idmapnode == SUB_MAP_NODE_MAP_TABLE.c.mapnodeid))\
-            .join((cls, cls.idmap == MapNode.idmap))\
+                   MapNode.idmapnode == SUB_MAP_NODE_MAP_TABLE.c.mapnodeid)) \
+            .join((cls, cls.idmap == MapNode.idmap)) \
             .filter(cls.idmap == idmap).distinct().order_by(Map.title).all())
-                   
-            
+

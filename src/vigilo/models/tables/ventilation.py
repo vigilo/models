@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Modèle pour la table Ventilation."""
 from sqlalchemy import Column
-from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.types import Integer
 from sqlalchemy.orm import relation
 
 from vigilo.models.session import DeclarativeBase, ForeignKey

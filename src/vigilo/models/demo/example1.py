@@ -39,7 +39,7 @@ def main():
     add_host('localhost')
 
     # Tags
-    add_tag("important", ("messagerie",None))
+    add_tag("important", ("messagerie", None))
     add_tag("mco", ("par.linux1", None))
     add_tag("important", ("proto4", None))
     add_tag("security", ("firewall", None))
@@ -100,31 +100,77 @@ def main():
                          message="Ouch", priority=1)
 
     # State
-    add_svc_state(("host5.example.com", "Interface eth0"), "CRITICAL", "eth0 is down")
-    add_svc_state(("host4.example.com", "Load"), "WARNING", "Load reached a warning level")
+    add_svc_state(
+        ("host5.example.com", "Interface eth0"),
+        "CRITICAL",
+        "eth0 is down")
+    add_svc_state(
+        ("host4.example.com", "Load"),
+        "WARNING",
+        "Load reached a warning level")
 
     # Dependency
-    add_dependency((None, 'Connexion'), ('host2.example.com', 'Interface eth0'))
-    add_dependency((None, 'Connexion'), ('host2.example.com', 'Interface eth1'))
-    add_dependency((None, 'Connexion'), ('host2.example.com', 'Interface eth2'))
-    add_dependency((None, 'Portail web'), (None, 'Connexion'))
-    add_dependency((None, 'Portail web'), ('host2.example.com', 'HTTPD'))
-    add_dependency(('messagerie', 'Processes'), ('messagerie', 'CPU'))
-    add_dependency(('messagerie', 'Processes'), ('messagerie', 'RAM'))
-    add_dependency(('messagerie', 'CPU'), ('messagerie', 'Interface eth0'))
-    add_dependency(('messagerie', 'RAM'), ('messagerie', 'Interface eth0'))
-    add_dependency(('messagerie', 'Interface eth0'), ('routeur1', 'Interface eth1'))
-    add_dependency(('messagerie', 'Interface eth0'), ('routeur2', 'Interface eth1'))
-    add_dependency(('host1.example.com', 'Processes'), ('host1.example.com', 'CPU'))
-    add_dependency(('host1.example.com', 'Processes'), ('host1.example.com', 'RAM'))
-    add_dependency(('host1.example.com', 'CPU'), ('host1.example.com', 'Interface eth0'))
-    add_dependency(('host1.example.com', 'RAM'), ('host1.example.com', 'Interface eth0'))
-    add_dependency(('host1.example.com', 'Interface eth0'), ('firewall', 'Interface eth1'))
-    add_dependency(('firewall', 'Interface eth1'), ('firewall', 'Interface eth0'))
-    add_dependency(('firewall', 'Interface eth0'), ('routeur1', 'Interface eth1'))
-    add_dependency(('firewall', 'Interface eth0'), ('routeur2', 'Interface eth1'))
-    add_dependency(('routeur1', 'Interface eth1'), ('routeur1', 'Interface eth0'))
-    add_dependency(('routeur2', 'Interface eth1'), ('routeur2', 'Interface eth0'))
+    add_dependency(
+        (None, 'Connexion'),
+        ('host2.example.com', 'Interface eth0'))
+    add_dependency(
+        (None, 'Connexion'),
+        ('host2.example.com', 'Interface eth1'))
+    add_dependency(
+        (None, 'Connexion'), ('host2.example.com', 'Interface eth2'))
+    add_dependency(
+    (None, 'Portail web'), (None, 'Connexion'))
+    add_dependency(
+        (None, 'Portail web'),
+        ('host2.example.com', 'HTTPD'))
+    add_dependency(
+        ('messagerie', 'Processes'),
+        ('messagerie', 'CPU'))
+    add_dependency(
+        ('messagerie', 'Processes'),
+        ('messagerie', 'RAM'))
+    add_dependency(
+        ('messagerie', 'CPU'),
+        ('messagerie', 'Interface eth0'))
+    add_dependency(
+        ('messagerie', 'RAM'),
+        ('messagerie', 'Interface eth0'))
+    add_dependency(
+        ('messagerie', 'Interface eth0'),
+        ('routeur1', 'Interface eth1'))
+    add_dependency(
+        ('messagerie', 'Interface eth0'),
+        ('routeur2', 'Interface eth1'))
+    add_dependency(
+        ('host1.example.com', 'Processes'),
+        ('host1.example.com', 'CPU'))
+    add_dependency(
+        ('host1.example.com', 'Processes'),
+        ('host1.example.com', 'RAM'))
+    add_dependency(
+        ('host1.example.com', 'CPU'),
+        ('host1.example.com', 'Interface eth0'))
+    add_dependency(
+        ('host1.example.com', 'RAM'),
+        ('host1.example.com', 'Interface eth0'))
+    add_dependency(
+        ('host1.example.com', 'Interface eth0'),
+        ('firewall', 'Interface eth1'))
+    add_dependency(
+        ('firewall', 'Interface eth1'),
+        ('firewall', 'Interface eth0'))
+    add_dependency(
+        ('firewall', 'Interface eth0'),
+        ('routeur1', 'Interface eth1'))
+    add_dependency(
+        ('firewall', 'Interface eth0'),
+        ('routeur2', 'Interface eth1'))
+    add_dependency(
+        ('routeur1', 'Interface eth1'),
+        ('routeur1', 'Interface eth0'))
+    add_dependency(
+        ('routeur2', 'Interface eth1'),
+        ('routeur2', 'Interface eth0'))
 
     # SupItemGroup
     servers = add_supitemgroup("Serveurs")
@@ -231,13 +277,26 @@ def main():
     add_map2group(maps[2], 'Groupe 2.1')
 
     #n1 = add_node_host("host1.example.com", 'Host 1', maps[0], "ServiceElement", 220, 350, 'server', maps[0:3])
-    n1 = add_node_host("proto4", 'Proto 4', maps[0], "ServiceElement", 220, 350, 'server', maps[0:3])
-    n2 = add_node_host("host2.example.com", 'Host 2', maps[0], "ServiceElement", 350, 140, 'firewall', maps[0:2])
-    n3 = add_node_host("host3.example.com", 'Host 3', maps[0], "ServiceElement", 350, 250, 'switch', maps[0:2])
-    n4 = add_node_host("host4.example.com", 'Host 4', maps[0], "ServiceElement", 590, 140, 'router', maps[0:2])
-    n5 = add_node_host("host5.example.com", 'Host 5', maps[0], "ServiceElement", 480, 350, 'server', maps[0:2])
+    n1 = add_node_host(
+        "proto4", 'Proto 4', maps[0], "ServiceElement",
+        220, 350, 'server', maps[0:3])
+    n2 = add_node_host(
+        "host2.example.com", 'Host 2', maps[0], "ServiceElement",
+        350, 140, 'firewall', maps[0:2])
+    n3 = add_node_host(
+        "host3.example.com", 'Host 3', maps[0], "ServiceElement",
+        350, 250, 'switch', maps[0:2])
+    n4 = add_node_host(
+        "host4.example.com", 'Host 4', maps[0], "ServiceElement",
+        590, 140, 'router', maps[0:2])
+    n5 = add_node_host(
+        "host5.example.com", 'Host 5', maps[0], "ServiceElement",
+        480, 350, 'server', maps[0:2])
 
-    n6 = add_node_lls(('host1.example.com', 'Interface eth0'), "Internet", maps[0], "ServiceElement", 590, 350, 'network-cloud', maps[0:3])
+    n6 = add_node_lls(
+        ('host1.example.com', 'Interface eth0'),
+        "Internet", maps[0], "ServiceElement",
+        590, 350, 'network-cloud', maps[0:3])
 
     l1 = add_mapllslink(n1, n3, ('proto4', 'Interface eth0'), maps[0])
     l2 = add_mapllslink(n2, n3, ('host1.example.com', 'Interface eth0'), maps[0])
@@ -248,11 +307,13 @@ def main():
 
     # Ajout des l'utilisateur 'editor' et 'reader' avec des permissions limitées.
     # Utilisé pour vérifier la gestion des permissions.
-    add_user('editor', u'editor@somedomain.com', u'Editor', u'editpass', 'editors')
+    add_user('editor', u'editor@somedomain.com',
+        u'Editor', u'editpass', 'editors')
     add_usergroup_permission('editors', 'vigimap-access')
     add_usergroup_permission('editors', 'vigimap-edit')
     
-    add_user('reader', u'reader@somedomain.com', u'Reader', u'readpass', 'readers')
+    add_user('reader', u'reader@somedomain.com',
+        u'Reader', u'readpass', 'readers')
     add_usergroup_permission('readers', 'vigimap-access')
 
     add_MapGroupPermission('Groupe 1', 'managers', 'r')

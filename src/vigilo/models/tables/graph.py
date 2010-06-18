@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, DBSession
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.secondary_tables import GRAPH_GROUP_TABLE
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 

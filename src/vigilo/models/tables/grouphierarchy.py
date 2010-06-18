@@ -8,7 +8,7 @@ from sqlalchemy.orm import relation
 from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.group import Group
 
-class GroupHierarchy(DeclarativeBase):
+class GroupHierarchy(DeclarativeBase, object):
     """
     Table permettant de représenter la hiérarchie des C{*Group}es.
     Le graphe représenté par cette table est transitif et réflexif.
