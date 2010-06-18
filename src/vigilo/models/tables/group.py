@@ -122,6 +122,24 @@ class Group(DeclarativeBase, object):
                             ).delete()
         gh = GroupHierarchy(parent=group, child=self, hops=1)
         DBSession.add(gh)
+        
+        # liste des liens enfants de self
+        ghchildren = list(DBSession.query(GroupHierarchy
+                                ).filter(GroupHierarchy.idparent == self.idgroup
+                                ).filter(GroupHierarchy.hops != 0))
+        # ajout des liens hops > 1
+        for gh in DBSession.query(GroupHierarchy
+                                ).filter(GroupHierarchy.idchild == group.idgroup
+                                ).filter(GroupHierarchy.hops > 1):
+            # ajout des liens hops > 1 coté parent pour le groupe self
+            newgh = GroupHierarchy.get_or_create(gh, self, gh.hops + 1)
+            
+            # ajout des liens hops > 1 des enfants de self
+            for gh2 in DBSession.query(GroupHierarchy
+                                    ).filter(GroupHierarchy.idparent == self.idgroup
+                                    ).filter(GroupHierarchy.hops != 0):
+                GroupHierarchy.get_or_create(gh, gh2, gh.hops + gh2.hops)
+        
     
     @classmethod
     def create(cls, name, parent=None, flush=True):
