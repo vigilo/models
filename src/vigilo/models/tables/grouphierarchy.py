@@ -4,7 +4,7 @@
 from sqlalchemy import Column
 from sqlalchemy.types import Integer
 from sqlalchemy.orm import relation
-from sqlalchemy.schema import CheckConstraint
+from sqlalchemy.schema import UniqueConstraint
 
 from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.group import Group
@@ -28,7 +28,7 @@ class GroupHierarchy(DeclarativeBase, object):
     __table_args__ = (
         # Contrainte garantissant qu'un groupe
         # n'a qu'un seul parent.
-#        CheckConstraint(''),
+        UniqueConstraint('idchild', 'hops'),
         {}
     )
 
