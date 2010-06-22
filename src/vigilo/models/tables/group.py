@@ -4,14 +4,13 @@
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
-from sqlalchemy.schema import UniqueConstraint
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
                                                 GRAPH_GROUP_TABLE, \
                                                 SUPITEM_GROUP_TABLE
 
-__all__ = ('SupItemGroup', 'MapGroup')
+__all__ = ('SupItemGroup', 'MapGroup', 'GraphGroup')
 
 class Group(DeclarativeBase, object):
     """
@@ -27,14 +26,10 @@ class Group(DeclarativeBase, object):
         Note: n'utilisez jamais cet attribut dans votre code pour effectuer
         un traitement en fonction du type de groupe. A la place, utilisez
         la fonction isinstance() de Python.
-        Exemple: isinstance(grp, HostGroup).
-    @ivar name: Nom du groupe, unique pour un type de groupe considéré.
+        Exemple : isinstance(grp, HostGroup).
+    @ivar name: Nom du groupe.
     """
     __tablename__ = 'group'
-    __table_args__ = (
-        UniqueConstraint('grouptype', 'name'),
-        {}
-    )
 
     idgroup = Column(
         Integer,
@@ -299,7 +294,7 @@ class SupItemGroup(Group):
             (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
         ).filter(GroupHierarchy.idparent == self.idgroup
         ).filter(GroupHierarchy.hops == 1
-        ).count() > 0 )
+        ).count() > 0)
     
     def get_children(self, hops=1):
         """ renvoie la liste des enfants d'un groupe
@@ -335,17 +330,4 @@ class SupItemGroup(Group):
                 if level in ('all', 'high'):
                     services.append(si)
         return services
-
-    # On surcharge les méthodes de Group qui ne sont pas pertinentes ici
-    # (elles ne gèrent qu'un seul parent, alors qu'un SupItemGroup peut
-    # en avoir plusieurs).
-    def get_parent(self):
-        raise NotImplemented(self.__class__.__name__ +
-                            " has no get_parent() method")
-
-    def set_parent(self, group):
-        raise NotImplemented(self.__class__.__name__ +
-                            " has no set_parent() method")
-
-    parent = property(get_parent, set_parent)
 

@@ -4,6 +4,7 @@
 from sqlalchemy import Column
 from sqlalchemy.types import Integer
 from sqlalchemy.orm import relation
+from sqlalchemy.schema import CheckConstraint
 
 from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.group import Group
@@ -24,6 +25,12 @@ class GroupHierarchy(DeclarativeBase, object):
     """
 
     __tablename__ = 'grouphierarchy'
+    __table_args__ = (
+        # Contrainte garantissant qu'un groupe
+        # n'a qu'un seul parent.
+#        CheckConstraint(''),
+        {}
+    )
 
     idparent = Column(
         Integer,
