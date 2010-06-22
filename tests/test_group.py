@@ -123,8 +123,8 @@ class TestGraphGroup(ModelTest):
         
         # on créé un groupe avec son enfant
         child = self.klass.create(name=u"achild")
-        lchild = self.klass.create(name=u"alittlechild")
-        lchild.set_parent(child)
+        gchild = self.klass.create(name=u"agrandchild")
+        gchild.set_parent(child)
         
         # on raccorde self.obj et l'enfant
         child.set_parent(self.obj)
@@ -142,7 +142,7 @@ class TestGraphGroup(ModelTest):
         # Vérification détaillée d'une partie des liens.
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.parent == child
-                        ).filter(GroupHierarchy.child == lchild
+                        ).filter(GroupHierarchy.child == gchild
                         ).filter(GroupHierarchy.hops == 1
                         ).one()
         
@@ -154,7 +154,7 @@ class TestGraphGroup(ModelTest):
 
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.parent == parent
-                        ).filter(GroupHierarchy.child == lchild
+                        ).filter(GroupHierarchy.child == gchild
                         ).filter(GroupHierarchy.hops == 3
                         ).one()
         
@@ -166,7 +166,7 @@ class TestGraphGroup(ModelTest):
         
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.parent == self.obj
-                        ).filter(GroupHierarchy.child == lchild
+                        ).filter(GroupHierarchy.child == gchild
                         ).filter(GroupHierarchy.hops == 2
                         ).one()
 
