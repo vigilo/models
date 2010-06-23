@@ -138,11 +138,11 @@ class Group(DeclarativeBase, object):
                 # l'arborescence de nos parents [et grands ...] à une
                 # distance augmentée de 1.
                 for c in children:
-                    DBSession.add(GroupHierarchy(
+                    GroupHierarchy.get_or_create(
                         idparent=p.idparent,
                         idchild=c.idchild,
                         hops=p.hops + c.hops + 1,
-                    ))
+                    )
         DBSession.flush()
 
     parent = property(get_parent, set_parent)

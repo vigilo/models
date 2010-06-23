@@ -5,6 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
+from sqlalchemy.orm.exc import NoResultFound
 
 from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.group import Group
@@ -77,18 +78,17 @@ class GroupHierarchy(DeclarativeBase, object):
         super(GroupHierarchy, self).__init__(**kwargs)
 
     @classmethod
-    def get_or_create(cls, parent, child, hops):
+    def get_or_create(cls, hops, **kw):
         """
         création sans doublon
         """
-        q = DBSession.query(cls
-                        ).filter(cls.parent == parent  
-                        ).filter(cls.child == child          
-                        )
-        if q.count() == 0:
-            gh = cls(parent=parent, child=child, hops=hops)
+        q = DBSession.query(cls)
+        for k, v in kw.iteritems():
+            q = q.filter(getattr(cls, k) == v)
+        try:
+            return q.one()
+        except NoResultFound:
+            gh = cls(hops=hops, **kw)
             DBSession.add(gh)
             return gh
-        else:
-            return q.one()
-    
+
