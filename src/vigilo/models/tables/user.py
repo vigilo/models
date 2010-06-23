@@ -32,7 +32,6 @@ class User(DeclarativeBase, object):
 
     __tablename__ = 'user'
 
-    # XXX Faut-il renommer ce champ ?
     user_name = Column(
         Unicode(255),
         unique=True,

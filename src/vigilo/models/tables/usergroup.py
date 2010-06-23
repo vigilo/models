@@ -31,7 +31,6 @@ class UserGroup(DeclarativeBase, object):
         primary_key=True, autoincrement=True,
     )
 
-    # XXX Faut-il renommer ce champ ?
     group_name = Column(
         Unicode(255),
         unique=True, index=True,

@@ -37,7 +37,6 @@ class Permission(DeclarativeBase, object):
         autoincrement=True, primary_key=True, unique=True,
     )
 
-    # XXX Faut-il renommer ce champ ?
     permission_name = Column(
         Unicode(255),
         unique=True, index=True, nullable=False,
