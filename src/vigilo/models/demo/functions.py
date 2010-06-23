@@ -472,12 +472,20 @@ def add_user(username, email, fullname, password, groupname):
         DBSession.add(group) 
     DBSession.flush()
 
+# Ajout d'un groupe d'utilisateurs.
+def add_usergroup(groupname):
+    group = tables.UserGroup(group_name=unicode(groupname))
+    DBSession.merge(group)
+    DBSession.flush()
+
 # Ajout d'une permission dans un groupe de users    
 def add_usergroup_permission(group, perm):
     if isinstance(group, basestring):
         group = tables.UserGroup.by_group_name(unicode(group))
     if isinstance(perm, basestring):
         perm = tables.Permission.by_permission_name(unicode(perm))   
+    if not perm:
+        return
     perm.usergroups.append(group)
     DBSession.add(perm)
     DBSession.flush()

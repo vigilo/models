@@ -37,6 +37,7 @@ def main():
     add_host('routeur2')
     add_host('firewall')
     add_host('localhost')
+    add_host('shows.how.vigigraph.may.make.an.ellipse')
 
     # Tags
     add_tag("important", ("messagerie", None))
@@ -204,6 +205,7 @@ def main():
     add_host2group('par.linux1', 'Serveurs Linux')
     add_host2group('par.unix0', 'Serveurs Linux')
     add_host2group('proto4', 'Serveurs Linux')
+    add_host2group('shows.how.vigigraph.may.make.an.ellipse', 'Serveurs Linux')
     add_host2group('server.mails', 'Serveurs Linux')
     add_host2group('testaix', 'Serveurs Windows')
     add_host2group('testnortel', 'Serveurs Windows')
@@ -234,26 +236,34 @@ def main():
     add_ventilation('localhost', 'localhost', 'rrdgraph')
     add_ventilation('localhost', 'localhost', 'nagios')
     add_ventilation('proto4', 'localhost', 'rrdgraph')
+    add_ventilation('shows.how.vigigraph.may.make.an.ellipse',
+                    'localhost', 'rrdgraph')
 
     # Métrologie
     service1 = ('proto4', 'UpTime')
     service2 = ('proto4', 'Load')
     service3 = ('proto4', 'Interface eth0')
+    service4 = ('shows.how.vigigraph.may.make.an.ellipse', 'UpTime')
     source1 = add_perfdatasource('Load 01', 'proto4')
     source2 = add_perfdatasource('Load 05', 'proto4')
     source3 = add_perfdatasource('Load 15', 'proto4')
     source4 = add_perfdatasource('sysUpTime', 'proto4')
-    source4 = add_perfdatasource('ineth0', 'proto4', max=512000)
-    source4 = add_perfdatasource('outeth0', 'proto4', max=512000)
+    source5 = add_perfdatasource('sysUpTime',
+        'shows.how.vigigraph.may.make.an.ellipse')
+    source6 = add_perfdatasource('ineth0', 'proto4', max=512000)
+    source7 = add_perfdatasource('outeth0', 'proto4', max=512000)
 
     graph_UpTime = add_graph('UpTime')
     graph_Load = add_graph('Load')
+    graph_UpTime2 = add_graph('UpTime')
     add_graph2group(graph_UpTime, 'Graphes')
     add_graph2group(graph_Load, 'Graphes')
+    add_graph2group(graph_UpTime2, 'Graphes')
     add_perfdatasource2graph(source1, graph_Load)
     add_perfdatasource2graph(source2, graph_Load)
     add_perfdatasource2graph(source3, graph_Load)
     add_perfdatasource2graph(source4, graph_UpTime)
+    add_perfdatasource2graph(source5, graph_UpTime2)
 
     # Cartographie
     add_mapgroup('Groupe 1', 'Root')
@@ -305,7 +315,11 @@ def main():
     l5 = add_mapllslink(n5, n1, ('host1.example.com', 'Interface eth0'), maps[0])
     l6 = add_mapllslink(n4, n6, ('host1.example.com', 'Interface eth0'), maps[0])
 
-    # Ajout des l'utilisateur 'editor' et 'reader' avec des permissions limitées.
+    # Ajout des groupes d'utilisateurs 'editors' et 'readers'.
+    add_usergroup('editors')
+    add_usergroup('readers')
+
+    # Ajout des utilisateurs 'editor' et 'reader' avec des permissions limitées.
     # Utilisé pour vérifier la gestion des permissions.
     add_user('editor', u'editor@somedomain.com',
         u'Editor', u'editpass', 'editors')
