@@ -6,6 +6,7 @@ from __future__ import absolute_import
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
+from sqlalchemy.exc import UnboundExecutionError
 
 from vigilo.models.session import DBSession, ForeignKey
 from vigilo.models.tables.secondary_tables import HOST_HOSTCLASS_TABLE
@@ -108,7 +109,10 @@ class Host(SupItem):
         return self.name
 
     def __str__(self):
-        return str(self.name)
+        try:
+            return str(self.name)
+        except UnboundExecutionError:
+            return super(Host, self).__str__()
 
     @classmethod
     def by_host_name(cls, hostname):
@@ -121,9 +125,4 @@ class Host(SupItem):
         @rtype: L{Host}
         """
         return DBSession.query(cls).filter(cls.name == hostname).first()
-    
-    def get_key(self):
-        """ Clé utile pour implémenter la détection de changement.
-        """
-        return "h:%s" % self.name
 

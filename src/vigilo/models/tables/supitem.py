@@ -168,8 +168,3 @@ class SupItem(DeclarativeBase, object):
         """Initialise un objet supervisé."""
         super(SupItem, self).__init__(**kwargs)
     
-    def get_key(self):
-        """ Clé utile pour implémenter la détection de changement.
-        """
-        raise Exception("not implemented in subclass.")
-

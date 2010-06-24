@@ -103,9 +103,4 @@ class ConfItem(DeclarativeBase, object):
         """
         return self.name
 
-    def get_key(self):
-        """
-        Clé unique, utilisée pour implémenter la détection de changement.
-        """
-        return "%s>%s" % (self.supitem.get_key(), self.name)
 

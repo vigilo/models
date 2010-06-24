@@ -5,6 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.types import UnicodeText, Unicode, Integer
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
+from sqlalchemy.exc import UnboundExecutionError
 
 from vigilo.models.session import DBSession, ForeignKey
 from vigilo.models.tables.supitem import SupItem
@@ -72,8 +73,11 @@ class Service(SupItem):
         return self.servicename
 
     def __repr__(self):
-        return "<%s \"%s\">" % (self.__class__.__name__,
-                                str(self.servicename))
+        try:
+            return "<%s \"%s\">" % (self.__class__.__name__,
+                                    str(self.servicename))
+        except UnboundExecutionError:
+            return super(Service, self).__repr__()
 
 
 class LowLevelService(Service):
@@ -159,14 +163,12 @@ class LowLevelService(Service):
         """Représentation unicode de l'objet."""
         return "%s (%s)" % (self.servicename, self.host.name)
     
-    def get_key(self):
-        """ Clé utile pour implémenter la détection de changement.
-        """
-        return "lls:%s:%s" % (self.host.name, self.servicename)
-
     def __repr__(self):
-        return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
-                        str(self.servicename), str(self.host.name))
+        try:
+            return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
+                            str(self.servicename), str(self.host.name))
+        except UnboundExecutionError:
+            return super(LowLevelService, self).__repr__()
     
 
 class HighLevelService(Service):
@@ -251,9 +253,4 @@ class HighLevelService(Service):
         """
         return DBSession.query(cls).filter(
             cls.servicename == servicename).first()
-    
-    def get_key(self):
-        """ Clé utile pour implémenter la détection de changement.
-        """
-        return "hls:%s" % self.servicename
 
