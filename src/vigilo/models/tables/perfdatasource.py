@@ -18,7 +18,7 @@ class PerfDataSource(DeclarativeBase, object):
     @ivar idperfdatasource: Identifiant auto-généré de la source de données.
     @ivar idhost: Identifiant de l'hôte auquel l'indicateur est rattaché.
     @ivar host: Instance de l'hôte auquel l'indicateur est rattaché.
-    @ivar name: Nom de la source de données.
+    @ivar name: Nom de la source de données sur le disque dur.
     @ivar type: Type de la source de données
         (COUNTER, DERIVE, ABSOLUTE, GAUGE).
     @ivar label: Label affiché sur le graphique généré.

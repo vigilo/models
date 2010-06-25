@@ -149,20 +149,6 @@ class User(DeclarativeBase, object):
 
         return result.values()
 
-
-        supitemgroups = DBSession.query(SupItemGroup.idgroup).distinct(
-            ).join(
-                (DataPermission, DataPermission.idgroup == \
-                    SupItemGroup.idgroup),
-                (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
-                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
-                    UserGroup.idgroup),
-            ).filter(
-                USER_GROUP_TABLE.c.username == self.user_name
-            ).all()
-
-        return [sig.idgroup for sig in supitemgroups]
-
     @property
     def groups(self):
         """

@@ -300,12 +300,19 @@ class SupItemGroup(Group):
         """ renvoie la liste des enfants d'un groupe
         """
         from .grouphierarchy import GroupHierarchy
-        return DBSession.query(SupItemGroup).join(
-            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
-        ).filter(GroupHierarchy.idparent == self.idgroup
-        ).filter(GroupHierarchy.hops == 1
-        ).all()
-    
+        children = DBSession.query(SupItemGroup).join(
+                (GroupHierarchy, GroupHierarchy.idchild == \
+                    SupItemGroup.idgroup),
+            ).filter(GroupHierarchy.idparent == self.idgroup)
+
+        # Pas de limite sur la distance, on retourne tous les enfants,
+        # on exclut juste le nœud courant.
+        if not hops:
+            children = children.filter(GroupHierarchy.hops > 0)
+        else:
+            children = children.filter(GroupHierarchy.hops == hops)
+        return children.all()
+
     def get_hosts(self):
         """ renvoie les hôtes appartenant au groupe
         """
