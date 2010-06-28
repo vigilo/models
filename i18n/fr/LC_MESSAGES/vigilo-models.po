@@ -5,32 +5,125 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: vigilo.models\n"
+"Project-Id-Version:  vigilo.models\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
 "POT-Creation-Date: 2010-02-16 09:45+0100\n"
-"PO-Revision-Date: 2010-02-16 09:45+0100\n"
+"PO-Revision-Date: 2010-06-28 11:06+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Generated-By: Babel 0.9.4\n"
 
-#: src/vigilo/models/supitem.py:122
-#, python-format
-msgid "Got a reference to a non configured host (%r)"
-msgstr "L'hôte référencé (%r) n'est pas configuré dans la base de données"
+#: src/vigilo/models/websetup.py:121
+msgid ""
+"Remove closed events which are at least DAYS old. DAYS must be a positive"
+" non-zero integer."
+msgstr ""
+"Supprime les événements clos agés d'au moins DAYS jours. DAYS doit être un "
+"entier strictement positif."
 
-#: src/vigilo/models/supitem.py:134
-#, python-format
-msgid "Got a reference to a non configured high level service (%r)"
-msgstr "Le service de haut niveau référencé (%r) "
-		"n'est pas configuré dans la base de données"
+#: src/vigilo/models/websetup.py:124
+msgid ""
+"Remove closed events, starting with the oldest ones, when the Vigilo "
+"database starts occupying more then SIZE bytes. SIZE must be a positive "
+"non-zero integer."
+msgstr ""
+"Supprime des événements clos, en commençant par les plus agés, tant que la "
+"base de données de Vigilo occupe plus de SIZE octets. SIZE doit être un "
+"entier strictement positif."
 
-#: src/vigilo/models/supitem.py:151
+#: src/vigilo/models/websetup.py:128
+msgid "Load configuration from this file."
+msgstr "Utiliser la configuration définie dans ce fichier."
+
+#: src/vigilo/models/websetup.py:143
+msgid "Too many arguments"
+msgstr "Trop d'arguments"
+
+#: src/vigilo/models/websetup.py:151
+msgid "No database configuration found"
+msgstr "Configuration de la base de données non trouvée"
+
+#: src/vigilo/models/websetup.py:183
 #, python-format
 msgid ""
-"Got a reference to a non configured low level service (%(hostname)r, %"
-"(servicename)r)"
-msgstr "Le service de bas niveau référencé (%(hostname)r, %(servicename)r) "
-		"n'est pas configuré dans la base de données"
+"Deleted %(nb_deleted)d closed events which were at least %(days)d days "
+"old."
+msgstr ""
+"%(nb_deleted)d événements clos agés d'au moins %(days)d jours ont été supprimés".
+
+#: src/vigilo/models/websetup.py:196
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d entries in the history for high level services "
+"which were at least %(days)d days old."
+msgstr ""
+"%(nb_deleted)d entrées dans l'historique des services de haut niveau, "
+"agées d'au moins %(days)d jours ont été supprimées."
+
+#: src/vigilo/models/websetup.py:211
+#, python-format
+msgid ""
+"The database is %(size)d bytes big, which is more than the limit "
+"(%(limit)d bytes). I will now delete old closed events and history "
+"entries to make room for new ones."
+msgstr ""
+"La base de données occupe %(size)d octets, ce qui dépasse la limite "
+"(%(limit)d octets). Je vais supprimer les anciens événements clos "
+"et les entrées d'historique afin de libérer de l'espace."
+
+#: src/vigilo/models/websetup.py:235
+#, python-format
+msgid "Deleted closed event #%d to make room for new events."
+msgstr "Suppression de l'événement clos #%d pour faire de la place."
+
+#: src/vigilo/models/websetup.py:243
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
+"big (limit: %(limit)d bytes)"
+msgstr ""
+"%(nb_deleted)d événements clos supprimés. La base de données occupe désormais "
+"%(size)d octets (limite : %(limit)d octets)"
+
+#: src/vigilo/models/websetup.py:270
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d history entries on high level services. The "
+"database is now %(size)d bytes big (limit: %(limit)d bytes)"
+msgstr ""
+"%(nb_deleted)d entrées d'historique sur les services de haut niveau supprimées. "
+"La database occupe désormais %(size)d octets (limite : %(limit)d octets)"
+
+#: src/vigilo/models/demo/__init__.py:41
+#, python-format
+msgid "No sample selected. Available samples: %s"
+msgstr "Aucun exemple sélectionné. Exemples disponibles : %s"
+
+#: src/vigilo/models/demo/__init__.py:67
+#, python-format
+msgid "Sample '%s' cannot be found."
+msgstr "Exemple '%s' non trouvé."
+
+#: src/vigilo/models/tables/supitem.py:131
+#, python-format
+msgid "Got a reference to a non configured host (%r)"
+msgstr "Réception d'une référence à un hôte non configuré (%r)"
+
+#: src/vigilo/models/tables/supitem.py:143
+#, python-format
+msgid "Got a reference to a non configured high level service (%r)"
+msgstr "Réception d'une référence à un service de haut niveau non configuré (%r)"
+
+#: src/vigilo/models/tables/supitem.py:160
+#, python-format
+msgid ""
+"Got a reference to a non configured low level service (%(hostname)r, "
+"%(servicename)r)"
+msgstr ""
+"Réception d'une référence à un service de bas niveau non configuré "
+"(%(servicename)r sur %(hostname)r)"
+

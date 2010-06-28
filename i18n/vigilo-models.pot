@@ -1,31 +1,110 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translations template for vigilo-models.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the vigilo-models project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
-msgid   ""
-msgstr  "Project-Id-Version: vigilo.models\n"
-        "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-        "POT-Creation-Date: 2010-02-16 09:45+0100\n"
-        "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-        "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-        "Language-Team: LANGUAGE <LL@li.org>\n"
-        "MIME-Version: 1.0\n"
-        "Content-Type: text/plain; charset=UTF-8\n"
-        "Content-Transfer-Encoding: 8bit\n"
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: vigilo-models 2.0.0\n"
+"Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
+"POT-Creation-Date: 2010-06-28 11:06+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.4\n"
 
-#: src/vigilo/models/supitem.py:122
-#, python-format
-msgid   "Got a reference to a non configured host (%r)"
-msgstr  ""
+#: src/vigilo/models/websetup.py:121
+msgid ""
+"Remove closed events which are at least DAYS old. DAYS must be a positive "
+"non-zero integer."
+msgstr ""
 
-#: src/vigilo/models/supitem.py:134
-#, python-format
-msgid   "Got a reference to a non configured high level service (%r)"
-msgstr  ""
+#: src/vigilo/models/websetup.py:124
+msgid ""
+"Remove closed events, starting with the oldest ones, when the Vigilo database"
+" starts occupying more then SIZE bytes. SIZE must be a positive non-zero "
+"integer."
+msgstr ""
 
-#: src/vigilo/models/supitem.py:151
+#: src/vigilo/models/websetup.py:128
+msgid "Load configuration from this file."
+msgstr ""
+
+#: src/vigilo/models/websetup.py:143
+msgid "Too many arguments"
+msgstr ""
+
+#: src/vigilo/models/websetup.py:151
+msgid "No database configuration found"
+msgstr ""
+
+#: src/vigilo/models/websetup.py:183
 #, python-format
-msgid   "Got a reference to a non configured low level service (%(hostname)r, %"
-        "(servicename)r)"
-msgstr  ""
+msgid "Deleted %(nb_deleted)d closed events which were at least %(days)d days old."
+msgstr ""
+
+#: src/vigilo/models/websetup.py:196
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d entries in the history for high level services which "
+"were at least %(days)d days old."
+msgstr ""
+
+#: src/vigilo/models/websetup.py:211
+#, python-format
+msgid ""
+"The database is %(size)d bytes big, which is more than the limit (%(limit)d "
+"bytes). I will now delete old closed events and history entries to make room "
+"for new ones."
+msgstr ""
+
+#: src/vigilo/models/websetup.py:235
+#, python-format
+msgid "Deleted closed event #%d to make room for new events."
+msgstr ""
+
+#: src/vigilo/models/websetup.py:243
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes big "
+"(limit: %(limit)d bytes)"
+msgstr ""
+
+#: src/vigilo/models/websetup.py:270
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d history entries on high level services. The database "
+"is now %(size)d bytes big (limit: %(limit)d bytes)"
+msgstr ""
+
+#: src/vigilo/models/demo/__init__.py:41
+#, python-format
+msgid "No sample selected. Available samples: %s"
+msgstr ""
+
+#: src/vigilo/models/demo/__init__.py:67
+#, python-format
+msgid "Sample '%s' cannot be found."
+msgstr ""
+
+#: src/vigilo/models/tables/supitem.py:131
+#, python-format
+msgid "Got a reference to a non configured host (%r)"
+msgstr ""
+
+#: src/vigilo/models/tables/supitem.py:143
+#, python-format
+msgid "Got a reference to a non configured high level service (%r)"
+msgstr ""
+
+#: src/vigilo/models/tables/supitem.py:160
+#, python-format
+msgid ""
+"Got a reference to a non configured low level service (%(hostname)r, "
+"%(servicename)r)"
+msgstr ""
+
