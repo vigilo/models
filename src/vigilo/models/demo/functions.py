@@ -252,6 +252,7 @@ def add_map(name):
                 background_repeat=u'no-repeat',
         )
         DBSession.add(m)
+        DBSession.flush()
     return m
 
 def add_mapgroup(name, parent=None):

@@ -16,6 +16,7 @@ from vigilo.models.tables.service import Service
 __all__ = ('MapNodeHost', 'MapNodeService', 'MapNodeLls', 'MapNodeHls', 
            'MapNodePerformance')
 
+
 class MapNode(DeclarativeBase, object):
     """
     Classe abstraite pour représenter un nœud présent sur une carte

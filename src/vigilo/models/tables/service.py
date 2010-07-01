@@ -5,13 +5,41 @@ from sqlalchemy import Column
 from sqlalchemy.types import UnicodeText, Unicode, Integer
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
-from sqlalchemy.exc import UnboundExecutionError
+from sqlalchemy.orm.interfaces import MapperExtension
+from sqlalchemy.orm import EXT_CONTINUE
 
 from vigilo.models.session import DBSession, ForeignKey
 from vigilo.models.tables.supitem import SupItem
 from vigilo.models.tables.host import Host
 
 __all__ = ('Service', )
+
+
+class CascadeToMapNodeService(MapperExtension):
+    """
+    Force la propagation de la suppression d'un service à toutes ses
+    représentations cartographiques (MapNodeService).
+
+    Sans cela, la suppression du MapNodeService est bien faite par PGSQL grâce
+    au "ON DELETE CASCADE", mais l'instance parente (MapNode) est laissée en
+    place.
+
+    Pour les détails, voir le ticket #57.
+    """
+    def before_delete(self, mapper, connection, instance):
+        """
+        On utilise before_delete() plutôt qu' after_delete() parce qu'avec
+        after_delete() le ON DELETE CASCADE s'est déjà produit et on a plus de
+        MapNodeService correspondant en base.
+        """
+        from vigilo.models.tables.mapnode import MapNodeService
+        mapnodes = DBSession.query(MapNodeService).filter_by(
+                        idservice=instance.idservice
+                    ).all()
+        for mapnode in mapnodes:
+            DBSession.delete(mapnode)
+        return EXT_CONTINUE
+
 
 class Service(SupItem):
     """
@@ -28,6 +56,7 @@ class Service(SupItem):
         (ex: unicité du nom du service pour un hôte donné).
     """
     __tablename__ = 'service'
+    __mapper_args__ = {'extension': CascadeToMapNodeService()}
 
     idservice = Column(
         Integer,
@@ -76,7 +105,7 @@ class Service(SupItem):
         try:
             return "<%s \"%s\">" % (self.__class__.__name__,
                                     str(self.servicename))
-        except UnboundExecutionError:
+        except Exception:
             return super(Service, self).__repr__()
 
 
@@ -167,7 +196,7 @@ class LowLevelService(Service):
         try:
             return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
                             str(self.servicename), str(self.host.name))
-        except UnboundExecutionError:
+        except Exception:
             return super(LowLevelService, self).__repr__()
     
 

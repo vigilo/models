@@ -6,13 +6,41 @@ from __future__ import absolute_import
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
-from sqlalchemy.exc import UnboundExecutionError
+from sqlalchemy.orm.interfaces import MapperExtension
+from sqlalchemy.orm import EXT_CONTINUE
 
 from vigilo.models.session import DBSession, ForeignKey
 from vigilo.models.tables.secondary_tables import HOST_HOSTCLASS_TABLE
 from vigilo.models.tables.supitem import SupItem
 
 __all__ = ('Host', )
+
+
+class CascadeToMapNodeHost(MapperExtension):
+    """
+    Force la propagation de la suppression d'un hôte à toutes ses
+    représentations cartographiques (MapNodeHost).
+
+    Sans cela, la suppression du MapNodeHost est bien faite par PGSQL grâce au
+    "ON DELETE CASCADE", mais l'instance parente (MapNode) est laissée en
+    place.
+
+    Pour les détails, voir le ticket #57.
+    """
+    def before_delete(self, mapper, connection, instance):
+        """
+        On utilise before_delete() plutôt qu' after_delete() parce qu'avec
+        after_delete() le ON DELETE CASCADE s'est déjà produit et on a plus de
+        MapNodeHost correspondant en base.
+        """
+        from vigilo.models.tables.mapnode import MapNodeHost
+        mapnodes = DBSession.query(MapNodeHost).filter_by(
+                            idhost=instance.idhost
+                    ).all()
+        for mapnode in mapnodes:
+            DBSession.delete(mapnode)
+        return EXT_CONTINUE
+
 
 class Host(SupItem):
     """
@@ -36,7 +64,9 @@ class Host(SupItem):
     @ivar services: Liste des services de bas niveau configurés sur cet hôte.
     """
     __tablename__ = 'host'
-    __mapper_args__ = {'polymorphic_identity': u'host'}
+    __mapper_args__ = {'polymorphic_identity': u'host',
+                       'extension': CascadeToMapNodeHost(),
+                      }
 
     idhost = Column(
         Integer,
@@ -111,7 +141,7 @@ class Host(SupItem):
     def __str__(self):
         try:
             return str(self.name)
-        except UnboundExecutionError:
+        except Exception:
             return super(Host, self).__str__()
 
     @classmethod
