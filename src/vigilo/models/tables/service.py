@@ -15,7 +15,7 @@ from vigilo.models.tables.host import Host
 __all__ = ('Service', )
 
 
-class CascadeToMapNodeService(MapperExtension):
+class CascadeToMapNodeLls(MapperExtension):
     """
     Force la propagation de la suppression d'un service à toutes ses
     représentations cartographiques (MapNodeService).
@@ -32,8 +32,33 @@ class CascadeToMapNodeService(MapperExtension):
         after_delete() le ON DELETE CASCADE s'est déjà produit et on a plus de
         MapNodeService correspondant en base.
         """
-        from vigilo.models.tables.mapnode import MapNodeService
-        mapnodes = DBSession.query(MapNodeService).filter_by(
+        from vigilo.models.tables.mapnode import MapNodeLls
+        mapnodes = DBSession.query(MapNodeLls).filter_by(
+                        idservice=instance.idservice
+                    ).all()
+        for mapnode in mapnodes:
+            DBSession.delete(mapnode)
+        return EXT_CONTINUE
+
+class CascadeToMapNodeHls(MapperExtension):
+    """
+    Force la propagation de la suppression d'un service à toutes ses
+    représentations cartographiques (MapNodeService).
+
+    Sans cela, la suppression du MapNodeService est bien faite par PGSQL grâce
+    au "ON DELETE CASCADE", mais l'instance parente (MapNode) est laissée en
+    place.
+
+    Pour les détails, voir le ticket #57.
+    """
+    def before_delete(self, mapper, connection, instance):
+        """
+        On utilise before_delete() plutôt qu' after_delete() parce qu'avec
+        after_delete() le ON DELETE CASCADE s'est déjà produit et on a plus de
+        MapNodeService correspondant en base.
+        """
+        from vigilo.models.tables.mapnode import MapNodeHls
+        mapnodes = DBSession.query(MapNodeHls).filter_by(
                         idservice=instance.idservice
                     ).all()
         for mapnode in mapnodes:
@@ -56,7 +81,6 @@ class Service(SupItem):
         (ex: unicité du nom du service pour un hôte donné).
     """
     __tablename__ = 'service'
-    __mapper_args__ = {'extension': CascadeToMapNodeService()}
 
     idservice = Column(
         Integer,
@@ -126,7 +150,8 @@ class LowLevelService(Service):
         UniqueConstraint('servicename', 'idhost'),
         {}
     )
-    __mapper_args__ = {'polymorphic_identity': u'lowlevel'}
+    __mapper_args__ = {'polymorphic_identity': u'lowlevel',
+                       'extension': CascadeToMapNodeLls()}
 
     idservice = Column(
         Integer,
@@ -221,7 +246,8 @@ class HighLevelService(Service):
         celui-ci.
     """
     __tablename__ = 'highlevelservice'
-    __mapper_args__ = {'polymorphic_identity': u'highlevel'}
+    __mapper_args__ = {'polymorphic_identity': u'highlevel',
+                       'extension': CascadeToMapNodeHls()}
 
     idservice = Column(
         Integer,
