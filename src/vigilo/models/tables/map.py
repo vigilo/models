@@ -8,6 +8,7 @@ from sqlalchemy.orm import relation, aliased
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
                                                 SUB_MAP_NODE_MAP_TABLE
+#from vigilo.models.tables.group import MapGroup
 
 __all__ = ('Map', )
 
@@ -76,6 +77,30 @@ class Map(DeclarativeBase, object):
         @rtype: C{unicode}
         """
         return self.title
+
+    @classmethod
+    def by_group_and_title(cls, group, maptitle):
+        """
+        Renvoie la carte dont le titre est L{maptitle} et qui appartient
+        au groupe L{group}.
+
+        @param group: Nom, identifiant ou instance du groupe.
+        @type group: C{unicode} ou C{int} ou C{MapGroup}
+        @param maptitle: Titre de la carte voulue.
+        @type maptitle: C{unicode}
+        @return: L'instance correspondant à la carte demandée.
+        @rtype: L{Map}
+        @note: En pratique, le couple groupe/titre n'est pas unique,
+            mais l'utilisateur n'a aucun intérêt à avoir deux cartes
+            portant le même titre dans le même groupe, donc on devrait
+            être assez tranquilles.
+        """
+        return DBSession.query(cls
+            ).join(
+                (MAP_GROUP_TABLE, MAP_GROUP_TABLE.c.idmap == cls.idmap),
+            ).filter(cls.title == maptitle
+            ).filter(MAP_GROUP_TABLE.c.idgroup == group.idgroup
+            ).first()
 
     @classmethod
     def by_map_title(cls, maptitle):
