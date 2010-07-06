@@ -113,18 +113,11 @@ def add_tag2supitem(tag, supitem):
 #
 
 def add_supitemgroup(name, parent=None):
-    g = DBSession.query(tables.SupItemGroup).filter(
-            tables.SupItemGroup.name == unicode(name)
-        ).first()
+    name = unicode(name)
+    g = tables.SupItemGroup.by_parent_and_name(parent, name)
     if not g:
-        if parent:
-            g = tables.SupItemGroup(name=unicode(name),
-                                 idparent=parent.idgroup)
-        else:
-            g = tables.SupItemGroup(name=unicode(name))
+        g = tables.SupItemGroup.create(name, parent)
         DBSession.add(g)
-        DBSession.add(tables.grouphierarchy.GroupHierarchy(
-                      parent=g, child=g, hops=0))
         DBSession.flush()
     return g
 
@@ -133,8 +126,7 @@ def add_supitemgroup_parent(child, parent):
         child = tables.SupItemGroup.by_group_name(unicode(child))
     if isinstance(parent, basestring):
         parent = tables.SupItemGroup.by_group_name(unicode(parent))
-    tables.grouphierarchy.GroupHierarchy.get_or_create(
-                        parent=parent, child=child, hops=1)
+    child.set_parent(parent)
     DBSession.flush()
 
 def add_supitemgrouppermission(group, usergroup, access='r'):
@@ -257,7 +249,7 @@ def add_map(name):
 
 def add_mapgroup(name, parent=None):
     name = unicode(name)
-    g = tables.MapGroup.by_group_name(name)
+    g = tables.MapGroup.by_parent_and_name(parent, name)
     if not g:
         if parent:
             if isinstance(parent, basestring):
@@ -410,11 +402,11 @@ def add_perfdatasource2graph(ds, graph):
         graph.perfdatasources.append(ds)
         DBSession.flush()
 
-def add_graphgroup(name):
+def add_graphgroup(name, parent):
     name = unicode(name)
-    g = tables.GraphGroup.by_group_name(name)
+    g = tables.GraphGroup.by_parent_and_name(parent, name)
     if not g:
-        g = tables.GraphGroup(name=name)
+        g = tables.GraphGroup.create(name, parent)
         DBSession.add(g)
         DBSession.flush()
     return g

@@ -3,7 +3,8 @@
 """Modèle pour la table Group"""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation
+from sqlalchemy.orm import relation, aliased
+from sqlalchemy.sql.expression import exists, not_
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
@@ -272,7 +273,41 @@ class Group(DeclarativeBase, object):
 
     @classmethod
     def by_parent_and_name(cls, parent, name):
+        """
+        Renvoie le groupe dont le nom est L{groupname} et qui a L{parent}
+        pour parent.
+
+        @param cls: La classe à utiliser, c'est-à-dire une classe
+            qui hérite de L{Group}.
+        @type cls: C{class}
+        @param parent: Instance du parent du groupe demandé ou C{None} pour
+            rechercher un groupe au sommet de la hiérarchie.
+        @type parent: L{Group} ou C{None}
+        @param groupname: Le nom du groupe que l'on souhaite récupérer.
+        @type groupname: C{unicode}
+        @return: Le groupe demandé.
+        @rtype: L{Group} ou C{None}
+        """
         from .grouphierarchy import GroupHierarchy
+
+        # Recherche d'un groupe au sommet de la hiérarchie.
+        if parent is None:
+            cls_alias1 = aliased(cls)
+            cls_alias2 = aliased(cls)
+            # Retourne le groupe de la classe demandée portant ce nom
+            # tel qu'il n'existe pas de groupe qui soit marqué comme
+            # étant un parent du groupe retenu.
+            return DBSession.query(
+                    cls_alias1,
+                ).filter(cls_alias1.name == name
+                ).filter(
+                    not_(exists(
+                        ).where(cls_alias1.idgroup == cls_alias2.idgroup
+                        ).where(GroupHierarchy.hops > 0
+                        ).where(GroupHierarchy.idchild == cls_alias2.idgroup)
+                    )
+                ).first()
+
         return DBSession.query(cls
                     ).join(
                         (GroupHierarchy, GroupHierarchy.idchild == cls.idgroup)

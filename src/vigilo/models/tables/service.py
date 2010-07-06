@@ -33,9 +33,9 @@ class CascadeToMapNodeLls(MapperExtension):
         MapNodeService correspondant en base.
         """
         from vigilo.models.tables.mapnode import MapNodeLls
-        mapnodes = DBSession.query(MapNodeLls).filter_by(
-                        idservice=instance.idservice
-                    ).all()
+        mapnodes = DBSession.query(MapNodeLls).filter(
+                MapNodeLls.idservice == instance.idservice
+            ).all()
         for mapnode in mapnodes:
             DBSession.delete(mapnode)
         return EXT_CONTINUE
@@ -58,9 +58,9 @@ class CascadeToMapNodeHls(MapperExtension):
         MapNodeService correspondant en base.
         """
         from vigilo.models.tables.mapnode import MapNodeHls
-        mapnodes = DBSession.query(MapNodeHls).filter_by(
-                        idservice=instance.idservice
-                    ).all()
+        mapnodes = DBSession.query(MapNodeHls).filter(
+                MapNodeHls.idservice == instance.idservice
+            ).all()
         for mapnode in mapnodes:
             DBSession.delete(mapnode)
         return EXT_CONTINUE
@@ -150,8 +150,10 @@ class LowLevelService(Service):
         UniqueConstraint('servicename', 'idhost'),
         {}
     )
-    __mapper_args__ = {'polymorphic_identity': u'lowlevel',
-                       'extension': CascadeToMapNodeLls()}
+    __mapper_args__ = {
+        'polymorphic_identity': u'lowlevel',
+       'extension': CascadeToMapNodeLls(),
+    }
 
     idservice = Column(
         Integer,
@@ -223,7 +225,7 @@ class LowLevelService(Service):
                             str(self.servicename), str(self.host.name))
         except Exception:
             return super(LowLevelService, self).__repr__()
-    
+
 
 class HighLevelService(Service):
     """
@@ -246,8 +248,10 @@ class HighLevelService(Service):
         celui-ci.
     """
     __tablename__ = 'highlevelservice'
-    __mapper_args__ = {'polymorphic_identity': u'highlevel',
-                       'extension': CascadeToMapNodeHls()}
+    __mapper_args__ = {
+        'polymorphic_identity': u'highlevel',
+        'extension': CascadeToMapNodeHls(),
+    }
 
     idservice = Column(
         Integer,

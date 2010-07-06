@@ -6,20 +6,21 @@ from vigilo.models.session import DBSession
 
 from vigilo.models.tables import GraphGroup, MapGroup, SupItemGroup
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
+from vigilo.models.demo.functions import add_graphgroup, \
+                                        add_supitemgroup, \
+                                        add_mapgroup
 
 from controller import ModelTest
 
 class TestGraphGroup(ModelTest):
-    """Test de la table Group"""
+    """Test de la table GraphGroup"""
     
     # Group est abstraite, on teste donc avec une classe dérivée
     klass = GraphGroup
+    creator = add_graphgroup
     attrs = {
         'name': u'graphgroup'
     }
-
-    def __init__(self):
-        ModelTest.__init__(self)
 
     def setup(self):
         """Set up the fixture used to test the model."""
@@ -112,7 +113,6 @@ class TestGraphGroup(ModelTest):
         assert_equal(self.obj.get_parent(), None)
         assert_equal(self.obj.has_parent(), False)
 
-
     def test_set_parent2(self):
         """ test méthode set_parent avec hiérarchies coté enfant et parent
         """
@@ -170,40 +170,8 @@ class TestGraphGroup(ModelTest):
                         ).filter(GroupHierarchy.hops == 2
                         ).one()
 
-# On reprend les tests de GraphGroup.
-class TestMapGroup(TestGraphGroup):
-    """Test de la table MapGroup"""
-
-    klass = MapGroup
-    attrs = {
-        'name': u'mapgroup'
-    }
-
-    def __init__(self):
-        ModelTest.__init__(self)
-
-class TestSupItemGroups(ModelTest):
-    """Test de la table hostgroup"""
-
-    klass = SupItemGroup
-    attrs = {
-        'name': u'hostgroup',
-    }
-
-    def __init__(self):
-        ModelTest.__init__(self)
-    
     def test_get_top_groups(self):
         """Test méthode get_top_groups"""
-        assert_equal(self.obj, DBSession.query(SupItemGroup).first())
-
-        DBSession.add(GroupHierarchy(
-            parent=self.obj,
-            child=self.obj,
-            hops=0,
-        ))
-        DBSession.flush()
-
         tops = self.klass.get_top_groups()
         assert_equal(len(tops), 1)
         assert_equal(tops[0], self.obj)
@@ -237,9 +205,35 @@ class TestSupItemGroups(ModelTest):
         DBSession.flush()
         
         assert_equal( [child, ], self.obj.get_children() )
-    
-    def test_get_hosts(self):
-        """
-        """
-        assert_equal( [], self.obj.get_hosts() )
+
+    def test_search_for_groups(self):
+        """Teste la récupération de groupes par nom/parent."""
+        root = self.creator.im_func(u'TestRoot', None)
+        child = self.creator.im_func(u'TestChild', root)
+        fake = self.creator.im_func(u'TestRoot', root)
+
+        # Récupération de la racine.
+        assert_equal(root, self.klass.by_parent_and_name(None, u'TestRoot'))
+        # Récupération des enfants.
+        assert_equal(child, self.klass.by_parent_and_name(root, u'TestChild'))
+        assert_equal(fake, self.klass.by_parent_and_name(root, u'TestRoot'))
+
+# On reprend les tests de GraphGroup.
+class TestMapGroup(TestGraphGroup):
+    """Test de la table MapGroup"""
+
+    klass = MapGroup
+    creator = add_mapgroup
+    attrs = {
+        'name': u'mapgroup'
+    }
+
+class TestSupItemGroups(TestGraphGroup):
+    """Test de la table SupItemGroup"""
+
+    klass = SupItemGroup
+    creator = add_supitemgroup
+    attrs = {
+        'name': u'supitemgorup',
+    }
 

@@ -34,9 +34,9 @@ class CascadeToMapNodeHost(MapperExtension):
         MapNodeHost correspondant en base.
         """
         from vigilo.models.tables.mapnode import MapNodeHost
-        mapnodes = DBSession.query(MapNodeHost).filter_by(
-                            idhost=instance.idhost
-                    ).all()
+        mapnodes = DBSession.query(MapNodeHost).filter(
+                MapNodeHost.idhost == instance.idhost
+            ).all()
         for mapnode in mapnodes:
             DBSession.delete(mapnode)
         return EXT_CONTINUE
@@ -64,9 +64,10 @@ class Host(SupItem):
     @ivar services: Liste des services de bas niveau configurés sur cet hôte.
     """
     __tablename__ = 'host'
-    __mapper_args__ = {'polymorphic_identity': u'host',
-                       'extension': CascadeToMapNodeHost(),
-                      }
+    __mapper_args__ = {
+        'polymorphic_identity': u'host',
+        'extension': CascadeToMapNodeHost(),
+    }
 
     idhost = Column(
         Integer,
@@ -138,7 +139,7 @@ class Host(SupItem):
         """
         return self.name
 
-    def __str__(self):
+    def __repr__(self):
         try:
             return str(self.name)
         except Exception:

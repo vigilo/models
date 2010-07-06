@@ -119,7 +119,8 @@ class User(DeclarativeBase, object):
         result = {}
         columns = None
 
-        # Groupes de cartes auxquels l'utilisateur a directement accès.
+        # Groupes d'éléments supervisés auxquels
+        # l'utilisateur a directement accès.
         direct = DBSession.query(SupItemGroup.idgroup).distinct(
             ).join(
                 (DataPermission, DataPermission.idgroup == \
@@ -132,8 +133,8 @@ class User(DeclarativeBase, object):
             ).all()
         direct_ids = [sig.idgroup for sig in direct]
 
-        # Groupes de cartes auxquels l'utilisateur a accès indirectement
-        # (droit de passage, mais pas de droit de lecture).
+        # Groupes d'éléments supervisés auxquels l'utilisateur a accès
+        # indirectement (droit de passage, mais pas de droit de lecture).
         indirect = DBSession.query(SupItemGroup.idgroup).distinct(
             ).join(
                 (GroupHierarchy, GroupHierarchy.idparent == \

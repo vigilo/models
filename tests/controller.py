@@ -55,7 +55,7 @@ class ModelTest(object):
     def do_get_dependencies(self):
         """
         Use this method to pull in other objects that need to be created
-        for this object to be build properly
+        for this object to be built properly.
         """
         DBSession.add(StateName(statename=u'OK', order=1))
         DBSession.add(StateName(statename=u'UNKNOWN', order=2))
