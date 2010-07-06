@@ -69,8 +69,7 @@ setup(name='vigilo-models',
         "nose >= 0.10.4",
         "WebHelpers >= 0.6.4",
         "repoze.who-testutil>=1.0b2",
-        "",
-        "",
+        "SymbolType >= 1.0",
     ],
     extras_require ={
         'tests': tests_require
