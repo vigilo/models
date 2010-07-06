@@ -72,15 +72,9 @@ class Group(DeclarativeBase, object):
 
     def __repr__(self):
         return "<%s \"%s\">" % (self.__class__.__name__, str(self.name))
-    
-    def remove_children(self):
-        """
-        """
-        from .grouphierarchy import GroupHierarchy
-        DBSession.query(GroupHierarchy)\
-            .filter(GroupHierarchy.idparent == self.idgroup)\
-            .delete()
-    
+
+    # Parents
+
     def has_parent(self):
         from .grouphierarchy import GroupHierarchy
         return (DBSession.query(GroupHierarchy)\
@@ -146,8 +140,62 @@ class Group(DeclarativeBase, object):
         DBSession.flush()
 
     parent = property(get_parent, set_parent)
+
+    # Fils
+
+    def has_children(self):
+        """ renvoie True si le groupe a des enfants
+        """
+        from .grouphierarchy import GroupHierarchy
+        return ( DBSession.query(self.__class__).join(
+            (GroupHierarchy, GroupHierarchy.idchild == self.__class__.idgroup),
+        ).filter(GroupHierarchy.idparent == self.idgroup
+        ).filter(GroupHierarchy.hops == 1
+        ).count() > 0)
     
-    
+    def get_children(self, hops=1):
+        """ renvoie la liste des enfants d'un groupe
+        """
+        from .grouphierarchy import GroupHierarchy
+        children = DBSession.query(self.__class__).join(
+                (GroupHierarchy, GroupHierarchy.idchild == \
+                    self.__class__.idgroup),
+            ).filter(GroupHierarchy.idparent == self.idgroup
+            ).order_by(self.__class__.name.asc())
+
+        # Pas de limite sur la distance, on retourne tous les enfants,
+        # on exclut juste le nœud courant.
+        if not hops:
+            children = children.filter(GroupHierarchy.hops > 0)
+        else:
+            children = children.filter(GroupHierarchy.hops == hops)
+        return children.all()
+
+    @property
+    def children(self):
+        return self.get_children()
+
+    def get_all_children(self):
+        """ renvoie la liste  des descendants
+        """
+        from .grouphierarchy import GroupHierarchy
+        children = DBSession.query(
+                self.__class__
+            ).distinct(
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idchild == self.__class__.idgroup)
+            ).filter(GroupHierarchy.idparent == self.idgroup
+            ).filter(GroupHierarchy.hops > 0).all()
+        return children
+
+    def remove_children(self):
+        from .grouphierarchy import GroupHierarchy
+        DBSession.query(GroupHierarchy)\
+            .filter(GroupHierarchy.idparent == self.idgroup)\
+            .delete()
+
+    # Méthodes de classe
+
     @classmethod
     def create(cls, name, parent=None, flush=True):
         """ méthode de création d'un groupe.
@@ -184,18 +232,6 @@ class Group(DeclarativeBase, object):
             DBSession.flush()
         return group
     
-    def get_all_children(self):
-        """ renvoie la liste  des descendants
-        """
-        from .grouphierarchy import GroupHierarchy
-        children = DBSession.query(
-                self.__class__
-            ).distinct(
-            ).join(
-                (GroupHierarchy, GroupHierarchy.idchild == self.__class__.idgroup)
-            ).filter(GroupHierarchy.hops > 0)
-        return children
-
     @classmethod
     def get_top_groups(cls):
         """
@@ -234,6 +270,18 @@ class Group(DeclarativeBase, object):
         """
         return DBSession.query(cls).filter(cls.name == groupname).first()
 
+    @classmethod
+    def by_parent_and_name(cls, parent, name):
+        from .grouphierarchy import GroupHierarchy
+        return DBSession.query(cls
+                    ).join(
+                        (GroupHierarchy, GroupHierarchy.idchild == cls.idgroup)
+                    ).filter(
+                        GroupHierarchy.idparent == parent.idgroup
+                    ).filter(GroupHierarchy.hops == 1
+                    ).filter(cls.name == name).first()
+
+
 class MapGroup(Group):
     """
     Groupe de cartes.
@@ -245,19 +293,10 @@ class MapGroup(Group):
 
     __mapper_args__ = {'polymorphic_identity': u'mapgroup'}
 
-    @property
-    def subgroups(self):
-        from .grouphierarchy import GroupHierarchy
-        return DBSession.query(MapGroup).join(
-            (GroupHierarchy, GroupHierarchy.idchild == MapGroup.idgroup),
-        ).filter(GroupHierarchy.idparent == self.idgroup
-        ).filter(GroupHierarchy.hops == 1
-        ).order_by(MapGroup.name.asc()
-        ).all()
-
     maps = relation('Map', secondary=MAP_GROUP_TABLE,
                     back_populates='groups',
-                    order_by='Map.title')
+                    order_by='Map.title',
+                    cascade="all")
 
 class GraphGroup(Group):
     """
@@ -286,55 +325,9 @@ class SupItemGroup(Group):
     supitems = relation('SupItem', secondary=SUPITEM_GROUP_TABLE,
                 back_populates='groups')
     
-    def has_children(self):
-        """ renvoie True si le groupe a des enfants
-        """
-        from .grouphierarchy import GroupHierarchy
-        return ( DBSession.query(SupItemGroup).join(
-            (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
-        ).filter(GroupHierarchy.idparent == self.idgroup
-        ).filter(GroupHierarchy.hops == 1
-        ).count() > 0)
+    hosts = relation('Host', secondary=SUPITEM_GROUP_TABLE)
     
-    def get_children(self, hops=1):
-        """ renvoie la liste des enfants d'un groupe
-        """
-        from .grouphierarchy import GroupHierarchy
-        children = DBSession.query(SupItemGroup).join(
-                (GroupHierarchy, GroupHierarchy.idchild == \
-                    SupItemGroup.idgroup),
-            ).filter(GroupHierarchy.idparent == self.idgroup)
-
-        # Pas de limite sur la distance, on retourne tous les enfants,
-        # on exclut juste le nœud courant.
-        if not hops:
-            children = children.filter(GroupHierarchy.hops > 0)
-        else:
-            children = children.filter(GroupHierarchy.hops == hops)
-        return children.all()
-
-    def get_hosts(self):
-        """ renvoie les hôtes appartenant au groupe
-        """
-        from vigilo.models.tables import Host
-        hosts = []
-        for si in self.supitems:
-            if si.__class__ == Host:
-                hosts.append(si)
-        return hosts
+    lls = relation('LowLevelService', secondary=SUPITEM_GROUP_TABLE)
     
-    def get_services(self, level='all'):
-        """ renvoie les services appartenant au groupe
-        level = all | low | high
-        """
-        from vigilo.models.tables import LowLevelService, HighLevelService
-        services = []
-        for si in self.supitems:
-            if si.__class__ == LowLevelService:
-                if level in ('all', 'low'):
-                    services.append(si)
-            elif si.__class__ == HighLevelService:
-                if level in ('all', 'high'):
-                    services.append(si)
-        return services
+    hls = relation('HighLevelService', secondary=SUPITEM_GROUP_TABLE)
 
