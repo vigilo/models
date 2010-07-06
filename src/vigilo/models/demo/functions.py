@@ -232,37 +232,28 @@ def add_svc_state(service, statename, message):
 #
 
 def add_map(name):
-    m = tables.Map.by_map_title(unicode(name))
-    if not m:
-        m = tables.Map(
-                mtime=datetime.today(),
-                title=unicode(name),
-                generated=True,
-                background_color=u'',
-                background_image=u'France',
-                background_position=u'top right',
-                background_repeat=u'no-repeat',
-        )
-        DBSession.add(m)
-        DBSession.flush()
+    m = tables.Map(
+            mtime=datetime.today(),
+            title=unicode(name),
+            generated=True,
+            background_color=u'',
+            background_image=u'France',
+            background_position=u'top right',
+            background_repeat=u'no-repeat',
+    )
+    DBSession.add(m)
+    DBSession.flush()
     return m
 
 def add_mapgroup(name, parent=None):
     name = unicode(name)
     g = tables.MapGroup.by_parent_and_name(parent, name)
     if not g:
-        if parent:
-            if isinstance(parent, basestring):
-                parent = tables.MapGroup.by_group_name(unicode(parent))
         g = tables.MapGroup.create(name, parent)
         DBSession.flush()
     return g
 
 def add_map2group(map, group):
-    if isinstance(group, basestring):
-        group = tables.MapGroup.by_group_name(unicode(group))
-    if isinstance(map, basestring):
-        map = tables.Map.by_map_title(unicode(map))
     if map not in group.maps:
         group.maps.append(map)
         DBSession.flush()
@@ -271,8 +262,6 @@ def add_node_host(host, label, map, widget="ServiceElement",
                     x=None, y=None, icon=None, submaps=[]):
     if isinstance(host, basestring):
         host = tables.Host.by_host_name(unicode(host))
-    if isinstance(map, basestring):
-        map = tables.Map.by_map_title(unicode(map))
     n = tables.MapNodeHost.by_map_label(map, unicode(label))
     if not n:
         n = tables.MapNodeHost(label=unicode(label), idmap=map.idmap,
@@ -292,8 +281,6 @@ def add_node_lls(lls, label, map, widget="ServiceElement",
     if isinstance(lls, tuple):
         lls = [unicode(s) for s in lls]
         lls = tables.LowLevelService.by_host_service_name(*lls)
-    if isinstance(map, basestring):
-        map = tables.Map.by_map_title(unicode(map))
     n = tables.MapNodeLls.by_map_label(map, unicode(label))
     if not n:
         n = tables.MapNodeLls(label=unicode(label), idmap=map.idmap,
@@ -310,8 +297,6 @@ def add_node_hls(hls, label, map, widget="ServiceElement",
                     x=None, y=None, icon=None, submaps=[]):
     if isinstance(hls, basestring):
         hls = tables.HighLevelService.by_service_name(hls)
-    if isinstance(map, basestring):
-        map = tables.Map.by_map_title(unicode(map))
     n = tables.MapNodeHls.by_map_label(map, unicode(label))
     if not n:
         n = tables.MapNodeHls(label=unicode(label), idmap=map.idmap,
@@ -325,8 +310,6 @@ def add_node_hls(hls, label, map, widget="ServiceElement",
     return n
 
 def add_mapsegment(from_node, to_node, map):
-    if isinstance(map, basestring):
-        map = tables.Map.by_map_title(unicode(map))
     if isinstance(from_node, basestring):
         from_node = tables.MapNode.by_map_label(map, unicode(from_node))
     if isinstance(to_node, basestring):
@@ -339,8 +322,6 @@ def add_mapsegment(from_node, to_node, map):
     return ms
 
 def add_mapllslink(from_node, to_node, lls, map):
-    if isinstance(map, basestring):
-        map = tables.Map.by_map_title(unicode(map))
     if isinstance(from_node, basestring):
         from_node = tables.MapNode.by_map_label(map, unicode(from_node))
     if isinstance(to_node, basestring):
@@ -422,8 +403,6 @@ def add_graph2group(graph, group):
         
 # Affectation des permissions aux groupes de cartes.
 def add_MapGroupPermission(group, usergroup, access='w'):
-    if isinstance(group, basestring):
-        group = tables.MapGroup.by_group_name(unicode(group))
     if isinstance(usergroup, basestring):
         usergroup = tables.UserGroup.by_group_name(unicode(usergroup))
     p = DBSession.query(tables.DataPermission).filter(

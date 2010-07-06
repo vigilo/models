@@ -266,27 +266,27 @@ def main():
     add_perfdatasource2graph(source5, graph_UpTime2)
 
     # Cartographie
-    add_mapgroup('Groupe 1', 'Root')
-    add_mapgroup('Groupe 1.1', 'Groupe 1')
-    add_mapgroup('Groupe 1.2', 'Groupe 1')
-    add_mapgroup('Groupe 2', 'Root')
-    add_mapgroup('Groupe 2.1', 'Groupe 2')
-    add_mapgroup('Groupe 1.1.1', 'Groupe 1.1')
-    add_mapgroup('Groupe 1.1.1.1', 'Groupe 1.1.1')
-    add_mapgroup('Groupe 3', 'Root')
+    mg_root = add_mapgroup('Root', None)
+    mg_1 = add_mapgroup('Groupe 1', mg_root)
+    mg_1_1 = add_mapgroup('Groupe 1.1', mg_1)
+    mg_1_2 = add_mapgroup('Groupe 1.2', mg_1)
+    mg_2 = add_mapgroup('Groupe 2', mg_root)
+    mg_2_1 = add_mapgroup('Groupe 2.1', mg_2)
+    mg_1_1_1 = add_mapgroup('Groupe 1.1.1', mg_1_1)
+    mg_1_1_1_1 = add_mapgroup('Groupe 1.1.1.1', mg_1_1_1)
+    mg_3 = add_mapgroup('Groupe 3', mg_root)
 
     maps = []
     for i in range(1, 4):
         m = add_map("Carte %d" % i)
         maps.append(m)
-    add_map2group(maps[0], 'Groupe 1')
-    add_map2group(maps[1], 'Groupe 1.1')
-    add_map2group(maps[2], 'Groupe 1.1')
-    add_map2group(maps[0], 'Groupe 2.1')
-    add_map2group(maps[1], 'Groupe 2.1')
-    add_map2group(maps[2], 'Groupe 2.1')
+    add_map2group(maps[0], mg_1)
+    add_map2group(maps[1], mg_1_1)
+    add_map2group(maps[2], mg_1_1)
+    add_map2group(maps[0], mg_2_1)
+    add_map2group(maps[1], mg_2_1)
+    add_map2group(maps[2], mg_2_1)
 
-    #n1 = add_node_host("host1.example.com", 'Host 1', maps[0], "ServiceElement", 220, 350, 'server', maps[0:3])
     n1 = add_node_host(
         "proto4", 'Proto 4', maps[0], "ServiceElement",
         220, 350, 'server', maps[0:3])
@@ -330,11 +330,11 @@ def main():
         u'Reader', u'readpass', 'readers')
     add_usergroup_permission('readers', 'vigimap-access')
 
-    add_MapGroupPermission('Groupe 1', 'managers', 'r')
-    add_MapGroupPermission('Groupe 2', 'managers', 'w')
-    add_MapGroupPermission('Groupe 3', 'managers', 'r')
-    add_MapGroupPermission('Groupe 1', 'editors', 'w')
-    add_MapGroupPermission('Groupe 3', 'editors', 'w')
-    add_MapGroupPermission('Groupe 1', 'readers', 'r')
+    add_MapGroupPermission(mg_1, 'managers', 'r')
+    add_MapGroupPermission(mg_2, 'managers', 'w')
+    add_MapGroupPermission(mg_3, 'managers', 'r')
+    add_MapGroupPermission(mg_1, 'editors', 'w')
+    add_MapGroupPermission(mg_3, 'editors', 'w')
+    add_MapGroupPermission(mg_1, 'readers', 'r')
 
 

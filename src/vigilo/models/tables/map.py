@@ -103,18 +103,6 @@ class Map(DeclarativeBase, object):
             ).first()
 
     @classmethod
-    def by_map_title(cls, maptitle):
-        """
-        Renvoie la carte dont le titre est L{maptitle}.
-        
-        @param maptitle: Titre de la carte voulue.
-        @type maptitle: C{unicode}
-        @return: L'instance correspondant à la carte demandée.
-        @rtype: L{Map}
-        """
-        return DBSession.query(cls).filter(cls.title == maptitle).first()
-
-    @classmethod
     def has_submaps(cls, idmap):
         from .mapnode import MapNode
         map_alias = aliased(Map)
