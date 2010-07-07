@@ -52,7 +52,8 @@ class Host(SupItem):
     @ivar description: Une description intelligible de l'hôte.
     @ivar hosttpl: ???.
     @todo: documenter l'attribut hosttpl.
-    @ivar mainip: Adresse IP (v4 ou v6) principale de cet hôte.
+    @ivar address: Adresse permettant de communiquer avec cet hôte.
+        Il peut s'agir d'une adresse IP (v4 ou v6) ou d'un FQDN.
     @ivar snmpcommunity: Nom de la communauté SNMP auquel l'hôte appartient.
     @ivar snmpport: Port à utiliser pour le protocole SNMP.
     @ivar snmpoidsperpdu: Nombre d'OIDs à transmettre par PDU.
