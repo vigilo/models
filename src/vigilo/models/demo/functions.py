@@ -345,7 +345,7 @@ def add_mapllslink(from_node, to_node, lls, map):
 # Métrologie
 #
 
-def add_perfdatasource(name, host, label=None, max=None):
+def add_perfdatasource(name, host, label=None, max=None, vigiloserver="localhost"):
     name = unicode(name)
     if isinstance(host, basestring):
         host = tables.Host.by_host_name(unicode(host))
@@ -360,7 +360,7 @@ def add_perfdatasource(name, host, label=None, max=None):
                                    max=max,
                                    )
         DBSession.add(ds)
-        add_ventilation(host, 'localhost', 'rrdgraph')
+        add_ventilation(host, vigiloserver, 'rrdgraph')
         DBSession.flush()
     return ds
 
