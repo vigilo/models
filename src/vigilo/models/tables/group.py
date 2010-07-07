@@ -74,6 +74,26 @@ class Group(DeclarativeBase, object):
     def __repr__(self):
         return "<%s \"%s\">" % (self.__class__.__name__, str(self.name))
 
+    # Chemin d'accès
+
+    def get_path(self):
+        """
+        Renvoie le chemin d'accès jusqu'au groupe.
+        
+        @return: Chemin d'accès jusqu'à ce groupe.
+        @rtype: C{str}
+        """
+        from .grouphierarchy import GroupHierarchy
+        parts = DBSession.query(
+                Group.name
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idparent == Group.idgroup),
+            ).filter(GroupHierarchy.idchild == self.idgroup
+            ).order_by(GroupHierarchy.hops.desc()
+            ).all()
+        parts = [p.name.replace('\\', '\\\\').replace('/', '\\/') for p in parts]
+        return '/'.join(parts)
+
     # Parents
 
     def has_parent(self):
@@ -172,9 +192,7 @@ class Group(DeclarativeBase, object):
             children = children.filter(GroupHierarchy.hops == hops)
         return children.all()
 
-    @property
-    def children(self):
-        return self.get_children()
+    children = property(get_children)
 
     def get_all_children(self):
         """ renvoie la liste  des descendants

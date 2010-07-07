@@ -218,6 +218,13 @@ class TestGraphGroup(ModelTest):
         assert_equal(child, self.klass.by_parent_and_name(root, u'TestChild'))
         assert_equal(fake, self.klass.by_parent_and_name(root, u'TestRoot'))
 
+    def test_get_path(self):
+        root = self.creator.im_func(u'TestRoot', None)
+        c1 = self.creator.im_func(u'/', root)
+        c2 = self.creator.im_func(u'\\', c1)
+
+        assert_equal(c2.get_path(), u'TestRoot/\\//\\\\')
+
 # On reprend les tests de GraphGroup.
 class TestMapGroup(TestGraphGroup):
     """Test de la table MapGroup"""
