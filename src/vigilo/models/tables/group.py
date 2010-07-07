@@ -92,6 +92,8 @@ class Group(DeclarativeBase, object):
             ).order_by(GroupHierarchy.hops.desc()
             ).all()
         parts = [p.name.replace('\\', '\\\\').replace('/', '\\/') for p in parts]
+        # Force la génération d'un chemin absolu (commençant par '/').
+        parts.insert(0, '')
         return '/'.join(parts)
 
     # Parents

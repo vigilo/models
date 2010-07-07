@@ -223,7 +223,7 @@ class TestGraphGroup(ModelTest):
         c1 = self.creator.im_func(u'/', root)
         c2 = self.creator.im_func(u'\\', c1)
 
-        assert_equal(c2.get_path(), u'TestRoot/\\//\\\\')
+        assert_equal(c2.get_path(), u'/TestRoot/\\//\\\\')
 
 # On reprend les tests de GraphGroup.
 class TestMapGroup(TestGraphGroup):
