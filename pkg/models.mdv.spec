@@ -25,32 +25,20 @@ Requires:   python-zope.sqlalchemy >= 0.4
 Requires:   python-pastescript >= 1.7
 Requires:   vigilo-common
 Requires:   python-transaction
-Requires:   python-decorator >= 3.1.2
-Requires:   python-turbojson >= 1.2
-Requires:   python-prioritized_methods >= 0.2.1
-Requires:   python-formencode >= 1.1
-Requires:   python-webflash >= 0.1a7
-Requires:   python-peak-rules >= 0.5a1.dev-r2569
-Requires:   python-repoze.what-pylons >= 1.0rc3
-Requires:   python-weberror >= 0.10.1
-Requires:   python-pylons >= 0.9.7
-Requires:   python-repoze.who >= 1.0.10
-Requires:   python-sqlalchemy-migrate >= 0.5.1
-Requires:   python-repoze.what.plugins.sql >= 1.0rc1
-Requires:   python-repoze.who.plugins.sa >= 1.0rc1
-Requires:   python-repoze.what >= 1.0.3
-Requires:   python-extremes >= 1.1 
-Requires:   python-addons >= 0.6
-Requires:   python-decoratortools >= 1.7dev-r2450
-Requires:   python-bytecodeassembler >= 0.3
-Requires:   python-pygments
-Requires:   python-tempita
-Requires:   python-webtest >= 1.1
-Requires:   python-mako >= 0.2.4
-Requires:   python-nose >= 0.10.4
-Requires:   python-webhelpers >= 0.6.4
-Requires:   python-repoze.who-testutil >= 1.0b2
-Requires:   python-symboltype >= 1.0
+#########
+Requires:   vigilo-models
+Requires:   python-transaction
+Requires:   vigilo-common
+Requires:   python-pastescript
+Requires:   python-setuptools
+Requires:   python-zope.sqlalchemy
+Requires:   python-sqlalchemy
+Requires:   python-psycopg2
+Requires:   python-babel
+Requires:   python-zope-interface 
+Requires:   python-configobj
+Requires:   python-pastedeploy
+Requires:   python-paste
 
 Buildarch:  noarch
 
