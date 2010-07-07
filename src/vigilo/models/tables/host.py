@@ -94,9 +94,8 @@ class Host(SupItem):
         Unicode(255),
         nullable=False)
 
-    mainip = Column(
-        Unicode(40),    # 39 caractères sont requis pour stocker une IPv6
-                        # sous forme canonique. On arrondit à 40 caractères.
+    address = Column(
+        Unicode(255),   # Longueur maximale d'un FQDN selon la RFC 2181.
         nullable=False)
 
     snmpcommunity = Column(

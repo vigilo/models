@@ -29,7 +29,7 @@ class TestLowLevelService(ModelTest):
             snmpcommunity=u'public',
             description=u'My Host',
             hosttpl=u'foo',
-            mainip=u'127.0.0.1',
+            address=u'127.0.0.1',
             snmpport=42,
             weight=42,
         )

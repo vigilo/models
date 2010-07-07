@@ -32,7 +32,7 @@ class TestEventHistory(ModelTest):
             snmpcommunity=u'public',
             description=u'My Host',
             hosttpl=u'template',
-            mainip=u'127.0.0.1',
+            address=u'127.0.0.1',
             snmpport=1234,
             weight=42,
         )

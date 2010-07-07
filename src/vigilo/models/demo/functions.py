@@ -16,7 +16,7 @@ def add_host(hostname):
                 name=unicode(hostname),
                 checkhostcmd=u'dummy',
                 hosttpl=u'dummy',
-                mainip=u"127.0.0.1",
+                address=u"127.0.0.1",
                 snmpcommunity=u"public",
                 snmpport=161,
                 weight=0)
