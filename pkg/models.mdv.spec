@@ -24,8 +24,8 @@ Requires:   python-sqlalchemy
 Requires:   python-zope.sqlalchemy >= 0.4
 Requires:   python-pastescript >= 1.7
 Requires:   vigilo-common
-Requires:   vigilo-transaction
-Requires:   vigilo-decorator
+Requires:   python-transaction
+Requires:   python-decorator >= 3.1.2
 Requires:   python-turbojson >= 1.2
 Requires:   python-prioritized_methods >= 0.2.1
 Requires:   python-formencode >= 1.1
