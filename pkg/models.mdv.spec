@@ -25,10 +25,10 @@ Requires:   python-zope.sqlalchemy >= 0.4
 Requires:   python-pastescript >= 1.7
 Requires:   vigilo-common
 Requires:   python-transaction
-#########
+######### Dependance from python dependance tree #########
 Requires:   vigilo-models
-Requires:   python-transaction
 Requires:   vigilo-common
+Requires:   python-transaction
 Requires:   python-pastescript
 Requires:   python-setuptools
 Requires:   python-zope.sqlalchemy
