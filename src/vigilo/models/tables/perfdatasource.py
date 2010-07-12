@@ -22,9 +22,9 @@ class PerfDataSource(DeclarativeBase, object):
     @ivar type: Type de la source de données
         (COUNTER, DERIVE, ABSOLUTE, GAUGE).
     @ivar label: Label affiché sur le graphique généré.
-        (ex name=ineth0 -> label=Données en entrée sur la carte réseau eth0)
+        (ex : name=ineth0 -> label=Données en entrée sur la carte réseau eth0)
     @ivar factor: Facteur de multiplication pour les valeurs en ordonnées.
-        (ex factor=8 pour conversion octets -> bits)
+        (ex : factor=8 pour conversion octets -> bits)
     @ivar max: Valeur maximale possible. Utilisée pour calculer un pourcentage
         d'utilisation de la ressource.
     """
