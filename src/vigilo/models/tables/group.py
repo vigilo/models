@@ -164,6 +164,24 @@ class Group(DeclarativeBase, object):
 
     parent = property(get_parent, set_parent)
 
+    def get_top_parent(self):
+        """
+        Renvoie le parent de plus haut niveau (celui qui n'a pas de parent lui-même)
+        @return: Parent de plus haut niveau
+        @rtype: L{Group}
+        """
+        from .grouphierarchy import GroupHierarchy
+        top_parent = DBSession.query(Group
+            ).join(
+                (GroupHierarchy, GroupHierarchy.idparent == Group.idgroup),
+            ).filter(GroupHierarchy.idchild == self.idgroup
+            ).order_by(GroupHierarchy.hops.desc()
+            ).first()
+        #if top_parent.has_parent():
+        #    # bizarre, on devrait avoir un groupe de plus haut niveau
+        #    return None
+        return top_parent
+
     # Fils
 
     def has_children(self):
