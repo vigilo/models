@@ -31,7 +31,7 @@ class TestFileDeployment(ModelTest):
     def tearDown(self):
         """Tear down the fixture used to test the model."""
         super(TestFileDeployment, self).tearDown()
-        #shutil.rmtree(self.tmpdir)
+        shutil.rmtree(self.tmpdir)
 
     tmpdir = None
     klass = FileDeployment
@@ -57,7 +57,3 @@ class TestFileDeployment(ModelTest):
         shaob.update("this is a sample file to deploy")
         
         assert_equal(u'' + shaob.hexdigest(), obj.hashcode)
-        
-        # TODO: should be put in tearDown; bug ?
-        shutil.rmtree(self.tmpdir)
-
