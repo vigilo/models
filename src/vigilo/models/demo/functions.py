@@ -383,7 +383,7 @@ def add_perfdatasource2graph(ds, graph):
         graph.perfdatasources.append(ds)
         DBSession.flush()
 
-def add_graphgroup(name, parent):
+def add_graphgroup(name, parent=None):
     name = unicode(name)
     g = tables.GraphGroup.by_parent_and_name(parent, name)
     if not g:
