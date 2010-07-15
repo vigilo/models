@@ -14,13 +14,21 @@ from controller import ModelTest
 
 
 class TestFileDeployment(ModelTest):
-    
+    tmpdir = None
+    klass = FileDeployment
+    attrs = {
+        'hashcode': u'-',
+        'date': datetime.now(),
+        'src_path': u'',
+        'dest_path': u'sample_dep.dest',
+    }
+
     def setup(self):
         """Call before every test case."""
         # Prepare temporary directory
         self.tmpdir = tempfile.mkdtemp()
         # move src file in the tmp dir
-        self.attrs['src_path'] = os.path.join(self.tmpdir, self.attrs['src_path'])
+        self.attrs['src_path'] = os.path.join(self.tmpdir, u'sample_dep.src')
         # build a sample file
         f = open(self.attrs['src_path'], 'w')
         f.write("this is a sample file to deploy")
@@ -33,18 +41,6 @@ class TestFileDeployment(ModelTest):
         super(TestFileDeployment, self).tearDown()
         shutil.rmtree(self.tmpdir)
 
-    tmpdir = None
-    klass = FileDeployment
-    attrs = {
-        'hashcode': u'-',
-        'date': datetime.now(),
-        'src_path': u'sample_dep.src',
-        'dest_path': u'sample_dep.dest'
-    }
-    
-    def __init__(self):
-        ModelTest.__init__(self)
-    
     def test_filedeployment(self):
         """Checks the filedeployment object."""
         obj = DBSession.query(self.klass).one()
@@ -52,8 +48,9 @@ class TestFileDeployment(ModelTest):
         DBSession.flush()
         
         # checks the hashcode
-        shaob = hashlib.sha1(os.path.join(self.tmpdir, self.attrs['src_path']))
+        shaob = hashlib.sha1(os.path.join(self.tmpdir, u'sample_dep.src'))
         shaob.update('sample_dep.dest')
         shaob.update("this is a sample file to deploy")
         
         assert_equal(u'' + shaob.hexdigest(), obj.hashcode)
+
