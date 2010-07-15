@@ -45,7 +45,7 @@ class SupItem(DeclarativeBase, object):
     @ivar tags: Libellés attachés à cet objet.
     """
     __tablename__ = 'supitem'
-    __mapper_args__ = {'extension': SetDefaultState()}
+    __mapper_args__ = {'extension': SupItemMapperExt()}
 
     idsupitem = Column(
         Integer,
