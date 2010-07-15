@@ -6,17 +6,16 @@ from __future__ import absolute_import
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode, UnicodeText
 from sqlalchemy.orm import relation
-from sqlalchemy.orm.interfaces import MapperExtension
 from sqlalchemy.orm import EXT_CONTINUE
 
 from vigilo.models.session import DBSession, ForeignKey
 from vigilo.models.tables.secondary_tables import HOST_HOSTCLASS_TABLE
-from vigilo.models.tables.supitem import SupItem
+from vigilo.models.tables.supitem import SupItem, SupItemMapperExt
 
 __all__ = ('Host', )
 
 
-class CascadeToMapNodeHost(MapperExtension):
+class HostMapperExt(SupItemMapperExt):
     """
     Force la propagation de la suppression d'un hôte à toutes ses
     représentations cartographiques (MapNodeHost).
@@ -67,7 +66,7 @@ class Host(SupItem):
     __tablename__ = 'host'
     __mapper_args__ = {
         'polymorphic_identity': u'host',
-        'extension': CascadeToMapNodeHost(),
+        'extension': HostMapperExt(),
     }
 
     idhost = Column(

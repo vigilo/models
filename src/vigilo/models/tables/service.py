@@ -5,17 +5,16 @@ from sqlalchemy import Column
 from sqlalchemy.types import UnicodeText, Unicode, Integer
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
-from sqlalchemy.orm.interfaces import MapperExtension
 from sqlalchemy.orm import EXT_CONTINUE
 
 from vigilo.models.session import DBSession, ForeignKey
-from vigilo.models.tables.supitem import SupItem
+from vigilo.models.tables.supitem import SupItem, SupItemMapperExt
 from vigilo.models.tables.host import Host
 
-__all__ = ('Service', )
+__all__ = ('Service', 'LowLevelService', 'HighLevelService')
 
 
-class CascadeToMapNodeLls(MapperExtension):
+class LlsMapperExt(SupItemMapperExt):
     """
     Force la propagation de la suppression d'un service à toutes ses
     représentations cartographiques (MapNodeService).
@@ -25,6 +24,9 @@ class CascadeToMapNodeLls(MapperExtension):
     place.
 
     Pour les détails, voir le ticket #57.
+
+    @TODO: à factoriser entre les services, voire avec les hôtes et les
+        supitems
     """
     def before_delete(self, mapper, connection, instance):
         """
@@ -40,7 +42,7 @@ class CascadeToMapNodeLls(MapperExtension):
             DBSession.delete(mapnode)
         return EXT_CONTINUE
 
-class CascadeToMapNodeHls(MapperExtension):
+class HlsMapperExt(SupItemMapperExt):
     """
     Force la propagation de la suppression d'un service à toutes ses
     représentations cartographiques (MapNodeService).
@@ -50,6 +52,9 @@ class CascadeToMapNodeHls(MapperExtension):
     place.
 
     Pour les détails, voir le ticket #57.
+
+    @TODO: à factoriser entre les services, voire avec les hôtes et les
+        supitems
     """
     def before_delete(self, mapper, connection, instance):
         """
@@ -152,7 +157,7 @@ class LowLevelService(Service):
     )
     __mapper_args__ = {
         'polymorphic_identity': u'lowlevel',
-       'extension': CascadeToMapNodeLls(),
+       'extension': LlsMapperExt(),
     }
 
     idservice = Column(
@@ -250,7 +255,7 @@ class HighLevelService(Service):
     __tablename__ = 'highlevelservice'
     __mapper_args__ = {
         'polymorphic_identity': u'highlevel',
-        'extension': CascadeToMapNodeHls(),
+        'extension': HlsMapperExt(),
     }
 
     idservice = Column(

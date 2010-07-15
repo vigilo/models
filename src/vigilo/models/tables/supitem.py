@@ -3,6 +3,8 @@
 """Modèle pour la table SupItem"""
 from sqlalchemy import Column
 from sqlalchemy.orm import relation, aliased
+from sqlalchemy.orm.interfaces import MapperExtension
+from sqlalchemy.orm import EXT_CONTINUE
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.sql import functions
 
@@ -10,7 +12,28 @@ from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import SUPITEM_TAG_TABLE, \
                                                     SUPITEM_GROUP_TABLE
 
-__all__ = ('SupItem', )
+__all__ = ('SupItem', 'SupItemMapperExt')
+
+
+class SupItemMapperExt(MapperExtension):
+    """
+    Quand un SupItem est ajouté en base, son état par défaut est OK. Ce
+    comportement est similaire à celui de Nagios. Si l'état n'est pas OK en
+    réalité, Nagios le détectera et enverra une notification, ce qui mettra à
+    jour l'état en base de données.
+
+    Fonctionnalité SQLAlchemy utilisée :
+    http://www.sqlalchemy.org/docs/05/reference/orm/interfaces.html#sqlalchemy.orm.interfaces.MapperExtension
+    """
+    def after_insert(self, mapper, connection, instance):
+        from vigilo.models.tables.state import State
+        from vigilo.models.tables.statename import StateName
+        s = State(idsupitem=instance.idsupitem,
+                         state=StateName.statename_to_value(u"OK"),
+                         message=u"")
+        DBSession.merge(s)
+        return EXT_CONTINUE
+
 
 class SupItem(DeclarativeBase, object):
     """
@@ -22,6 +45,7 @@ class SupItem(DeclarativeBase, object):
     @ivar tags: Libellés attachés à cet objet.
     """
     __tablename__ = 'supitem'
+    __mapper_args__ = {'extension': SetDefaultState()}
 
     idsupitem = Column(
         Integer,
