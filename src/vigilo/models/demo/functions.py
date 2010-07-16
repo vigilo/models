@@ -231,18 +231,26 @@ def add_svc_state(service, statename, message):
 # Cartographie
 #
 
-def add_map(name):
-    m = tables.Map(
-            mtime=datetime.today(),
-            title=unicode(name),
-            generated=True,
-            background_color=u'',
-            background_image=u'France',
-            background_position=u'top right',
-            background_repeat=u'no-repeat',
-    )
-    DBSession.add(m)
-    DBSession.flush()
+def add_map(name, group=None):
+    if group is None:
+        group = tables.MapGroup.by_group_name(u"Root")
+    if isinstance(group, basestring):
+        group = tables.MapGroup.by_group_name(unicode(group))
+    name = unicode(name)
+    m = tables.Map.by_group_and_title(group, name)
+    if not m:
+        m = tables.Map(
+                mtime=datetime.today(),
+                title=name,
+                generated=True,
+                background_color=u'',
+                background_image=u'',
+                background_position=u'',
+                background_repeat=u'',
+        )
+        DBSession.add(m)
+        m.groups.append(group)
+        DBSession.flush()
     return m
 
 def add_mapgroup(name, parent=None):
