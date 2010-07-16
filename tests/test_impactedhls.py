@@ -19,6 +19,7 @@ class TestImpactedHLS(ModelTest):
 
     def do_get_dependencies(self):
         """Création des dépendances du test."""
+        ModelTest.do_get_dependencies(self)
         hls = HighLevelService(
             servicename=u'HLS',
             op_dep=u'+',

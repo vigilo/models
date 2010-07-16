@@ -2,6 +2,8 @@
 """Test suite for State class"""
 from datetime import datetime
 
+from nose.tools import assert_equals
+
 from vigilo.models.tables import State, Host, LowLevelService
 from vigilo.models.session import DBSession
 
@@ -41,6 +43,7 @@ class TestServiceState(ModelTest):
             weight=42,
         )
         DBSession.add(host)
+        DBSession.flush()
 
         service = LowLevelService(
             host=host,
@@ -52,5 +55,16 @@ class TestServiceState(ModelTest):
         DBSession.add(service)
 
         DBSession.flush()
-        return dict(supitem=service)
+        return dict(idsupitem=service.idservice)
 
+    def test_query_obj(self):
+        """Vérifie les données insérées."""
+        # On est obligé de redéfinir cette fonction parce que plusieurs états
+        # ont été insérés lorsqu'on a ajouté l'hôte et le service.
+        obj = DBSession.query(State).join(
+                    (LowLevelService, LowLevelService.idservice == State.idsupitem)
+                ).filter(
+                    LowLevelService.servicename == u"myservice"
+                ).one()
+        for key, value in self.attrs.iteritems():
+            assert_equals(getattr(obj, key), value)

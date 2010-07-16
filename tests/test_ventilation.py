@@ -18,6 +18,7 @@ class TestVentilation(ModelTest):
     
     def do_get_dependencies(self):
         """Generate some data for the test"""
+        ModelTest.do_get_dependencies(self)
         DBSession.add(Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',

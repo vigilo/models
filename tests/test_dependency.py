@@ -15,6 +15,7 @@ class TestDependency(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
+        ModelTest.do_get_dependencies(self)
         host = Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',

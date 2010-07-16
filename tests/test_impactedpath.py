@@ -17,6 +17,7 @@ class TestImpactedPath(ModelTest):
 
     def do_get_dependencies(self):
         """Création des dépendances du test."""
+        ModelTest.do_get_dependencies(self)
         host = Host(
             name=u'myhost',
             checkhostcmd=u'halt -f',

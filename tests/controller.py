@@ -39,7 +39,7 @@ class ModelTest(object):
             new_attrs.update(self.attrs)
             new_attrs.update(self.do_get_dependencies())
             self.obj = self.klass(**new_attrs)
-            DBSession.add(self.obj)
+            self.obj = DBSession.merge(self.obj)
             DBSession.flush()
             return self.obj
         except:
@@ -64,6 +64,7 @@ class ModelTest(object):
         DBSession.add(StateName(statename=u'UP', order=1))
         DBSession.add(StateName(statename=u'UNREACHABLE', order=2))
         DBSession.add(StateName(statename=u'DOWN', order=4))
+        DBSession.flush()
         return {}
 
     def test_create_obj(self):

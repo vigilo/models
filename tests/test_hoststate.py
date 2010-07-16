@@ -43,5 +43,5 @@ class TestHostState(ModelTest):
         DBSession.add(host)
 
         DBSession.flush()
-        return dict(supitem=host)
+        return dict(idsupitem=host.idhost)
 

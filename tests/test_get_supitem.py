@@ -4,7 +4,7 @@ import unittest
 from nose.tools import assert_equals
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Host, LowLevelService, HighLevelService, SupItem
+from vigilo.models.tables import Host, LowLevelService, HighLevelService, SupItem, StateName
 
 class TestGetSupItem(unittest.TestCase):
     """Test de la méthode get_supitem de la classe 'SupItem'"""
@@ -15,6 +15,9 @@ class TestGetSupItem(unittest.TestCase):
         item (hôte, service de haut niveau, ou service de bas niveau).
         """
         
+        DBSession.add(StateName(statename=u'OK', order=1))
+        DBSession.add(StateName(statename=u'UP', order=1))
+        DBSession.flush()
         # Ajout d'un hôte dans la BDD
         host1 = Host(
             name = u'messagerie',

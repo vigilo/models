@@ -22,6 +22,7 @@ class TestLowLevelService(ModelTest):
 
     def do_get_dependencies(self):
         """Generate some data for the test"""
+        ModelTest.do_get_dependencies(self)
         # Création de l'hôte physique sur lequel portera la dépendance.
         host = Host(
             name=u'myhost',
