@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for Host class"""
-from vigilo.models.tables import Host
+from nose.tools import assert_equals
+
+from vigilo.models.tables import Host, StateName
+from vigilo.models.session import DBSession
 
 from controller import ModelTest
 
@@ -21,4 +24,8 @@ class TestHost(ModelTest):
 
     def __init__(self):
         ModelTest.__init__(self)
+
+    def test_default_state(self):
+        assert_equals(u'OK', StateName.value_to_statename(
+            DBSession.query(self.klass).one().state.state))
 
