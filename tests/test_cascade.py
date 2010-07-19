@@ -11,8 +11,7 @@ from controller import setup_db, teardown_db
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, Service, StateName, \
      Map, MapNode, MapNodeHost, MapNodeService, MapNodeLls, MapNodeHls
-from vigilo.models.demo.functions import add_map, add_host, add_node_host, \
-     add_node_lls, add_lowlevelservice, add_node_hls, add_highlevelservice
+from vigilo.models.demo import functions as fct
 
 
 class DeleteCascadeTest(unittest.TestCase):
@@ -21,6 +20,7 @@ class DeleteCascadeTest(unittest.TestCase):
     def setUp(self):
         """Call before every test case."""
         DBSession.add(StateName(statename=u'OK', order=0))
+        fct.add_mapgroup('Root')
         DBSession.flush()
 
     def tearDown(self):
@@ -31,9 +31,9 @@ class DeleteCascadeTest(unittest.TestCase):
     def test_host_mapnode(self):
         """Suppression des mapnodes d'un host supprimé (#57)"""
         # Mettre localhost sur une carte
-        h = add_host(u"localhost")
-        testmap = add_map(u"Test map")
-        mnh = add_node_host(h, "localhost", testmap)
+        h = fct.add_host(u"localhost")
+        testmap = fct.add_map(u"Test map")
+        mnh = fct.add_node_host(h, "localhost", testmap)
         DBSession.flush()
         DBSession.delete(h)
         DBSession.flush()
@@ -47,10 +47,10 @@ class DeleteCascadeTest(unittest.TestCase):
     def test_lls_mapnode(self):
         """Suppression des mapnodes d'un lls supprimé (#57)"""
         # Mettre localhost sur une carte
-        h = add_host(u"localhost")
-        s = add_lowlevelservice(h, "testservice")
-        testmap = add_map(u"Test map")
-        mnh = add_node_lls(s, "testservice", testmap)
+        h = fct.add_host(u"localhost")
+        s = fct.add_lowlevelservice(h, "testservice")
+        testmap = fct.add_map(u"Test map")
+        mnh = fct.add_node_lls(s, "testservice", testmap)
         DBSession.flush()
         DBSession.delete(s)
         DBSession.flush()
@@ -66,10 +66,10 @@ class DeleteCascadeTest(unittest.TestCase):
     def test_hls_mapnode(self):
         """Suppression des mapnodes d'un hls supprimé (#57)"""
         # Mettre localhost sur une carte
-        h = add_host(u"localhost")
-        s = add_highlevelservice("testservice")
-        testmap = add_map(u"Test map")
-        mnh = add_node_hls(s, "testservice", testmap)
+        h = fct.add_host(u"localhost")
+        s = fct.add_highlevelservice("testservice")
+        testmap = fct.add_map(u"Test map")
+        mnh = fct.add_node_hls(s, "testservice", testmap)
         DBSession.flush()
         DBSession.delete(s)
         DBSession.flush()
