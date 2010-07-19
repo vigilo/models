@@ -32,7 +32,7 @@ for entry in working_set.iter_entry_points("vigilo.models.demo", "samples"):
 
 def run_demo():
     import optparse
-    from vigilo.common.gettext import translate
+    from vigilo.common.gettext import translate_narrow
     _ = translate_narrow(__name__)
 
     parser = optparse.OptionParser("Usage: %prog sample1 [sample2...]")
