@@ -73,7 +73,7 @@ class TestGraphGroup(ModelTest):
                         ).filter(GroupHierarchy.child == self.obj
                         ).filter(GroupHierarchy.hops == 1
                         ).one()
-        assert_equal(self.obj.get_parent(), parent)
+        assert_equal(self.obj.parent, parent)
         assert_equal(self.obj.has_parent(), True)
 
         # Notre parent est modifié.
@@ -85,12 +85,12 @@ class TestGraphGroup(ModelTest):
                         ).filter(GroupHierarchy.child == self.obj
                         ).filter(GroupHierarchy.hops == 1
                         ).one()
-        assert_equal(self.obj.get_parent(), anotherparent)
+        assert_equal(self.obj.parent, anotherparent)
         assert_equal(self.obj.has_parent(), True)
 
         # Suppression du parent.
         self.obj.parent = None
-        assert_equal(self.obj.get_parent(), None)
+        assert_equal(self.obj.parent, None)
         assert_equal(self.obj.has_parent(), False)
 
     def test_set_parent2(self):

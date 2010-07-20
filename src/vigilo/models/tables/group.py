@@ -111,7 +111,8 @@ class Group(DeclarativeBase, object):
             .filter(GroupHierarchy.hops > 0)\
             .count() > 0)
     
-    def get_parent(self):
+    def __get_parent(self):
+        """Récupère l'instance parente du groupe courant."""
         from .grouphierarchy import GroupHierarchy
         q = DBSession.query(GroupHierarchy).filter(
                     GroupHierarchy.idchild == self.idgroup
@@ -122,7 +123,7 @@ class Group(DeclarativeBase, object):
             return None
         return q.one().parent
     
-    def set_parent(self, group):
+    def __set_parent(self, group):
         """
         Positionne un groupe en tant que parent du groupe courant.
         Cette méthode ne peut gérer qu'un unique parent, elle ne convient
@@ -168,7 +169,7 @@ class Group(DeclarativeBase, object):
                     )
         DBSession.flush()
 
-    parent = property(get_parent, set_parent)
+    parent = property(__get_parent, __set_parent)
 
     def get_top_parent(self):
         """
