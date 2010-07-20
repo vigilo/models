@@ -3,7 +3,8 @@
 """Modèle pour la table Group"""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation, aliased
+from sqlalchemy.orm import relation, aliased, EXT_CONTINUE
+from sqlalchemy.orm.interfaces import MapperExtension
 from sqlalchemy.sql.expression import exists, not_
 
 from vigilo.models.session import DeclarativeBase, DBSession
@@ -48,7 +49,9 @@ class Group(DeclarativeBase, object):
         nullable=False,
     )
 
-    __mapper_args__ = {'polymorphic_on': _grouptype}
+    __mapper_args__ = {
+        'polymorphic_on': _grouptype,
+    }
 
     datapermissions = relation('DataPermission', cascade="all",
                       back_populates='group', lazy=True)
@@ -60,6 +63,9 @@ class Group(DeclarativeBase, object):
         @param kwargs: Un dictionnaire avec les informations sur le groupe.
         @type kwargs: C{dict}
         """
+        from vigilo.models.tables.grouphierarchy import GroupHierarchy
+        loop = GroupHierarchy(parent=self, child=self, hops=0)
+        DBSession.add(loop)
         super(Group, self).__init__(**kwargs)
 
     def __unicode__(self):
@@ -235,42 +241,6 @@ class Group(DeclarativeBase, object):
 
     # Méthodes de classe
 
-    @classmethod
-    def create(cls, name, parent=None, flush=True):
-        """ méthode de création d'un groupe.
-        
-        @param name: nom du groupe
-        @type name: C{str}
-        @param parent: groupe parent
-        @type parent: C{Group}
-        @param flush: invoque l'appel au flush db
-        @type flush: C{Boolean}
-        """
-        from .grouphierarchy import GroupHierarchy
-        group = cls(name=name)
-        DBSession.add(group)
-    
-        DBSession.add(GroupHierarchy(
-            parent=group,
-            child=group,
-            hops=0,
-        ))
-
-        if parent:
-            inherited = DBSession.query(GroupHierarchy
-                ).filter(GroupHierarchy.child == parent
-                ).all()
-            for g in inherited:
-                DBSession.add(GroupHierarchy(
-                    parent=g.parent,
-                    child=group,
-                    hops=g.hops + 1,
-                ))
-
-        if flush:
-            DBSession.flush()
-        return group
-    
     @classmethod
     def get_top_groups(cls):
         """

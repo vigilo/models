@@ -116,7 +116,7 @@ def add_supitemgroup(name, parent=None):
     name = unicode(name)
     g = tables.SupItemGroup.by_parent_and_name(parent, name)
     if not g:
-        g = tables.SupItemGroup.create(name, parent)
+        g = tables.SupItemGroup(name=name, parent=parent)
         DBSession.add(g)
         DBSession.flush()
     return g
@@ -126,7 +126,7 @@ def add_supitemgroup_parent(child, parent):
         child = tables.SupItemGroup.by_group_name(unicode(child))
     if isinstance(parent, basestring):
         parent = tables.SupItemGroup.by_group_name(unicode(parent))
-    child.set_parent(parent)
+    child.parent = parent
     DBSession.flush()
 
 def add_supitemgrouppermission(group, usergroup, access='r'):
@@ -257,7 +257,8 @@ def add_mapgroup(name, parent=None):
     name = unicode(name)
     g = tables.MapGroup.by_parent_and_name(parent, name)
     if not g:
-        g = tables.MapGroup.create(name, parent)
+        g = tables.MapGroup(name=name, parent=parent)
+        DBSession.add(g)
         DBSession.flush()
     return g
 
@@ -395,7 +396,7 @@ def add_graphgroup(name, parent=None):
     name = unicode(name)
     g = tables.GraphGroup.by_parent_and_name(parent, name)
     if not g:
-        g = tables.GraphGroup.create(name, parent)
+        g = tables.GraphGroup(name=name, parent=parent)
         DBSession.add(g)
         DBSession.flush()
     return g

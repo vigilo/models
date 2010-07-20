@@ -45,9 +45,13 @@ class TestUser(ModelTest):
         usergroup.users.append(user)
         DBSession.flush()
 
-        root = SupItemGroup.create(u'root')
-        sub1 = SupItemGroup.create(u'sub1', parent=root)
-        sub2 = SupItemGroup.create(u'sub2', parent=sub1)
+        root = SupItemGroup(name=u'root')
+        DBSession.add(root)
+        sub1 = SupItemGroup(name=u'sub1', parent=root)
+        DBSession.add(sub1)
+        sub2 = SupItemGroup(name=u'sub2', parent=sub1)
+        DBSession.add(sub2)
+        DBSession.flush()
 
         perm = Permission(permission_name=u'manage')
         perm.usergroups.append(usergroup)
@@ -83,11 +87,16 @@ class TestUser(ModelTest):
         usergroup = UserGroup(group_name=u'managers')
         usergroup.users.append(user)
         DBSession.flush()
-        
-        g1 = MapGroup.create(u'groupe 1')
-        g11 = MapGroup.create(u'groupe 1.1', parent=g1)
-        g111 = MapGroup.create(u'groupe 1.1.1', parent=g11)
-        g1111 = MapGroup.create(u'groupe 1.1.1.1', parent=g111)
+
+        g1 = MapGroup(name=u'groupe 1')
+        DBSession.add(g1)
+        g11 = MapGroup(name=u'groupe 1.1', parent=g1)
+        DBSession.add(g11)
+        g111 = MapGroup(name=u'groupe 1.1.1', parent=g11)
+        DBSession.add(g111)
+        g1111 = MapGroup(name=u'groupe 1.1.1.1', parent=g111)
+        DBSession.add(g1111)
+        DBSession.flush()
         
         perm = Permission(permission_name=u'manage')
         DBSession.add(perm)

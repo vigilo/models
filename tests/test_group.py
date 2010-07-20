@@ -22,41 +22,20 @@ class TestGraphGroup(ModelTest):
         'name': u'graphgroup'
     }
 
-    def setup(self):
-        """Set up the fixture used to test the model."""
-        try:
-            print "Class being tested:", self.klass
-            new_attrs = {}
-            new_attrs.update(self.attrs)
-            new_attrs.update(self.do_get_dependencies())
-            self.obj = self.klass.create(**new_attrs)
-            DBSession.add(self.obj)
-            DBSession.flush()
-            return self.obj
-        except:
-            DBSession.rollback()
-            raise
-
-    def test_create(self):
-        """ test de la méthode Group.create
+    def test_creation_loop(self):
         """
-        group = self.klass.create(u'a group')
+        Ajout des boucles dans la hiérarchie lors de la création d'un groupe.
+        """
         DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.idparent == group.idgroup
-                        ).filter(GroupHierarchy.idchild == group.idgroup
+                        ).filter(GroupHierarchy.idparent == self.obj.idgroup
+                        ).filter(GroupHierarchy.idchild == self.obj.idgroup
                         ).filter(GroupHierarchy.hops == 0
-                        ).one()
-        child = self.klass.create(name=u'a child', parent=group)
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.idparent == group.idgroup
-                        ).filter(GroupHierarchy.idchild == child.idgroup
-                        ).filter(GroupHierarchy.hops == 1
                         ).one()
     
     def test_remove_children(self):
         """ test méthode remove_children
         """
-        child = self.klass.create(name=u"achild")
+        child = self.klass(name=u"achild")
         DBSession.add(child)
         DBSession.add(GroupHierarchy(
             parent=self.obj,
@@ -81,14 +60,14 @@ class TestGraphGroup(ModelTest):
                         ).count() )
 
     def test_parent(self):
-        """ test méthode set_parent
-        """
+        """Affectation d'un parent à un groupe."""
         # Au début, nous n'avons pas de parent.
         assert_equal(self.obj.has_parent(), False)
 
         # On obtient un parent.
-        parent = self.klass.create(name=u"aparent")
-        self.obj.set_parent(parent)
+        parent = self.klass(name=u"aparent")
+        DBSession.add(parent)
+        self.obj.parent = parent
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.parent == parent
                         ).filter(GroupHierarchy.child == self.obj
@@ -98,8 +77,9 @@ class TestGraphGroup(ModelTest):
         assert_equal(self.obj.has_parent(), True)
 
         # Notre parent est modifié.
-        anotherparent = self.klass.create(name=u"anotherparent")
-        self.obj.set_parent(anotherparent)
+        anotherparent = self.klass(name=u"anotherparent")
+        DBSession.add(anotherparent)
+        self.obj.parent = anotherparent
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.parent == anotherparent
                         ).filter(GroupHierarchy.child == self.obj
@@ -109,25 +89,26 @@ class TestGraphGroup(ModelTest):
         assert_equal(self.obj.has_parent(), True)
 
         # Suppression du parent.
-        self.obj.set_parent(None)
+        self.obj.parent = None
         assert_equal(self.obj.get_parent(), None)
         assert_equal(self.obj.has_parent(), False)
 
     def test_set_parent2(self):
-        """ test méthode set_parent avec hiérarchies coté enfant et parent
-        """
+        """Affectation d'un parent avec hiérarchies coté enfant et parent."""
         # on créé un parent sur self.obj
-        parent = self.klass.create(name=u"aparent")
+        parent = self.klass(name=u"aparent")
         DBSession.add(parent)
-        self.obj.set_parent(parent)
+        self.obj.parent = parent
         
         # on créé un groupe avec son enfant
-        child = self.klass.create(name=u"achild")
-        gchild = self.klass.create(name=u"agrandchild")
-        gchild.set_parent(child)
+        child = self.klass(name=u"achild")
+        DBSession.add(child)
+        gchild = self.klass(name=u"agrandchild")
+        DBSession.add(gchild)
+        gchild.parent = child
         
         # on raccorde self.obj et l'enfant
-        child.set_parent(self.obj)
+        child.parent = self.obj
 
         # Vérifications superficielles.
         assert_equal(4, DBSession.query(GroupHierarchy).filter(
@@ -171,17 +152,16 @@ class TestGraphGroup(ModelTest):
                         ).one()
 
     def test_get_top_groups(self):
-        """Test méthode get_top_groups"""
+        """Récupération des groupes au sommet de la hiérarchie."""
         tops = self.klass.get_top_groups()
         assert_equal(len(tops), 1)
         assert_equal(tops[0], self.obj)
-        
+
     def test_has_children(self):
-        """
-        """
+        """Test de la présence de fils."""
         assert_equal( False, self.obj.has_children() )
         
-        child = self.klass.create(name=u"achild")
+        child = self.klass(name=u"achild")
         DBSession.add(child)
         DBSession.add(GroupHierarchy(
             parent=self.obj,
@@ -193,9 +173,8 @@ class TestGraphGroup(ModelTest):
         assert_equal( True, self.obj.has_children() )
     
     def test_get_children(self):
-        """
-        """
-        child = self.klass.create(name=u"achild")
+        """Récupération des groupes fils."""
+        child = self.klass(name=u"achild")
         DBSession.add(child)
         DBSession.add(GroupHierarchy(
             parent=self.obj,
@@ -219,6 +198,7 @@ class TestGraphGroup(ModelTest):
         assert_equal(fake, self.klass.by_parent_and_name(root, u'TestRoot'))
 
     def test_get_path(self):
+        """Génération d'un chemin absolu vers le groupe."""
         root = self.creator.im_func(u'TestRoot', None)
         c1 = self.creator.im_func(u'/', root)
         c2 = self.creator.im_func(u'\\', c1)
