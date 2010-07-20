@@ -125,52 +125,20 @@ class SupItem(DeclarativeBase, object):
                                             LowLevelService
         from sqlalchemy.sql.expression import and_
 
-        # Le module vigilo.common est utilisé par les composants
-        # qui fonctionnent en mode démon (corrélateur, connecteurs, etc.).
-        try:
-            from vigilo.common.logging import get_logger
-            from vigilo.common.gettext import translate
-            _ = translate(__name__)
-        except ImportError:
-            # Dans les applications TurboGears, on utilise les outils
-            # de Python + ceux du framework.
-            from logging import getLogger as get_logger
-            try:
-                from pylons.i18n import ugettext as _
-            except ImportError:
-                # Si pylons.i18n n'est pas disponible, il s'agit probablement
-                # des tests unitaires, on définit '_' comme une non-opération.
-                from gettext import NullTranslations
-                _ = NullTranslations().ugettext
-
-        LOGGER = get_logger(__name__)
-        
         # Si le nom du service vaut None, l'item est un hôte.
         if not servicename:
-            host = DBSession.query(Host.idhost
+            return DBSession.query(Host.idhost
                         ).filter(Host.name == hostname
                         ).scalar()
-
-            if not host:
-                LOGGER.error(_('Got a reference to a non configured '
-                        'host (%r)') % (hostname, ))
-
-            return host
         
         # Lorsque l'item est un service de haut niveau.
         if not hostname:
-            service = DBSession.query(HighLevelService.idservice
+            return DBSession.query(HighLevelService.idservice
                         ).filter(HighLevelService.servicename == servicename,
                         ).scalar()
-                    
-            if not service:
-                LOGGER.error(_('Got a reference to a non configured '
-                        'high level service (%r)') % (servicename, ))
-
-            return service
         
         # Sinon, l'item est un service de bas niveau.
-        service = DBSession.query(LowLevelService.idservice
+        return DBSession.query(LowLevelService.idservice
                     ).join(
                         (Host, LowLevelService.idhost == Host.idhost)
                     ).filter(
@@ -179,13 +147,6 @@ class SupItem(DeclarativeBase, object):
                             Host.name == hostname
                         )
                     ).scalar()
-
-        if not service:
-            LOGGER.error(_('Got a reference to a non configured '
-                    'low level service (%(hostname)r, %(servicename)r)') % 
-                    {"hostname": hostname, "servicename": servicename})
-
-        return service
 
 
     def __init__(self, **kwargs):
