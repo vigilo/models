@@ -12,6 +12,7 @@ from vigilo.models.session import DBSession, ForeignKey
 from vigilo.models.tables.secondary_tables import HOST_HOSTCLASS_TABLE
 from vigilo.models.tables.supitem import SupItem, SupItemMapperExt
 
+
 __all__ = ('Host', )
 
 
@@ -121,6 +122,19 @@ class Host(SupItem):
 
     perfdatasources = relation('PerfDataSource', lazy=True, cascade="all",
                         back_populates='host')
+
+    def _get_graphs(self):
+        from vigilo.models.tables.graph import Graph
+        from vigilo.models.tables.perfdatasource import PerfDataSource
+        from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
+        return DBSession.query(Graph).distinct().join(
+                        (GRAPH_PERFDATASOURCE_TABLE, \
+                            GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+                        (PerfDataSource, PerfDataSource.idperfdatasource == \
+                            GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
+                    ).filter(PerfDataSource.idhost == self.idhost
+                    ).all()
+    graphs = property(_get_graphs)
 
 
     def __init__(self, **kwargs):

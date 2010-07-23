@@ -48,9 +48,6 @@ class PerfDataSource(DeclarativeBase, object):
     host = relation('Host', back_populates="perfdatasources",
                        lazy=True)
     
-    graphs = relation('Graph', secondary=GRAPH_PERFDATASOURCE_TABLE,
-                         back_populates='perfdatasources', lazy=True)
-
     name = Column(
         UnicodeText,
         nullable=False)
@@ -69,6 +66,9 @@ class PerfDataSource(DeclarativeBase, object):
         default=1.0, nullable=False)
 
     max = Column(Float(precision=None, asdecimal=False))
+
+    graphs = relation('Graph', secondary=GRAPH_PERFDATASOURCE_TABLE,
+                         back_populates='perfdatasources', lazy=True)
 
     def __init__(self, **kwargs):
         """Initialisation de la source de données de performance."""
