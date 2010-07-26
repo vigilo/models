@@ -113,6 +113,9 @@ class SupItem(DeclarativeBase, object):
         Lorsque le paramètre servicename vaut None, l'item est alors un host. 
         Lorsque le paramètre hostname vaut None, l'item est un SHN.
         Sinon, l'item est un SBN.
+
+        Remarque de AB: j'aurais bien vu un nom du genre `by_names()` plutôt,
+        mais bon, on va pas tout casser juste pour faire joli.
             
         @param hostname: Nom du host.
         @type hostname: C{str}
@@ -147,6 +150,27 @@ class SupItem(DeclarativeBase, object):
                             Host.name == hostname
                         )
                     ).scalar()
+
+
+    def is_allowed_for(self, user, perm_type="r"):
+        """
+        Vérifie que l'utilisateur fourni en paramètre à le droit d'accéder au
+        supitem, avec la permission optionnellement spécifiée.
+
+        @todo: probablement à optimiser, ça fait beaucoup de requêtes.
+        
+        @param user: L'utilisateur dont la permission est à tester
+        @type  user: L{User}
+        @param perm_type: Type d'accès, par défaut "r"
+        @type  perm_type: C{str}
+        """
+        if "managers" in user.usergroups:
+            return True
+        allowed_groups = [sg[0] for sg in user.supitemgroups() if sg[1]]
+        for group in self.groups:
+            if group.idgroup in allowed_groups:
+                return True
+        return False
 
 
     def __init__(self, **kwargs):
