@@ -139,6 +139,8 @@ class MapServiceLink(MapLink):
         ),
     )
 
+    graph = relation('Graph')
+
     # TODO: renommer en idds_out (on se place toujours du point de vue du from)
     idds_from_to_to = Column(
         Integer,
