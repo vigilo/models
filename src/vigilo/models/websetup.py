@@ -129,7 +129,7 @@ def populate_db(bind):
     transaction.commit()
     print "Successfully setup"
 
-def init_db():
+def init_db(*args):
     """
     Cette fonction est appelée par le script vigiboard-init-db
     pour initialiser la base de données de Vigiboard.
