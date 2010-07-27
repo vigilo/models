@@ -4,12 +4,21 @@
 import sys
 import time
 import transaction
+import pkg_resources
 import sqlalchemy.sql.functions as sqlfuncs
 from sqlalchemy import types as sqltypes
 
-__all__ = ['populate_db', 'init_db']
+__all__ = [
+    'populate_db',
+    'init_db',
+    'VIGILO_MODELS_VERSION',
+]
 
-
+# Numéro de version du modèle, il sera incrémenté pour chaque nouvelle
+# version livrée au client. Il sera utilisé par les scripts de mise à jour
+# de Vigilo afin d'importer les données d'une ancienne version du modèle
+# vers la nouvelle version (permet d'assurer la rétro-compatibilité).
+VIGILO_MODELS_VERSION = 3
 
 def populate_db(bind):
     """Placez les commandes pour peupler la base de données ici."""
@@ -20,7 +29,6 @@ def populate_db(bind):
 
     # Chargement du modèle.
     from vigilo.models import tables
-    from vigilo.models import VIGILO_MODELS_VERSION
 
     # Création des tables
     print "Creating tables"
@@ -28,12 +36,56 @@ def populate_db(bind):
 
     # Création d'un jeu de données par défaut.
     print "Checking for an already existing model"
-    version = DBSession.query(tables.Version.version).filter(
-                    tables.Version.name == u'vigilo.models'
-                ).scalar()
+    current_version = DBSession.query(tables.Version.version).filter(
+                            tables.Version.name == u'vigilo.models'
+                        ).scalar()
 
-    if version:
-        print "Version %s of the model is already installed" % version
+    if current_version:
+        print "Version %d of the model is already installed" % current_version
+        files = pkg_resources.resource_listdir('vigilo.models.migration', '')
+        scripts = []
+        for f in files:
+            if not f.endswith('.py') or f == '__init__.py':
+                continue
+            scripts.append(f[:-3])
+        scripts.sort()
+
+        try:
+            for script in scripts:
+                    try:
+                        ver = int(script.split('_')[0])
+                    except ValueError:
+                        continue
+
+                    if ver <= current_version or ver > VIGILO_MODELS_VERSION:
+                        continue
+
+                    print "Upgrading to version %(version)d using the " \
+                        "following changeset: '%(script)s'" % {
+                        'version': ver,
+                        'script': script,
+                    } 
+
+                    ep = pkg_resources.EntryPoint.parse(
+                        'upgrade = vigilo.models.migration.%s:upgrade' % script
+                        ).load(require=False)
+
+                    transaction.begin()
+                    try:
+                        ep(bind)
+                        version = tables.Version()
+                        version.name = u'vigilo.models'
+                        version.version = ver
+                        DBSession.merge(version)
+                        DBSession.flush()
+                    except:
+                        transaction.abort()
+                        raise
+                    else:
+                        transaction.commit()
+        except ImportError:
+            # @TODO: log a warning/error or halt the process
+            raise
 
     else:
         print "Setting up the generic tables"
@@ -51,12 +103,6 @@ def populate_db(bind):
         DBSession.add(group)
         DBSession.flush()
 
-        version = tables.Version()
-        version.name = u'vigilo.models'
-        version.version = VIGILO_MODELS_VERSION
-        DBSession.add(version)
-        DBSession.flush()
-
         DBSession.add(tables.StateName(statename=u'OK', order=0))
         DBSession.add(tables.StateName(statename=u'UNKNOWN', order=1))
         DBSession.add(tables.StateName(statename=u'WARNING', order=2))
@@ -64,6 +110,12 @@ def populate_db(bind):
         DBSession.add(tables.StateName(statename=u'UP', order=0))
         DBSession.add(tables.StateName(statename=u'UNREACHABLE', order=1))
         DBSession.add(tables.StateName(statename=u'DOWN', order=3))
+        DBSession.flush()
+
+        version = tables.Version()
+        version.name = u'vigilo.models'
+        version.version = VIGILO_MODELS_VERSION
+        DBSession.add(version)
         DBSession.flush()
 
     # Spécifique projets
