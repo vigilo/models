@@ -164,7 +164,7 @@ class SupItem(DeclarativeBase, object):
         @param perm_type: Type d'accès, par défaut "r"
         @type  perm_type: C{str}
         """
-        if "managers" in user.usergroups:
+        if u"managers" in [g.group_name for g in user.usergroups]:
             return True
         allowed_groups = [sg[0] for sg in user.supitemgroups() if sg[1]]
         for group in self.groups:
