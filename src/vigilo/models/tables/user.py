@@ -76,7 +76,7 @@ class User(DeclarativeBase, object):
     def __init__(self, **kwargs):
         """
         Initialise l'instance avec les informations de l'utilisateur.
-        
+
         @param kwargs: Un dictionnaire contenant les informations sur
             l'utilisateur.
         @type kwargs: C{dict}
@@ -86,7 +86,7 @@ class User(DeclarativeBase, object):
     def __unicode__(self):
         """
         Conversion en unicode.
-        
+
         @return: Le nom de l'utilisateur.
         @rtype: C{str}
         """
@@ -99,7 +99,7 @@ class User(DeclarativeBase, object):
         associées à l'utilisateur.
 
         @return: Les permissions de cet utilisateur.
-        @rtype: C{set} of C{str}       
+        @rtype: C{set} of C{str}
         """
         perms = set()
         for g in self.usergroups:
@@ -170,13 +170,13 @@ class User(DeclarativeBase, object):
         Alors U ne peut voir que les hôtes rattachés à HG (ici, H),
         tandis que U1 peut voir les hôtes rattachés soit à HG, soit à HG1
         (ou aux deux), c'est-à-dire H et H1.
-        
+
         @param only_id: Indique le type de retour de la fonction.
-            Si cette valeur vaut True, la fonction renvoie la liste 
+            Si cette valeur vaut True, la fonction renvoie la liste
             des identifiants de groupe.
-            Sinon, la fonction renvoie la liste des groupes 
+            Sinon, la fonction renvoie la liste des groupes
         @type only_id: C{bool}
-        
+
         @param only_direct: Indique si on retourne uniquement les groupes de cartes
             auxquels l'utilisateur à directement accés ou tous les groupes
             y compris ceux auxquels il a indirectement accés (droit de passage,
@@ -214,7 +214,7 @@ class User(DeclarativeBase, object):
                 (GroupHierarchy, GroupHierarchy.idparent == MapGroup.idgroup),
             ).filter(GroupHierarchy.idchild.in_(direct_ids)
             ).all()
-        
+
         groups = None
         if only_direct:
             groups = direct
@@ -232,7 +232,7 @@ class User(DeclarativeBase, object):
         """
         Retourne l'utilisateur (L{User}) dont l'adresse email
         est L{email}.
-        
+
         @return: Utilisateur dont l'email est L{email}.
         @rtype: L{User}
         """
@@ -243,7 +243,7 @@ class User(DeclarativeBase, object):
         """
         Retourne l'utilisateur (L{User}) dont le nom d'utilisateur
         est L{username}.
-        
+
         @return: Utilisateur dont le nom d'utilisateur est L{username}.
         @rtype: L{User}
         """
@@ -267,7 +267,7 @@ class User(DeclarativeBase, object):
         """
         Teste si le mot de passe proposé correspond au mot de passe de
         l'utilisateur.
-        
+
         @param password: Le mot de passe donné par l'utilisateur pour
             s'authentifier, en texte clair.
         @type password: C{str}
@@ -287,26 +287,32 @@ class User(DeclarativeBase, object):
     def _hash_password(password):
         """
         Applique une fonction de hachage au mot de passe.
-        
+
         @param password: Mot de passe à hacher.
         @type password: C{str}
         @return: Hash correspondant au mot de passe donné.
-        @rtype: 
-        @note: Si la variable HASH_FUNCTION a été définie dans la configuration,
-            la méthode correspondante du module C{hashlib} est utilisée.
-            Si la variable n'existe pas ou ne correspond pas à une classe
-            valide du module hashlib, alors le mot de passe est stocké en clair.
+        @rtype:
+        @note: Si la variable password_hashing_function a été définie dans la
+            configuration, la méthode correspondante du module C{hashlib} est
+            utilisée. Si la variable n'existe pas ou ne correspond pas à une
+            classe/fonction valide du module hashlib, alors le mot de passe
+            est stocké en clair.
         """
         from vigilo.models.configure import HASHING_FUNC as hash_method
 
+        # Nécessaire car hashlib ne fonctionne pas sur des chaînes Unicode.
+        if isinstance(password, unicode):
+            password = password.encode('utf-8')
+
         if not hash_method is None:
-            hash_method = hashlib.__dict__.get(hash_method)
+            hash_method = getattr(hashlib, hash_method)
             if not callable(hash_method):
                 hash_method = None
 
-        if hash_method is None:
-            return password
-        return u'' + hash_method(password).hexdigest()
+        if hash_method is not None:
+            password = hash_method(password).hexdigest()
+        # On force la conversion vers Unicode pour SQLAlchemy.
+        return password.decode('utf-8')
 
     password = synonym('_password', descriptor=property(None,
                                                         _set_password))
@@ -340,4 +346,3 @@ class User(DeclarativeBase, object):
 
     language = synonym('_language', descriptor=property(_get_language,
                                                         _set_language))
-
