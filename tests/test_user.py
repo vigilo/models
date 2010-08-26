@@ -120,9 +120,23 @@ class TestUser(ModelTest):
             user.mapgroups(False, True))
 
     def test_hash_function(self):
+        """Hachage des mots de passe avec md5."""
+        from vigilo.models import configure
+        configure.HASHING_FUNC = 'md5'
         self.obj.password = 'foobar'
         DBSession.flush()
 
         digest = u''+hashlib.md5('foobar').hexdigest()
         user = DBSession.query(User).filter(User._password == digest).one()
+        eq_(user, self.obj)
+
+
+    def test_hash_function2(self):
+        """Absence de hachage des mots de passe."""
+        from vigilo.models import configure
+        configure.HASHING_FUNC = None
+        self.obj.password = 'foobar'
+        DBSession.flush()
+
+        user = DBSession.query(User).filter(User._password == u'foobar').one()
         eq_(user, self.obj)
