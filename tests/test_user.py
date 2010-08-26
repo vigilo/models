@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for User class"""
+import hashlib
 from nose.tools import eq_
 
 from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup,\
@@ -78,12 +79,12 @@ class TestUser(ModelTest):
                 (sub1.idgroup, False),
                 (sub2.idgroup, True),
             ], user.supitemgroups())
-        
+
     def test_mapgroups(self):
         """Récupération des groupes de cartes accessibles"""
         user = User(user_name=u'manager', email=u'', fullname=u'')
         DBSession.flush()
-        
+
         usergroup = UserGroup(group_name=u'managers')
         usergroup.users.append(user)
         DBSession.flush()
@@ -97,7 +98,7 @@ class TestUser(ModelTest):
         g1111 = MapGroup(name=u'groupe 1.1.1.1', parent=g111)
         DBSession.add(g1111)
         DBSession.flush()
-        
+
         perm = Permission(permission_name=u'manage')
         DBSession.add(perm)
         perm.usergroups.append(usergroup)
@@ -110,11 +111,18 @@ class TestUser(ModelTest):
         )
         DBSession.add(dataperm)
         DBSession.flush()
-        
-        
+
+
         eq_([g1.idgroup, g11.idgroup, g111.idgroup],
             user.mapgroups(True))
 
         eq_([g111],
             user.mapgroups(False, True))
 
+    def test_hash_function(self):
+        self.obj.password = 'foobar'
+        DBSession.flush()
+
+        digest = u''+hashlib.md5('foobar').hexdigest()
+        user = DBSession.query(User).filter(User._password == digest).one()
+        eq_(user, self.obj)
