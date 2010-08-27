@@ -206,7 +206,7 @@ class LowLevelService(Service):
         """
         Renvoie le service de bas niveau dont le nom d'hôte
         est L{hostname} et le nom de service est L{servicename}.
-        
+
         @param hostname: Nom de l'hôte auquel est rattaché le service.
         @type hostname: C{unicode}
         @param servicename: Nom du service voulu.
@@ -223,7 +223,7 @@ class LowLevelService(Service):
     def __unicode__(self):
         """Représentation unicode de l'objet."""
         return "%s (%s)" % (self.servicename, self.host.name)
-    
+
     def __repr__(self):
         try:
             return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
@@ -300,7 +300,7 @@ class HighLevelService(Service):
 
     impacts = relation('ImpactedHLS', back_populates='hls',
                        lazy=True, cascade="all")
-    
+
     def __init__(self, **kwargs):
         """Initialisation de l'objet."""
         super(HighLevelService, self).__init__(**kwargs)
@@ -309,7 +309,7 @@ class HighLevelService(Service):
     def by_service_name(cls, servicename):
         """
         Renvoie le service de haut niveau dont le nom est L{servicename}.
-        
+
         @param servicename: Nom du service de haut niveau voulu.
         @type servicename: C{unicode}
         @return: Le service de haut niveau demandé.

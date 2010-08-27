@@ -22,7 +22,7 @@ class Group(DeclarativeBase, object):
     des instances.
     En combinant cette classe à la classe GroupHierarchy, il est possible
     de créer une arborescence de groupes.
-    
+
     @ivar idgroup: Identifiant (auto-généré) du groupe.
     @ivar _grouptype: Discriminant pour savoir le type de groupe manipulé.
         Note: n'utilisez jamais cet attribut dans votre code pour effectuer
@@ -59,7 +59,7 @@ class Group(DeclarativeBase, object):
     def __init__(self, **kwargs):
         """
         Initialise l'instance avec les informations du groupe.
-        
+
         @param kwargs: Un dictionnaire avec les informations sur le groupe.
         @type kwargs: C{dict}
         """
@@ -71,7 +71,7 @@ class Group(DeclarativeBase, object):
     def __unicode__(self):
         """
         Conversion en unicode.
-        
+
         @return: Le nom du groupe.
         @rtype: C{str}
         """
@@ -85,10 +85,14 @@ class Group(DeclarativeBase, object):
     def get_path(self):
         """
         Renvoie le chemin d'accès jusqu'au groupe.
-        
+
         @return: Chemin d'accès jusqu'à ce groupe.
         @rtype: C{str}
         """
+        # mise en cache
+        path = getattr(self, "_path", None)
+        if path:
+            return path
         from .grouphierarchy import GroupHierarchy
         parts = DBSession.query(
                 Group.name
@@ -100,7 +104,9 @@ class Group(DeclarativeBase, object):
         parts = [p.name.replace('\\', '\\\\').replace('/', '\\/') for p in parts]
         # Force la génération d'un chemin absolu (commençant par '/').
         parts.insert(0, '')
-        return '/'.join(parts)
+        self._path = '/'.join(parts)
+        return self._path
+    path = property(get_path)
 
     # Parents
 
@@ -110,7 +116,7 @@ class Group(DeclarativeBase, object):
             .filter(GroupHierarchy.idchild == self.idgroup)\
             .filter(GroupHierarchy.hops > 0)\
             .count() > 0)
-    
+
     def __get_parent(self):
         """Récupère l'instance parente du groupe courant."""
         from .grouphierarchy import GroupHierarchy
@@ -122,7 +128,7 @@ class Group(DeclarativeBase, object):
         if q.count() == 0:
             return None
         return q.one().parent
-    
+
     def __set_parent(self, group):
         """
         Positionne un groupe en tant que parent du groupe courant.
@@ -200,7 +206,7 @@ class Group(DeclarativeBase, object):
         ).filter(GroupHierarchy.idparent == self.idgroup
         ).filter(GroupHierarchy.hops == 1
         ).count() > 0)
-    
+
     def get_children(self, hops=1):
         """ renvoie la liste des enfants d'un groupe
         """
@@ -368,10 +374,10 @@ class SupItemGroup(Group):
 
     supitems = relation('SupItem', secondary=SUPITEM_GROUP_TABLE,
                 back_populates='groups')
-    
+
     hosts = relation('Host', secondary=SUPITEM_GROUP_TABLE)
-    
+
     lls = relation('LowLevelService', secondary=SUPITEM_GROUP_TABLE)
-    
+
     hls = relation('HighLevelService', secondary=SUPITEM_GROUP_TABLE)
 

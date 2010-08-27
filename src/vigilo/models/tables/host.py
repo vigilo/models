@@ -45,7 +45,7 @@ class HostMapperExt(SupItemMapperExt):
 class Host(SupItem):
     """
     Informations sur un hôte du parc informatique.
-    
+
     @ivar idhost: Identifiant de l'hôte.
     @ivar name: Nom complet (FQDN) unique de l'hôte.
     @ivar checkhostcmd: Commande à exécuter pour vérifier l'état de l'hôte.
@@ -162,7 +162,7 @@ class Host(SupItem):
     def by_host_name(cls, hostname):
         """
         Renvoie l'hôte dont le nom est L{hostname}.
-        
+
         @param hostname: Nom de l'hôte voulu.
         @type hostname: C{unicode}
         @return: L'hôte demandé.
@@ -174,9 +174,9 @@ class Host(SupItem):
         """
         Vérifie que l'utilisateur fourni en paramètre à le droit d'accéder au
         supitem, avec la permission optionnellement spécifiée.
-        
+
         @todo: probablement à optimiser, ça fait beaucoup de requêtes.
-        
+
         @param user: L'utilisateur dont la permission est à tester
         @type  user: L{User}
         @param perm_type: Type d'accès, par défaut "r"

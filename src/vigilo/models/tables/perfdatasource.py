@@ -47,11 +47,11 @@ class PerfDataSource(DeclarativeBase, object):
 
     host = relation('Host', back_populates="perfdatasources",
                        lazy=True)
-    
+
     name = Column(
         UnicodeText,
         nullable=False)
-    
+
     # GAUGE, COUNTER, ...
     type = Column(
         UnicodeText,
@@ -73,17 +73,17 @@ class PerfDataSource(DeclarativeBase, object):
     def __init__(self, **kwargs):
         """Initialisation de la source de données de performance."""
         super(PerfDataSource, self).__init__(**kwargs)
-    
+
     def __repr__(self):
         return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
                                           str(self.name), str(self.host.name))
-    
+
     @classmethod
     def by_host_and_source_name(cls, host, sourcename):
         """
         Renvoie une source de données concernant un service donné
         en fonction de son nom.
-        
+
         @param cls: Classe à utiliser pour la récupération de la source.
         @type cls: C{type}
         @param host: Instance de L{Host} ou identifiant

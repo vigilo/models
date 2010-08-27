@@ -14,7 +14,7 @@ __all__ = ('Graph', )
 class Graph(DeclarativeBase, object):
     """
     Informations sur une datasource d'un service.
-    
+
     @ivar idgraph: Identifiant du graph, autogénéré.
     @ivar name: Nom du graph.
     @ivar template: Le type de graphe généré par rrdtool (ligne, barres,
@@ -25,7 +25,7 @@ class Graph(DeclarativeBase, object):
         rattachées à ce graphe.
     """
     __tablename__ = 'graph'
-    
+
     idgraph = Column(
         Integer,
         primary_key=True, autoincrement=True,)
@@ -37,14 +37,14 @@ class Graph(DeclarativeBase, object):
     template = Column(
         Unicode(255),
         default=u'', nullable=False)
-    
+
     vlabel = Column(
         Unicode(255),
         default=u'', nullable=False)
-    
+
     groups = relation('GraphGroup', secondary=GRAPH_GROUP_TABLE,
         lazy=True, back_populates='graphs')
-    
+
     perfdatasources = relation('PerfDataSource', lazy=True,
         back_populates='graphs', secondary=GRAPH_PERFDATASOURCE_TABLE)
 
