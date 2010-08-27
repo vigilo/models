@@ -1,1 +1,1 @@
-include deployment/models.ini
+include deployment/settings.ini
