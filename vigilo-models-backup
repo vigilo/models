@@ -5,7 +5,7 @@ base_dir=/var/lib/pgsql
 
 if [ $# -lt 2 ]
 then
-    echo "Usage: $0 <Vigilo database name> <path/where/to/put/the/backup.gz>"
+    echo "Usage: $0 <Vigilo database name> <path/where/to/put/the/backup>"
     exit 1
 fi
 
