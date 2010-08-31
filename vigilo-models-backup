@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Dossier racine des données de PostgreSQL.
+base_dir=/var/lib/pgsql
+
+if [ $# -lt 2 ]
+then
+    echo "Usage: $0 <Vigilo database name> <path/where/to/put/the/backup.gz>"
+    exit 1
+fi
+
+# Définition de variables utiles pour la connexion à PostgreSQL
+# et pour gérer la sauvegarde.
+if [ -z "$PGUSER" ]; then PGUSER=postgres; fi
+if [ -z "$PGSSLMODE" ]; then PGSSLMODE=require; fi
+
+export PGUSER
+export PGSSLMODE
+
+# Fonction qui permet un retour arrière en cas d'erreur/interruption
+# lors de la procédure de restauration.
+bashtrap()
+{
+    msg="The backup was interrupted and most likely got corrupted."
+    echo $msg | logger -i -t 'Vigilo-backup'
+    echo $msg
+    trap - INT TERM EXIT
+    exit 2
+}
+
+trap bashtrap INT TERM EXIT
+
+msg="Starting backup process."
+echo $msg | logger -i -t 'Vigilo-backup'
+echo $msg
+
+pg_dump -v -b -Fc $1 > $2
+
+msg="Vigilo was successfully backed up!"
+echo $msg | logger -i -t 'Vigilo-backup'
+echo $msg
+
+trap - INT TERM EXIT
+exit 0

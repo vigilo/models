@@ -1,0 +1,64 @@
+#!/bin/bash
+
+if [ $# -lt 2 ]
+then
+    echo "Usage: $0 <Vigilo database name> <path/to/the/backup.gz>"
+    exit 1
+fi
+
+# Définition de variables utiles pour la connexion à PostgreSQL
+# et pour gérer la sauvegarde.
+if [ -z "$PGUSER" ]; then PGUSER=postgres; fi
+if [ -z "$PGSSLMODE" ]; then PGSSLMODE=require; fi
+
+export PGUSER
+export PGSSLMODE
+
+# Fonction qui permet un retour arrière en cas d'erreur/interruption
+# lors de la procédure de restauration.
+bashtrap()
+{
+    msg="The restoration process was interrupted. Rolling back..."
+    echo $msg | logger -i -t 'Vigilo-restore'
+    echo $msg
+    trap - INT TERM EXIT
+    exit 2
+}
+
+trap bashtrap INT TERM EXIT
+
+msg="Starting restoration process."
+echo $msg | logger -i -t 'Vigilo-restore'
+echo $msg
+
+user=`pg_restore -l $2 | grep -E 'TABLE public .*version ' | awk '{print $7}'`
+
+# Création de la nouvelle base de données.
+su postgres -c "createdb -O $user $1"
+if [ $? -ne 0 ];
+then
+    msg="Could not create the database ($1) for user $user"
+    echo $msg | logger -i -t 'Vigilo-restore'
+    echo $msg
+    trap - INT TERM EXIT
+    exit 1
+fi
+
+# Restauration à proprement parler, encapsulée dans une transaction,
+# et qui fait un rollback automatiquement au moindre problème.
+pg_restore -v -e -L `dirname $0`/restoration.plan -Fc -1 -d $1 $2
+if [ $? -ne 0 ];
+then
+    msg="Could not restore data"
+    echo $msg | logger -i -t 'Vigilo-restore'
+    echo $msg
+    trap - INT TERM EXIT
+    exit 1
+fi
+
+msg="Vigilo was successfully restored!"
+echo $msg | logger -i -t 'Vigilo-restore'
+echo $msg
+
+trap - INT TERM EXIT
+exit 0

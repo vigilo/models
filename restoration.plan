@@ -1,0 +1,864 @@
+;
+; Archive created at Mon Aug 30 11:01:34 2010
+;     dbname: vigilo
+;     TOC Entries: 824
+;     Compression: -1
+;     Dump Version: 1.10-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 8.3.11
+;     Dumped by pg_dump version: 8.3.11
+;
+;
+; Selected TOC Entries:
+;
+7; 2615 465823 SCHEMA - _vigilo postgres
+2534; 0 0 ACL - _vigilo postgres
+6; 2615 2200 SCHEMA - public postgres
+2535; 0 0 COMMENT - SCHEMA public postgres
+2536; 0 0 ACL - public postgres
+633; 2612 423162 PROCEDURAL LANGUAGE - plpgsql vigilo
+632; 2612 423159 PROCEDURAL LANGUAGE - plpythonu postgres
+571; 0 0 SHELL TYPE _vigilo xxid postgres
+21; 1255 465825 FUNCTION _vigilo xxidin(cstring) postgres
+22; 1255 465826 FUNCTION _vigilo xxidout(xxid) postgres
+570; 1247 465824 TYPE _vigilo xxid postgres
+574; 0 0 SHELL TYPE _vigilo xxid_snapshot postgres
+33; 1255 465855 FUNCTION _vigilo xxid_snapshot_in(cstring) postgres
+34; 1255 465856 FUNCTION _vigilo xxid_snapshot_out(xxid_snapshot) postgres
+573; 1247 465854 TYPE _vigilo xxid_snapshot postgres
+153; 1255 466178 FUNCTION _vigilo add_empty_table_to_replication(integer, integer, text, text, text, text) postgres
+2537; 0 0 COMMENT _vigilo FUNCTION add_empty_table_to_replication(integer, integer, text, text, text, text) postgres
+150; 1255 466171 FUNCTION _vigilo add_missing_table_field(text, text, text, text) postgres
+2538; 0 0 COMMENT _vigilo FUNCTION add_missing_table_field(text, text, text, text) postgres
+149; 1255 466170 FUNCTION _vigilo addpartiallogindices() postgres
+2539; 0 0 COMMENT _vigilo FUNCTION addpartiallogindices() postgres
+124; 1255 466144 FUNCTION _vigilo altertableforreplication(integer) postgres
+2540; 0 0 COMMENT _vigilo FUNCTION altertableforreplication(integer) postgres
+125; 1255 466146 FUNCTION _vigilo altertablerestore(integer) postgres
+2541; 0 0 COMMENT _vigilo FUNCTION altertablerestore(integer) postgres
+29; 1255 465836 FUNCTION _vigilo btxxidcmp(xxid, xxid) postgres
+51; 1255 466069 FUNCTION _vigilo checkmoduleversion() postgres
+2542; 0 0 COMMENT _vigilo FUNCTION checkmoduleversion() postgres
+133; 1255 466154 FUNCTION _vigilo cleanupevent() postgres
+2543; 0 0 COMMENT _vigilo FUNCTION cleanupevent() postgres
+69; 1255 466087 FUNCTION _vigilo cleanupnodelock() postgres
+2544; 0 0 COMMENT _vigilo FUNCTION cleanupnodelock() postgres
+152; 1255 466177 FUNCTION _vigilo copyfields(integer) postgres
+2545; 0 0 COMMENT _vigilo FUNCTION copyfields(integer) postgres
+38; 1255 466056 FUNCTION _vigilo createevent(name, text) postgres
+2546; 0 0 COMMENT _vigilo FUNCTION createevent(name, text) postgres
+39; 1255 466057 FUNCTION _vigilo createevent(name, text, text) postgres
+2547; 0 0 COMMENT _vigilo FUNCTION createevent(name, text, text) postgres
+40; 1255 466058 FUNCTION _vigilo createevent(name, text, text, text) postgres
+2548; 0 0 COMMENT _vigilo FUNCTION createevent(name, text, text, text) postgres
+41; 1255 466059 FUNCTION _vigilo createevent(name, text, text, text, text) postgres
+2549; 0 0 COMMENT _vigilo FUNCTION createevent(name, text, text, text, text) postgres
+42; 1255 466060 FUNCTION _vigilo createevent(name, text, text, text, text, text) postgres
+2550; 0 0 COMMENT _vigilo FUNCTION createevent(name, text, text, text, text, text) postgres
+43; 1255 466061 FUNCTION _vigilo createevent(name, text, text, text, text, text, text) postgres
+2551; 0 0 COMMENT _vigilo FUNCTION createevent(name, text, text, text, text, text, text) postgres
+44; 1255 466062 FUNCTION _vigilo createevent(name, text, text, text, text, text, text, text) postgres
+2552; 0 0 COMMENT _vigilo FUNCTION createevent(name, text, text, text, text, text, text, text) postgres
+45; 1255 466063 FUNCTION _vigilo createevent(name, text, text, text, text, text, text, text, text) postgres
+2553; 0 0 COMMENT _vigilo FUNCTION createevent(name, text, text, text, text, text, text, text, text) postgres
+46; 1255 466064 FUNCTION _vigilo createevent(name, text, text, text, text, text, text, text, text, text) postgres
+2554; 0 0 COMMENT _vigilo FUNCTION createevent(name, text, text, text, text, text, text, text, text, text) postgres
+121; 1255 466141 FUNCTION _vigilo ddlscript_complete(integer, text, integer) postgres
+2555; 0 0 COMMENT _vigilo FUNCTION ddlscript_complete(integer, text, integer) postgres
+123; 1255 466143 FUNCTION _vigilo ddlscript_complete_int(integer, integer) postgres
+2556; 0 0 COMMENT _vigilo FUNCTION ddlscript_complete_int(integer, integer) postgres
+119; 1255 466139 FUNCTION _vigilo ddlscript_prepare(integer, integer) postgres
+2557; 0 0 COMMENT _vigilo FUNCTION ddlscript_prepare(integer, integer) postgres
+122; 1255 466142 FUNCTION _vigilo ddlscript_prepare_int(integer, integer) postgres
+2558; 0 0 COMMENT _vigilo FUNCTION ddlscript_prepare_int(integer, integer) postgres
+47; 1255 466065 FUNCTION _vigilo denyaccess() postgres
+2559; 0 0 COMMENT _vigilo FUNCTION denyaccess() postgres
+2560; 0 0 ACL _vigilo denyaccess() postgres
+139; 1255 466160 FUNCTION _vigilo determineattkindserial(text) postgres
+2561; 0 0 COMMENT _vigilo FUNCTION determineattkindserial(text) postgres
+138; 1255 466159 FUNCTION _vigilo determineattkindunique(text, name) postgres
+2562; 0 0 COMMENT _vigilo FUNCTION determineattkindunique(text, name) postgres
+137; 1255 466158 FUNCTION _vigilo determineidxnameserial(text) postgres
+2563; 0 0 COMMENT _vigilo FUNCTION determineidxnameserial(text) postgres
+136; 1255 466157 FUNCTION _vigilo determineidxnameunique(text, name) postgres
+2564; 0 0 COMMENT _vigilo FUNCTION determineidxnameunique(text, name) postgres
+76; 1255 466094 FUNCTION _vigilo disablenode(integer) postgres
+2565; 0 0 COMMENT _vigilo FUNCTION disablenode(integer) postgres
+77; 1255 466095 FUNCTION _vigilo disablenode_int(integer) postgres
+120; 1255 466140 FUNCTION _vigilo drop_if_exists(text, text) postgres
+2566; 0 0 COMMENT _vigilo FUNCTION drop_if_exists(text, text) postgres
+90; 1255 466109 FUNCTION _vigilo droplisten(integer, integer, integer) postgres
+2567; 0 0 COMMENT _vigilo FUNCTION droplisten(integer, integer, integer) postgres
+91; 1255 466110 FUNCTION _vigilo droplisten_int(integer, integer, integer) postgres
+2568; 0 0 COMMENT _vigilo FUNCTION droplisten_int(integer, integer, integer) postgres
+78; 1255 466096 FUNCTION _vigilo dropnode(integer) postgres
+2569; 0 0 COMMENT _vigilo FUNCTION dropnode(integer) postgres
+79; 1255 466097 FUNCTION _vigilo dropnode_int(integer) postgres
+2570; 0 0 COMMENT _vigilo FUNCTION dropnode_int(integer) postgres
+86; 1255 466105 FUNCTION _vigilo droppath(integer, integer) postgres
+2571; 0 0 COMMENT _vigilo FUNCTION droppath(integer, integer) postgres
+87; 1255 466106 FUNCTION _vigilo droppath_int(integer, integer) postgres
+2572; 0 0 COMMENT _vigilo FUNCTION droppath_int(integer, integer) postgres
+98; 1255 466118 FUNCTION _vigilo dropset(integer) postgres
+2573; 0 0 COMMENT _vigilo FUNCTION dropset(integer) postgres
+99; 1255 466119 FUNCTION _vigilo dropset_int(integer) postgres
+117; 1255 466137 FUNCTION _vigilo droptrigger(integer, name) postgres
+2574; 0 0 COMMENT _vigilo FUNCTION droptrigger(integer, name) postgres
+118; 1255 466138 FUNCTION _vigilo droptrigger_int(integer, name) postgres
+2575; 0 0 COMMENT _vigilo FUNCTION droptrigger_int(integer, name) postgres
+74; 1255 466092 FUNCTION _vigilo enablenode(integer) postgres
+2576; 0 0 COMMENT _vigilo FUNCTION enablenode(integer) postgres
+75; 1255 466093 FUNCTION _vigilo enablenode_int(integer) postgres
+2577; 0 0 COMMENT _vigilo FUNCTION enablenode_int(integer) postgres
+130; 1255 466151 FUNCTION _vigilo enablesubscription(integer, integer, integer) postgres
+2578; 0 0 COMMENT _vigilo FUNCTION enablesubscription(integer, integer, integer) postgres
+131; 1255 466152 FUNCTION _vigilo enablesubscription_int(integer, integer, integer) postgres
+2579; 0 0 COMMENT _vigilo FUNCTION enablesubscription_int(integer, integer, integer) postgres
+80; 1255 466098 FUNCTION _vigilo failednode(integer, integer) postgres
+2580; 0 0 COMMENT _vigilo FUNCTION failednode(integer, integer) postgres
+81; 1255 466100 FUNCTION _vigilo failednode2(integer, integer, integer, bigint, bigint) postgres
+2581; 0 0 COMMENT _vigilo FUNCTION failednode2(integer, integer, integer, bigint, bigint) postgres
+82; 1255 466101 FUNCTION _vigilo failoverset_int(integer, integer, integer, bigint) postgres
+2582; 0 0 COMMENT _vigilo FUNCTION failoverset_int(integer, integer, integer, bigint) postgres
+156; 1255 466181 FUNCTION _vigilo finishtableaftercopy(integer) postgres
+2583; 0 0 COMMENT _vigilo FUNCTION finishtableaftercopy(integer) postgres
+132; 1255 466153 FUNCTION _vigilo forwardconfirm(integer, integer, bigint, timestamp without time zone) postgres
+2584; 0 0 COMMENT _vigilo FUNCTION forwardconfirm(integer, integer, bigint, timestamp without time zone) postgres
+142; 1255 466163 FUNCTION _vigilo generate_sync_event(interval) postgres
+2585; 0 0 COMMENT _vigilo FUNCTION generate_sync_event(interval) postgres
+30; 1255 465837 FUNCTION _vigilo getcurrentxid() postgres
+49; 1255 466067 FUNCTION _vigilo getlocalnodeid(name) postgres
+2586; 0 0 COMMENT _vigilo FUNCTION getlocalnodeid(name) postgres
+2587; 0 0 ACL _vigilo getlocalnodeid(name) postgres
+32; 1255 465839 FUNCTION _vigilo getmaxxid() postgres
+31; 1255 465838 FUNCTION _vigilo getminxid() postgres
+50; 1255 466068 FUNCTION _vigilo getmoduleversion() postgres
+2588; 0 0 COMMENT _vigilo FUNCTION getmoduleversion() postgres
+2589; 0 0 ACL _vigilo getmoduleversion() postgres
+53; 1255 466071 FUNCTION _vigilo getsessionrole(name) postgres
+2590; 0 0 COMMENT _vigilo FUNCTION getsessionrole(name) postgres
+2591; 0 0 ACL _vigilo getsessionrole(name) postgres
+71; 1255 466089 FUNCTION _vigilo initializelocalnode(integer, text) postgres
+2592; 0 0 COMMENT _vigilo FUNCTION initializelocalnode(integer, text) postgres
+56; 1255 466074 FUNCTION _vigilo killbackend(integer, text) postgres
+2593; 0 0 COMMENT _vigilo FUNCTION killbackend(integer, text) postgres
+48; 1255 466066 FUNCTION _vigilo lockedset() postgres
+2594; 0 0 COMMENT _vigilo FUNCTION lockedset() postgres
+94; 1255 466113 FUNCTION _vigilo lockset(integer) postgres
+2595; 0 0 COMMENT _vigilo FUNCTION lockset(integer) postgres
+148; 1255 466169 FUNCTION _vigilo logswitch_finish() postgres
+2596; 0 0 COMMENT _vigilo FUNCTION logswitch_finish() postgres
+146; 1255 466167 FUNCTION _vigilo logswitch_start() postgres
+2597; 0 0 COMMENT _vigilo FUNCTION logswitch_start() postgres
+147; 1255 466168 FUNCTION _vigilo logswitch_weekly() postgres
+2598; 0 0 COMMENT _vigilo FUNCTION logswitch_weekly() postgres
+54; 1255 466072 FUNCTION _vigilo logtrigger() postgres
+2599; 0 0 COMMENT _vigilo FUNCTION logtrigger() postgres
+2600; 0 0 ACL _vigilo logtrigger() postgres
+158; 1255 466183 FUNCTION _vigilo make_function_strict(text, text) postgres
+2601; 0 0 COMMENT _vigilo FUNCTION make_function_strict(text, text) postgres
+100; 1255 466120 FUNCTION _vigilo mergeset(integer, integer) postgres
+2602; 0 0 COMMENT _vigilo FUNCTION mergeset(integer, integer) postgres
+101; 1255 466121 FUNCTION _vigilo mergeset_int(integer, integer) postgres
+2603; 0 0 COMMENT _vigilo FUNCTION mergeset_int(integer, integer) postgres
+96; 1255 466115 FUNCTION _vigilo moveset(integer, integer) postgres
+2604; 0 0 COMMENT _vigilo FUNCTION moveset(integer, integer) postgres
+97; 1255 466116 FUNCTION _vigilo moveset_int(integer, integer, integer, bigint) postgres
+2605; 0 0 COMMENT _vigilo FUNCTION moveset_int(integer, integer, integer, bigint) postgres
+157; 1255 466182 FUNCTION _vigilo pre74() postgres
+2606; 0 0 COMMENT _vigilo FUNCTION pre74() postgres
+155; 1255 466180 FUNCTION _vigilo preparetableforcopy(integer) postgres
+2607; 0 0 COMMENT _vigilo FUNCTION preparetableforcopy(integer) postgres
+141; 1255 466162 FUNCTION _vigilo reachablefromnode(integer, integer[]) postgres
+2608; 0 0 COMMENT _vigilo FUNCTION reachablefromnode(integer, integer[]) postgres
+140; 1255 466161 FUNCTION _vigilo rebuildlistenentries() postgres
+2609; 0 0 COMMENT _vigilo FUNCTION rebuildlistenentries() postgres
+70; 1255 466088 FUNCTION _vigilo registernodeconnection(integer) postgres
+2610; 0 0 COMMENT _vigilo FUNCTION registernodeconnection(integer) postgres
+64; 1255 466082 FUNCTION _vigilo registry_get_int4(text, integer) postgres
+2611; 0 0 COMMENT _vigilo FUNCTION registry_get_int4(text, integer) postgres
+66; 1255 466084 FUNCTION _vigilo registry_get_text(text, text) postgres
+2612; 0 0 COMMENT _vigilo FUNCTION registry_get_text(text, text) postgres
+68; 1255 466086 FUNCTION _vigilo registry_get_timestamp(text, timestamp without time zone) postgres
+2613; 0 0 COMMENT _vigilo FUNCTION registry_get_timestamp(text, timestamp without time zone) postgres
+63; 1255 466081 FUNCTION _vigilo registry_set_int4(text, integer) postgres
+2614; 0 0 COMMENT _vigilo FUNCTION registry_set_int4(text, integer) postgres
+65; 1255 466083 FUNCTION _vigilo registry_set_text(text, text) postgres
+2615; 0 0 COMMENT _vigilo FUNCTION registry_set_text(text, text) postgres
+67; 1255 466085 FUNCTION _vigilo registry_set_timestamp(text, timestamp without time zone) postgres
+2616; 0 0 COMMENT _vigilo FUNCTION registry_set_timestamp(text, timestamp without time zone) postgres
+154; 1255 466179 FUNCTION _vigilo replicate_partition(integer, text, text, text, text) postgres
+2617; 0 0 COMMENT _vigilo FUNCTION replicate_partition(integer, text, text, text, text) postgres
+37; 1255 466013 FUNCTION _vigilo sequencelastvalue(text) postgres
+2618; 0 0 COMMENT _vigilo FUNCTION sequencelastvalue(text) postgres
+114; 1255 466134 FUNCTION _vigilo sequencesetvalue(integer, integer, bigint, bigint) postgres
+2619; 0 0 COMMENT _vigilo FUNCTION sequencesetvalue(integer, integer, bigint, bigint) postgres
+106; 1255 466126 FUNCTION _vigilo setaddsequence(integer, integer, text, text) postgres
+2620; 0 0 COMMENT _vigilo FUNCTION setaddsequence(integer, integer, text, text) postgres
+107; 1255 466127 FUNCTION _vigilo setaddsequence_int(integer, integer, text, text) postgres
+2621; 0 0 COMMENT _vigilo FUNCTION setaddsequence_int(integer, integer, text, text) postgres
+102; 1255 466122 FUNCTION _vigilo setaddtable(integer, integer, text, name, text) postgres
+2622; 0 0 COMMENT _vigilo FUNCTION setaddtable(integer, integer, text, name, text) postgres
+103; 1255 466123 FUNCTION _vigilo setaddtable_int(integer, integer, text, name, text) postgres
+2623; 0 0 COMMENT _vigilo FUNCTION setaddtable_int(integer, integer, text, name, text) postgres
+108; 1255 466128 FUNCTION _vigilo setdropsequence(integer) postgres
+2624; 0 0 COMMENT _vigilo FUNCTION setdropsequence(integer) postgres
+109; 1255 466129 FUNCTION _vigilo setdropsequence_int(integer) postgres
+2625; 0 0 COMMENT _vigilo FUNCTION setdropsequence_int(integer) postgres
+104; 1255 466124 FUNCTION _vigilo setdroptable(integer) postgres
+2626; 0 0 COMMENT _vigilo FUNCTION setdroptable(integer) postgres
+105; 1255 466125 FUNCTION _vigilo setdroptable_int(integer) postgres
+2627; 0 0 COMMENT _vigilo FUNCTION setdroptable_int(integer) postgres
+112; 1255 466132 FUNCTION _vigilo setmovesequence(integer, integer) postgres
+2628; 0 0 COMMENT _vigilo FUNCTION setmovesequence(integer, integer) postgres
+113; 1255 466133 FUNCTION _vigilo setmovesequence_int(integer, integer) postgres
+2629; 0 0 COMMENT _vigilo FUNCTION setmovesequence_int(integer, integer) postgres
+110; 1255 466130 FUNCTION _vigilo setmovetable(integer, integer) postgres
+2630; 0 0 COMMENT _vigilo FUNCTION setmovetable(integer, integer) postgres
+111; 1255 466131 FUNCTION _vigilo setmovetable_int(integer, integer) postgres
+52; 1255 466070 FUNCTION _vigilo setsessionrole(name, text) postgres
+2631; 0 0 COMMENT _vigilo FUNCTION setsessionrole(name, text) postgres
+2632; 0 0 ACL _vigilo setsessionrole(name, text) postgres
+57; 1255 466075 FUNCTION _vigilo slon_quote_brute(text) postgres
+2633; 0 0 COMMENT _vigilo FUNCTION slon_quote_brute(text) postgres
+58; 1255 466076 FUNCTION _vigilo slon_quote_input(text) postgres
+2634; 0 0 COMMENT _vigilo FUNCTION slon_quote_input(text) postgres
+62; 1255 466080 FUNCTION _vigilo slonyversion() postgres
+2635; 0 0 COMMENT _vigilo FUNCTION slonyversion() postgres
+59; 1255 466077 FUNCTION _vigilo slonyversionmajor() postgres
+2636; 0 0 COMMENT _vigilo FUNCTION slonyversionmajor() postgres
+60; 1255 466078 FUNCTION _vigilo slonyversionminor() postgres
+2637; 0 0 COMMENT _vigilo FUNCTION slonyversionminor() postgres
+61; 1255 466079 FUNCTION _vigilo slonyversionpatchlevel() postgres
+2638; 0 0 COMMENT _vigilo FUNCTION slonyversionpatchlevel() postgres
+88; 1255 466107 FUNCTION _vigilo storelisten(integer, integer, integer) postgres
+2639; 0 0 COMMENT _vigilo FUNCTION storelisten(integer, integer, integer) postgres
+89; 1255 466108 FUNCTION _vigilo storelisten_int(integer, integer, integer) postgres
+2640; 0 0 COMMENT _vigilo FUNCTION storelisten_int(integer, integer, integer) postgres
+72; 1255 466090 FUNCTION _vigilo storenode(integer, text, boolean) postgres
+2641; 0 0 COMMENT _vigilo FUNCTION storenode(integer, text, boolean) postgres
+73; 1255 466091 FUNCTION _vigilo storenode_int(integer, text, boolean) postgres
+2642; 0 0 COMMENT _vigilo FUNCTION storenode_int(integer, text, boolean) postgres
+84; 1255 466103 FUNCTION _vigilo storepath(integer, integer, text, integer) postgres
+2643; 0 0 COMMENT _vigilo FUNCTION storepath(integer, integer, text, integer) postgres
+85; 1255 466104 FUNCTION _vigilo storepath_int(integer, integer, text, integer) postgres
+2644; 0 0 COMMENT _vigilo FUNCTION storepath_int(integer, integer, text, integer) postgres
+92; 1255 466111 FUNCTION _vigilo storeset(integer, text) postgres
+2645; 0 0 COMMENT _vigilo FUNCTION storeset(integer, text) postgres
+93; 1255 466112 FUNCTION _vigilo storeset_int(integer, integer, text) postgres
+2646; 0 0 COMMENT _vigilo FUNCTION storeset_int(integer, integer, text) postgres
+115; 1255 466135 FUNCTION _vigilo storetrigger(integer, name) postgres
+2647; 0 0 COMMENT _vigilo FUNCTION storetrigger(integer, name) postgres
+116; 1255 466136 FUNCTION _vigilo storetrigger_int(integer, name) postgres
+2648; 0 0 COMMENT _vigilo FUNCTION storetrigger_int(integer, name) postgres
+126; 1255 466147 FUNCTION _vigilo subscribeset(integer, integer, integer, boolean) postgres
+2649; 0 0 COMMENT _vigilo FUNCTION subscribeset(integer, integer, integer, boolean) postgres
+127; 1255 466148 FUNCTION _vigilo subscribeset_int(integer, integer, integer, boolean) postgres
+2650; 0 0 COMMENT _vigilo FUNCTION subscribeset_int(integer, integer, integer, boolean) postgres
+134; 1255 466155 FUNCTION _vigilo tableaddkey(text) postgres
+2651; 0 0 COMMENT _vigilo FUNCTION tableaddkey(text) postgres
+135; 1255 466156 FUNCTION _vigilo tabledropkey(integer) postgres
+2652; 0 0 COMMENT _vigilo FUNCTION tabledropkey(integer) postgres
+143; 1255 466164 FUNCTION _vigilo tablehasserialkey(text) postgres
+2653; 0 0 COMMENT _vigilo FUNCTION tablehasserialkey(text) postgres
+55; 1255 466073 FUNCTION _vigilo terminatenodeconnections(integer) postgres
+2654; 0 0 COMMENT _vigilo FUNCTION terminatenodeconnections(integer) postgres
+83; 1255 466102 FUNCTION _vigilo uninstallnode() postgres
+2655; 0 0 COMMENT _vigilo FUNCTION uninstallnode() postgres
+95; 1255 466114 FUNCTION _vigilo unlockset(integer) postgres
+2656; 0 0 COMMENT _vigilo FUNCTION unlockset(integer) postgres
+128; 1255 466149 FUNCTION _vigilo unsubscribeset(integer, integer) postgres
+2657; 0 0 COMMENT _vigilo FUNCTION unsubscribeset(integer, integer) postgres
+129; 1255 466150 FUNCTION _vigilo unsubscribeset_int(integer, integer) postgres
+2658; 0 0 COMMENT _vigilo FUNCTION unsubscribeset_int(integer, integer) postgres
+144; 1255 466165 FUNCTION _vigilo updaterelname(integer, integer) postgres
+2659; 0 0 COMMENT _vigilo FUNCTION updaterelname(integer, integer) postgres
+145; 1255 466166 FUNCTION _vigilo updatereloid(integer, integer) postgres
+2660; 0 0 COMMENT _vigilo FUNCTION updatereloid(integer, integer) postgres
+151; 1255 466172 FUNCTION _vigilo upgradeschema(text) postgres
+2661; 0 0 COMMENT _vigilo FUNCTION upgradeschema(text) postgres
+36; 1255 465859 FUNCTION _vigilo xxid_ge_snapshot(xxid, xxid_snapshot) postgres
+35; 1255 465858 FUNCTION _vigilo xxid_lt_snapshot(xxid, xxid_snapshot) postgres
+23; 1255 465830 FUNCTION _vigilo xxideq(xxid, xxid) postgres
+28; 1255 465835 FUNCTION _vigilo xxidge(xxid, xxid) postgres
+27; 1255 465834 FUNCTION _vigilo xxidgt(xxid, xxid) postgres
+26; 1255 465833 FUNCTION _vigilo xxidle(xxid, xxid) postgres
+25; 1255 465832 FUNCTION _vigilo xxidlt(xxid, xxid) postgres
+24; 1255 465831 FUNCTION _vigilo xxidne(xxid, xxid) postgres
+1339; 2617 465842 OPERATOR public < postgres
+1337; 2617 465845 OPERATOR public <= postgres
+1341; 2617 465843 OPERATOR public <> postgres
+1340; 2617 465844 OPERATOR public = postgres
+1336; 2617 465840 OPERATOR public > postgres
+1338; 2617 465841 OPERATOR public >= postgres
+1454; 2616 465847 OPERATOR CLASS _vigilo xxid_ops postgres
+2069; 2605 465828 CAST pg_catalog CAST (xid AS _vigilo.xxid)
+2182; 2605 465829 CAST pg_catalog CAST (_vigilo.xxid AS xid)
+1906; 1259 466044 SEQUENCE _vigilo sl_action_seq postgres
+2662; 0 0 COMMENT _vigilo SEQUENCE sl_action_seq postgres
+2663; 0 0 SEQUENCE SET _vigilo sl_action_seq postgres
+1910; 1259 466053 TABLE _vigilo sl_archive_counter postgres
+2664; 0 0 COMMENT _vigilo TABLE sl_archive_counter postgres
+2665; 0 0 COMMENT _vigilo COLUMN sl_archive_counter.ac_num postgres
+2666; 0 0 COMMENT _vigilo COLUMN sl_archive_counter.ac_timestamp postgres
+1909; 1259 466050 TABLE _vigilo sl_config_lock postgres
+2667; 0 0 COMMENT _vigilo TABLE sl_config_lock postgres
+2668; 0 0 COMMENT _vigilo COLUMN sl_config_lock.dummy postgres
+1898; 1259 466003 TABLE _vigilo sl_confirm postgres
+2669; 0 0 COMMENT _vigilo TABLE sl_confirm postgres
+2670; 0 0 COMMENT _vigilo COLUMN sl_confirm.con_origin postgres
+2671; 0 0 COMMENT _vigilo COLUMN sl_confirm.con_seqno postgres
+2672; 0 0 COMMENT _vigilo COLUMN sl_confirm.con_timestamp postgres
+1897; 1259 465995 TABLE _vigilo sl_event postgres
+2673; 0 0 COMMENT _vigilo TABLE sl_event postgres
+2674; 0 0 COMMENT _vigilo COLUMN sl_event.ev_origin postgres
+2675; 0 0 COMMENT _vigilo COLUMN sl_event.ev_seqno postgres
+2676; 0 0 COMMENT _vigilo COLUMN sl_event.ev_timestamp postgres
+2677; 0 0 COMMENT _vigilo COLUMN sl_event.ev_minxid postgres
+2678; 0 0 COMMENT _vigilo COLUMN sl_event.ev_maxxid postgres
+2679; 0 0 COMMENT _vigilo COLUMN sl_event.ev_xip postgres
+2680; 0 0 COMMENT _vigilo COLUMN sl_event.ev_type postgres
+2681; 0 0 COMMENT _vigilo COLUMN sl_event.ev_data1 postgres
+2682; 0 0 COMMENT _vigilo COLUMN sl_event.ev_data2 postgres
+2683; 0 0 COMMENT _vigilo COLUMN sl_event.ev_data3 postgres
+2684; 0 0 COMMENT _vigilo COLUMN sl_event.ev_data4 postgres
+2685; 0 0 COMMENT _vigilo COLUMN sl_event.ev_data5 postgres
+2686; 0 0 COMMENT _vigilo COLUMN sl_event.ev_data6 postgres
+2687; 0 0 COMMENT _vigilo COLUMN sl_event.ev_data7 postgres
+2688; 0 0 COMMENT _vigilo COLUMN sl_event.ev_data8 postgres
+1905; 1259 466042 SEQUENCE _vigilo sl_event_seq postgres
+2689; 0 0 COMMENT _vigilo SEQUENCE sl_event_seq postgres
+2690; 0 0 SEQUENCE SET _vigilo sl_event_seq postgres
+1895; 1259 465965 TABLE _vigilo sl_listen postgres
+2691; 0 0 COMMENT _vigilo TABLE sl_listen postgres
+2692; 0 0 COMMENT _vigilo COLUMN sl_listen.li_origin postgres
+2693; 0 0 COMMENT _vigilo COLUMN sl_listen.li_provider postgres
+2694; 0 0 COMMENT _vigilo COLUMN sl_listen.li_receiver postgres
+1904; 1259 466040 SEQUENCE _vigilo sl_local_node_id postgres
+2695; 0 0 COMMENT _vigilo SEQUENCE sl_local_node_id postgres
+2696; 0 0 SEQUENCE SET _vigilo sl_local_node_id postgres
+1900; 1259 466014 TABLE _vigilo sl_log_1 postgres
+2697; 0 0 COMMENT _vigilo TABLE sl_log_1 postgres
+2698; 0 0 COMMENT _vigilo COLUMN sl_log_1.log_origin postgres
+2699; 0 0 COMMENT _vigilo COLUMN sl_log_1.log_xid postgres
+2700; 0 0 COMMENT _vigilo COLUMN sl_log_1.log_tableid postgres
+2701; 0 0 COMMENT _vigilo COLUMN sl_log_1.log_cmdtype postgres
+2702; 0 0 COMMENT _vigilo COLUMN sl_log_1.log_cmddata postgres
+1901; 1259 466021 TABLE _vigilo sl_log_2 postgres
+2703; 0 0 COMMENT _vigilo TABLE sl_log_2 postgres
+2704; 0 0 COMMENT _vigilo COLUMN sl_log_2.log_origin postgres
+2705; 0 0 COMMENT _vigilo COLUMN sl_log_2.log_xid postgres
+2706; 0 0 COMMENT _vigilo COLUMN sl_log_2.log_tableid postgres
+2707; 0 0 COMMENT _vigilo COLUMN sl_log_2.log_cmdtype postgres
+2708; 0 0 COMMENT _vigilo COLUMN sl_log_2.log_cmddata postgres
+1908; 1259 466048 SEQUENCE _vigilo sl_log_status postgres
+2709; 0 0 COMMENT _vigilo SEQUENCE sl_log_status postgres
+2710; 0 0 SEQUENCE SET _vigilo sl_log_status postgres
+1886; 1259 465860 TABLE _vigilo sl_node postgres
+2711; 0 0 COMMENT _vigilo TABLE sl_node postgres
+2712; 0 0 COMMENT _vigilo COLUMN sl_node.no_id postgres
+2713; 0 0 COMMENT _vigilo COLUMN sl_node.no_active postgres
+2714; 0 0 COMMENT _vigilo COLUMN sl_node.no_comment postgres
+2715; 0 0 COMMENT _vigilo COLUMN sl_node.no_spool postgres
+1888; 1259 465870 TABLE _vigilo sl_nodelock postgres
+2716; 0 0 COMMENT _vigilo TABLE sl_nodelock postgres
+2717; 0 0 COMMENT _vigilo COLUMN sl_nodelock.nl_nodeid postgres
+2718; 0 0 COMMENT _vigilo COLUMN sl_nodelock.nl_conncnt postgres
+2719; 0 0 COMMENT _vigilo COLUMN sl_nodelock.nl_backendpid postgres
+1887; 1259 465868 SEQUENCE _vigilo sl_nodelock_nl_conncnt_seq postgres
+2720; 0 0 SEQUENCE OWNED BY _vigilo sl_nodelock_nl_conncnt_seq postgres
+2721; 0 0 SEQUENCE SET _vigilo sl_nodelock_nl_conncnt_seq postgres
+1894; 1259 465947 TABLE _vigilo sl_path postgres
+2722; 0 0 COMMENT _vigilo TABLE sl_path postgres
+2723; 0 0 COMMENT _vigilo COLUMN sl_path.pa_server postgres
+2724; 0 0 COMMENT _vigilo COLUMN sl_path.pa_client postgres
+2725; 0 0 COMMENT _vigilo COLUMN sl_path.pa_conninfo postgres
+2726; 0 0 COMMENT _vigilo COLUMN sl_path.pa_connretry postgres
+1902; 1259 466028 TABLE _vigilo sl_registry postgres
+2727; 0 0 COMMENT _vigilo TABLE sl_registry postgres
+2728; 0 0 COMMENT _vigilo COLUMN sl_registry.reg_key postgres
+2729; 0 0 COMMENT _vigilo COLUMN sl_registry.reg_int4 postgres
+2730; 0 0 COMMENT _vigilo COLUMN sl_registry.reg_text postgres
+2731; 0 0 COMMENT _vigilo COLUMN sl_registry.reg_timestamp postgres
+1907; 1259 466046 SEQUENCE _vigilo sl_rowid_seq postgres
+2732; 0 0 COMMENT _vigilo SEQUENCE sl_rowid_seq postgres
+2733; 0 0 SEQUENCE SET _vigilo sl_rowid_seq postgres
+2734; 0 0 ACL _vigilo sl_rowid_seq postgres
+1893; 1259 465932 TABLE _vigilo sl_sequence postgres
+2735; 0 0 COMMENT _vigilo TABLE sl_sequence postgres
+2736; 0 0 COMMENT _vigilo COLUMN sl_sequence.seq_id postgres
+2737; 0 0 COMMENT _vigilo COLUMN sl_sequence.seq_reloid postgres
+2738; 0 0 COMMENT _vigilo COLUMN sl_sequence.seq_relname postgres
+2739; 0 0 COMMENT _vigilo COLUMN sl_sequence.seq_nspname postgres
+2740; 0 0 COMMENT _vigilo COLUMN sl_sequence.seq_set postgres
+2741; 0 0 COMMENT _vigilo COLUMN sl_sequence.seq_comment postgres
+1889; 1259 465876 TABLE _vigilo sl_set postgres
+2742; 0 0 COMMENT _vigilo TABLE sl_set postgres
+2743; 0 0 COMMENT _vigilo COLUMN sl_set.set_id postgres
+2744; 0 0 COMMENT _vigilo COLUMN sl_set.set_origin postgres
+2745; 0 0 COMMENT _vigilo COLUMN sl_set.set_locked postgres
+2746; 0 0 COMMENT _vigilo COLUMN sl_set.set_comment postgres
+1903; 1259 466036 VIEW _vigilo sl_seqlastvalue postgres
+1899; 1259 466009 TABLE _vigilo sl_seqlog postgres
+2747; 0 0 COMMENT _vigilo TABLE sl_seqlog postgres
+2748; 0 0 COMMENT _vigilo COLUMN sl_seqlog.seql_seqid postgres
+2749; 0 0 COMMENT _vigilo COLUMN sl_seqlog.seql_origin postgres
+2750; 0 0 COMMENT _vigilo COLUMN sl_seqlog.seql_ev_seqno postgres
+2751; 0 0 COMMENT _vigilo COLUMN sl_seqlog.seql_last_value postgres
+1890; 1259 465889 TABLE _vigilo sl_setsync postgres
+2752; 0 0 COMMENT _vigilo TABLE sl_setsync postgres
+2753; 0 0 COMMENT _vigilo COLUMN sl_setsync.ssy_setid postgres
+2754; 0 0 COMMENT _vigilo COLUMN sl_setsync.ssy_origin postgres
+2755; 0 0 COMMENT _vigilo COLUMN sl_setsync.ssy_seqno postgres
+2756; 0 0 COMMENT _vigilo COLUMN sl_setsync.ssy_minxid postgres
+2757; 0 0 COMMENT _vigilo COLUMN sl_setsync.ssy_maxxid postgres
+2758; 0 0 COMMENT _vigilo COLUMN sl_setsync.ssy_xip postgres
+2759; 0 0 COMMENT _vigilo COLUMN sl_setsync.ssy_action_list postgres
+1911; 1259 466173 VIEW _vigilo sl_status postgres
+2760; 0 0 COMMENT _vigilo VIEW sl_status postgres
+1896; 1259 465980 TABLE _vigilo sl_subscribe postgres
+2761; 0 0 COMMENT _vigilo TABLE sl_subscribe postgres
+2762; 0 0 COMMENT _vigilo COLUMN sl_subscribe.sub_set postgres
+2763; 0 0 COMMENT _vigilo COLUMN sl_subscribe.sub_provider postgres
+2764; 0 0 COMMENT _vigilo COLUMN sl_subscribe.sub_receiver postgres
+2765; 0 0 COMMENT _vigilo COLUMN sl_subscribe.sub_forward postgres
+2766; 0 0 COMMENT _vigilo COLUMN sl_subscribe.sub_active postgres
+1891; 1259 465907 TABLE _vigilo sl_table postgres
+2767; 0 0 COMMENT _vigilo TABLE sl_table postgres
+2768; 0 0 COMMENT _vigilo COLUMN sl_table.tab_id postgres
+2769; 0 0 COMMENT _vigilo COLUMN sl_table.tab_reloid postgres
+2770; 0 0 COMMENT _vigilo COLUMN sl_table.tab_relname postgres
+2771; 0 0 COMMENT _vigilo COLUMN sl_table.tab_nspname postgres
+2772; 0 0 COMMENT _vigilo COLUMN sl_table.tab_set postgres
+2773; 0 0 COMMENT _vigilo COLUMN sl_table.tab_idxname postgres
+2774; 0 0 COMMENT _vigilo COLUMN sl_table.tab_altered postgres
+2775; 0 0 COMMENT _vigilo COLUMN sl_table.tab_comment postgres
+1892; 1259 465922 TABLE _vigilo sl_trigger postgres
+2776; 0 0 COMMENT _vigilo TABLE sl_trigger postgres
+2777; 0 0 COMMENT _vigilo COLUMN sl_trigger.trig_tabid postgres
+2778; 0 0 COMMENT _vigilo COLUMN sl_trigger.trig_tgname postgres
+1822; 1259 465149 TABLE public vigilo_application vigilo
+1821; 1259 465147 SEQUENCE public vigilo_application_idapp_seq vigilo
+2779; 0 0 SEQUENCE OWNED BY public vigilo_application_idapp_seq vigilo
+2780; 0 0 SEQUENCE SET public vigilo_application_idapp_seq vigilo
+1828; 1259 465183 TABLE public vigilo_change vigilo
+1857; 1259 465469 TABLE public vigilo_confitem vigilo
+1856; 1259 465467 SEQUENCE public vigilo_confitem_idconfitem_seq vigilo
+2781; 0 0 SEQUENCE OWNED BY public vigilo_confitem_idconfitem_seq vigilo
+2782; 0 0 SEQUENCE SET public vigilo_confitem_idconfitem_seq vigilo
+1851; 1259 465407 TABLE public vigilo_correvent vigilo
+1850; 1259 465405 SEQUENCE public vigilo_correvent_idcorrevent_seq vigilo
+2783; 0 0 SEQUENCE OWNED BY public vigilo_correvent_idcorrevent_seq vigilo
+2784; 0 0 SEQUENCE SET public vigilo_correvent_idcorrevent_seq vigilo
+1883; 1259 465778 TABLE public vigilo_datapermission vigilo
+1866; 1259 465584 TABLE public vigilo_dependency vigilo
+1865; 1259 465560 TABLE public vigilo_downtime vigilo
+1864; 1259 465558 SEQUENCE public vigilo_downtime_iddowntime_seq vigilo
+2785; 0 0 SEQUENCE OWNED BY public vigilo_downtime_iddowntime_seq vigilo
+2786; 0 0 SEQUENCE SET public vigilo_downtime_iddowntime_seq vigilo
+1817; 1259 465123 TABLE public vigilo_downtime_status vigilo
+1816; 1259 465121 SEQUENCE public vigilo_downtime_status_idstatus_seq vigilo
+2787; 0 0 SEQUENCE OWNED BY public vigilo_downtime_status_idstatus_seq vigilo
+2788; 0 0 SEQUENCE SET public vigilo_downtime_status_idstatus_seq vigilo
+1849; 1259 465376 TABLE public vigilo_event vigilo
+1848; 1259 465374 SEQUENCE public vigilo_event_idevent_seq vigilo
+2789; 0 0 SEQUENCE OWNED BY public vigilo_event_idevent_seq vigilo
+2790; 0 0 SEQUENCE SET public vigilo_event_idevent_seq vigilo
+1854; 1259 465436 TABLE public vigilo_eventhistory vigilo
+1853; 1259 465434 SEQUENCE public vigilo_eventhistory_idhistory_seq vigilo
+2791; 0 0 SEQUENCE OWNED BY public vigilo_eventhistory_idhistory_seq vigilo
+2792; 0 0 SEQUENCE SET public vigilo_eventhistory_idhistory_seq vigilo
+1852; 1259 465419 TABLE public vigilo_eventsaggregate vigilo
+1830; 1259 465191 TABLE public vigilo_filedeployment vigilo
+1829; 1259 465189 SEQUENCE public vigilo_filedeployment_idfiledeployment_seq vigilo
+2793; 0 0 SEQUENCE OWNED BY public vigilo_filedeployment_idfiledeployment_seq vigilo
+2794; 0 0 SEQUENCE SET public vigilo_filedeployment_idfiledeployment_seq vigilo
+1825; 1259 465165 TABLE public vigilo_graph vigilo
+1824; 1259 465163 SEQUENCE public vigilo_graph_idgraph_seq vigilo
+2795; 0 0 SEQUENCE OWNED BY public vigilo_graph_idgraph_seq vigilo
+2796; 0 0 SEQUENCE SET public vigilo_graph_idgraph_seq vigilo
+1835; 1259 465219 TABLE public vigilo_graphgroup vigilo
+1844; 1259 465328 TABLE public vigilo_graphperfdatasource vigilo
+1834; 1259 465211 TABLE public vigilo_group vigilo
+1833; 1259 465209 SEQUENCE public vigilo_group_idgroup_seq vigilo
+2797; 0 0 SEQUENCE OWNED BY public vigilo_group_idgroup_seq vigilo
+2798; 0 0 SEQUENCE SET public vigilo_group_idgroup_seq vigilo
+1836; 1259 465234 TABLE public vigilo_grouphierarchy vigilo
+1862; 1259 465523 TABLE public vigilo_highlevelservice vigilo
+1860; 1259 465492 TABLE public vigilo_hlshistory vigilo
+1859; 1259 465490 SEQUENCE public vigilo_hlshistory_idhistory_seq vigilo
+2799; 0 0 SEQUENCE OWNED BY public vigilo_hlshistory_idhistory_seq vigilo
+2800; 0 0 SEQUENCE SET public vigilo_hlshistory_idhistory_seq vigilo
+1839; 1259 465260 TABLE public vigilo_host vigilo
+1840; 1259 465274 TABLE public vigilo_host2hostclass vigilo
+1820; 1259 465140 TABLE public vigilo_hostclass vigilo
+1819; 1259 465138 SEQUENCE public vigilo_hostclass_idclass_seq vigilo
+2801; 0 0 SEQUENCE OWNED BY public vigilo_hostclass_idclass_seq vigilo
+2802; 0 0 SEQUENCE SET public vigilo_hostclass_idclass_seq vigilo
+1861; 1259 465508 TABLE public vigilo_impactedhls vigilo
+1847; 1259 465363 TABLE public vigilo_impactedpath vigilo
+1846; 1259 465361 SEQUENCE public vigilo_impactedpath_idpath_seq vigilo
+2803; 0 0 SEQUENCE OWNED BY public vigilo_impactedpath_idpath_seq vigilo
+2804; 0 0 SEQUENCE SET public vigilo_impactedpath_idpath_seq vigilo
+1868; 1259 465614 TABLE public vigilo_legend vigilo
+1863; 1259 465537 TABLE public vigilo_lowlevelservice vigilo
+1870; 1259 465621 TABLE public vigilo_map vigilo
+1869; 1259 465619 SEQUENCE public vigilo_map_idmap_seq vigilo
+2805; 0 0 SEQUENCE OWNED BY public vigilo_map_idmap_seq vigilo
+2806; 0 0 SEQUENCE SET public vigilo_map_idmap_seq vigilo
+1871; 1259 465630 TABLE public vigilo_mapgroup vigilo
+1875; 1259 465663 TABLE public vigilo_maplink vigilo
+1874; 1259 465661 SEQUENCE public vigilo_maplink_idmaplink_seq vigilo
+2807; 0 0 SEQUENCE OWNED BY public vigilo_maplink_idmaplink_seq vigilo
+2808; 0 0 SEQUENCE SET public vigilo_maplink_idmaplink_seq vigilo
+1873; 1259 465647 TABLE public vigilo_mapnode vigilo
+1872; 1259 465645 SEQUENCE public vigilo_mapnode_idmapnode_seq vigilo
+2809; 0 0 SEQUENCE OWNED BY public vigilo_mapnode_idmapnode_seq vigilo
+2810; 0 0 SEQUENCE SET public vigilo_mapnode_idmapnode_seq vigilo
+1880; 1259 465754 TABLE public vigilo_mapnodehost vigilo
+1878; 1259 465724 TABLE public vigilo_mapnodeservice vigilo
+1877; 1259 465714 TABLE public vigilo_mapsegment vigilo
+1876; 1259 465684 TABLE public vigilo_mapservicelink vigilo
+1843; 1259 465314 TABLE public vigilo_perfdatasource vigilo
+1842; 1259 465312 SEQUENCE public vigilo_perfdatasource_idperfdatasource_seq vigilo
+2811; 0 0 SEQUENCE OWNED BY public vigilo_perfdatasource_idperfdatasource_seq vigilo
+2812; 0 0 SEQUENCE SET public vigilo_perfdatasource_idperfdatasource_seq vigilo
+1814; 1259 465102 TABLE public vigilo_permission vigilo
+1813; 1259 465100 SEQUENCE public vigilo_permission_idpermission_seq vigilo
+2813; 0 0 SEQUENCE OWNED BY public vigilo_permission_idpermission_seq vigilo
+2814; 0 0 SEQUENCE SET public vigilo_permission_idpermission_seq vigilo
+1858; 1259 465480 TABLE public vigilo_service vigilo
+1845; 1259 465343 TABLE public vigilo_state vigilo
+1832; 1259 465202 TABLE public vigilo_statename vigilo
+1831; 1259 465200 SEQUENCE public vigilo_statename_idstatename_seq vigilo
+2815; 0 0 SEQUENCE OWNED BY public vigilo_statename_idstatename_seq vigilo
+2816; 0 0 SEQUENCE SET public vigilo_statename_idstatename_seq vigilo
+1879; 1259 465739 TABLE public vigilo_submapmapnodetable vigilo
+1838; 1259 465253 TABLE public vigilo_supitem vigilo
+1837; 1259 465251 SEQUENCE public vigilo_supitem_idsupitem_seq vigilo
+2817; 0 0 SEQUENCE OWNED BY public vigilo_supitem_idsupitem_seq vigilo
+2818; 0 0 SEQUENCE SET public vigilo_supitem_idsupitem_seq vigilo
+1855; 1259 465452 TABLE public vigilo_supitemgroup vigilo
+1818; 1259 465129 TABLE public vigilo_tag vigilo
+1867; 1259 465599 TABLE public vigilo_tags2supitems vigilo
+1815; 1259 465112 TABLE public vigilo_user vigilo
+1882; 1259 465771 TABLE public vigilo_usergroup vigilo
+1881; 1259 465769 SEQUENCE public vigilo_usergroup_idgroup_seq vigilo
+2819; 0 0 SEQUENCE OWNED BY public vigilo_usergroup_idgroup_seq vigilo
+2820; 0 0 SEQUENCE SET public vigilo_usergroup_idgroup_seq vigilo
+1885; 1259 465808 TABLE public vigilo_usergrouppermissions vigilo
+1884; 1259 465793 TABLE public vigilo_usertousergroups vigilo
+1841; 1259 465289 TABLE public vigilo_ventilation vigilo
+1823; 1259 465157 TABLE public vigilo_version vigilo
+1827; 1259 465176 TABLE public vigilo_vigiloserver vigilo
+1826; 1259 465174 SEQUENCE public vigilo_vigiloserver_idvigiloserver_seq vigilo
+2821; 0 0 SEQUENCE OWNED BY public vigilo_vigiloserver_idvigiloserver_seq vigilo
+2822; 0 0 SEQUENCE SET public vigilo_vigiloserver_idvigiloserver_seq vigilo
+2206; 2604 465873 DEFAULT _vigilo nl_conncnt postgres
+2186; 2604 465152 DEFAULT public idapp vigilo
+2199; 2604 465472 DEFAULT public idconfitem vigilo
+2196; 2604 465410 DEFAULT public idcorrevent vigilo
+2201; 2604 465563 DEFAULT public iddowntime vigilo
+2184; 2604 465126 DEFAULT public idstatus vigilo
+2195; 2604 465379 DEFAULT public idevent vigilo
+2198; 2604 465439 DEFAULT public idhistory vigilo
+2189; 2604 465194 DEFAULT public idfiledeployment vigilo
+2187; 2604 465168 DEFAULT public idgraph vigilo
+2191; 2604 465214 DEFAULT public idgroup vigilo
+2200; 2604 465495 DEFAULT public idhistory vigilo
+2185; 2604 465143 DEFAULT public idclass vigilo
+2194; 2604 465366 DEFAULT public idpath vigilo
+2202; 2604 465624 DEFAULT public idmap vigilo
+2204; 2604 465666 DEFAULT public idmaplink vigilo
+2203; 2604 465650 DEFAULT public idmapnode vigilo
+2193; 2604 465317 DEFAULT public idperfdatasource vigilo
+2183; 2604 465105 DEFAULT public idpermission vigilo
+2190; 2604 465205 DEFAULT public idstatename vigilo
+2192; 2604 465256 DEFAULT public idsupitem vigilo
+2205; 2604 465774 DEFAULT public idgroup vigilo
+2188; 2604 465179 DEFAULT public idvigiloserver vigilo
+2529; 0 466053 TABLE DATA _vigilo sl_archive_counter postgres
+2528; 0 466050 TABLE DATA _vigilo sl_config_lock postgres
+2523; 0 466003 TABLE DATA _vigilo sl_confirm postgres
+2522; 0 465995 TABLE DATA _vigilo sl_event postgres
+2520; 0 465965 TABLE DATA _vigilo sl_listen postgres
+2525; 0 466014 TABLE DATA _vigilo sl_log_1 postgres
+2526; 0 466021 TABLE DATA _vigilo sl_log_2 postgres
+2512; 0 465860 TABLE DATA _vigilo sl_node postgres
+2513; 0 465870 TABLE DATA _vigilo sl_nodelock postgres
+2519; 0 465947 TABLE DATA _vigilo sl_path postgres
+2527; 0 466028 TABLE DATA _vigilo sl_registry postgres
+2524; 0 466009 TABLE DATA _vigilo sl_seqlog postgres
+2518; 0 465932 TABLE DATA _vigilo sl_sequence postgres
+2514; 0 465876 TABLE DATA _vigilo sl_set postgres
+2515; 0 465889 TABLE DATA _vigilo sl_setsync postgres
+2521; 0 465980 TABLE DATA _vigilo sl_subscribe postgres
+2516; 0 465907 TABLE DATA _vigilo sl_table postgres
+2517; 0 465922 TABLE DATA _vigilo sl_trigger postgres
+2466; 0 465149 TABLE DATA public vigilo_application vigilo
+2470; 0 465183 TABLE DATA public vigilo_change vigilo
+2489; 0 465469 TABLE DATA public vigilo_confitem vigilo
+2476; 0 465253 TABLE DATA public vigilo_supitem vigilo
+2472; 0 465202 TABLE DATA public vigilo_statename vigilo
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; event depend de supitem et statename
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2484; 0 465376 TABLE DATA public vigilo_event vigilo
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; correvent depend de event
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2485; 0 465407 TABLE DATA public vigilo_correvent vigilo
+2509; 0 465778 TABLE DATA public vigilo_datapermission vigilo
+2496; 0 465584 TABLE DATA public vigilo_dependency vigilo
+2495; 0 465560 TABLE DATA public vigilo_downtime vigilo
+2463; 0 465123 TABLE DATA public vigilo_downtime_status vigilo
+2487; 0 465436 TABLE DATA public vigilo_eventhistory vigilo
+2486; 0 465419 TABLE DATA public vigilo_eventsaggregate vigilo
+2471; 0 465191 TABLE DATA public vigilo_filedeployment vigilo
+2473; 0 465211 TABLE DATA public vigilo_group vigilo
+2468; 0 465165 TABLE DATA public vigilo_graph vigilo
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; graphgroup depend de group
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2474; 0 465219 TABLE DATA public vigilo_graphgroup vigilo
+2477; 0 465260 TABLE DATA public vigilo_host vigilo
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; perfdatasource depend de host
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2480; 0 465314 TABLE DATA public vigilo_perfdatasource vigilo
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; graphperfdatasource depend de perfdatasource
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2481; 0 465328 TABLE DATA public vigilo_graphperfdatasource vigilo
+2475; 0 465234 TABLE DATA public vigilo_grouphierarchy vigilo
+2490; 0 465480 TABLE DATA public vigilo_service vigilo
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; highlevelservice depend de service
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2493; 0 465523 TABLE DATA public vigilo_highlevelservice vigilo
+2491; 0 465492 TABLE DATA public vigilo_hlshistory vigilo
+2478; 0 465274 TABLE DATA public vigilo_host2hostclass vigilo
+2465; 0 465140 TABLE DATA public vigilo_hostclass vigilo
+2492; 0 465508 TABLE DATA public vigilo_impactedhls vigilo
+2483; 0 465363 TABLE DATA public vigilo_impactedpath vigilo
+2498; 0 465614 TABLE DATA public vigilo_legend vigilo
+2494; 0 465537 TABLE DATA public vigilo_lowlevelservice vigilo
+2499; 0 465621 TABLE DATA public vigilo_map vigilo
+2500; 0 465630 TABLE DATA public vigilo_mapgroup vigilo
+2501; 0 465647 TABLE DATA public vigilo_mapnode vigilo
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; maplink depend de mapnode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2502; 0 465663 TABLE DATA public vigilo_maplink vigilo
+2507; 0 465754 TABLE DATA public vigilo_mapnodehost vigilo
+2505; 0 465724 TABLE DATA public vigilo_mapnodeservice vigilo
+2504; 0 465714 TABLE DATA public vigilo_mapsegment vigilo
+2503; 0 465684 TABLE DATA public vigilo_mapservicelink vigilo
+2461; 0 465102 TABLE DATA public vigilo_permission vigilo
+2482; 0 465343 TABLE DATA public vigilo_state vigilo
+2506; 0 465739 TABLE DATA public vigilo_submapmapnodetable vigilo
+2488; 0 465452 TABLE DATA public vigilo_supitemgroup vigilo
+2464; 0 465129 TABLE DATA public vigilo_tag vigilo
+2497; 0 465599 TABLE DATA public vigilo_tags2supitems vigilo
+2462; 0 465112 TABLE DATA public vigilo_user vigilo
+2508; 0 465771 TABLE DATA public vigilo_usergroup vigilo
+2511; 0 465808 TABLE DATA public vigilo_usergrouppermissions vigilo
+2510; 0 465793 TABLE DATA public vigilo_usertousergroups vigilo
+2469; 0 465176 TABLE DATA public vigilo_vigiloserver vigilo
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; ventilation depend de vigiloserver
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+2479; 0 465289 TABLE DATA public vigilo_ventilation vigilo
+2467; 0 465157 TABLE DATA public vigilo_version vigilo
+2361; 2606 466002 CONSTRAINT _vigilo sl_event-pkey postgres
+2357; 2606 465969 CONSTRAINT _vigilo sl_listen-pkey postgres
+2337; 2606 465867 CONSTRAINT _vigilo sl_node-pkey postgres
+2339; 2606 465875 CONSTRAINT _vigilo sl_nodelock-pkey postgres
+2355; 2606 465954 CONSTRAINT _vigilo sl_path-pkey postgres
+2368; 2606 466035 CONSTRAINT _vigilo sl_registry_pkey postgres
+2351; 2606 465939 CONSTRAINT _vigilo sl_sequence-pkey postgres
+2353; 2606 465941 CONSTRAINT _vigilo sl_sequence_seq_reloid_key postgres
+2341; 2606 465883 CONSTRAINT _vigilo sl_set-pkey postgres
+2343; 2606 465896 CONSTRAINT _vigilo sl_setsync-pkey postgres
+2359; 2606 465984 CONSTRAINT _vigilo sl_subscribe-pkey postgres
+2345; 2606 465914 CONSTRAINT _vigilo sl_table-pkey postgres
+2347; 2606 465916 CONSTRAINT _vigilo sl_table_tab_reloid_key postgres
+2349; 2606 465926 CONSTRAINT _vigilo sl_trigger-pkey postgres
+2223; 2606 465156 CONSTRAINT public vigilo_application_name_key vigilo
+2225; 2606 465154 CONSTRAINT public vigilo_application_pkey vigilo
+2236; 2606 465187 CONSTRAINT public vigilo_change_pkey vigilo
+2286; 2606 465474 CONSTRAINT public vigilo_confitem_pkey vigilo
+2276; 2606 465413 CONSTRAINT public vigilo_correvent_pkey vigilo
+2331; 2606 465782 CONSTRAINT public vigilo_datapermission_pkey vigilo
+2304; 2606 465588 CONSTRAINT public vigilo_dependency_pkey vigilo
+2302; 2606 465568 CONSTRAINT public vigilo_downtime_pkey vigilo
+2215; 2606 465128 CONSTRAINT public vigilo_downtime_status_pkey vigilo
+2274; 2606 465384 CONSTRAINT public vigilo_event_pkey vigilo
+2282; 2606 465444 CONSTRAINT public vigilo_eventhistory_pkey vigilo
+2278; 2606 465423 CONSTRAINT public vigilo_eventsaggregate_pkey vigilo
+2238; 2606 465199 CONSTRAINT public vigilo_filedeployment_pkey vigilo
+2230; 2606 465173 CONSTRAINT public vigilo_graph_pkey vigilo
+2247; 2606 465223 CONSTRAINT public vigilo_graphgroup_pkey vigilo
+2268; 2606 465332 CONSTRAINT public vigilo_graphperfdatasource_pkey vigilo
+2245; 2606 465216 CONSTRAINT public vigilo_group_pkey vigilo
+2249; 2606 465240 CONSTRAINT public vigilo_grouphierarchy_idchild_key vigilo
+2251; 2606 465238 CONSTRAINT public vigilo_grouphierarchy_pkey vigilo
+2295; 2606 465530 CONSTRAINT public vigilo_highlevelservice_pkey vigilo
+2290; 2606 465497 CONSTRAINT public vigilo_hlshistory_pkey vigilo
+2259; 2606 465278 CONSTRAINT public vigilo_host2hostclass_pkey vigilo
+2257; 2606 465267 CONSTRAINT public vigilo_host_pkey vigilo
+2221; 2606 465145 CONSTRAINT public vigilo_hostclass_pkey vigilo
+2292; 2606 465512 CONSTRAINT public vigilo_impactedhls_pkey vigilo
+2272; 2606 465368 CONSTRAINT public vigilo_impactedpath_pkey vigilo
+2308; 2606 465618 CONSTRAINT public vigilo_legend_pkey vigilo
+2298; 2606 465544 CONSTRAINT public vigilo_lowlevelservice_pkey vigilo
+2300; 2606 465546 CONSTRAINT public vigilo_lowlevelservice_servicename_key vigilo
+2310; 2606 465629 CONSTRAINT public vigilo_map_pkey vigilo
+2312; 2606 465634 CONSTRAINT public vigilo_mapgroup_pkey vigilo
+2316; 2606 465668 CONSTRAINT public vigilo_maplink_pkey vigilo
+2314; 2606 465655 CONSTRAINT public vigilo_mapnode_pkey vigilo
+2326; 2606 465758 CONSTRAINT public vigilo_mapnodehost_pkey vigilo
+2322; 2606 465728 CONSTRAINT public vigilo_mapnodeservice_pkey vigilo
+2320; 2606 465718 CONSTRAINT public vigilo_mapsegment_pkey vigilo
+2318; 2606 465688 CONSTRAINT public vigilo_mapservicelink_pkey vigilo
+2266; 2606 465322 CONSTRAINT public vigilo_perfdatasource_pkey vigilo
+2210; 2606 465110 CONSTRAINT public vigilo_permission_pkey vigilo
+2288; 2606 465484 CONSTRAINT public vigilo_service_pkey vigilo
+2270; 2606 465350 CONSTRAINT public vigilo_state_pkey vigilo
+2241; 2606 465207 CONSTRAINT public vigilo_statename_pkey vigilo
+2324; 2606 465743 CONSTRAINT public vigilo_submapmapnodetable_pkey vigilo
+2254; 2606 465258 CONSTRAINT public vigilo_supitem_pkey vigilo
+2284; 2606 465456 CONSTRAINT public vigilo_supitemgroup_pkey vigilo
+2218; 2606 465136 CONSTRAINT public vigilo_tag_pkey vigilo
+2306; 2606 465603 CONSTRAINT public vigilo_tags2supitems_pkey vigilo
+2213; 2606 465119 CONSTRAINT public vigilo_user_pkey vigilo
+2329; 2606 465776 CONSTRAINT public vigilo_usergroup_pkey vigilo
+2335; 2606 465812 CONSTRAINT public vigilo_usergrouppermissions_pkey vigilo
+2333; 2606 465797 CONSTRAINT public vigilo_usertousergroups_pkey vigilo
+2264; 2606 465293 CONSTRAINT public vigilo_ventilation_pkey vigilo
+2228; 2606 465161 CONSTRAINT public vigilo_version_pkey vigilo
+2233; 2606 465181 CONSTRAINT public vigilo_vigiloserver_pkey vigilo
+2362; 1259 466007 INDEX _vigilo sl_confirm_idx1 postgres
+2363; 1259 466008 INDEX _vigilo sl_confirm_idx2 postgres
+2365; 1259 466020 INDEX _vigilo sl_log_1_idx1 postgres
+2366; 1259 466027 INDEX _vigilo sl_log_2_idx1 postgres
+2364; 1259 466012 INDEX _vigilo sl_seqlog_idx postgres
+2234; 1259 465188 INDEX public ix_vigilo_change_element vigilo
+2279; 1259 465450 INDEX public ix_vigilo_eventhistory_idevent vigilo
+2280; 1259 465451 INDEX public ix_vigilo_eventhistory_type_action vigilo
+2242; 1259 465218 INDEX public ix_vigilo_group_grouptype vigilo
+2243; 1259 465217 INDEX public ix_vigilo_group_name vigilo
+2293; 1259 465536 INDEX public ix_vigilo_highlevelservice_servicename vigilo
+2255; 1259 465273 INDEX public ix_vigilo_host_name vigilo
+2219; 1259 465146 INDEX public ix_vigilo_hostclass_name vigilo
+2296; 1259 465557 INDEX public ix_vigilo_lowlevelservice_servicename vigilo
+2208; 1259 465111 INDEX public ix_vigilo_permission_permission_name vigilo
+2239; 1259 465208 INDEX public ix_vigilo_statename_statename vigilo
+2252; 1259 465259 INDEX public ix_vigilo_supitem_itemtype vigilo
+2216; 1259 465137 INDEX public ix_vigilo_tag_name vigilo
+2211; 1259 465120 INDEX public ix_vigilo_user_email vigilo
+2327; 1259 465777 INDEX public ix_vigilo_usergroup_group_name vigilo
+2260; 1259 465310 INDEX public ix_vigilo_ventilation_idapp vigilo
+2261; 1259 465311 INDEX public ix_vigilo_ventilation_idhost vigilo
+2262; 1259 465309 INDEX public ix_vigilo_ventilation_idvigiloserver vigilo
+2226; 1259 465162 INDEX public ix_vigilo_version_name vigilo
+2231; 1259 465182 INDEX public ix_vigilo_vigiloserver_name vigilo
+2450; 2620 466185 TRIGGER public _vigilo_logtrigger_3001 vigilo
+2451; 2620 466189 TRIGGER public _vigilo_logtrigger_3002 vigilo
+2452; 2620 466193 TRIGGER public _vigilo_logtrigger_3003 vigilo
+2453; 2620 466197 TRIGGER public _vigilo_logtrigger_3004 vigilo
+2460; 2620 466201 TRIGGER public _vigilo_logtrigger_3005 vigilo
+2459; 2620 466205 TRIGGER public _vigilo_logtrigger_3006 vigilo
+2457; 2620 466209 TRIGGER public _vigilo_logtrigger_3007 vigilo
+2454; 2620 466213 TRIGGER public _vigilo_logtrigger_3008 vigilo
+2455; 2620 466214 TRIGGER public _vigilo_logtrigger_3009 vigilo
+2456; 2620 466215 TRIGGER public _vigilo_logtrigger_3010 vigilo
+2458; 2620 466216 TRIGGER public _vigilo_logtrigger_3011 vigilo
+2446; 2606 465970 FK CONSTRAINT _vigilo li_origin-no_id-ref postgres
+2445; 2606 465960 FK CONSTRAINT _vigilo pa_client-no_id-ref postgres
+2444; 2606 465955 FK CONSTRAINT _vigilo pa_server-no_id-ref postgres
+2443; 2606 465942 FK CONSTRAINT _vigilo seq_set-set_id-ref postgres
+2438; 2606 465884 FK CONSTRAINT _vigilo set_origin-no_id-ref postgres
+2447; 2606 465975 FK CONSTRAINT _vigilo sl_listen-sl_path-ref postgres
+2448; 2606 465985 FK CONSTRAINT _vigilo sl_subscribe-sl_path-ref postgres
+2440; 2606 465902 FK CONSTRAINT _vigilo ssy_origin-no_id-ref postgres
+2439; 2606 465897 FK CONSTRAINT _vigilo ssy_setid-set_id-ref postgres
+2449; 2606 465990 FK CONSTRAINT _vigilo sub_set-set_id-ref postgres
+2441; 2606 465917 FK CONSTRAINT _vigilo tab_set-set_id-ref postgres
+2442; 2606 465927 FK CONSTRAINT _vigilo trig_tabid-tab_id-ref postgres
+2398; 2606 465475 FK CONSTRAINT public vigilo_confitem_idsupitem_fkey vigilo
+2392; 2606 465414 FK CONSTRAINT public vigilo_correvent_idcause_fkey vigilo
+2433; 2606 465788 FK CONSTRAINT public vigilo_datapermission_idgroup_fkey vigilo
+2432; 2606 465783 FK CONSTRAINT public vigilo_datapermission_idusergroup_fkey vigilo
+2411; 2606 465594 FK CONSTRAINT public vigilo_dependency_idsupitem1_fkey vigilo
+2410; 2606 465589 FK CONSTRAINT public vigilo_dependency_idsupitem2_fkey vigilo
+2408; 2606 465574 FK CONSTRAINT public vigilo_downtime_author_fkey vigilo
+2409; 2606 465579 FK CONSTRAINT public vigilo_downtime_idstatus_fkey vigilo
+2407; 2606 465569 FK CONSTRAINT public vigilo_downtime_idsupitem_fkey vigilo
+2390; 2606 465395 FK CONSTRAINT public vigilo_event_current_state_fkey vigilo
+2388; 2606 465385 FK CONSTRAINT public vigilo_event_idsupitem_fkey vigilo
+2389; 2606 465390 FK CONSTRAINT public vigilo_event_initial_state_fkey vigilo
+2391; 2606 465400 FK CONSTRAINT public vigilo_event_peak_state_fkey vigilo
+2395; 2606 465445 FK CONSTRAINT public vigilo_eventhistory_idevent_fkey vigilo
+2394; 2606 465429 FK CONSTRAINT public vigilo_eventsaggregate_idcorrevent_fkey vigilo
+2393; 2606 465424 FK CONSTRAINT public vigilo_eventsaggregate_idevent_fkey vigilo
+2372; 2606 465224 FK CONSTRAINT public vigilo_graphgroup_idgraph_fkey vigilo
+2373; 2606 465229 FK CONSTRAINT public vigilo_graphgroup_idgroup_fkey vigilo
+2383; 2606 465333 FK CONSTRAINT public vigilo_graphperfdatasource_idgraph_fkey vigilo
+2384; 2606 465338 FK CONSTRAINT public vigilo_graphperfdatasource_idperfdatasource_fkey vigilo
+2375; 2606 465246 FK CONSTRAINT public vigilo_grouphierarchy_idchild_fkey vigilo
+2374; 2606 465241 FK CONSTRAINT public vigilo_grouphierarchy_idparent_fkey vigilo
+2404; 2606 465531 FK CONSTRAINT public vigilo_highlevelservice_idservice_fkey vigilo
+2400; 2606 465498 FK CONSTRAINT public vigilo_hlshistory_idhls_fkey vigilo
+2401; 2606 465503 FK CONSTRAINT public vigilo_hlshistory_idstatename_fkey vigilo
+2378; 2606 465284 FK CONSTRAINT public vigilo_host2hostclass_hostname_fkey vigilo
+2377; 2606 465279 FK CONSTRAINT public vigilo_host2hostclass_idclass_fkey vigilo
+2376; 2606 465268 FK CONSTRAINT public vigilo_host_idhost_fkey vigilo
+2403; 2606 465518 FK CONSTRAINT public vigilo_impactedhls_idhls_fkey vigilo
+2402; 2606 465513 FK CONSTRAINT public vigilo_impactedhls_idpath_fkey vigilo
+2387; 2606 465369 FK CONSTRAINT public vigilo_impactedpath_idsupitem_fkey vigilo
+2406; 2606 465552 FK CONSTRAINT public vigilo_lowlevelservice_idhost_fkey vigilo
+2405; 2606 465547 FK CONSTRAINT public vigilo_lowlevelservice_idservice_fkey vigilo
+2414; 2606 465635 FK CONSTRAINT public vigilo_mapgroup_idgroup_fkey vigilo
+2415; 2606 465640 FK CONSTRAINT public vigilo_mapgroup_idmap_fkey vigilo
+2418; 2606 465674 FK CONSTRAINT public vigilo_maplink_idfrom_node_fkey vigilo
+2419; 2606 465679 FK CONSTRAINT public vigilo_maplink_idmap_fkey vigilo
+2417; 2606 465669 FK CONSTRAINT public vigilo_maplink_idto_node_fkey vigilo
+2416; 2606 465656 FK CONSTRAINT public vigilo_mapnode_idmap_fkey vigilo
+2431; 2606 465764 FK CONSTRAINT public vigilo_mapnodehost_idhost_fkey vigilo
+2430; 2606 465759 FK CONSTRAINT public vigilo_mapnodehost_idmapnode_fkey vigilo
+2426; 2606 465729 FK CONSTRAINT public vigilo_mapnodeservice_idmapnode_fkey vigilo
+2427; 2606 465734 FK CONSTRAINT public vigilo_mapnodeservice_idservice_fkey vigilo
+2425; 2606 465719 FK CONSTRAINT public vigilo_mapsegment_idmapsegment_fkey vigilo
+2423; 2606 465704 FK CONSTRAINT public vigilo_mapservicelink_idds_from_to_to_fkey vigilo
+2422; 2606 465699 FK CONSTRAINT public vigilo_mapservicelink_idds_to_to_from_fkey vigilo
+2424; 2606 465709 FK CONSTRAINT public vigilo_mapservicelink_idgraph_fkey vigilo
+2421; 2606 465694 FK CONSTRAINT public vigilo_mapservicelink_idmapservicelink_fkey vigilo
+2420; 2606 465689 FK CONSTRAINT public vigilo_mapservicelink_idref_fkey vigilo
+2382; 2606 465323 FK CONSTRAINT public vigilo_perfdatasource_idhost_fkey vigilo
+2399; 2606 465485 FK CONSTRAINT public vigilo_service_idservice_fkey vigilo
+2385; 2606 465351 FK CONSTRAINT public vigilo_state_idsupitem_fkey vigilo
+2386; 2606 465356 FK CONSTRAINT public vigilo_state_state_fkey vigilo
+2429; 2606 465749 FK CONSTRAINT public vigilo_submapmapnodetable_idmap_fkey vigilo
+2428; 2606 465744 FK CONSTRAINT public vigilo_submapmapnodetable_mapnodeid_fkey vigilo
+2397; 2606 465462 FK CONSTRAINT public vigilo_supitemgroup_idgroup_fkey vigilo
+2396; 2606 465457 FK CONSTRAINT public vigilo_supitemgroup_idsupitem_fkey vigilo
+2413; 2606 465609 FK CONSTRAINT public vigilo_tags2supitems_name_fkey vigilo
+2412; 2606 465604 FK CONSTRAINT public vigilo_tags2supitems_service_fkey vigilo
+2437; 2606 465818 FK CONSTRAINT public vigilo_usergrouppermissions_idgroup_fkey vigilo
+2436; 2606 465813 FK CONSTRAINT public vigilo_usergrouppermissions_idpermission_fkey vigilo
+2435; 2606 465803 FK CONSTRAINT public vigilo_usertousergroups_idgroup_fkey vigilo
+2434; 2606 465798 FK CONSTRAINT public vigilo_usertousergroups_username_fkey vigilo
+2380; 2606 465299 FK CONSTRAINT public vigilo_ventilation_idapp_fkey vigilo
+2379; 2606 465294 FK CONSTRAINT public vigilo_ventilation_idhost_fkey vigilo
+2381; 2606 465304 FK CONSTRAINT public vigilo_ventilation_idvigiloserver_fkey vigilo
