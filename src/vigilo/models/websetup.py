@@ -64,14 +64,14 @@ def populate_db(bind):
                         "following changeset: '%(script)s'" % {
                         'version': ver,
                         'script': script,
-                    } 
-
-                    ep = pkg_resources.EntryPoint.parse(
-                        'upgrade = vigilo.models.migration.%s:upgrade' % script
-                        ).load(require=False)
+                    }
 
                     transaction.begin()
+
                     try:
+                        ep = pkg_resources.EntryPoint.parse(
+                            'upgrade = vigilo.models.migration.%s:upgrade' % script
+                            ).load(require=False)
                         ep(bind)
                         version = tables.Version()
                         version.name = u'vigilo.models'
@@ -329,4 +329,3 @@ def clean_vigiboard(*args):
 
     transaction.commit()
     sys.exit(0)
-

@@ -20,6 +20,10 @@ from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 from sqlalchemy.orm import scoped_session, sessionmaker
 from zope.sqlalchemy import ZopeTransactionExtension
 
+from sqlalchemy.orm.scoping import ScopedSession
+from sqlalchemy.schema import DDL, _bind_or_error
+from sqlalchemy.sql import expression
+
 import vigilo.models.configure as configure
 
 __all__ = (
@@ -98,8 +102,66 @@ class PrefixedTables(DeclarativeMeta):
                 configure.DB_BASENAME + dict_['__tablename__']
         DeclarativeMeta.__init__(mcs, classname, bases, dict_)
 
+class ClusteredDDL(DDL):
+    def __init__(self, statement, cluster_name, cluster_sets, context=None, bind=None):
+        # Si plusieurs instructions ont été passées (liste),
+        # on les combine ici.
+        if isinstance(statement, list):
+            statement = ';'.join(statement)
+        super(ClusteredDDL, self).__init__(statement, 'postgres', context, bind)
+        self.cluster_name = cluster_name
+        self.cluster_sets = cluster_sets
+
+    def execute(self, bind=None, schema_item=None):
+        if bind is None:
+            bind = _bind_or_error(self)
+
+        if self._should_execute(None, schema_item, bind):
+            # On évalue le contexte une fois pour toute (il ne changera plus).
+            context = self._prepare_context(schema_item, bind)
+            cluster_name = '_' + self.cluster_name
+
+            # Dans le cas où une réplication est en place,
+            # on doit préparer le cluster pour le DDL.
+            if self.cluster_sets and self.cluster_name:
+                prepare_statement = "SELECT %%s.ddlscript_prepare(:cluster_set,-1);"
+                executable = expression.text(prepare_statement %
+                    context % cluster_name)
+                for cluster_set in self.cluster_sets:
+                    bind.execute(executable, params={
+                        'cluster_set': int(cluster_set),
+                    })
+
+            # Exécution locale du DDL.
+            statement = self._expand(schema_item, bind)
+            res = bind.execute(expression.text(statement))
+
+            # Propagation du DDL aux autres nœuds.
+            if self.cluster_sets and self.cluster_name:
+                repl_statement = "SELECT %%s.ddlscript_complete(:cluster_set,:statement,-1);"
+                executable = expression.text(repl_statement %
+                    self._prepare_context(schema_item, bind) % cluster_name)
+                for cluster_set in self.cluster_sets:
+                    bind.execute(executable, params={
+                        'cluster_set': int(cluster_set),
+                        'statement': statement
+                    })
+
+            return res
+
+    def _should_execute(self, event, schema_item, bind):
+        # Permet de gérer une session donnée en argument.
+        if isinstance(bind, ScopedSession):
+            bind = bind.bind
+        return super(ClusteredDDL, self)._should_execute(event, schema_item, bind)
+
+    def _prepare_context(self, schema_item, bind):
+        # Permet de gérer une session donnée en argument.
+        if isinstance(bind, ScopedSession):
+            bind = bind.bind
+        return super(ClusteredDDL, self)._prepare_context(schema_item, bind)
+
 DeclarativeBase = declarative_base(metaclass=PrefixedTables)
 metadata = DeclarativeBase.metadata
 DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False,
                 extension=ZopeTransactionExtension()))
-
