@@ -78,7 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING
 %{_bindir}/*
 %config(noreplace) %{_sysconfdir}/vigilo
-%{python_sitelib}/*
+%{python26_sitelib}/*
 
 
 %changelog
