@@ -1,7 +1,7 @@
 %define module  models
 %define name    vigilo-%{module}
 %define version 2.0.0
-%define release 1%{?svn}
+%define release 1%{?svn}%{?dist}
 
 Name:       %{name}
 Summary:    Vigilo data models (ORM)
