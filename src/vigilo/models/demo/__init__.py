@@ -7,7 +7,7 @@ les démonstrations.
 
 from pkg_resources import resource_listdir, working_set
 
-__all__ = ("samples")
+__all__ = ("samples",)
 
 samples = {}
 
