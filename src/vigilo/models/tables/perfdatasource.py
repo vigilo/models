@@ -88,7 +88,7 @@ class PerfDataSource(DeclarativeBase, object):
         @type cls: C{type}
         @param host: Instance de L{Host} ou identifiant
             de l'hôte sur lequel porte la source de données.
-        @type service: C{int} ou L{Host}
+        @type host: C{int} ou L{Host}
         @param sourcename: Nom de la source de données à récupérer.
         @type sourcename: C{unicode}
         @return: La source de données de performances dont le nom est
@@ -105,4 +105,3 @@ class PerfDataSource(DeclarativeBase, object):
             ).filter(cls.host == host
             ).filter(cls.name == sourcename
             ).first()
-

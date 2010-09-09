@@ -289,7 +289,7 @@ class Group(DeclarativeBase, object):
     @classmethod
     def by_parent_and_name(cls, parent, name):
         """
-        Renvoie le groupe dont le nom est L{groupname} et qui a L{parent}
+        Renvoie le groupe dont le nom est L{name} et qui a L{parent}
         pour parent.
 
         @param cls: La classe à utiliser, c'est-à-dire une classe
@@ -298,8 +298,8 @@ class Group(DeclarativeBase, object):
         @param parent: Instance du parent du groupe demandé ou C{None} pour
             rechercher un groupe au sommet de la hiérarchie.
         @type parent: L{Group} ou C{None}
-        @param groupname: Le nom du groupe que l'on souhaite récupérer.
-        @type groupname: C{unicode}
+        @param name: Le nom du groupe que l'on souhaite récupérer.
+        @type name: C{unicode}
         @return: Le groupe demandé.
         @rtype: L{Group} ou C{None}
         """
@@ -380,4 +380,3 @@ class SupItemGroup(Group):
     lls = relation('LowLevelService', secondary=SUPITEM_GROUP_TABLE)
 
     hls = relation('HighLevelService', secondary=SUPITEM_GROUP_TABLE)
-

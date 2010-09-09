@@ -184,7 +184,8 @@ class User(DeclarativeBase, object):
         @rtype: C{bool}
 
         @return: Les groupes de cartes auxquels l'utilisateur a accès.
-        @rtype: C{set} of C{Group}
+        @rtype: C{list} of C{int} if L{only_id} is True, C{list} of C{Group}
+            otherwise.
         """
         result = {}
         columns = None
