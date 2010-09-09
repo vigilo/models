@@ -181,7 +181,7 @@ class User(DeclarativeBase, object):
             auxquels l'utilisateur à directement accés ou tous les groupes
             y compris ceux auxquels il a indirectement accés (droit de passage,
             mais pas droit de lecture)
-        @rtype: C{bool}
+        @type only_direct: C{bool}
 
         @return: Les groupes de cartes auxquels l'utilisateur a accès.
         @rtype: C{list} of C{int} if L{only_id} is True, C{list} of C{Group}
