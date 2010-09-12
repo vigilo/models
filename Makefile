@@ -1,4 +1,5 @@
 NAME := models
+EPYDOC_PARSE = vigilo\.models\.tables
 all: build
 include buildenv/Makefile.common
 
