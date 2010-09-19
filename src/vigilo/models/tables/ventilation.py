@@ -26,7 +26,7 @@ class Ventilation(DeclarativeBase, object):
     @ivar idapp: Identifiant de l'L{Application} installée.
     @ivar application: Instance de l'L{Application} installée.
     """
-    
+
     __tablename__ = 'ventilation'
 
     idhost = Column(
@@ -66,6 +66,6 @@ class Ventilation(DeclarativeBase, object):
     application = relation('Application')
 
     def __init__(self, **kwargs):
-        """Initialise une association ventilation."""   
+        """Initialise une association ventilation."""
         super(Ventilation, self).__init__(**kwargs)
 

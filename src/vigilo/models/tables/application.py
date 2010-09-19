@@ -11,7 +11,7 @@ __all__ = ('Application', )
 class Application(DeclarativeBase, object):
     """
     Gère les applications employées par Vigilo.
-    
+
     @ivar idapp: Identifiant de l'application.
     @ivar name: Nom (unique) de l'application.
     """
@@ -19,7 +19,7 @@ class Application(DeclarativeBase, object):
 
     idapp = Column(
         Integer,
-        primary_key=True, 
+        primary_key=True,
         autoincrement=True,
     )
 
@@ -32,7 +32,7 @@ class Application(DeclarativeBase, object):
     def __init__(self, **kwargs):
         """
         Initialise l'instance avec les informations de l'application.
-        
+
         @param kwargs: Un dictionnaire contenant les informations sur
             l'applications.
         @type kwargs: C{dict}
@@ -42,7 +42,7 @@ class Application(DeclarativeBase, object):
     def __unicode__(self):
         """
         Conversion en unicode.
-        
+
         @return: Nom du groupe d'applications.
         @rtype: C{unicode}
         """
