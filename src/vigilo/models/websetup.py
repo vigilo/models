@@ -52,37 +52,37 @@ def populate_db(bind):
 
         try:
             for script in scripts:
-                    try:
-                        ver = int(script.split('_')[0])
-                    except ValueError:
-                        continue
+                try:
+                    ver = int(script.split('_')[0])
+                except ValueError:
+                    continue
 
-                    if ver <= current_version or ver > VIGILO_MODELS_VERSION:
-                        continue
+                if ver <= current_version or ver > VIGILO_MODELS_VERSION:
+                    continue
 
-                    print "Upgrading to version %(version)d using the " \
-                        "following changeset: '%(script)s'" % {
-                        'version': ver,
-                        'script': script,
-                    }
+                print "Upgrading to version %(version)d using the " \
+                    "following changeset: '%(script)s'" % {
+                    'version': ver,
+                    'script': script,
+                }
 
-                    transaction.begin()
+                transaction.begin()
 
-                    try:
-                        ep = pkg_resources.EntryPoint.parse(
-                            'upgrade = vigilo.models.migration.%s:upgrade' % script
-                            ).load(require=False)
-                        ep(bind)
-                        version = tables.Version()
-                        version.name = u'vigilo.models'
-                        version.version = ver
-                        DBSession.merge(version)
-                        DBSession.flush()
-                    except:
-                        transaction.abort()
-                        raise
-                    else:
-                        transaction.commit()
+                try:
+                    ep = pkg_resources.EntryPoint.parse(
+                        'upgrade = vigilo.models.migration.%s:upgrade' % script
+                        ).load(require=False)
+                    ep(bind)
+                    version = tables.Version()
+                    version.name = u'vigilo.models'
+                    version.version = ver
+                    DBSession.merge(version)
+                    DBSession.flush()
+                except:
+                    transaction.abort()
+                    raise
+                else:
+                    transaction.commit()
         except ImportError:
             # @TODO: log a warning/error or halt the process
             raise
