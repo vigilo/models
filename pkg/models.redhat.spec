@@ -13,7 +13,7 @@ Name:       %{name}
 Summary:    Vigilo data models (ORM)
 Version:    %{version}
 Release:    %{release}
-Source0:    %{module}.tar.bz2
+Source0:    %{name}-%{version}.tar.gz
 URL:        http://www.projet-vigilo.org
 Group:      System/Servers
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
@@ -54,7 +54,7 @@ This library gives an API to the Vigilo data models.
 This library is part of the Vigilo Project <http://vigilo-project.org>
 
 %prep
-%setup -q -n %{module}
+%setup -q
 
 %build
 make PYTHON=%{__python}
