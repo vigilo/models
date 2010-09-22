@@ -72,7 +72,9 @@ def populate_db(bind):
                     ep = pkg_resources.EntryPoint.parse(
                         'upgrade = vigilo.models.migration.%s:upgrade' % script
                         ).load(require=False)
-                    ep(bind)
+                    # @FIXME: le 2ème argument est le nom du cluster.
+                    # Il ne devrait probablement pas être hard-codé...
+                    ep(bind, 'vigilo')
                     version = tables.Version()
                     version.name = u'vigilo.models'
                     version.version = ver

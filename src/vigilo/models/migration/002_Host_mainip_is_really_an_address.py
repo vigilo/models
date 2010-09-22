@@ -9,12 +9,12 @@ d'un nom d'hôte complètement qualifié (FQDN).
 from vigilo.models.session import DBSession, ClusteredDDL
 from vigilo.models import tables
 
-def upgrade(migrate_engine):
+def upgrade(migrate_engine, cluster_name):
     ClusteredDDL(
         [
             "ALTER TABLE %(fullname)s RENAME COLUMN mainip TO address",
             "ALTER TABLE %(fullname)s ALTER COLUMN address TYPE varchar(255)",
         ],
-        cluster_name='vigilo',
+        cluster_name=cluster_name,
         cluster_sets=[2, 3],
     ).execute(DBSession, tables.Host.__table__)

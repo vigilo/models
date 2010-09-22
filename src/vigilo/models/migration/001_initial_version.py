@@ -3,5 +3,5 @@
 Version initiale du modèle.
 """
 
-def upgrade(migrate_engine):
+def upgrade(migrate_engine, cluster_name):
     pass
