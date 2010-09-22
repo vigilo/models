@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """
-Modèle pour la table maplink et ses tables dérivées par jointure 
+Modèle pour la table maplink et ses tables dérivées par jointure
 mapservicelink et mapsegment.
 """
 from sqlalchemy import Column
@@ -24,7 +24,7 @@ class MapLink(DeclarativeBase, object):
     @ivar idmaplink: Identifiant de la liaison.
     @ivar idfrom_node: Identifiant du nœud de départ de la liaison.
     @ivar idto_node: Identifiant du nœud d'arrivée de la liaison.
-    @ivar idmap: Référence vers l'identifiant de carte de la liaison. 
+    @ivar idmap: Référence vers l'identifiant de carte de la liaison.
     @ivar type_link: Type de liaison.
     @ivar from_node: Instance du nœud de départ de la liaison.
     @ivar to_node: Instance du nœud d'arrivée de la liaison.
@@ -42,7 +42,7 @@ class MapLink(DeclarativeBase, object):
             MapNode.idmapnode,
             ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
-    
+
     idto_node = Column(
         Integer,
         ForeignKey(
@@ -56,19 +56,19 @@ class MapLink(DeclarativeBase, object):
             Map.idmap,
             onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False)
-    
+
     type_link = Column('type_link', Unicode(16), nullable=False)
 
     __mapper_args__ = {'polymorphic_on': type_link}
 
-    from_node = relation('MapNode', foreign_keys=[idto_node], 
-                         primaryjoin='MapLink.idto_node == MapNode.idmapnode', 
+    from_node = relation('MapNode', foreign_keys=[idto_node],
+                         primaryjoin='MapLink.idto_node == MapNode.idmapnode',
                          lazy=True)
-    
+
     to_node = relation('MapNode', foreign_keys=[idfrom_node],
                        primaryjoin='MapLink.idfrom_node == MapNode.idmapnode',
                        lazy=True)
- 
+
     def __init__(self, **kwargs):
         """Initialise une liaison."""
         super(MapLink, self).__init__(**kwargs)
@@ -88,20 +88,20 @@ class MapLink(DeclarativeBase, object):
     def by_link_name(cls, linkname):
         """
         Renvoie la liaison dont le nom est L{linkname}.
-        
+
         @param linkname: Nom de la liaison voulue.
         @type linkname: C{unicode}
         @return: La liaison demandée.
         @rtype: L{MapLink}
         """
         return DBSession.query(cls).filter(cls.name == linkname).first()
-    
-    
+
+
 class MapServiceLink(MapLink):
     """
     Classe chargée de la représentation graphique d'une
     liaison de type Service dans VigiMap.
-    
+
     @ivar idmapservicelink: Identifiant du modèle de l'hôte (séquence).
     @ivar idref: Identifiant du service de bas niveau référencé.
     @ivar reference: Instance du service de bas niveau référencé.
@@ -110,7 +110,7 @@ class MapServiceLink(MapLink):
     @ivar map: Relation vers la carte.
     """
     __tablename__ = 'mapservicelink'
-    
+
     idmapservicelink = Column(
         Integer,
         ForeignKey(
@@ -166,39 +166,39 @@ class MapServiceLink(MapLink):
                        primaryjoin='PerfDataSource.idperfdatasource == '
                                     'MapServiceLink.idds_from_to_to',
                          lazy=True)
-    
+
     # TODO: renommer en ds_in (on se place toujours du point de vue du from)
     ds_to_to_from = relation('PerfDataSource', foreign_keys=[idds_to_to_from],
                        primaryjoin='PerfDataSource.idperfdatasource == '
                                     'MapServiceLink.idds_to_to_from',
                        lazy=True)
- 
+
     map = relation('Map',
-        back_populates='links', lazy=True) 
-    
-        
+        back_populates='links', lazy=True)
+
+
     def __init__(self, **kwargs):
         """Initialisation d'une liaison concernant un L{Service}."""
         super(MapServiceLink, self).__init__(**kwargs)
-        
- 
+
+
 class MapLlsLink(MapServiceLink):
     """
     Classe chargée de la représentation graphique d'une
     liaison de type Service de Bas Niveau dans VigiMap.
     """
-    
+
     __mapper_args__ = {'polymorphic_identity': u'mapllslink'}
-    
-    
+
+
 class MapHlsLink(MapServiceLink):
     """
     Classe chargée de la représentation graphique d'une
     liaison de type Service de Bas Niveau dans VigiMap.
     """
-    
+
     __mapper_args__ = {'polymorphic_identity': u'maphlslink'}
-           
+
 
 class MapSegment(MapLink):
     """
@@ -211,7 +211,7 @@ class MapSegment(MapLink):
     """
     __tablename__ = 'mapsegment'
     __mapper_args__ = {'polymorphic_identity': u'mapsegment'}
-    
+
     idmapsegment = Column(
         Integer,
         ForeignKey(
@@ -219,11 +219,16 @@ class MapSegment(MapLink):
             onupdate='CASCADE', ondelete='CASCADE'),
         primary_key=True,
         nullable=False
-        )
-    
-    color = Column(Unicode(255))
-    
-    thickness = Column(Integer)
-    
-    map = relation('Map', back_populates='segments')
+    )
 
+    color = Column(
+        Unicode(255),
+        nullable=False
+    )
+
+    thickness = Column(
+        Integer,
+        nullable=False
+    )
+
+    map = relation('Map', back_populates='segments')
