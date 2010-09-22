@@ -124,9 +124,20 @@ class ClusteredDDL(DDL):
             # Dans le cas où une réplication est en place,
             # on doit préparer le cluster pour le DDL.
             if self.cluster_sets and self.cluster_name:
-                prepare_statement = "SELECT %%s.ddlscript_prepare(:cluster_set,-1);"
-                executable = expression.text(prepare_statement %
-                    context % cluster_name)
+                # On prépare le set du cluster, uniquement s'il est présent
+                # (d'où la recherche sur set_id dans sl_set) et si son origine
+                # (set_origin) correspond bien au nœud courant du cluster
+                # (getlocalnodeid).
+                prepare_statement = \
+                    "SELECT %%(cluster_name)s." \
+                        "ddlscript_prepare(:cluster_set,-1) " \
+                    "FROM %%(cluster_name)s.sl_set " \
+                    "WHERE set_origin = %%(cluster_name)s." \
+                        "getlocalnodeid('%%(cluster_name)s') " \
+                    "AND set_id =  :cluster_set;"
+                executable = expression.text(prepare_statement % context % {
+                    'cluster_name': cluster_name
+                })
                 for cluster_set in self.cluster_sets:
                     bind.execute(executable, params={
                         'cluster_set': int(cluster_set),
@@ -138,13 +149,24 @@ class ClusteredDDL(DDL):
 
             # Propagation du DDL aux autres nœuds.
             if self.cluster_sets and self.cluster_name:
-                repl_statement = "SELECT %%s.ddlscript_complete(:cluster_set,:statement,-1);"
+                # On prépare le DDL sur les sets présents tels que l'origine
+                # (set_origin) correspond bien au nœud courant du cluster
+                # (getlocalnodeid).
+                repl_statement = \
+                    "SELECT %%(cluster_name)s." \
+                        "ddlscript_complete(:cluster_set,:statement,-1)" \
+                    "FROM %%(cluster_name)s.sl_set " \
+                    "WHERE set_origin = %%(cluster_name)s." \
+                        "getlocalnodeid('%%(cluster_name)s') " \
+                    "AND set_id =  :cluster_set;"
                 executable = expression.text(repl_statement %
-                    self._prepare_context(schema_item, bind) % cluster_name)
+                    self._prepare_context(schema_item, bind) % {
+                        'cluster_name': cluster_name,
+                    })
                 for cluster_set in self.cluster_sets:
                     bind.execute(executable, params={
                         'cluster_set': int(cluster_set),
-                        'statement': statement
+                        'statement': statement,
                     })
 
             return res
