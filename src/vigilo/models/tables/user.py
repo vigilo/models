@@ -45,7 +45,8 @@ class User(DeclarativeBase, object):
 
     email = Column(
         Unicode(255),
-        unique=True, index=True, nullable=False,
+        index=True,
+        nullable=True,
     )
 
     _password = Column(
