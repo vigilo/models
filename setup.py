@@ -60,7 +60,8 @@ setup(name='vigilo-models',
     entry_points={
         'console_scripts': [
             'vigilo-models-init-db = vigilo.models.websetup:init_db',
-            'vigilo-models-clean-vigiboard = vigilo.models.websetup:clean_vigiboard',
+            'vigilo-models-clean-vigiboard = vigilo.models.scripts.purge_vigiboard:clean_vigiboard',
+            'vigilo-passwd = vigilo.models.scripts.passwd:change_password',
             'vigilo-models-demo = vigilo.models.demo:run_demo',
         ],
     },
@@ -68,4 +69,3 @@ setup(name='vigilo-models',
     data_files=install_i18n("i18n", os.path.join(sys.prefix, 'share', 'locale')) +
         [(os.path.join(sysconfdir, "vigilo/models"), ["deployment/settings.ini"])],
 )
-
