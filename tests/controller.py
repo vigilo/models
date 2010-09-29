@@ -14,8 +14,8 @@ __all__ = ['ModelTest', 'setup_db', 'teardown_db']
 def setup_db():
     """Crée toutes les tables du modèle dans la BDD."""
     metadata.create_all()
-    
-#Teardown that database 
+
+#Teardown that database
 def teardown_db():
     """Supprime toutes les tables du modèle de la BDD."""
     metadata.drop_all()
@@ -33,6 +33,7 @@ class ModelTest(object):
 
     def setup(self):
         """Set up the fixture used to test the model."""
+        setup_db()
         try:
             print "Class being tested:", self.klass
             new_attrs = {}
@@ -51,6 +52,7 @@ class ModelTest(object):
         del self.obj
         DBSession.rollback()
         DBSession.expunge_all()
+        teardown_db()
 
     def do_get_dependencies(self):
         """
@@ -76,4 +78,3 @@ class ModelTest(object):
         obj = DBSession.query(self.klass).one()
         for key, value in self.attrs.iteritems():
             assert_equals(getattr(obj, key), value)
-

@@ -7,14 +7,120 @@ import pkg_resources
 __all__ = [
     'populate_db',
     'init_db',
-    'VIGILO_MODELS_VERSION',
+    'get_migration_scripts',
+    'migrate_model',
 ]
 
-# Numéro de version du modèle, il sera incrémenté pour chaque nouvelle
-# version livrée au client. Il sera utilisé par les scripts de mise à jour
-# de Vigilo afin d'importer les données d'une ancienne version du modèle
-# vers la nouvelle version (permet d'assurer la rétro-compatibilité).
-VIGILO_MODELS_VERSION = 5
+def get_migration_scripts(module):
+    """
+    Renvoie un dictionnaire contenant la liste des scripts de migration
+    disponibles, indexés par leur numéro de version.
+
+    @param module: Nom du module à partir duquel les migrations seront
+        chargées. Un sous-module "migration" doit exister sous ce module,
+        contenant des scripts de migration pour le modèle. Les scripts
+        doivent être nommés "<version>_<description>.py". Par exemple :
+        "001_User_Email_Suppression_contrainte_not_null.py".
+    @type module; C{str}
+    """
+    files = pkg_resources.resource_listdir(module, 'migration')
+    scripts = {}
+    for f in files:
+        if not f.endswith('.py') or f == '__init__.py':
+            continue
+
+        try:
+            ver = int(f.split('_')[0], 10)
+        except ValueError, TypeError:
+            continue
+
+        scripts[ver] = f[:-3]
+    return scripts
+
+def migrate_model(bind, module, scripts, stop_at=None):
+    """
+    Met à jour le modèle à partir des scripts de migration fournis
+    par le L{module}.
+
+    @param bind: Connexion à la base de données.
+    @type bind: C{Engine}
+    @param module: Nom du module dont le modèle doit être migré.
+    @type module: C{str}
+    @param scripts: Dictionnaire contenant les noms des scripts de migration,
+        indexés par leur numéro de version.
+    @type scripts: C{dict}
+    @param stop_at: Numéro du dernier script de migration à exécuter.
+        Si omis, alors la migration s'effectue jusqu'au dernier script
+        disponible, correspondant à la version la plus à jour.
+    @type stop_at: C{int}
+    @return: True si la migration a eu lieu (même lorsqu'au aucun changement
+        n'a été effectué) ou False si le modèle en question n'existait pas.
+    @rtype: C{bool}
+    """
+    from vigilo.models.session import DBSession
+    from vigilo.models import tables
+
+    if stop_at is None:
+        stop_at = max(scripts.keys())
+
+    module = unicode(module)
+
+    print u"Searching for already installed version of '%s'" % module
+    current_version = DBSession.query(tables.Version.version).filter(
+                            tables.Version.name == module
+                        ).scalar()
+
+
+    if current_version:
+        print u"Version %(version)d of %(module)s is already installed" % {
+            'version': current_version,
+            'module': module,
+        }
+
+        try:
+            versions = scripts.keys()
+            sorted(versions)
+            for ver in versions:
+                if ver <= current_version or ver > stop_at:
+                    continue
+
+                print u"Upgrading %(module)s to version %(version)d using " \
+                    "the following changeset: '%(script)s'" % {
+                    'module': module,
+                    'version': ver,
+                    'script': scripts[ver],
+                }
+
+                transaction.begin()
+
+                try:
+                    # On charge le script correspondant à la version en
+                    # cours de traitement, à partir d'un dossier "migration"
+                    # situé dans le répertoire du module donné en argument.
+                    ep = pkg_resources.EntryPoint.parse(
+                        'upgrade = %s.migration.%s:upgrade' % (
+                            module,
+                            scripts[ver],
+                        )).load(require=False)
+
+                    # @FIXME: le 2ème argument est le nom du cluster.
+                    # Il ne devrait probablement pas être hard-codé...
+                    ep(bind, 'vigilo')
+                    version = tables.Version()
+                    version.name = module
+                    version.version = ver
+                    DBSession.merge(version)
+                    DBSession.flush()
+                except:
+                    transaction.abort()
+                    raise
+                else:
+                    transaction.commit()
+        except ImportError:
+            # @TODO: log a warning/error or halt the process
+            raise
+        return True
+    return False
 
 def populate_db(bind):
     """Placez les commandes pour peupler la base de données ici."""
@@ -30,62 +136,11 @@ def populate_db(bind):
     print "Creating tables"
     metadata.create_all(bind=bind)
 
-    # Création d'un jeu de données par défaut.
-    print "Checking for an already existing model"
-    current_version = DBSession.query(tables.Version.version).filter(
-                            tables.Version.name == u'vigilo.models'
-                        ).scalar()
+    module = 'vigilo.models'
+    scripts = get_migration_scripts(module)
+    max_version = max(scripts.keys())
 
-    if current_version:
-        print "Version %d of the model is already installed" % current_version
-        files = pkg_resources.resource_listdir('vigilo.models.migration', '')
-        scripts = []
-        for f in files:
-            if not f.endswith('.py') or f == '__init__.py':
-                continue
-            scripts.append(f[:-3])
-        scripts.sort()
-
-        try:
-            for script in scripts:
-                try:
-                    ver = int(script.split('_')[0])
-                except ValueError:
-                    continue
-
-                if ver <= current_version or ver > VIGILO_MODELS_VERSION:
-                    continue
-
-                print "Upgrading to version %(version)d using the " \
-                    "following changeset: '%(script)s'" % {
-                    'version': ver,
-                    'script': script,
-                }
-
-                transaction.begin()
-
-                try:
-                    ep = pkg_resources.EntryPoint.parse(
-                        'upgrade = vigilo.models.migration.%s:upgrade' % script
-                        ).load(require=False)
-                    # @FIXME: le 2ème argument est le nom du cluster.
-                    # Il ne devrait probablement pas être hard-codé...
-                    ep(bind, 'vigilo')
-                    version = tables.Version()
-                    version.name = u'vigilo.models'
-                    version.version = ver
-                    DBSession.merge(version)
-                    DBSession.flush()
-                except:
-                    transaction.abort()
-                    raise
-                else:
-                    transaction.commit()
-        except ImportError:
-            # @TODO: log a warning/error or halt the process
-            raise
-
-    else:
+    if not migrate_model(bind, module, scripts):
         print "Setting up the generic tables"
         manager = tables.User()
         manager.user_name = u'manager'
@@ -111,8 +166,8 @@ def populate_db(bind):
         DBSession.flush()
 
         version = tables.Version()
-        version.name = u'vigilo.models'
-        version.version = VIGILO_MODELS_VERSION
+        version.name = unicode(module)
+        version.version = max_version
         DBSession.add(version)
         DBSession.flush()
 

@@ -19,6 +19,7 @@ class DeleteCascadeTest(unittest.TestCase):
 
     def setUp(self):
         """Call before every test case."""
+        setup_db()
         DBSession.add(StateName(statename=u'OK', order=0))
         fct.add_mapgroup('Root')
         DBSession.flush()
@@ -27,6 +28,7 @@ class DeleteCascadeTest(unittest.TestCase):
         """Call after every test case."""
         DBSession.rollback()
         DBSession.expunge_all()
+        teardown_db()
 
     def test_host_mapnode(self):
         """Suppression des mapnodes d'un host supprimé (#57)"""

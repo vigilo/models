@@ -37,7 +37,7 @@ class TestLowLevelService(ModelTest):
         DBSession.add(host)
         DBSession.flush()
         return dict(host=host)
-    
+
     def test_by_host_service_name(self):
         """Récupération d'un LowLevelService par son nom d'hôte/service."""
         ob = LowLevelService.by_host_service_name(u'myhost', u'myservice')
@@ -46,7 +46,7 @@ class TestLowLevelService(ModelTest):
     def test_default_state(self):
         assert_equals(u'OK', StateName.value_to_statename(
             DBSession.query(self.klass).one().state.state))
-        
+
 
 class TestHighLevelService(ModelTest):
     """Test de la classe HighLevelService."""
@@ -65,11 +65,10 @@ class TestHighLevelService(ModelTest):
         ModelTest.__init__(self)
 
     def test_by_service_name(self):
-        """Récupération d'un HighLevelService par son nom.'"""
+        """Récupération d'un HighLevelService par son nom."""
         ob = HighLevelService.by_service_name(u'myservice')
         assert_equals(ob.critical_threshold, 80)
 
     def test_default_state(self):
         assert_equals(u'OK', StateName.value_to_statename(
             DBSession.query(self.klass).one().state.state))
-
