@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vigilo-models 2.0.0\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2010-06-28 11:06+0200\n"
-"PO-Revision-Date: 2010-08-26 17:00+0200\n"
+"POT-Creation-Date: 2010-09-29 14:40+0200\n"
+"PO-Revision-Date: 2010-09-29 18:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -17,88 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
-
-#: src/vigilo/models/websetup.py:173
-msgid ""
-"Remove closed events which are at least DAYS old. DAYS must be a positive"
-" non-zero integer."
-msgstr ""
-"Remove closed events which are at least DAYS old. DAYS must be a positive"
-" non-zero integer."
-
-#: src/vigilo/models/websetup.py:176
-msgid ""
-"Remove closed events, starting with the oldest ones, when the Vigilo "
-"database starts occupying more then SIZE bytes. SIZE must be a positive "
-"non-zero integer."
-msgstr ""
-"Remove closed events, starting with the oldest ones, when the Vigilo "
-"database starts occupying more then SIZE bytes. SIZE must be a positive "
-"non-zero integer."
-
-#: src/vigilo/models/websetup.py:180
-msgid "Load configuration from this file."
-msgstr "Load configuration from this file."
-
-#: src/vigilo/models/websetup.py:195
-msgid "Too many arguments"
-msgstr "Too many arguments"
-
-#: src/vigilo/models/websetup.py:203
-msgid "No database configuration found"
-msgstr "No database configuration found"
-
-#: src/vigilo/models/websetup.py:235
-#, python-format
-msgid ""
-"Deleted %(nb_deleted)d closed events which were at least %(days)d days "
-"old."
-msgstr ""
-"Deleted %(nb_deleted)d closed events which were at least %(days)d days "
-"old."
-
-#: src/vigilo/models/websetup.py:248
-#, python-format
-msgid ""
-"Deleted %(nb_deleted)d entries in the history for high level services "
-"which were at least %(days)d days old."
-msgstr ""
-"Deleted %(nb_deleted)d entries in the history for high level services "
-"which were at least %(days)d days old."
-
-#: src/vigilo/models/websetup.py:263
-#, python-format
-msgid ""
-"The database is %(size)d bytes big, which is more than the limit "
-"(%(limit)d bytes). I will now delete old closed events and history "
-"entries to make room for new ones."
-msgstr ""
-"The database is %(size)d bytes big, which is more than the limit "
-"(%(limit)d bytes). I will now delete old closed events and history "
-"entries to make room for new ones."
-
-#: src/vigilo/models/websetup.py:287
-#, python-format
-msgid "Deleted closed event #%d to make room for new events."
-msgstr "Deleted closed event #%d to make room for new events."
-
-#: src/vigilo/models/websetup.py:295
-#, python-format
-msgid ""
-"Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
-"big (limit: %(limit)d bytes)"
-msgstr ""
-"Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
-"big (limit: %(limit)d bytes)"
-
-#: src/vigilo/models/websetup.py:322
-#, python-format
-msgid ""
-"Deleted %(nb_deleted)d history entries on high level services. The "
-"database is now %(size)d bytes big (limit: %(limit)d bytes)"
-msgstr ""
-"Deleted %(nb_deleted)d history entries on high level services. The "
-"database is now %(size)d bytes big (limit: %(limit)d bytes)"
 
 #: src/vigilo/models/demo/__init__.py:41
 #, python-format
@@ -109,4 +27,140 @@ msgstr "No sample selected. Available samples: %s"
 #, python-format
 msgid "Sample '%s' cannot be found."
 msgstr "Sample '%s' cannot be found."
+
+#: src/vigilo/models/scripts/passwd.py:24
+msgid "%prog [options] [username]"
+msgstr "%prog [options] [username]"
+
+#: src/vigilo/models/scripts/passwd.py:25
+msgid ""
+"Changes Vigilo's password for user 'username' or the currently logged in "
+"user if this argument is omitted."
+msgstr ""
+"Changes Vigilo's password for user 'username' or the currently logged in "
+"user if this argument is omitted."
+
+#: src/vigilo/models/scripts/passwd.py:29
+#: src/vigilo/models/scripts/purge_vigiboard.py:50
+msgid "Load configuration from this file."
+msgstr "Load configuration from this file."
+
+#: src/vigilo/models/scripts/passwd.py:45
+#: src/vigilo/models/scripts/purge_vigiboard.py:65
+msgid "Too many arguments"
+msgstr "Too many arguments"
+
+#: src/vigilo/models/scripts/passwd.py:53
+#: src/vigilo/models/scripts/purge_vigiboard.py:73
+msgid "No database configuration found"
+msgstr "No database configuration found"
+
+#: src/vigilo/models/scripts/passwd.py:66
+#, python-format
+msgid "Changing Vigilo password for user '%s'."
+msgstr "Changing Vigilo password for user '%s'."
+
+#: src/vigilo/models/scripts/passwd.py:73
+msgid "Enter current password: "
+msgstr "Enter current password: "
+
+#: src/vigilo/models/scripts/passwd.py:78
+msgid "Bad login or password."
+msgstr "Bad login or password."
+
+#: src/vigilo/models/scripts/passwd.py:81
+msgid "Enter new password: "
+msgstr "Enter new password: "
+
+#: src/vigilo/models/scripts/passwd.py:82
+msgid "Confirm new password: "
+msgstr "Confirm new password: "
+
+#: src/vigilo/models/scripts/passwd.py:87
+msgid "Sorry, passwords do not match."
+msgstr "Sorry, passwords do not match."
+
+#: src/vigilo/models/scripts/passwd.py:93
+msgid "Password unchanged."
+msgstr "Password unchanged."
+
+#: src/vigilo/models/scripts/passwd.py:101
+#, python-format
+msgid "An exception occurred while updating password for user '%s'."
+msgstr "An exception occurred while updating password for user '%s'."
+
+#: src/vigilo/models/scripts/passwd.py:107
+#, python-format
+msgid "Successfully updated password for user '%s'."
+msgstr "Successfully updated password for user '%s'."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:43
+msgid ""
+"Remove closed events which are at least DAYS old. DAYS must be a positive"
+" non-zero integer."
+msgstr ""
+"Remove closed events which are at least DAYS old. DAYS must be a positive"
+" non-zero integer."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:46
+msgid ""
+"Remove closed events, starting with the oldest ones, when the Vigilo "
+"database starts occupying more then SIZE bytes. SIZE must be a positive "
+"non-zero integer."
+msgstr ""
+"Remove closed events, starting with the oldest ones, when the Vigilo "
+"database starts occupying more then SIZE bytes. SIZE must be a positive "
+"non-zero integer."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:105
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d closed events which were at least %(days)d days "
+"old."
+msgstr ""
+"Deleted %(nb_deleted)d closed events which were at least %(days)d days "
+"old."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:118
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d entries in the history for high level services "
+"which were at least %(days)d days old."
+msgstr ""
+"Deleted %(nb_deleted)d entries in the history for high level services "
+"which were at least %(days)d days old."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:133
+#, python-format
+msgid ""
+"The database is %(size)d bytes big, which is more than the limit "
+"(%(limit)d bytes). I will now delete old closed events and history "
+"entries to make room for new ones."
+msgstr ""
+"The database is %(size)d bytes big, which is more than the limit "
+"(%(limit)d bytes). I will now delete old closed events and history "
+"entries to make room for new ones."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:157
+#, python-format
+msgid "Deleted closed event #%d to make room for new events."
+msgstr "Deleted closed event #%d to make room for new events."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:165
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
+"big (limit: %(limit)d bytes)"
+msgstr ""
+"Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
+"big (limit: %(limit)d bytes)"
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:192
+#, python-format
+msgid ""
+"Deleted %(nb_deleted)d history entries on high level services. The "
+"database is now %(size)d bytes big (limit: %(limit)d bytes)"
+msgstr ""
+"Deleted %(nb_deleted)d history entries on high level services. The "
+"database is now %(size)d bytes big (limit: %(limit)d bytes)"
 
