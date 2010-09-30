@@ -257,9 +257,15 @@ class Group(DeclarativeBase, object):
         et tous ses descendants.
         """
         from .grouphierarchy import GroupHierarchy
-        DBSession.query(GroupHierarchy)\
-            .filter(GroupHierarchy.idparent == self.idgroup)\
-            .delete()
+
+        children_ids = DBSession.query(
+                GroupHierarchy.idchild
+            ).filter(GroupHierarchy.idparent == self.idgroup
+            ).filter(GroupHierarchy.hops > 0).all()
+        children_ids = [c.idchild for c in children_ids]
+        DBSession.query(Group).filter(Group.idgroup.in_(children_ids)).delete()
+        DBSession.flush()
+        print DBSession.query(Group).all()
 
     # Méthodes de classe
 

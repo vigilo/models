@@ -464,7 +464,7 @@ def add_map(name, group=None):
         DBSession.flush()
     return m
 
-def add_mapgroup(name, parent):
+def add_mapgroup(name, parent=None):
     """
     Ajoute un groupe de cartes.
 

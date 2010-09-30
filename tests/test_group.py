@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Test suite for ServiceGroup class"""
 from nose.tools import assert_equal
+from sqlalchemy.schema import DDL
 
 from vigilo.models.session import DBSession
-
 from vigilo.models.tables import GraphGroup, MapGroup, SupItemGroup
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
 from vigilo.models.demo.functions import add_graphgroup, \
@@ -14,7 +14,7 @@ from controller import ModelTest
 
 class TestGraphGroup(ModelTest):
     """Test de la table GraphGroup"""
-    
+
     # Group est abstraite, on teste donc avec une classe dérivée
     klass = GraphGroup
     creator = add_graphgroup
@@ -31,32 +31,49 @@ class TestGraphGroup(ModelTest):
                         ).filter(GroupHierarchy.idchild == self.obj.idgroup
                         ).filter(GroupHierarchy.hops == 0
                         ).one()
-    
+
     def test_remove_children(self):
-        """ test méthode remove_children
         """
-        child = self.klass(name=u"achild")
+        Test la méthode remove_children
+        """
+        # Ce hack est nécessaire lors du passage des tests unitaires
+        # avec sqlite3. Il permet de simuler un ON DELETE CASCADE,
+        # car cette fonctionnalité n'est pas présente dans les anciennes
+        # version de sqlite.
+        trigger = DDL(
+            """
+CREATE TRIGGER foobar
+BEFORE DELETE ON %(group)s
+FOR EACH ROW BEGIN
+    DELETE FROM %(grouphierarchy)s WHERE %(grouphierarchy)s.idparent = OLD.idgroup;
+    DELETE FROM %(grouphierarchy)s WHERE %(grouphierarchy)s.idchild = OLD.idgroup;
+END;
+            """,
+            on='sqlite',
+            context={
+                'group': self.klass.__tablename__,
+                'grouphierarchy': GroupHierarchy.__tablename__,
+            }
+        )
+        DBSession.bind.execute(trigger)
+
+        child = self.klass(name=u"achild", parent=self.obj)
         DBSession.add(child)
-        DBSession.add(GroupHierarchy(
-            parent=self.obj,
-            child=child,
-            hops=1,
-        ))
         DBSession.flush()
-        
+
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.idparent == self.obj.idgroup
                         ).filter(GroupHierarchy.idchild == child.idgroup
                         ).filter(GroupHierarchy.hops == 1
                         ).one()
-        
+
         self.obj.remove_children()
-        
+        assert_equal(False, self.obj.has_children())
+
         assert_equal(0,
-        DBSession.query(GroupHierarchy
+            DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.idparent == self.obj.idgroup
-                        ).filter(GroupHierarchy.idchild == child.idgroup
-                        ).filter(GroupHierarchy.hops == 1
+                        ).filter(GroupHierarchy.hops > 0
                         ).count() )
 
     def test_parent(self):
@@ -99,14 +116,14 @@ class TestGraphGroup(ModelTest):
         parent = self.klass(name=u"aparent")
         DBSession.add(parent)
         self.obj.parent = parent
-        
+
         # on créé un groupe avec son enfant
         child = self.klass(name=u"achild")
         DBSession.add(child)
         gchild = self.klass(name=u"agrandchild")
         DBSession.add(gchild)
         gchild.parent = child
-        
+
         # on raccorde self.obj et l'enfant
         child.parent = self.obj
 
@@ -126,7 +143,7 @@ class TestGraphGroup(ModelTest):
                         ).filter(GroupHierarchy.child == gchild
                         ).filter(GroupHierarchy.hops == 1
                         ).one()
-        
+
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.parent == parent
                         ).filter(GroupHierarchy.child == self.obj
@@ -138,13 +155,13 @@ class TestGraphGroup(ModelTest):
                         ).filter(GroupHierarchy.child == gchild
                         ).filter(GroupHierarchy.hops == 3
                         ).one()
-        
+
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.parent == self.obj
                         ).filter(GroupHierarchy.child == child
                         ).filter(GroupHierarchy.hops == 1
                         ).one()
-        
+
         DBSession.query(GroupHierarchy
                         ).filter(GroupHierarchy.parent == self.obj
                         ).filter(GroupHierarchy.child == gchild
@@ -160,7 +177,7 @@ class TestGraphGroup(ModelTest):
     def test_has_children(self):
         """Test de la présence de fils."""
         assert_equal( False, self.obj.has_children() )
-        
+
         child = self.klass(name=u"achild")
         DBSession.add(child)
         DBSession.add(GroupHierarchy(
@@ -169,9 +186,9 @@ class TestGraphGroup(ModelTest):
             hops=1,
         ))
         DBSession.flush()
-        
+
         assert_equal( True, self.obj.has_children() )
-    
+
     def test_get_children(self):
         """Récupération des groupes fils."""
         child = self.klass(name=u"achild")
@@ -182,7 +199,7 @@ class TestGraphGroup(ModelTest):
             hops=1,
         ))
         DBSession.flush()
-        
+
         assert_equal( [child, ], self.obj.get_children() )
 
     def test_search_for_groups(self):
@@ -223,4 +240,3 @@ class TestSupItemGroups(TestGraphGroup):
     attrs = {
         'name': u'supitemgorup',
     }
-
