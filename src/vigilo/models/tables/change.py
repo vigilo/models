@@ -17,7 +17,7 @@ class Change(DeclarativeBase, object):
     les différents composants dont les dates de dernières
     modifications nous intéressent.
     Ex : un nom de table SQL, un nom d'application, une fonction, etc.
-    
+
     @ivar element: Nom de la table.
     @ivar last_modified: Date de dernière modification.
     """
@@ -45,14 +45,14 @@ class Change(DeclarativeBase, object):
         @return: Le nom de la table concernée.
         @rtype: C{str}
         """
-        return self.tablename
+        return self.element
 
     @classmethod
     def by_table_name(cls, element):
         """
         Renvoie les informations concernant la dernière modification
         de l'élément L{element}.
-        
+
         @param element: Nom de l'élément voulu.
         @type element: C{unicode}
         @return: Les informations concernant l'élément demandé.
@@ -75,4 +75,3 @@ class Change(DeclarativeBase, object):
         change.last_modified = datetime.now()
         DBSession.add(change)
         DBSession.flush()
-

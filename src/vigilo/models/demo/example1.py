@@ -308,12 +308,13 @@ def main():
         "Internet", maps[0], "ServiceElement",
         590, 350, 'network-cloud', maps[0:3])
 
+    service = ('host1.example.com', 'Interface eth0')
     l1 = add_mapllslink(n1, n3, ('proto4', 'Interface eth0'), maps[0])
-    l2 = add_mapllslink(n2, n3, ('host1.example.com', 'Interface eth0'), maps[0])
-    l3 = add_mapllslink(n4, n2, ('host1.example.com', 'Interface eth0'), maps[0])
-    l4 = add_mapllslink(n5, n3, ('host1.example.com', 'Interface eth0'), maps[0])
-    l5 = add_mapllslink(n5, n1, ('host1.example.com', 'Interface eth0'), maps[0])
-    l6 = add_mapllslink(n4, n6, ('host1.example.com', 'Interface eth0'), maps[0])
+    l2 = add_mapllslink(n2, n3, service, maps[0])
+    l3 = add_mapllslink(n4, n2, service, maps[0])
+    l4 = add_mapllslink(n5, n3, service, maps[0])
+    l5 = add_mapllslink(n5, n1, service, maps[0])
+    l6 = add_mapllslink(n4, n6, service, maps[0])
 
     # Ajout des groupes d'utilisateurs 'editors' et 'readers'.
     add_usergroup('editors')
@@ -325,7 +326,7 @@ def main():
         u'Editor', u'editpass', 'editors')
     add_usergroup_permission('editors', 'vigimap-access')
     add_usergroup_permission('editors', 'vigimap-edit')
-    
+
     add_user('reader', u'reader@somedomain.com',
         u'Reader', u'readpass', 'readers')
     add_usergroup_permission('readers', 'vigimap-access')
@@ -336,5 +337,3 @@ def main():
     add_MapGroupPermission(mg_1, 'editors', 'w')
     add_MapGroupPermission(mg_3, 'editors', 'w')
     add_MapGroupPermission(mg_1, 'readers', 'r')
-
-

@@ -101,7 +101,10 @@ class Group(DeclarativeBase, object):
             ).filter(GroupHierarchy.idchild == self.idgroup
             ).order_by(GroupHierarchy.hops.desc()
             ).all()
-        parts = [p.name.replace('\\', '\\\\').replace('/', '\\/') for p in parts]
+        parts = [
+                    p.name.replace('\\', '\\\\').replace('/', '\\/')
+                    for p in parts
+                ]
         # Force la génération d'un chemin absolu (commençant par '/').
         parts.insert(0, '')
         self._path = '/'.join(parts)
@@ -111,6 +114,9 @@ class Group(DeclarativeBase, object):
     # Parents
 
     def has_parent(self):
+        """
+        Renvoie True si ce groupe a un parent.
+        """
         from .grouphierarchy import GroupHierarchy
         return (DBSession.query(GroupHierarchy)\
             .filter(GroupHierarchy.idchild == self.idgroup)\
@@ -179,7 +185,8 @@ class Group(DeclarativeBase, object):
 
     def get_top_parent(self):
         """
-        Renvoie le parent de plus haut niveau (celui qui n'a pas de parent lui-même)
+        Renvoie le parent de plus haut niveau
+        (celui qui n'a pas de parent lui-même).
         @return: Parent de plus haut niveau
         @rtype: L{Group}
         """
@@ -198,7 +205,8 @@ class Group(DeclarativeBase, object):
     # Fils
 
     def has_children(self):
-        """ renvoie True si le groupe a des enfants
+        """
+        Renvoie True si le groupe a des enfants.
         """
         from .grouphierarchy import GroupHierarchy
         return ( DBSession.query(self.__class__).join(
@@ -208,7 +216,8 @@ class Group(DeclarativeBase, object):
         ).count() > 0)
 
     def get_children(self, hops=1):
-        """ renvoie la liste des enfants d'un groupe
+        """
+        Renvoie la liste des enfants du groupe.
         """
         from .grouphierarchy import GroupHierarchy
         children = DBSession.query(self.__class__).join(
@@ -228,7 +237,9 @@ class Group(DeclarativeBase, object):
     children = property(get_children)
 
     def get_all_children(self):
-        """ renvoie la liste  des descendants
+        """
+        Renvoie la liste des descendants du groupe, c'est-à-dire
+        la liste de ses fils, petit-fils, etc.
         """
         from .grouphierarchy import GroupHierarchy
         children = DBSession.query(
@@ -241,6 +252,10 @@ class Group(DeclarativeBase, object):
         return children
 
     def remove_children(self):
+        """
+        Supprime la relation de descendance entre ce groupe
+        et tous ses descendants.
+        """
         from .grouphierarchy import GroupHierarchy
         DBSession.query(GroupHierarchy)\
             .filter(GroupHierarchy.idparent == self.idgroup)\

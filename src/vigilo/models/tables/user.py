@@ -2,15 +2,14 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table User"""
 from sqlalchemy.orm import synonym, relation
-from sqlalchemy import Column, and_
+from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime
 import hashlib
 
 from vigilo.models.session import DeclarativeBase, DBSession
-from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE, \
-                                            USERGROUP_PERMISSION_TABLE
+from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE
 from vigilo.models.tables import SupItemGroup, UserGroup, MapGroup, \
-                                    Permission, DataPermission
+                                    DataPermission
 from .grouphierarchy import GroupHierarchy
 
 __all__ = ('User', )

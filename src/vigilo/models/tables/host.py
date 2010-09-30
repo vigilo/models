@@ -126,10 +126,12 @@ class Host(SupItem):
     def _get_graphs(self):
         from vigilo.models.tables.graph import Graph
         from vigilo.models.tables.perfdatasource import PerfDataSource
-        from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
+        from vigilo.models.tables.secondary_tables import \
+            GRAPH_PERFDATASOURCE_TABLE
         return DBSession.query(Graph).distinct().join(
                         (GRAPH_PERFDATASOURCE_TABLE, \
-                            GRAPH_PERFDATASOURCE_TABLE.c.idgraph == Graph.idgraph),
+                            GRAPH_PERFDATASOURCE_TABLE.c.idgraph == \
+                            Graph.idgraph),
                         (PerfDataSource, PerfDataSource.idperfdatasource == \
                             GRAPH_PERFDATASOURCE_TABLE.c.idperfdatasource),
                     ).filter(PerfDataSource.idhost == self.idhost
@@ -189,4 +191,3 @@ class Host(SupItem):
             if service.is_allowed_for(user, perm_type):
                 return True
         return False
-

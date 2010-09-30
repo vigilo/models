@@ -103,7 +103,31 @@ class PrefixedTables(DeclarativeMeta):
         DeclarativeMeta.__init__(mcs, classname, bases, dict_)
 
 class ClusteredDDL(DDL):
-    def __init__(self, statement, cluster_name, cluster_sets, context=None, bind=None):
+    """
+    Exécute une requête SQL destinée à PostgreSQL
+    et qui modifie le schéma (DDL).
+    Cette classe prend soin de répliquer la modification
+    sur les nœuds de réplication appropriés si ceux-ci sont
+    disponibles.
+    """
+
+    def __init__(self, statement, cluster_name, cluster_sets,
+        context=None, bind=None):
+        """
+        Initialisation.
+
+        @param statement: Une requête SQL ou une liste de requêtes SQL.
+        @param statement: C{basestr} ou C{list} de C{basestr}
+        @param cluster_name: Nom du cluster de réplication.
+        @type cluster_name: C{basestr}
+        @param cluster_sets: Liste des numéros des ensembles de réplication
+            concernés par la requête.
+        @type cluster_sets: C{list} de C{int}
+        @param context: Valeurs contextuelles de substitution.
+        @type context: C{dict}
+        @param bind: Connexion à la base de données maître.
+        @type bind: C{Connectable}
+        """
         # Si plusieurs instructions ont été passées (liste),
         # on les combine ici.
         if isinstance(statement, list):
@@ -113,6 +137,19 @@ class ClusteredDDL(DDL):
         self.cluster_sets = cluster_sets
 
     def execute(self, bind=None, schema_item=None):
+        """
+        Exécute la requête ou la série de requêtes associées
+        à cet objet.
+
+        @param bind: Connexion à la base de données maître.
+        @type bind: C{Connectable}
+        @param schema_item: Élément du modèle sur lequel
+            porte la modification.
+        @type schema_item: C{Table}
+        @return: Résultat de l'exécution de la requête sur
+            le nœud maître.
+        @rtype: C{ResultProxy}
+        """
         if bind is None:
             bind = _bind_or_error(self)
 
@@ -172,12 +209,19 @@ class ClusteredDDL(DDL):
             return res
 
     def _should_execute(self, event, schema_item, bind):
+        """
+        Détermine si le DDL doit être exécuté ou non.
+        """
         # Permet de gérer une session donnée en argument.
         if isinstance(bind, ScopedSession):
             bind = bind.bind
-        return super(ClusteredDDL, self)._should_execute(event, schema_item, bind)
+        return super(ClusteredDDL, self)._should_execute(
+            event, schema_item, bind)
 
     def _prepare_context(self, schema_item, bind):
+        """
+        Prépare le contexte de substitution.
+        """
         # Permet de gérer une session donnée en argument.
         if isinstance(bind, ScopedSession):
             bind = bind.bind
