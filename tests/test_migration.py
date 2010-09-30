@@ -22,6 +22,7 @@ class TestMigration(unittest.TestCase):
         transaction.begin()
 
     def test_model_creation(self):
+        """Teste la création du modèle."""
         # On vérifie que lorsque le modèle de Vigilo est créé,
         # il l'est avec la toute dernière version disponible.
         populate_db(DBSession.bind)
@@ -32,9 +33,18 @@ class TestMigration(unittest.TestCase):
         self.assertEquals(installed_version.version, latest_version)
 
     def test_migration(self):
+        """Teste la migration (partielle/totale) du modèle."""
+
         # Recherche des scripts de migration dans le dossier des tests.
         module = u'testdata'
         scripts = get_migration_scripts(module)
+
+        expected_scripts = {
+            1: '001_Initial_version',
+            2: '002_Dummy',
+            3: '003_Dummy',
+        }
+        self.assertEquals(scripts, expected_scripts)
 
         # On simule l'installation d'un nouveau modèle.
         DBSession.add(tables.Version(
