@@ -31,7 +31,7 @@ def get_migration_scripts(module):
 
         try:
             ver = int(f.split('_')[0], 10)
-        except ValueError, TypeError:
+        except (ValueError, TypeError):
             continue
 
         scripts[ver] = f[:-3]
