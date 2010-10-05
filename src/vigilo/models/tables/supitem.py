@@ -73,7 +73,7 @@ class SupItem(DeclarativeBase, object):
     def impacted_hls(self, *args):
         """
         Renvoie une requête portant sur les services de haut niveau impactés.
-        
+
         @param args: Liste d'éléments à récupérer dans la requête.
         @type args: Une C{DeclarativeBase} ou une liste de C{Column}s.
         @return: Une C{Query} portant sur les éléments demandés.
@@ -103,27 +103,27 @@ class SupItem(DeclarativeBase, object):
         ).filter(imp_hls2.distance == subquery.c.distance)
 
         return services_query
- 
- 
+
+
     @classmethod
     def get_supitem(cls, hostname, servicename):
         """
         Récupère dans la BDD l'identifiant de l'item (host ou service)
-        correspondant à ce hostname et à ce servicename. 
-        Lorsque le paramètre servicename vaut None, l'item est alors un host. 
+        correspondant à ce hostname et à ce servicename.
+        Lorsque le paramètre servicename vaut None, l'item est alors un host.
         Lorsque le paramètre hostname vaut None, l'item est un SHN.
         Sinon, l'item est un SBN.
 
         Remarque de AB: j'aurais bien vu un nom du genre `by_names()` plutôt,
         mais bon, on va pas tout casser juste pour faire joli.
-            
+
         @param hostname: Nom du host.
         @type hostname: C{str}
         @param servicename: Nom du service.
         @type servicename: C{str}
         @return: L'identifiant d'un host, un SHN, ou un SBN.
         @rtype: C{int}
-        """  
+        """
         from vigilo.models.tables import Host, HighLevelService, \
                                             LowLevelService
         from sqlalchemy.sql.expression import and_
@@ -133,13 +133,13 @@ class SupItem(DeclarativeBase, object):
             return DBSession.query(Host.idhost
                         ).filter(Host.name == hostname
                         ).scalar()
-        
+
         # Lorsque l'item est un service de haut niveau.
         if not hostname:
             return DBSession.query(HighLevelService.idservice
                         ).filter(HighLevelService.servicename == servicename,
                         ).scalar()
-        
+
         # Sinon, l'item est un service de bas niveau.
         return DBSession.query(LowLevelService.idservice
                     ).join(
@@ -158,7 +158,7 @@ class SupItem(DeclarativeBase, object):
         supitem, avec la permission optionnellement spécifiée.
 
         @todo: probablement à optimiser, ça fait beaucoup de requêtes.
-        
+
         @param user: L'utilisateur dont la permission est à tester
         @type  user: L{User}
         @param perm_type: Type d'accès, par défaut "r"
@@ -176,4 +176,4 @@ class SupItem(DeclarativeBase, object):
     def __init__(self, **kwargs):
         """Initialise un objet supervisé."""
         super(SupItem, self).__init__(**kwargs)
-    
+

@@ -18,43 +18,43 @@ class VigiloServer(DeclarativeBase, object):
     @ivar description: Une description intelligible du serveur.
     """
     __tablename__ = 'vigiloserver'
-    
-    
+
+
     idvigiloserver = Column(
         Integer,
         primary_key=True,
         autoincrement=True,
     )
-    
+
     name = Column(
         Unicode(255),
         index=True,
         unique=True,
         nullable=False,
     )
-    
+
     def __init__(self, **kwargs):
         """
         Initialise l'instance avec les informations du serveur.
-        
+
         @param kwargs: Un dictionnaire avec les informations.
         @type kwargs: C{dict}
         """
         super(VigiloServer, self).__init__(**kwargs)
-    
+
     def __unicode__(self):
         """
         Conversion en unicode.
-        
+
         @return: Le nom du groupe.
         @rtype: C{unicode}
         """
         return self.name
-    
+
     def __str__(self):
         return str(self.name)
 
-    
+
     @classmethod
     def by_vigiloserver_name(cls, servername):
         """
