@@ -23,6 +23,7 @@ from zope.sqlalchemy import ZopeTransactionExtension
 from sqlalchemy.orm.scoping import ScopedSession
 from sqlalchemy.schema import DDL, _bind_or_error
 from sqlalchemy.sql import expression
+from sqlalchemy.exc import ProgrammingError
 
 import vigilo.models.configure as configure
 
@@ -158,9 +159,18 @@ class ClusteredDDL(DDL):
             context = self._prepare_context(schema_item, bind)
             cluster_name = '_' + self.cluster_name
 
+            replicated = bind.execute(
+                'SELECT 1 AS "exists" '
+                'FROM pg_tables '
+                'WHERE schemaname = :cluster_name '
+                'LIMIT 1;',
+                params={
+                    'cluster_name': cluster_name,
+                }).rowcount
+
             # Dans le cas où une réplication est en place,
             # on doit préparer le cluster pour le DDL.
-            if self.cluster_sets and self.cluster_name:
+            if self.cluster_sets and self.cluster_name and replicated:
                 # On prépare le set du cluster, uniquement s'il est présent
                 # (d'où la recherche sur set_id dans sl_set) et si son origine
                 # (set_origin) correspond bien au nœud courant du cluster
@@ -171,7 +181,7 @@ class ClusteredDDL(DDL):
                     "FROM %%(cluster_name)s.sl_set " \
                     "WHERE set_origin = %%(cluster_name)s." \
                         "getlocalnodeid('%%(cluster_name)s') " \
-                    "AND set_id =  :cluster_set;"
+                    "AND set_id = :cluster_set;"
                 executable = expression.text(prepare_statement % context % {
                     'cluster_name': cluster_name
                 })
@@ -180,12 +190,13 @@ class ClusteredDDL(DDL):
                         'cluster_set': int(cluster_set),
                     })
 
+
             # Exécution locale du DDL.
             statement = self._expand(schema_item, bind)
             res = bind.execute(expression.text(statement))
 
             # Propagation du DDL aux autres nœuds.
-            if self.cluster_sets and self.cluster_name:
+            if self.cluster_sets and self.cluster_name and replicated:
                 # On prépare le DDL sur les sets présents tels que l'origine
                 # (set_origin) correspond bien au nœud courant du cluster
                 # (getlocalnodeid).
@@ -195,7 +206,7 @@ class ClusteredDDL(DDL):
                     "FROM %%(cluster_name)s.sl_set " \
                     "WHERE set_origin = %%(cluster_name)s." \
                         "getlocalnodeid('%%(cluster_name)s') " \
-                    "AND set_id =  :cluster_set;"
+                    "AND set_id = :cluster_set;"
                 executable = expression.text(repl_statement %
                     self._prepare_context(schema_item, bind) % {
                         'cluster_name': cluster_name,
