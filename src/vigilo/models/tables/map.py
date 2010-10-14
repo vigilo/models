@@ -21,7 +21,7 @@ class Map(DeclarativeBase, object):
     @ivar background_color: Couleur d'arrière-plan (propriété CSS).
     @ivar background_image: Image d'arrière-plan (propriété CSS).
     @ivar background_position: Position d'arrière-plan (propriété CSS).
-    @ivar background_repeat: Répétition d'arrière-plan (propriété CSS). 
+    @ivar background_repeat: Répétition d'arrière-plan (propriété CSS).
     @ivar groups: Liste des L{MapGroup}s auxquels cette carte appartient.
     @ivar links: Liste des liaisons (L{MapServiceLink}) présentes sur la carte.
     @ivar nodes: Liste des nœuds (L{MapNode}) présents sur la carte.
@@ -35,32 +35,32 @@ class Map(DeclarativeBase, object):
         autoincrement=True,
         nullable=False,
     )
-    
+
     mtime = Column(DateTime(timezone=False))
-    
+
     title = Column(Unicode(255), nullable=False)
-    
+
     background_color = Column(Unicode(8))
     background_image = Column(Unicode(255))
     background_position = Column(Unicode(255))
     background_repeat = Column(Unicode(255))
     generated =  Column(
-        Boolean, 
+        Boolean,
         default = False,
         nullable = False)
-    
+
     groups = relation('MapGroup', secondary=MAP_GROUP_TABLE,
                          back_populates='maps', lazy=True)
 
     links = relation('MapServiceLink', back_populates='map',
                      lazy=True, cascade="all")
-    
+
     nodes = relation('MapNode', back_populates='map',
                      lazy=True, cascade="all")
-    
+
     segments = relation('MapSegment', back_populates='map',
                         lazy=True, cascade="all")
-    
+
 
     def __init__(self, **kwargs):
         """Initialise une carte."""
@@ -122,9 +122,9 @@ class Map(DeclarativeBase, object):
         from .mapnode import MapNode
         map_alias = aliased(Map)
         return (DBSession.query(map_alias) \
-            .join((SUB_MAP_NODE_MAP_TABLE, 
+            .join((SUB_MAP_NODE_MAP_TABLE,
                    SUB_MAP_NODE_MAP_TABLE.c.idmap == map_alias.idmap)) \
-            .join((MapNode, 
+            .join((MapNode,
                    MapNode.idmapnode == SUB_MAP_NODE_MAP_TABLE.c.mapnodeid)) \
             .join((cls, cls.idmap == MapNode.idmap)) \
             .filter(cls.idmap == idmap).distinct().order_by(Map.title).all())

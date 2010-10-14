@@ -2,7 +2,7 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """VigiloServer model"""
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, Unicode
+from sqlalchemy.types import Integer, Unicode, Boolean
 
 from vigilo.models.session import DeclarativeBase, DBSession
 
@@ -31,6 +31,12 @@ class VigiloServer(DeclarativeBase, object):
         index=True,
         unique=True,
         nullable=False,
+    )
+
+    disabled =  Column(
+        Boolean,
+        default = False,
+        nullable = False,
     )
 
     def __init__(self, **kwargs):
