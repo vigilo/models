@@ -265,7 +265,6 @@ class Group(DeclarativeBase, object):
         children_ids = [c.idchild for c in children_ids]
         DBSession.query(Group).filter(Group.idgroup.in_(children_ids)).delete()
         DBSession.flush()
-        print DBSession.query(Group).all()
 
     # Méthodes de classe
 
