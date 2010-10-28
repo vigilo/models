@@ -599,7 +599,7 @@ def add_perfdatasource(name, host, label=None, max=None,
                                    max=max,
                                    )
         DBSession.add(ds)
-        add_ventilation(host, vigiloserver, 'rrdgraph')
+        add_ventilation(host, vigiloserver, 'vigirrd')
         DBSession.flush()
     return ds
 
