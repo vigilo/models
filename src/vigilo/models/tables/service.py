@@ -164,7 +164,8 @@ class LowLevelService(Service):
         Integer,
         ForeignKey(
             Service.idservice,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
         ),
         autoincrement=False, primary_key=True,
     )
@@ -178,7 +179,8 @@ class LowLevelService(Service):
         Integer,
         ForeignKey(
             Host.idhost,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
         ),
         nullable=False,
     )
@@ -196,6 +198,21 @@ class LowLevelService(Service):
         nullable=False,
     )
 
+    idcollector = Column(
+        Integer,
+        ForeignKey(
+            idservice,
+            ondelete='SET NULL',
+            onupdate='CASCADE',
+        ),
+        default=None,
+        nullable=True,
+    )
+
+    collector = relation('LowLevelService',
+        remote_side='LowLevelService.idcollector',
+        primaryjoin=idservice == idcollector,
+        lazy=True)
 
     def __init__(self, **kwargs):
         """Initialisation de l'objet."""
@@ -317,4 +334,3 @@ class HighLevelService(Service):
         """
         return DBSession.query(cls).filter(
             cls.servicename == servicename).first()
-
