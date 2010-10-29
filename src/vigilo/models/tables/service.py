@@ -149,6 +149,8 @@ class LowLevelService(Service):
     @ivar command: Commande à exécuter pour vérifier l'état du service.
     @ivar weight: Poids affecté à ce service pour le calcul de l'état
         des services de haut niveau (L{HighLevelService}).
+    @ivar idcollector: Identifiant du Collector pour ce service.
+    @ivar collector: Collector pour ce service.
     """
     __tablename__ = 'lowlevelservice'
     __table_args__ = (
