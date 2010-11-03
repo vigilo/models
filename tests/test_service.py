@@ -4,6 +4,7 @@ from nose.tools import assert_equals
 
 from vigilo.models.tables import Host, LowLevelService, HighLevelService, StateName
 from vigilo.models.session import DBSession
+from vigilo.models.demo.functions import add_lowlevelservice
 
 from controller import ModelTest
 
@@ -44,8 +45,19 @@ class TestLowLevelService(ModelTest):
         assert_equals(ob.weight, 100)
 
     def test_default_state(self):
+        """L'état initial d'un service de bas niveau est 'OK'."""
         assert_equals(u'OK', StateName.value_to_statename(
             DBSession.query(self.klass).one().state.state))
+
+    def test_collector_relation(self):
+        """Bon fonctionnement de l'association service -> collector."""
+        service = DBSession.query(self.klass).one()
+        collector = add_lowlevelservice(service.host.name, u'Collector')
+        service.idcollector = collector.idservice
+        DBSession.flush()
+
+        assert_equals(service.idcollector, collector.idservice)
+        assert_equals(service.collector, collector)
 
 
 class TestHighLevelService(ModelTest):
@@ -70,5 +82,6 @@ class TestHighLevelService(ModelTest):
         assert_equals(ob.critical_threshold, 80)
 
     def test_default_state(self):
+        """L'état initial d'un service de haut niveau est 'OK'."""
         assert_equals(u'OK', StateName.value_to_statename(
             DBSession.query(self.klass).one().state.state))

@@ -159,7 +159,7 @@ class LowLevelService(Service):
     )
     __mapper_args__ = {
         'polymorphic_identity': u'lowlevel',
-       'extension': LlsMapperExt(),
+        'extension': LlsMapperExt(),
     }
 
     idservice = Column(
@@ -200,10 +200,14 @@ class LowLevelService(Service):
         nullable=False,
     )
 
+    # On fait référence à SupItem plutôt qu'à LowLevelService,
+    # même si on sait que le collecteur est un service de bas niveau,
+    # afin de contourner un bug de SQLAlchemy avec les relations
+    # auto-référentielles et l'héritage.
     idcollector = Column(
         Integer,
         ForeignKey(
-            idservice,
+            SupItem.idsupitem,
             ondelete='SET NULL',
             onupdate='CASCADE',
         ),
@@ -211,10 +215,7 @@ class LowLevelService(Service):
         nullable=True,
     )
 
-    collector = relation('LowLevelService',
-        remote_side='LowLevelService.idcollector',
-        primaryjoin=idservice == idcollector,
-        lazy=True)
+    collector = relation('SupItem', remote_side='SupItem.idsupitem', lazy=True)
 
     def __init__(self, **kwargs):
         """Initialisation de l'objet."""

@@ -26,6 +26,6 @@ class TestHost(ModelTest):
         ModelTest.__init__(self)
 
     def test_default_state(self):
+        """L'état initial d'un hôte est 'OK'."""
         assert_equals(u'OK', StateName.value_to_statename(
             DBSession.query(self.klass).one().state.state))
-

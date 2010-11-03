@@ -14,7 +14,7 @@ def upgrade(migrate_engine, cluster_name):
         [
             "ALTER TABLE %(fullname)s ADD COLUMN idcollector INTEGER",
             "ALTER TABLE %(fullname)s ADD CONSTRAINT %(fullname)s_idcollector_fkey "
-                "FOREIGN KEY(idcollector) REFERENCES %(fullname)s(idservice) "
+                "FOREIGN KEY(idcollector) REFERENCES %(db_basename)ssupitem(idsupitem) "
                 "ON UPDATE CASCADE ON DELETE SET NULL",
         ],
         cluster_name=cluster_name,
