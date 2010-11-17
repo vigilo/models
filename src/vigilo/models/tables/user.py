@@ -114,7 +114,7 @@ class User(DeclarativeBase, object):
 
         @return: Liste des identifiants des groupes d'éléments supervisés
             auxquels l'utilisateur a accès.
-        @rtype: C{list} of C{int}
+        @rtype: C{list} of Ctuple{} of C{int}, C{bool}
         """
         result = {}
         columns = None
