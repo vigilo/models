@@ -1,17 +1,18 @@
-# French translations for PACKAGE package.
-# Copyright (C) 2010 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# Automatically generated, 2010.
+# German translations for vigilo-models.
+# Copyright (C) 2010 ORGANIZATION
+# This file is distributed under the same license as the vigilo-models
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  vigilo.models\n"
-"Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2010-02-16 09:45+0100\n"
+"Project-Id-Version: vigilo-models 2.0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2010-11-19 12:34+0100\n"
 "PO-Revision-Date: 2010-11-19 12:34+0100\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,88 +21,88 @@ msgstr ""
 #: src/vigilo/models/demo/__init__.py:41
 #, python-format
 msgid "No sample selected. Available samples: %s"
-msgstr "Aucun exemple sélectionné. Exemples disponibles : %s"
+msgstr "Kein Beispiel ausgewählt. Verfügbare Beispiele: %s"
 
 #: src/vigilo/models/demo/__init__.py:67
 #, python-format
 msgid "Sample '%s' cannot be found."
-msgstr "Exemple '%s' non trouvé."
+msgstr "Beispiel '%s' kann nicht gefunden werden."
 
 #: src/vigilo/models/scripts/passwd.py:24
 msgid "%prog [options] [username]"
-msgstr "%prog [option] [nom d'utilisateur]"
+msgstr "%prog [Optionen] [Benutzername]"
 
 #: src/vigilo/models/scripts/passwd.py:25
 msgid ""
 "Changes Vigilo's password for user 'username' or the currently logged in "
 "user if this argument is omitted."
 msgstr ""
-"Modifie le mot de passe Vigilo de l'utilisateur \"nom d'utilisateur\" ou "
-"de l'utilisateur qui lance la commande si cet argument est omis."
+"Ändert das Kennwort von Vigilo für den Benutzer 'Benutzername' oder den "
+"derzeit angemeldeten Benutzer, wenn dieses Argument ausgelassen wird."
 
 #: src/vigilo/models/scripts/passwd.py:29
 #: src/vigilo/models/scripts/purge_vigiboard.py:50
 msgid "Load configuration from this file."
-msgstr "Utiliser la configuration définie dans ce fichier."
+msgstr "Konfiguration aus dieser Datei laden."
 
 #: src/vigilo/models/scripts/passwd.py:45
 #: src/vigilo/models/scripts/purge_vigiboard.py:65
 msgid "Too many arguments"
-msgstr "Trop d'arguments"
+msgstr "Zu viele Argumente"
 
 #: src/vigilo/models/scripts/passwd.py:53
 #: src/vigilo/models/scripts/purge_vigiboard.py:73
 msgid "No database configuration found"
-msgstr "Configuration de la base de données non trouvée"
+msgstr "Keine Datenbank-Konfiguration gefunden"
 
 #: src/vigilo/models/scripts/passwd.py:66
 #, python-format
 msgid "Changing Vigilo password for user '%s'."
-msgstr "Modification du mot de passe Vigilo pour l'utilisateur '%s'."
+msgstr "Das Vigilo-Kennwort für Benutzer '%s' wird geändert."
 
 #: src/vigilo/models/scripts/passwd.py:73
 msgid "Enter current password: "
-msgstr "Mot de passe actuel : "
+msgstr "Aktuelles Kennwort eingeben: "
 
 #: src/vigilo/models/scripts/passwd.py:78
 msgid "Bad login or password."
-msgstr "Identifiant ou mot de passe incorrect."
+msgstr "Benutzername oder Kennwort nicht korrekt."
 
 #: src/vigilo/models/scripts/passwd.py:81
 msgid "Enter new password: "
-msgstr "Nouveau mot de passe : "
+msgstr "Neues Kennwort eingeben: "
 
 #: src/vigilo/models/scripts/passwd.py:82
 msgid "Confirm new password: "
-msgstr "Confirmer : "
+msgstr "Neues Kennwort bestätigen: "
 
 #: src/vigilo/models/scripts/passwd.py:87
 msgid "Sorry, passwords do not match."
-msgstr "Désolé, les mots de passe ne coïncident pas."
+msgstr "Leider stimmen die Kennwörter nicht überein."
 
 #: src/vigilo/models/scripts/passwd.py:93
 msgid "Password unchanged."
-msgstr "Le mot de passe n'a pas été modifié."
+msgstr "Kennwort nicht geändert."
 
 #: src/vigilo/models/scripts/passwd.py:101
 #, python-format
 msgid "An exception occurred while updating password for user '%s'."
 msgstr ""
-"Une erreur est survenue durant la mise à jour du mot de passe de "
-"l'utilisateur '%s'."
+"Bei der Aktualisierung des Kennworts für Benutzer '%s' ist eine Ausnahme "
+"aufgetreten."
 
 #: src/vigilo/models/scripts/passwd.py:107
 #, python-format
 msgid "Successfully updated password for user '%s'."
-msgstr "Le mot de passe de l'utilisateur '%s' a été mis à jour avec succès."
+msgstr "Das Kennwort für Benutzer '%s' wurde erfolgreich aktualisiert."
 
 #: src/vigilo/models/scripts/purge_vigiboard.py:43
 msgid ""
 "Remove closed events which are at least DAYS old. DAYS must be a positive"
 " non-zero integer."
 msgstr ""
-"Supprime les événements clos agés d'au moins DAYS jours. DAYS doit être "
-"un entier strictement positif."
+"Abgeschlossene Ereignisse, die mindestens TAGE alt sind, entfernen. TAGE "
+"müssen ein positiver nicht-Null Integer sein."
 
 #: src/vigilo/models/scripts/purge_vigiboard.py:46
 msgid ""
@@ -109,9 +110,9 @@ msgid ""
 "database starts occupying more then SIZE bytes. SIZE must be a positive "
 "non-zero integer."
 msgstr ""
-"Supprime des événements clos, en commençant par les plus agés, tant que "
-"la base de données de Vigilo occupe plus de SIZE octets. SIZE doit être "
-"un entier strictement positif."
+"Abgeschlossene Ereignisse entfernen und dabei mit den ältesten beginnen, "
+"wenn die Vigilo Datenbank beginnt, mehr als GRÖSSE Bytes einzunehmen. "
+"GRÖSSE muss ein positiver nicht-Null Integer sein."
 
 #: src/vigilo/models/scripts/purge_vigiboard.py:105
 #, python-format
@@ -119,8 +120,8 @@ msgid ""
 "Deleted %(nb_deleted)d closed events which were at least %(days)d days "
 "old."
 msgstr ""
-"%(nb_deleted)d événements clos agés d'au moins %(days)d jours ont été "
-"supprimés\""
+"Gelöschte %(nb_deleted)d abgeschlossene Ereignisse, die mindestens "
+"%(days)d Tage alt sind."
 
 #: src/vigilo/models/scripts/purge_vigiboard.py:118
 #, python-format
@@ -128,8 +129,8 @@ msgid ""
 "Deleted %(nb_deleted)d entries in the history for high level services "
 "which were at least %(days)d days old."
 msgstr ""
-"%(nb_deleted)d entrées dans l'historique des services de haut niveau, "
-"agées d'au moins %(days)d jours ont été supprimées."
+"Gelöschte %(nb_deleted)d Enträge im Verlauf für High-Level Services, die "
+"mindestens %(days)d Tage alt sind."
 
 #: src/vigilo/models/scripts/purge_vigiboard.py:133
 #, python-format
@@ -138,14 +139,16 @@ msgid ""
 "(%(limit)d bytes). I will now delete old closed events and history "
 "entries to make room for new ones."
 msgstr ""
-"La base de données occupe %(size)d octets, ce qui dépasse la limite "
-"(%(limit)d octets). Je vais supprimer les anciens événements clos et les "
-"entrées d'historique afin de libérer de l'espace."
+"Die Datenbank ist %(size)d Byte groß und liegt über dem Grenzwert "
+"(%(limit)d bytes). Die alten abgeschlossenen Ereignisse und "
+"Verlaufseinträge jetzt löschen, um Platz für neue zu schaffen."
 
 #: src/vigilo/models/scripts/purge_vigiboard.py:157
 #, python-format
 msgid "Deleted closed event #%d to make room for new events."
-msgstr "Suppression de l'événement clos #%d pour faire de la place."
+msgstr ""
+"Gelöschtes abgeschlossenes Ereignis #%d um Platz für neue Ereignisse zu "
+"schaffen."
 
 #: src/vigilo/models/scripts/purge_vigiboard.py:165
 #, python-format
@@ -153,8 +156,8 @@ msgid ""
 "Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
 "big (limit: %(limit)d bytes)"
 msgstr ""
-"%(nb_deleted)d événements clos supprimés. La base de données occupe "
-"désormais %(size)d octets (limite : %(limit)d octets)"
+"Gelöschtes %(nb_deleted)d abgeschlossenes Ereignis. Die Datenbank ist "
+"jetzt %(size)d Byte groß (limit: %(limit)d bytes)"
 
 #: src/vigilo/models/scripts/purge_vigiboard.py:192
 #, python-format
@@ -162,7 +165,6 @@ msgid ""
 "Deleted %(nb_deleted)d history entries on high level services. The "
 "database is now %(size)d bytes big (limit: %(limit)d bytes)"
 msgstr ""
-"%(nb_deleted)d entrées d'historique sur les services de haut niveau "
-"supprimées. La database occupe désormais %(size)d octets (limite : "
-"%(limit)d octets)"
+"Gelöschte %(nb_deleted)d Verlaufseinträge über High-Level-Services. Die "
+"Datenbank ist jetzt %(size)d Byte groß (limit: %(limit)d bytes)"
 
