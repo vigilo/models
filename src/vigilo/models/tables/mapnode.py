@@ -13,7 +13,7 @@ from vigilo.models.tables.map import Map
 from vigilo.models.tables.host import Host
 from vigilo.models.tables.service import Service
 
-__all__ = ('MapNodeHost', 'MapNodeService', 'MapNodeLls', 'MapNodeHls', 
+__all__ = ('MapNodeHost', 'MapNodeService', 'MapNodeLls', 'MapNodeHls',
            'MapNodePerformance')
 
 
@@ -24,7 +24,7 @@ class MapNode(DeclarativeBase, object):
     correspondent aux classes concrètes utilisées pour la représentation
     des cartes.
 
-    @ivar idmapnode: Identifiant du modèle de nœud (séquence). 
+    @ivar idmapnode: Identifiant du modèle de nœud (séquence).
     @ivar label: Label du nœud.
     @ivar x_pos: Abscisse du nœud.
     @ivar y_pos: Ordonnée du nœud.
@@ -42,7 +42,7 @@ class MapNode(DeclarativeBase, object):
         Integer,
         primary_key=True, autoincrement=True, nullable=False,
     )
-    
+
     label = Column(Unicode(255))
 
     idmap = Column(
@@ -51,42 +51,42 @@ class MapNode(DeclarativeBase, object):
             Map.idmap,
             onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False)
-    
+
     x_pos = Column(Integer, nullable=True)
-    
+
     y_pos = Column(Integer, nullable=True)
-    
+
     minimize = Column(
-        Boolean, 
+        Boolean,
         default = False,
         nullable = False)
 
     widget = Column(Unicode(32), nullable=False, default=u"SimpleElement")
 
     map = relation('Map', back_populates='nodes')
-    
+
     submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
-    
+
     # Il est possible de créer des éléments sur la carte
     # qui n'ont pas de relations avec les SupItem, mais
     # permettent juste d'ajouter un label, une image et
     # éventuellement des liens vers des sous-cartes.
     type_node = Column('type_node', Unicode(16), nullable=True)
-    
+
     icon = Column(
         Unicode(255)
         )
-    
+
     links_from = relation('MapLink', foreign_keys=[idmapnode],
                     primaryjoin='MapLink.idfrom_node == '
                         'MapNode.idmapnode')
-    
+
     links_to = relation('MapLink', foreign_keys=[idmapnode],
                     primaryjoin='MapLink.idto_node == '
                         'MapNode.idmapnode')
 
     __mapper_args__ = {'polymorphic_on': type_node}
-    
+
 
     def __init__(self, **kwargs):
         """Initialise un noeud."""
@@ -136,14 +136,14 @@ class MapNode(DeclarativeBase, object):
 class MapNodeHost(MapNode):
     """
     Classe chargée de la représentation graphique d'un hôte dans vigimap
-    
-    @ivar idmapnode: Identifiant du modèle de l'hôte (séquence). 
+
+    @ivar idmapnode: Identifiant du modèle de l'hôte (séquence).
     @ivar idhost: Identifiant de l'L{Host} représenté.
     @ivar host: Instance de l'L{Host} représenté.
     """
     __tablename__ = 'mapnodehost'
     __mapper_args__ = {'polymorphic_identity': u'host'}
-    
+
     idmapnode = Column(
         Integer,
         ForeignKey(
@@ -152,20 +152,20 @@ class MapNodeHost(MapNode):
         autoincrement=True, primary_key=True,
         nullable=False
     )
-    
+
     idhost = Column(
-        Integer, 
+        Integer,
         ForeignKey(
             Host.idhost,
             onupdate='CASCADE', ondelete='CASCADE'),
         nullable=False)
-    
+
     host = relation('Host', lazy=True)
-    
-    
+
+
     def __init__(self, **kwargs):
         super(MapNodeHost, self).__init__(**kwargs)
-        
+
     def __unicode__(self):
         """
         Formatte un C{MapNode} pour l'afficher dans les formulaires.
@@ -177,22 +177,22 @@ class MapNodeHost(MapNode):
             'hostname':  self.host.name,
         }
 
-        
+
 class MapNodeService(MapNode):
     """
     Classe chargée de la représentation graphique d'un service dans VigiMap.
 
-    @ivar idmapnode: Identifiant du modèle de service (séquence). 
+    @ivar idmapnode: Identifiant du modèle de service (séquence).
     @ivar idservice: Identifiant du L{Service} représenté.
     @ivar service: Instance du L{Service} représenté.
      """
     __tablename__ = 'mapnodeservice'
-    
+
     idmapnode = Column(
         Integer,
         ForeignKey(
             MapNode.idmapnode,
-            onupdate='CASCADE', ondelete='CASCADE'), 
+            onupdate='CASCADE', ondelete='CASCADE'),
         autoincrement=False, primary_key=True,
         nullable=False
     )
@@ -200,7 +200,7 @@ class MapNodeService(MapNode):
     idservice = Column(
         Integer,
         ForeignKey(
-            Service.idservice,
+            Service.idsupitem,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,
@@ -208,7 +208,7 @@ class MapNodeService(MapNode):
 
     service = relation('Service')
 
-    
+
     def __init__(self, **kwargs):
         super(MapNodeService, self).__init__(**kwargs)
 
@@ -228,12 +228,12 @@ class MapNodeLls(MapNodeService):
     """
     Classe chargée de la représentation graphique d'un service de bas niveau
     dans VigiMap.
- 
+
     """
     __mapper_args__ = {'polymorphic_identity': u'lls'}
-    
-    
-    
+
+
+
 class MapNodeHls(MapNodeService):
     """
     Classe chargée de la représentation graphique d'un service de haut niveau
@@ -241,4 +241,3 @@ class MapNodeHls(MapNodeService):
 
     """
     __mapper_args__ = {'polymorphic_identity': u'hls'}
-

@@ -25,7 +25,6 @@ class TestHLSHistory(ModelTest):
 
         hls = HighLevelService(
             servicename=u'HLS',
-            op_dep=u'+',
             message=u'Ouch',
             warning_threshold=42,
             critical_threshold=42,
@@ -37,4 +36,3 @@ class TestHLSHistory(ModelTest):
         idstatename = StateName.statename_to_value(u'WARNING')
 
         return dict(hls=hls, idstatename=idstatename)
-

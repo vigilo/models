@@ -22,7 +22,6 @@ class TestImpactedHLS(ModelTest):
         ModelTest.do_get_dependencies(self)
         hls = HighLevelService(
             servicename=u'HLS',
-            op_dep=u'+',
             message=u'Ouch',
             warning_threshold=42,
             critical_threshold=42,
@@ -49,4 +48,3 @@ class TestImpactedHLS(ModelTest):
         DBSession.flush()
 
         return dict(path=path, hls=hls)
-

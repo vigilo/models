@@ -49,7 +49,6 @@ class TestServiceState(ModelTest):
             host=host,
             servicename=u'myservice',
             command=u'halt',
-            op_dep=u'+',
             weight=42,
         )
         DBSession.add(service)

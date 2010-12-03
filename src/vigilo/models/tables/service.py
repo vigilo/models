@@ -3,7 +3,7 @@
 """Modèle pour la table Service"""
 from sqlalchemy import Column
 from sqlalchemy.types import UnicodeText, Unicode, Integer
-from sqlalchemy.orm import relation
+from sqlalchemy.orm import relation, column_property
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.orm import EXT_CONTINUE
 
@@ -74,69 +74,15 @@ class HlsMapperExt(SupItemMapperExt):
 class Service(SupItem):
     """
     Service générique.
-
-    @ivar idservice: Identifiant du service.
-    @ivar op_dep: Le type d'opération à appliquer aux dépendances de ce
-        service de haut niveau ('+', '&' ou '|').
-    @ivar groups: Liste des groupes de services auxquels ce service appartient.
-    @ivar dependancies: Liste des services dont ce service dépend.
-        Pour les services techniques, cette liste est toujours vide.
-    @note: Le nom du service a été déplacé au niveau des classes filles
-        afin de permettre l'ajout de contraintes SQL supplémentaires
-        (ex: unicité du nom du service pour un hôte donné).
     """
-    __tablename__ = 'service'
+    # Pour la compatibilité avec les versions précédentes du modèle.
+    idservice = SupItem.idsupitem
 
-    idservice = Column(
-        Integer,
-        ForeignKey(
-            SupItem.idsupitem,
-            onupdate='CASCADE', ondelete='CASCADE',
-        ),
-        primary_key=True, autoincrement=False,
-    )
-
-    op_dep = Column(
-        Unicode(1),
-        nullable=False,
-    )
-
-    @property
-    def dependancies(self):
-        """
-        Renvoie la liste des dépendances de ce service.
-
-        Pour un L{Service} technique (de bas niveau), il n'y a jamais de
-        dépendances, donc cette méthode renvoie une liste vide.
-        Cette méthode existe afin de permettre d'appeler C{obj.dependancies}
-        sur un service quelconque (de bas ou de haut niveau) sans provoquer
-        d'erreurs.
-        """
-        return []
-
-
-    def __init__(self, **kwargs):
-        """Initialise un service."""
-        super(Service, self).__init__(**kwargs)
-
-    def __unicode__(self):
-        """
-        Formatte un C{Service} pour l'afficher dans les formulaires.
-
-        Le nom du service est utilisé pour le représenter dans les formulaires.
-
-        @return: Le nom du service.
-        @rtype: C{str}
-        """
-        return self.servicename
-
-    def __repr__(self):
-        try:
-            return "<%s \"%s\">" % (self.__class__.__name__,
-                                    str(self.servicename))
-        except Exception:
-            return super(Service, self).__repr__()
-
+    # Nécessaire pour pouvoir récupérer uniquement
+    # des instances de services et pas d'hôtes.
+    __mapper_args__ = {
+        'polymorphic_identity': u'service',
+    }
 
 class LowLevelService(Service):
     """
@@ -157,15 +103,11 @@ class LowLevelService(Service):
         UniqueConstraint('servicename', 'idhost'),
         {}
     )
-    __mapper_args__ = {
-        'polymorphic_identity': u'lowlevel',
-        'extension': LlsMapperExt(),
-    }
 
     idservice = Column(
         Integer,
         ForeignKey(
-            Service.idservice,
+            SupItem.idsupitem,
             ondelete='CASCADE',
             onupdate='CASCADE',
         ),
@@ -215,7 +157,15 @@ class LowLevelService(Service):
         nullable=True,
     )
 
-    collector = relation('SupItem', remote_side='SupItem.idsupitem', lazy=True)
+    collector = relation('Service', foreign_keys=[idcollector],
+        primaryjoin='LowLevelService.idcollector == Service.idsupitem',
+        lazy=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': u'lowlevel',
+        'extension': LlsMapperExt(),
+        'inherit_condition': idservice == SupItem.idsupitem,
+    }
 
     def __init__(self, **kwargs):
         """Initialisation de l'objet."""
@@ -281,7 +231,7 @@ class HighLevelService(Service):
     idservice = Column(
         Integer,
         ForeignKey(
-            Service.idservice,
+            SupItem.idsupitem,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
         autoincrement=False, primary_key=True,

@@ -47,7 +47,6 @@ class TestEvent(ModelTest):
             host=host,
             servicename=u'myservice',
             command=u'halt',
-            op_dep=u'+',
             weight=42,
         )
         DBSession.add(service)
@@ -100,4 +99,3 @@ class TestEvent(ModelTest):
         state = StateName.value_to_statename(self.obj.peak_state)
         assert_equal(u'CRITICAL', state,
             "Expected peak state = 'CRITICAL', got %r." % state)
-

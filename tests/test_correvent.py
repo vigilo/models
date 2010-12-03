@@ -41,7 +41,6 @@ class TestCorrEvent(ModelTest):
             host=host,
             servicename=u'myservice',
             command=u'halt',
-            op_dep=u'+',
             weight=42,
         )
         DBSession.add(service)
@@ -67,4 +66,3 @@ class TestCorrEvent(ModelTest):
         """La fonction GetSinceDate doit renvoyer un objet formaté"""
         assert_true(re.compile("^\d*d \d*h \d'$").match(
             self.obj.get_since_date("timestamp_active")))
-

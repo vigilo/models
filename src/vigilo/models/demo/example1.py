@@ -95,10 +95,8 @@ def main():
     add_lowlevelservice('localhost', 'Swap Usage')
 
     # HighLevelService
-    add_highlevelservice("Connexion", op_dep="+",
-                         message="Ouch", priority=3)
-    add_highlevelservice("Portail web", op_dep="&",
-                         message="Ouch", priority=1)
+    add_highlevelservice("Connexion", message="Ouch", priority=3)
+    add_highlevelservice("Portail web", message="Ouch", priority=1)
 
     # State
     add_svc_state(
@@ -110,68 +108,46 @@ def main():
         "WARNING",
         "Load reached a warning level")
 
+    # DependencyGroup
+    depgroup_connexion = add_dependency_group(None, 'Connexion', '&')
+    depgroup_portail = add_dependency_group(None, 'Portail web', '&')
+    depgroup_processes = add_dependency_group('messagerie', 'Processes', '&')
+    depgroup_cpu = add_dependency_group('messagerie', 'CPU', '&')
+    depgroup_ram = add_dependency_group('messagerie', 'RAM', '&')
+    depgroup_eth = add_dependency_group('messagerie', 'Interface eth0', '&')
+    depgroup_processes2 = add_dependency_group(
+        'host1.example.com', 'Processes', '&')
+    depgroup_cpu2 = add_dependency_group('host1.example.com', 'CPU', '&')
+    depgroup_ram2 = add_dependency_group('host1.example.com', 'RAM', '&')
+    depgroup_eth2 = add_dependency_group(
+        'host1.example.com', 'Interface eth0', '&')
+    depgroup_eth3 = add_dependency_group('firewall', 'Interface eth1', '&')
+    depgroup_eth4 = add_dependency_group('firewall', 'Interface eth0', '&')
+    depgroup_eth5 = add_dependency_group('routeur1', 'Interface eth1', '&')
+    depgroup_eth6 = add_dependency_group('routeur2', 'Interface eth1', '&')
+
     # Dependency
-    add_dependency(
-        (None, 'Connexion'),
-        ('host2.example.com', 'Interface eth0'))
-    add_dependency(
-        (None, 'Connexion'),
-        ('host2.example.com', 'Interface eth1'))
-    add_dependency(
-        (None, 'Connexion'), ('host2.example.com', 'Interface eth2'))
-    add_dependency(
-    (None, 'Portail web'), (None, 'Connexion'))
-    add_dependency(
-        (None, 'Portail web'),
-        ('host2.example.com', 'HTTPD'))
-    add_dependency(
-        ('messagerie', 'Processes'),
-        ('messagerie', 'CPU'))
-    add_dependency(
-        ('messagerie', 'Processes'),
-        ('messagerie', 'RAM'))
-    add_dependency(
-        ('messagerie', 'CPU'),
-        ('messagerie', 'Interface eth0'))
-    add_dependency(
-        ('messagerie', 'RAM'),
-        ('messagerie', 'Interface eth0'))
-    add_dependency(
-        ('messagerie', 'Interface eth0'),
-        ('routeur1', 'Interface eth1'))
-    add_dependency(
-        ('messagerie', 'Interface eth0'),
-        ('routeur2', 'Interface eth1'))
-    add_dependency(
-        ('host1.example.com', 'Processes'),
-        ('host1.example.com', 'CPU'))
-    add_dependency(
-        ('host1.example.com', 'Processes'),
-        ('host1.example.com', 'RAM'))
-    add_dependency(
-        ('host1.example.com', 'CPU'),
-        ('host1.example.com', 'Interface eth0'))
-    add_dependency(
-        ('host1.example.com', 'RAM'),
-        ('host1.example.com', 'Interface eth0'))
-    add_dependency(
-        ('host1.example.com', 'Interface eth0'),
-        ('firewall', 'Interface eth1'))
-    add_dependency(
-        ('firewall', 'Interface eth1'),
-        ('firewall', 'Interface eth0'))
-    add_dependency(
-        ('firewall', 'Interface eth0'),
-        ('routeur1', 'Interface eth1'))
-    add_dependency(
-        ('firewall', 'Interface eth0'),
-        ('routeur2', 'Interface eth1'))
-    add_dependency(
-        ('routeur1', 'Interface eth1'),
-        ('routeur1', 'Interface eth0'))
-    add_dependency(
-        ('routeur2', 'Interface eth1'),
-        ('routeur2', 'Interface eth0'))
+    add_dependency(depgroup_connexion, ('host2.example.com', 'Interface eth0'))
+    add_dependency(depgroup_connexion, ('host2.example.com', 'Interface eth1'))
+    add_dependency(depgroup_connexion, ('host2.example.com', 'Interface eth2'))
+    add_dependency(depgroup_portail, (None, 'Connexion'))
+    add_dependency(depgroup_portail, ('host2.example.com', 'HTTPD'))
+    add_dependency(depgroup_processes, ('messagerie', 'CPU'))
+    add_dependency(depgroup_processes, ('messagerie', 'RAM'))
+    add_dependency(depgroup_cpu, ('messagerie', 'Interface eth0'))
+    add_dependency(depgroup_ram, ('messagerie', 'Interface eth0'))
+    add_dependency(depgroup_eth, ('routeur1', 'Interface eth1'))
+    add_dependency(depgroup_eth, ('routeur2', 'Interface eth1'))
+    add_dependency(depgroup_processes2, ('host1.example.com', 'CPU'))
+    add_dependency(depgroup_processes2, ('host1.example.com', 'RAM'))
+    add_dependency(depgroup_cpu2, ('host1.example.com', 'Interface eth0'))
+    add_dependency(depgroup_ram2, ('host1.example.com', 'Interface eth0'))
+    add_dependency(depgroup_eth2, ('firewall', 'Interface eth1'))
+    add_dependency(depgroup_eth3, ('firewall', 'Interface eth0'))
+    add_dependency(depgroup_eth4, ('routeur1', 'Interface eth1'))
+    add_dependency(depgroup_eth4, ('routeur2', 'Interface eth1'))
+    add_dependency(depgroup_eth5, ('routeur1', 'Interface eth0'))
+    add_dependency(depgroup_eth6, ('routeur2', 'Interface eth0'))
 
     # SupItemGroup
     servers = add_supitemgroup("Serveurs")
@@ -223,7 +199,7 @@ def main():
 
     # Applications
     add_application('nagios')
-    add_application('rrdgraph')
+    add_application('vigirrd')
     add_application('collector')
     add_application('connector-nagios')
 
@@ -233,11 +209,11 @@ def main():
     # Ventilation
     # add_ventilation(h1, h2, app)
     # L'appli app pour h1 se trouve sur h2.
-    add_ventilation('localhost', 'localhost', 'rrdgraph')
+    add_ventilation('localhost', 'localhost', 'vigirrd')
     add_ventilation('localhost', 'localhost', 'nagios')
-    add_ventilation('proto4', 'localhost', 'rrdgraph')
+    add_ventilation('proto4', 'localhost', 'vigirrd')
     add_ventilation('shows.how.vigigraph.may.make.an.ellipse',
-                    'localhost', 'rrdgraph')
+                    'localhost', 'vigirrd')
 
     # Métrologie
     service1 = ('proto4', 'UpTime')

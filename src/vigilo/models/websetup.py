@@ -122,7 +122,7 @@ def migrate_model(bind, module, scripts, stop_at=None):
         return True
     return False
 
-def populate_db(bind):
+def populate_db(bind, commit=True):
     """Placez les commandes pour peupler la base de données ici."""
     import logging
     LOGGER = logging.getLogger(__name__)
@@ -179,7 +179,8 @@ def populate_db(bind):
         print "Setting up for %s" % entry.dist.project_name
         pop_db(bind)
 
-    transaction.commit()
+    if commit:
+        transaction.commit()
     print "Successfully setup"
 
 def init_db(*args):

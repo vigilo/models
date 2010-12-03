@@ -36,7 +36,6 @@ class TestTag(ModelTest):
         service = LowLevelService(
             host=host,
             servicename=u'myservice',
-            op_dep=u'+',
             weight=42,
         )
         DBSession.add(service)
@@ -53,4 +52,3 @@ class TestTag(ModelTest):
                     hostname=u'myhost', servicename=u'myservice')
         assert_equals(1, len(service.tags))
         assert_equals(self.obj, service.tags[0])
-

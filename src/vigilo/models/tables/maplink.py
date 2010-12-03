@@ -123,7 +123,7 @@ class MapServiceLink(MapLink):
     idref = Column(
         Integer,
         ForeignKey(
-            Service.idservice,
+            Service.idsupitem,
             onupdate='CASCADE', ondelete='CASCADE',
         ),
         nullable=False,

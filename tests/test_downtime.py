@@ -46,27 +46,23 @@ class TestDowntime(ModelTest):
             host=host,
             servicename=u'myservice',
             command=u'halt',
-            op_dep=u'+',
             weight=42,
         )
         DBSession.add(service)
         DBSession.flush()
-        
-        user = User(   
+
+        user = User(
             user_name = u"foobar",
             email = u"foobar@example.org",
             fullname = u'Foo bar',
         )
         DBSession.add(user)
         DBSession.flush()
-        
-        status = DowntimeStatus(   
+
+        status = DowntimeStatus(
             status = u"Scheduled"
         )
         DBSession.add(status)
         DBSession.flush()
-        
-        return dict(supitem=service, user=user, status=status)
-    
-        
 
+        return dict(supitem=service, user=user, status=status)

@@ -37,7 +37,6 @@ class TestGetSupItem(unittest.TestCase):
             servicename = u'Processes',
             host = host1,
             command = u'halt',
-            op_dep = u'&',
             weight = 42,
         )
         DBSession.add(lls1)
@@ -49,7 +48,6 @@ class TestGetSupItem(unittest.TestCase):
             message = u'Ouch',
             warning_threshold = 300,
             critical_threshold = 150,
-            op_dep = u'&',
             priority = 1,
         )
         DBSession.add(hls1)

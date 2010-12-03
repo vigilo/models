@@ -11,7 +11,7 @@ def upgrade(migrate_engine, cluster_name):
     ClusteredDDL(
         [
             "ALTER TABLE %(fullname)s ADD COLUMN disabled BOOLEAN "
-            "NOT NULL DEFAULT false",
+                "NOT NULL DEFAULT false",
         ],
         cluster_name=cluster_name,
         # La modification n'impacte pas la réplication

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Test suite for Dependency class"""
-from vigilo.models.tables import Dependency, Host, LowLevelService
+from vigilo.models.tables import Dependency, Host, \
+                                    LowLevelService, \
+                                    DependencyGroup
 from vigilo.models.session import DBSession
 
 from controller import ModelTest
@@ -32,11 +34,18 @@ class TestDependency(ModelTest):
             host=host,
             servicename=u'myservice',
             command=u'halt',
-            op_dep=u'+',
             weight=42,
         )
         DBSession.add(service)
 
+        depgroup = DependencyGroup(
+            operator=u'+',
+            dependent=host,
+        )
+        DBSession.add(depgroup)
         DBSession.flush()
-        return dict(supitem1=host, supitem2=service)
 
+        return dict(
+            idgroup=depgroup.idgroup,
+            supitem=service,
+        )

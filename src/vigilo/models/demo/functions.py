@@ -71,21 +71,20 @@ def add_lowlevelservice(host, servicename, statename="OK",
                 #servicetype=u"normal",
                 #priority=1,
                 weight=weight,
-                command=u"dummy",
-                op_dep=u"")
+                command=u"dummy")
         DBSession.add(s)
         DBSession.flush()
         add_svc_state((host.name, servicename), statename, message)
     return s
 
-def add_highlevelservice(servicename, op_dep="", message="", priority=1):
+def add_highlevelservice(servicename, operator="&", message="", priority=1):
     """
     Ajoute un service de haut niveau.
 
     @param servicename: Nom du service de haut niveau à ajouter.
     @type servicename: C{basestr}
-    @param op_dep: Opérateur de dépendance ("+", "|" ou "&").
-    @type op_dep: C{basestr}
+    @param operator: Opérateur de dépendance ("+", "|" ou "&").
+    @type operator: C{basestr}
     @param message: Message qui sera envoyé à Nagios lorsque l'état de
         ce service de haut niveau change. Il peut contenir des formats.
     @type message: C{basestr}
@@ -97,19 +96,36 @@ def add_highlevelservice(servicename, op_dep="", message="", priority=1):
     servicename = unicode(servicename)
     s = tables.HighLevelService.by_service_name(servicename)
     if not s:
+        # @TODO: traiter l'opérateur de dépendances.
         s = tables.HighLevelService(
                 servicename=servicename,
                 priority=priority,
                 weight=0,
                 message=unicode(message),
                 warning_threshold=300,
-                critical_threshold=150,
-                op_dep=unicode(op_dep))
+                critical_threshold=150)
         DBSession.add(s)
         DBSession.flush()
     return s
 
-def add_dependency(dependent, depended):
+def add_dependency_group(host, service, operator='&'):
+    if host is None:        # HLS
+        dependent = tables.HighLevelService.by_service_name(unicode(service))
+    elif service is None:   # Host
+        dependent = tables.Host.by_host_name(unicode(host))
+    else:                   # LLS
+        dependent = tables.LowLevelService.by_host_service_name(
+                        unicode(host), unicode(service))
+    group = tables.DependencyGroup(
+        operator=unicode(operator),
+        dependent=dependent,
+    )
+    DBSession.add(group)
+    DBSession.flush()
+    return group.idgroup
+
+
+def add_dependency(group, depended):
     """
     Ajoute une dépendance entre 2 éléments
     (services de bas/haut niveau ou hôte).
@@ -124,25 +140,24 @@ def add_dependency(dependent, depended):
         exprimé de la même manière que ce dernier.
     @type depended: C{tuple}
     """
-    host, service = dependent
-    if host is None:        # HLS
-        supitem1 = tables.HighLevelService.by_service_name(unicode(service))
-    elif service is None:   # Host
-        supitem1 = tables.Host.by_host_name(unicode(host))
-    else:                   # LLS
-        supitem1 = tables.LowLevelService.by_host_service_name(
-                        unicode(host), unicode(service))
+    if isinstance(group, int):
+        idgroup = group
+    else:
+        idgroup = group.idgroup
 
     host, service = depended
     if host is None:        # HLS
-        supitem2 = tables.HighLevelService.by_service_name(unicode(service))
+        dependency = tables.HighLevelService.by_service_name(unicode(service))
     elif service is None:   # Host
-        supitem2 = tables.Host.by_host_name(unicode(host))
+        dependency = tables.Host.by_host_name(unicode(host))
     else:                   # LLS
-        supitem2 = tables.LowLevelService.by_host_service_name(
+        dependency = tables.LowLevelService.by_host_service_name(
                         unicode(host), unicode(service))
 
-    tables.Dependency.get_or_create(supitem1, supitem2)
+    DBSession.add(tables.Dependency(
+        idgroup=idgroup,
+        supitem=dependency,
+    ))
     DBSession.flush()
 
 

@@ -6,7 +6,7 @@ __all__ = [
     'EventHistory', 'Event', 'CorrEvent',
     'GraphGroup', 'Graph', 'Host', 'HostClass', 'PerfDataSource',
     'SupItem', 'LowLevelService', 'HighLevelService',
-    'Dependency', 'Version', 'State', 'Permission',
+    'Dependency', 'DependencyGroup', 'Version', 'State', 'Permission',
     'UserGroup', 'User', 'Tag',
     'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost', 'MapNodeHls',
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
@@ -25,6 +25,7 @@ from .perfdatasource import PerfDataSource
 from .group import MapGroup, GraphGroup, SupItemGroup
 from .supitem import SupItem
 from .service import LowLevelService, HighLevelService, Service
+from .dependencygroup import DependencyGroup
 from .dependency import Dependency
 from .version import Version
 from .state import State
@@ -61,4 +62,3 @@ for entry in working_set.iter_entry_points("vigilo.models", "tables"):
     for t in tables_ext.__all__:
         globals()[t] = getattr(tables_ext, t)
         __all__.append(t)
-
