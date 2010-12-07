@@ -23,9 +23,6 @@ Buildarch:  noarch
 BuildRequires:   python26-distribute
 BuildRequires:   python26-babel
 BuildRequires:   python26-epydoc
-# Pour la generation de doc
-BuildRequires:   python26-sqlalchemy0.5
-BuildRequires:   python26-transaction
 
 Requires:   python26-babel >= 0.9.4
 Requires:   python26-distribute
@@ -46,7 +43,6 @@ This library is part of the Vigilo Project <http://vigilo-project.org>
 
 %build
 make PYTHON=%{__python}
-make apidoc EPYDOC=%{_bindir}/epydoc || :
 
 %install
 rm -rf $RPM_BUILD_ROOT
