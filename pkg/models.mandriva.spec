@@ -16,6 +16,9 @@ License:    GPLv2
 BuildRequires:   python-setuptools
 BuildRequires:   python-babel
 BuildRequires:   epydoc
+# Pour la generation de doc
+BuildRequires:   python-sqlalchemy
+BuildRequires:   python-transaction
 
 Requires:   python >= 2.5
 Requires:   python-babel >= 0.9.4
@@ -53,7 +56,7 @@ This library is part of the Vigilo Project <http://vigilo-project.org>
 
 %build
 make PYTHON=%{_bindir}/python
-make apidoc EPYDOC=%{_bindir}/epydoc
+make apidoc EPYDOC=%{_bindir}/epydoc || :
 
 %install
 rm -rf $RPM_BUILD_ROOT

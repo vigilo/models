@@ -1,2 +1,2 @@
 include deployment/settings.ini
-recursive-include buildenv Makefile.common buildout.*.cfg
+recursive-include buildenv Makefile.common buildout.*.cfg extra/*
