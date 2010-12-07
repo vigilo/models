@@ -22,7 +22,6 @@ Buildarch:  noarch
 
 BuildRequires:   python26-distribute
 BuildRequires:   python26-babel
-BuildRequires:   python26-epydoc
 
 Requires:   python26-babel >= 0.9.4
 Requires:   python26-distribute

@@ -15,7 +15,6 @@ License:    GPLv2
 
 BuildRequires:   python-setuptools
 BuildRequires:   python-babel
-BuildRequires:   epydoc
 
 Requires:   python >= 2.5
 Requires:   python-babel >= 0.9.4
