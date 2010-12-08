@@ -47,7 +47,7 @@ def add_lowlevelservice(host, servicename, statename="OK",
     @param host: Nom ou instance d'hôte.
     @type host: C{basestr} ou L{tables.Host}
     @param servicename: Nom du service à créer sur cet hôte.
-    @type param: C{basestr}
+    @type servicename: C{basestr}
     @param statename: État initial du service.
     @type statename: C{basestr}
     @param message: Message associé à l'état initial du service.
@@ -127,17 +127,13 @@ def add_dependency_group(host, service, operator='&'):
 
 def add_dependency(group, depended):
     """
-    Ajoute une dépendance entre 2 éléments
-    (services de bas/haut niveau ou hôte).
+    Ajoute une dépendance à un groupe de dépendances.
 
-    @param dependent: Élément qui est dépendant de L{depended},
-        exprimé sous la forme d'un tuple (hôte, service).
-        C{service} vaut None si la dépendance porte sur l'hôte.
-        C{hôte} vaut None si la dépendance porte sur un service
-        de haut niveau.
-    @type dependent: C{tuple}
-    @param depended: Élément dont dépend L{dependent},
-        exprimé de la même manière que ce dernier.
+    @param group: Groupe de dépendance (identifiant ou instance).
+    @type group: C{int} or L{tables.DependencyGroup}
+    @param depended: Élément à ajouter au groupe de dépendance,
+        sous la forme d'un tuple (hôte, service) décrivant l'élément
+        à ajouter.
     @type depended: C{tuple}
     """
     if isinstance(group, int):
