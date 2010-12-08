@@ -73,7 +73,7 @@ class Group(DeclarativeBase, object):
         Conversion en unicode.
 
         @return: Le nom du groupe.
-        @rtype: C{str}
+        @rtype: C{unicode}
         """
         return self.name
 
