@@ -60,7 +60,8 @@ setup(name='vigilo-models',
     entry_points={
         'console_scripts': [
             'vigilo-models-init-db = vigilo.models.websetup:init_db',
-            'vigilo-models-clean-vigiboard = vigilo.models.scripts.purge_vigiboard:clean_vigiboard',
+            'vigiboard-clean = vigilo.models.scripts.purge_vigiboard:clean_vigiboard',
+            'vigiboard-close = vigilo.models.scripts.close_vigiboard:close_green',
             'vigilo-passwd = vigilo.models.scripts.passwd:change_password',
             'vigilo-models-demo = vigilo.models.demo:run_demo',
         ],
