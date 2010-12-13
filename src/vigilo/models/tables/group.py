@@ -3,7 +3,7 @@
 """Modèle pour la table Group"""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation, aliased, EXT_CONTINUE
+from sqlalchemy.orm import relation, aliased, EXT_CONTINUE, exc
 from sqlalchemy.orm.interfaces import MapperExtension
 from sqlalchemy.sql.expression import exists, not_
 
@@ -78,7 +78,7 @@ class Group(DeclarativeBase, object):
         return self.name
 
     def __repr__(self):
-        return "<%s \"%s\">" % (self.__class__.__name__, str(self.name))
+        return u"<%s \"%s\">" % (self.__class__.__name__, unicode(self.name))
 
     # Chemin d'accès
 
@@ -126,14 +126,17 @@ class Group(DeclarativeBase, object):
     def __get_parent(self):
         """Récupère l'instance parente du groupe courant."""
         from .grouphierarchy import GroupHierarchy
-        q = DBSession.query(GroupHierarchy).filter(
-                    GroupHierarchy.idchild == self.idgroup
-                ).filter(
-                    GroupHierarchy.hops == 1
-                )
-        if q.count() == 0:
+        try:
+            parent = DBSession.query(self.__class__).join(
+                    (GroupHierarchy, GroupHierarchy.idparent == \
+                        self.__class__.idgroup),
+                ).filter(GroupHierarchy.idchild == self.idgroup
+                ).filter(GroupHierarchy.hops == 1
+                ).one()
+        except exc.NoResultFound:
             return None
-        return q.one().parent
+        else:
+            return parent
 
     def __set_parent(self, group):
         """
