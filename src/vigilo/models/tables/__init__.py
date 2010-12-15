@@ -51,6 +51,7 @@ from .ventilation import Ventilation
 from .filedeployment import FileDeployment
 from .change import Change
 from .confitem import ConfItem
+from .conffile import ConfFile
 from .hlshistory import HLSHistory
 
 # Spécifique projets

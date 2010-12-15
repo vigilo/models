@@ -70,7 +70,7 @@ MAP_GROUP_TABLE = Table(
     Column('idmap', Integer, ForeignKey(
                 'map.idmap',
                 onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)                           
+            primary_key=True, autoincrement=False)
 )
 
 SUB_MAP_NODE_MAP_TABLE = Table(
@@ -82,7 +82,7 @@ SUB_MAP_NODE_MAP_TABLE = Table(
     Column('idmap', Integer, ForeignKey(
                 'map.idmap',
                 onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True)                           
+            primary_key=True)
 )
 
 HOST_HOSTCLASS_TABLE = Table(
@@ -132,4 +132,3 @@ GRAPH_PERFDATASOURCE_TABLE = Table(
                 onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True, autoincrement=False)
 )
-

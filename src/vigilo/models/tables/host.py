@@ -11,7 +11,7 @@ from sqlalchemy.orm import EXT_CONTINUE
 from vigilo.models.session import DBSession, ForeignKey
 from vigilo.models.tables.secondary_tables import HOST_HOSTCLASS_TABLE
 from vigilo.models.tables.supitem import SupItem, SupItemMapperExt
-
+from vigilo.models.tables.conffile import ConfFile
 
 __all__ = ('Host', )
 
@@ -79,6 +79,16 @@ class Host(SupItem):
         primary_key=True, autoincrement=False,
     )
 
+    idconffile = Column(
+        Integer,
+        ForeignKey(
+            ConfFile.idconffile,
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+        ),
+        nullable=True
+    )
+
     name = Column(
         Unicode(255),
         index=True, unique=True, nullable=False)
@@ -113,6 +123,8 @@ class Host(SupItem):
         Integer,
         nullable=False,
     )
+
+    conffile = relation('ConfFile', lazy=True, cascade='all')
 
     hostclasses = relation('HostClass', secondary=HOST_HOSTCLASS_TABLE,
         back_populates='hosts', lazy=True)

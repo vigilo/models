@@ -16,7 +16,7 @@ from vigilo.models import tables
 # Base
 #
 
-def add_host(hostname):
+def add_host(hostname, conffile=None):
     """
     Ajoute un hôte.
 
@@ -34,7 +34,8 @@ def add_host(hostname):
                 address=u"127.0.0.1",
                 snmpcommunity=u"public",
                 snmpport=161,
-                weight=0)
+                weight=0,
+                conffile=conffile)
         DBSession.add(h)
         DBSession.flush()
     return h
