@@ -161,7 +161,7 @@ class ClusteredDDL(DDL):
 
             replicated = bind.execute(
                 'SELECT 1 AS "exists" '
-                'FROM pg_tables '
+                'FROM pg_catalog.pg_tables '
                 'WHERE schemaname = :cluster_name '
                 'LIMIT 1;',
                 params={

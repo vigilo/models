@@ -8,46 +8,7 @@ from vigilo.models.session import DBSession, ClusteredDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
-from vigilo.models.session import PrefixedTables, ForeignKey
-from vigilo.models.tables.supitem import SupItem
-from sqlalchemy import Column
-from sqlalchemy.types import Integer, Unicode
-
-from sqlalchemy.ext.declarative import declarative_base
-DeclarativeBase = declarative_base(metaclass=PrefixedTables)
-
-class DependencyGroup(DeclarativeBase, object):
-    """Groupe de dépendances, réunies par un opérateur."""
-    __tablename__ = 'dependencygroup'
-
-    idgroup = Column(
-        Integer,
-        primary_key=True,
-        autoincrement=True,
-    )
-
-    operator = Column(
-        Unicode(1),
-        nullable=False,
-    )
-
-    iddependent = Column(
-        Integer,
-        ForeignKey(
-            SupItem.idsupitem,
-            ondelete='CASCADE',
-            onupdate='CASCADE',
-        ),
-        nullable=False,
-    )
-
 def upgrade(migrate_engine, cluster_name):
-    # Création de la nouvelle table DependencyGroup.
-    DeclarativeBase.metadata.create_all(
-        bind=DBSession.bind,
-        tables=[DependencyGroup.__table__]
-    )
-
     supitem_refs = [
         ('lowlevelservice', 'idservice'),
         ('highlevelservice', 'idservice'),
@@ -59,6 +20,16 @@ def upgrade(migrate_engine, cluster_name):
         ('impactedhls', 'idhls'),
         ('hlshistory', 'idhls'),
     ]
+
+    owner = DBSession.execute(
+        'SELECT tableowner '
+        'FROM pg_catalog.pg_tables '
+        'WHERE schemaname = :schema '
+        'AND tablename = :table;',
+        params={
+            'schema': "public",
+            'table': tables.SupItem.__tablename__,
+        }).fetchone().tableowner
 
     ClusteredDDL(
         # Suppression des contraintes référentielles vers Service...
@@ -99,6 +70,9 @@ def upgrade(migrate_engine, cluster_name):
             # Suppression de l'ancienne table Service.
             "DROP TABLE %(db_basename)s%(old_table)s",
 
+            # Purge du contenu de Dependency.
+            "DELETE FROM %(db_basename)sdependency",
+
             # Suppression des contraintes dans Dependency.
             "ALTER TABLE %(fullname)s DROP CONSTRAINT "
                 "%(db_basename)sdependency_pkey",
@@ -119,6 +93,9 @@ def upgrade(migrate_engine, cluster_name):
                 "FOREIGN KEY(idsupitem) REFERENCES %(db_basename)ssupitem(idsupitem) "
                 "ON UPDATE CASCADE ON DELETE CASCADE",
             "ALTER TABLE %(fullname)s ADD PRIMARY KEY (idgroup, idsupitem)",
+
+            # Correction des droits sur DependencyGroup.
+            "ALTER TABLE %(db_basename)sdependencygroup OWNER TO %(owner)s",
         ],
         cluster_name=cluster_name,
         cluster_sets=[2],
@@ -126,6 +103,7 @@ def upgrade(migrate_engine, cluster_name):
         context={
             'db_basename': DB_BASENAME,
             'old_table': 'service',
+            'owner': owner,
         }
     ).execute(DBSession, tables.Dependency.__table__)
 
