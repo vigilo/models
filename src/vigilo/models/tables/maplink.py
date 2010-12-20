@@ -61,11 +61,11 @@ class MapLink(DeclarativeBase, object):
 
     __mapper_args__ = {'polymorphic_on': type_link}
 
-    from_node = relation('MapNode', foreign_keys=[idto_node],
+    to_node = relation('MapNode', foreign_keys=[idto_node],
                          primaryjoin='MapLink.idto_node == MapNode.idmapnode',
                          lazy=True)
 
-    to_node = relation('MapNode', foreign_keys=[idfrom_node],
+    from_node = relation('MapNode', foreign_keys=[idfrom_node],
                        primaryjoin='MapLink.idfrom_node == MapNode.idmapnode',
                        lazy=True)
 
