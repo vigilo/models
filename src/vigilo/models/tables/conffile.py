@@ -13,7 +13,7 @@ class ConfFile(DeclarativeBase, object):
     Elle permet ensuite de déterminer rapidement dans quel fichier un élément
     du parc est configuré.
 
-    @iver idconffile: Identifiant unique du fichier de configuration.
+    @ivar idconffile: Identifiant unique du fichier de configuration.
     @ivar name: Nom (unique) du fichier de configuration,
         relatif au répertoire de base de la configuration de VigiConf.
     """
@@ -43,7 +43,7 @@ class ConfFile(DeclarativeBase, object):
         dont le nom est passé.
 
         @param filename: Nom du fichier de configuration.
-        @type hostname: C{unicode}
+        @type  filename: C{unicode}
         @return: Instance correspondant à ce fichier de configuration
             s'il en existe une.
         @rtype: L{ConfFile} ou None

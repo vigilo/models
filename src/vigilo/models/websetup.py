@@ -21,7 +21,7 @@ def get_migration_scripts(module):
         contenant des scripts de migration pour le modèle. Les scripts
         doivent être nommés "<version>_<description>.py". Par exemple :
         "001_User_Email_Suppression_contrainte_not_null.py".
-    @type module; C{str}
+    @type  module: C{str}
     """
     files = pkg_resources.resource_listdir(module, 'migration')
     scripts = {}
