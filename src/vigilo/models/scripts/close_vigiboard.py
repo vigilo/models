@@ -79,6 +79,7 @@ def close_green(*args):
         ).filter(StateName.statename.in_(sought_states)
         ).filter(CorrEvent.status != u'AAClosed').all()
 
+    username = unicode(pwd.getpwuid(os.getuid())[0])
     for event in events:
         # On ajoute un message dans l'historique pour la traçabilité.
         history = EventHistory(
@@ -86,7 +87,7 @@ def close_green(*args):
                 idevent=event.idcause,
                 value=u"",
                 text=u"Automatically marked the event as closed",
-                username=pwd.getpwuid(os.getuid())[0],
+                username=username,
                 timestamp=datetime.now(),
             )
         DBSession.add(history)
