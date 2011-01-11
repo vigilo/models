@@ -124,7 +124,7 @@ class Host(SupItem):
         nullable=False,
     )
 
-    conffile = relation('ConfFile', lazy=True)
+    conffile = relation('ConfFile', back_populates="hosts", lazy=True)
 
     hostclasses = relation('HostClass', secondary=HOST_HOSTCLASS_TABLE,
         back_populates='hosts', lazy=True)

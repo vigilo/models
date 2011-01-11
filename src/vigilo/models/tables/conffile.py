@@ -32,6 +32,10 @@ class ConfFile(DeclarativeBase, object):
         unique=True,
     )
 
+    hosts = relation('Host', back_populates="conffile", cascade="all",
+                     lazy=True)
+
+
     def __init__(self, **kwargs):
         """Initialise un ConfFile."""
         super(ConfFile, self).__init__(**kwargs)
