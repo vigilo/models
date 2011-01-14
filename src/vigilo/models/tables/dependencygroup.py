@@ -12,6 +12,22 @@ __all__ = ('DependencyGroup', )
 
 class DependencyGroup(DeclarativeBase, object):
     """
+    Gère un groupe de dépendances associées
+    à un élément du parc.
+
+    @ivar idgroup: Identifiant du groupe de dépendances.
+    @ivar operator: Opération effectuée sur le groupe de dépendances.
+        Il peut s'agir de "&" (poids = min(poids_dependences))
+        ou bien de "|" (poids = max(poids_dependences))
+        ou bien de "+" (poids = somme(poids_dependences)).
+        Pour le moment, cet attribut n'a de sens que pour les services
+        de haut niveau et est ignoré pour les autres types d'éléments.
+    @ivar iddependent: Identifiant de l'élément supervisé sur lequel
+        portent les dépendances (i.e. : l'élément dépendant).
+    @ivar dependent: Instance de l'élément supervisé dépendant.
+    @ivar role: Le rôle du groupe de dépendances :
+        - soit "hls" pour les dépendances d'un service de haut niveau
+        - ou "topology" pour des dépendances topologiques.
     """
 
     __tablename__ = 'dependencygroup'
@@ -34,6 +50,11 @@ class DependencyGroup(DeclarativeBase, object):
             ondelete='CASCADE',
             onupdate='CASCADE',
         ),
+        nullable=False,
+    )
+
+    role = Column(
+        Unicode(16),
         nullable=False,
     )
 

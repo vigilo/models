@@ -12,6 +12,7 @@ class TestDependencyGroup(ModelTest):
 
     attrs = {
         'operator': u'+',
+        'role': u'topology',
     }
 
     def __init__(self):

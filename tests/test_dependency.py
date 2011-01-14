@@ -40,6 +40,7 @@ class TestDependency(ModelTest):
 
         depgroup = DependencyGroup(
             operator=u'+',
+            role=u'topology',
             dependent=host,
         )
         DBSession.add(depgroup)

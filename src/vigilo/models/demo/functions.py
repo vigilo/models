@@ -109,7 +109,9 @@ def add_highlevelservice(servicename, operator="&", message="", priority=1):
         DBSession.flush()
     return s
 
-def add_dependency_group(host, service, operator='&'):
+def add_dependency_group(host, service, role, operator='&'):
+    if role != 'hls' and role != 'topology':
+        raise ValueError('Valid roles: "hls" or "topology"')
     if host is None:        # HLS
         dependent = tables.HighLevelService.by_service_name(unicode(service))
     elif service is None:   # Host
@@ -119,6 +121,7 @@ def add_dependency_group(host, service, operator='&'):
                         unicode(host), unicode(service))
     group = tables.DependencyGroup(
         operator=unicode(operator),
+        role=unicode(role),
         dependent=dependent,
     )
     DBSession.add(group)

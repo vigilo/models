@@ -109,22 +109,20 @@ def main():
         "Load reached a warning level")
 
     # DependencyGroup
-    depgroup_connexion = add_dependency_group(None, 'Connexion', '&')
-    depgroup_portail = add_dependency_group(None, 'Portail web', '&')
-    depgroup_processes = add_dependency_group('messagerie', 'Processes', '&')
-    depgroup_cpu = add_dependency_group('messagerie', 'CPU', '&')
-    depgroup_ram = add_dependency_group('messagerie', 'RAM', '&')
-    depgroup_eth = add_dependency_group('messagerie', 'Interface eth0', '&')
-    depgroup_processes2 = add_dependency_group(
-        'host1.example.com', 'Processes', '&')
-    depgroup_cpu2 = add_dependency_group('host1.example.com', 'CPU', '&')
-    depgroup_ram2 = add_dependency_group('host1.example.com', 'RAM', '&')
-    depgroup_eth2 = add_dependency_group(
-        'host1.example.com', 'Interface eth0', '&')
-    depgroup_eth3 = add_dependency_group('firewall', 'Interface eth1', '&')
-    depgroup_eth4 = add_dependency_group('firewall', 'Interface eth0', '&')
-    depgroup_eth5 = add_dependency_group('routeur1', 'Interface eth1', '&')
-    depgroup_eth6 = add_dependency_group('routeur2', 'Interface eth1', '&')
+    depgroup_connexion = add_dependency_group(None, 'Connexion', 'hls', '&')
+    depgroup_portail = add_dependency_group(None, 'Portail web', 'hls', '&')
+    depgroup_processes = add_dependency_group('messagerie', 'Processes', 'topology', '&')
+    depgroup_cpu = add_dependency_group('messagerie', 'CPU', 'topology', '&')
+    depgroup_ram = add_dependency_group('messagerie', 'RAM', 'topology', '&')
+    depgroup_eth = add_dependency_group('messagerie', 'Interface eth0', 'topology', '&')
+    depgroup_processes2 = add_dependency_group('host1.example.com', 'Processes', 'topology', '&')
+    depgroup_cpu2 = add_dependency_group('host1.example.com', 'CPU', 'topology', '&')
+    depgroup_ram2 = add_dependency_group('host1.example.com', 'RAM', 'topology', '&')
+    depgroup_eth2 = add_dependency_group('host1.example.com', 'Interface eth0', 'topology', '&')
+    depgroup_eth3 = add_dependency_group('firewall', 'Interface eth1', 'topology', '&')
+    depgroup_eth4 = add_dependency_group('firewall', 'Interface eth0', 'topology', '&')
+    depgroup_eth5 = add_dependency_group('routeur1', 'Interface eth1', 'topology', '&')
+    depgroup_eth6 = add_dependency_group('routeur2', 'Interface eth1', 'topology', '&')
 
     # Dependency
     add_dependency(depgroup_connexion, ('host2.example.com', 'Interface eth0'))

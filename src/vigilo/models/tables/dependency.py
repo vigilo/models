@@ -13,6 +13,17 @@ __all__ = ('Dependency', )
 
 class Dependency(DeclarativeBase, object):
     """
+    Gère une dépendance (logique ou fonctionnelle).
+    Le type de dépendance est donné dans L{DependencyGroup}.
+
+    @ivar idgroup: Identifiant du groupe de dépendances
+        auquel cette dépendance appartient.
+    @ivar group: Instance du groupe de dépendances
+        auquel cette dépendance appartient.
+    @ivar idsupitem: Identifiant de l'élément supervisé
+        qui constitue la dépendance.
+    @ivar supitem: Instance de l'élément supervisé
+        qui constitue la dépendance.
     """
 
     __tablename__ = 'dependency'
