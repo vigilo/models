@@ -587,8 +587,8 @@ def add_mapllslink(from_node, to_node, lls, map):
     ms = tables.MapLlsLink(idfrom_node=from_node.idmapnode,
                                idto_node=to_node.idmapnode,
                                idref=lls.idservice, idmap=map.idmap,
-                               ds_from_to_to=pds_out,
-                               ds_to_to_from=pds_in)
+                               ds_out=pds_out,
+                               ds_in=pds_in)
     DBSession.merge(ms)
     DBSession.flush()
     return ms
