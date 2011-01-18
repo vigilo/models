@@ -141,7 +141,6 @@ class MapServiceLink(MapLink):
 
     graph = relation('Graph')
 
-    # TODO: renommer en idds_out (on se place toujours du point de vue du from)
     idds_out = Column(
         Integer,
         ForeignKey(
@@ -151,7 +150,6 @@ class MapServiceLink(MapLink):
         ),
     )
 
-    # TODO: renommer en idds_in (on se place toujours du point de vue du from)
     idds_in = Column(
         Integer,
         ForeignKey(
@@ -161,12 +159,10 @@ class MapServiceLink(MapLink):
         ),
     )
 
-    # TODO: renommer en ds_out (on se place toujours du point de vue du from)
     ds_out = relation('PerfDataSource', foreign_keys=[idds_out],
                        primaryjoin='PerfDataSource.idperfdatasource == '
                                     'MapServiceLink.idds_out', lazy=True)
 
-    # TODO: renommer en ds_in (on se place toujours du point de vue du from)
     ds_in = relation('PerfDataSource', foreign_keys=[idds_in],
                        primaryjoin='PerfDataSource.idperfdatasource == '
                                     'MapServiceLink.idds_in', lazy=True)
