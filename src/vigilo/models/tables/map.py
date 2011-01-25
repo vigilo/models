@@ -56,7 +56,8 @@ class Map(DeclarativeBase, object):
                      lazy=True, cascade="all")
 
     nodes = relation('MapNode', back_populates='map',
-                     lazy=True, cascade="all")
+                     lazy=True, cascade="all",
+                     order_by='MapNode.label')
 
     segments = relation('MapSegment', back_populates='map',
                         lazy=True, cascade="all")
@@ -128,4 +129,3 @@ class Map(DeclarativeBase, object):
                    MapNode.idmapnode == SUB_MAP_NODE_MAP_TABLE.c.mapnodeid)) \
             .join((cls, cls.idmap == MapNode.idmap)) \
             .filter(cls.idmap == idmap).distinct().order_by(Map.title).all())
-
