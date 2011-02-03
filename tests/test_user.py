@@ -112,11 +112,12 @@ class TestUser(ModelTest):
         DBSession.add(dataperm)
         DBSession.flush()
 
-
-        eq_([g1.idgroup, g11.idgroup, g111.idgroup],
+        # g1111 est considéré comme un groupe direct par mapgroups()
+        # car l'accès est autorisé récursivement.
+        eq_([g1.idgroup, g11.idgroup, g111.idgroup, g1111.idgroup],
             user.mapgroups(True))
 
-        eq_([g111],
+        eq_([g111, g1111],
             user.mapgroups(False, True))
 
     def test_hash_function(self):

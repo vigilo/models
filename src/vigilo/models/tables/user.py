@@ -70,7 +70,7 @@ class User(DeclarativeBase, object):
     )
 
     usergroups = relation('UserGroup', secondary=USER_GROUP_TABLE,
-        back_populates='users', lazy=True)
+        back_populates='users', lazy=True, order_by='UserGroup.group_name')
 
 
     def __init__(self, **kwargs):
@@ -199,7 +199,8 @@ class User(DeclarativeBase, object):
 
         direct = DBSession.query(columns).distinct(
             ).join(
-                (DataPermission, DataPermission.idgroup == MapGroup.idgroup),
+                (GroupHierarchy, GroupHierarchy.idchild == MapGroup.idgroup),
+                (DataPermission, DataPermission.idgroup == GroupHierarchy.idparent),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                     UserGroup.idgroup),
