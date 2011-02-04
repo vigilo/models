@@ -107,10 +107,15 @@ class User(DeclarativeBase, object):
         return perms
 
 
-    def supitemgroups(self):
+    def supitemgroups(self, access=None):
         """
         Renvoie la liste des identifiants des groupes d'éléments supervisés
         auxquels l'utilisateur a accès.
+
+        @param access: La liste des types d'accès qui autoriseront
+            l'utilisateur à voir les groupes. Si elle vaut C{None},
+            aucune vérification n'est faite sur le type d'accès.
+        @param access: C{basestring} or C{list} of C{basestring}
 
         @return: Liste des identifiants des groupes d'éléments supervisés
             auxquels l'utilisateur a accès.
@@ -119,18 +124,29 @@ class User(DeclarativeBase, object):
         result = {}
         columns = None
 
+        if hasattr(access, '__iter__'):
+            access = set(map(unicode, access))
+        elif access is not None:
+            access = set([unicode(access)])
+
+        # L'accès en écriture donne implicitement un accès en lecture.
+        if access is not None and u'r' in access:
+            access.add(u'w')
+
         # Groupes d'éléments supervisés auxquels
         # l'utilisateur a directement accès.
         direct = DBSession.query(SupItemGroup.idgroup).distinct(
             ).join(
-                (DataPermission, DataPermission.idgroup == \
-                    SupItemGroup.idgroup),
+                (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
+                (DataPermission, DataPermission.idgroup == GroupHierarchy.idparent),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                     UserGroup.idgroup),
             ).filter(USER_GROUP_TABLE.c.username == self.user_name
-            ).filter(DataPermission.access.in_([u'r', u'w'])
-            ).all()
+            ).filter(USER_GROUP_TABLE.c.username == self.user_name)
+        if access is not None:
+            direct = direct.filter(DataPermission.access.in_(access))
+        direct = direct.all()
         direct_ids = [sig.idgroup for sig in direct]
 
         # Groupes d'éléments supervisés auxquels l'utilisateur a accès
@@ -150,7 +166,7 @@ class User(DeclarativeBase, object):
 
         return result.values()
 
-    def mapgroups(self, only_id=True, only_direct=False):
+    def mapgroups(self, only_id=True, only_direct=False, access=None):
         """
         Renvoie l'ensemble des groupes ou identifiants de groupe
         de cartes auxquels l'utilisateur a accès.
@@ -183,12 +199,26 @@ class User(DeclarativeBase, object):
             mais pas droit de lecture)
         @type only_direct: C{bool}
 
+        @param access: La liste des types d'accès qui autoriseront
+            l'utilisateur à voir les groupes. Si elle vaut C{None},
+            aucune vérification n'est faite sur le type d'accès.
+        @param access: C{basestring} or C{list} of C{basestring}
+
         @return: Les groupes de cartes auxquels l'utilisateur a accès.
         @rtype: C{list} of C{int} if L{only_id} is True, C{list} of C{Group}
             otherwise.
         """
         result = {}
         columns = None
+
+        if hasattr(access, '__iter__'):
+            access = set(map(unicode, access))
+        elif access is not None:
+            access = set([unicode(access)])
+
+        # L'accès en écriture donne implicitement un accès en lecture.
+        if access is not None and u'r' in access:
+            access.add(u'w')
 
         if only_id:
             columns = MapGroup.idgroup
@@ -204,9 +234,10 @@ class User(DeclarativeBase, object):
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                     UserGroup.idgroup),
-            ).filter(USER_GROUP_TABLE.c.username == self.user_name
-            ).filter(DataPermission.access.in_([u'r', u'w'])
-            ).all()
+            ).filter(USER_GROUP_TABLE.c.username == self.user_name)
+        if access is not None:
+            direct = direct.filter(DataPermission.access.in_(access))
+        direct = direct.all()
         direct_ids = [mg.idgroup for mg in direct]
 
         # Groupes de cartes auxquels l'utilisateur a accès indirectement

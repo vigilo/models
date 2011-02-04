@@ -50,8 +50,10 @@ class TestUser(ModelTest):
         DBSession.add(root)
         sub1 = SupItemGroup(name=u'sub1', parent=root)
         DBSession.add(sub1)
-        sub2 = SupItemGroup(name=u'sub2', parent=sub1)
+        sub2 = SupItemGroup(name=u'sub2', parent=root)
         DBSession.add(sub2)
+        sub21 = SupItemGroup(name=u'sub21', parent=sub2)
+        DBSession.add(sub21)
         DBSession.flush()
 
         perm = Permission(permission_name=u'manage')
@@ -66,18 +68,10 @@ class TestUser(ModelTest):
         DBSession.add(dataperm)
         DBSession.flush()
 
-        dataperm = DataPermission(
-            usergroup=usergroup,
-            group=root,
-            access=u'r',
-        )
-        DBSession.add(dataperm)
-        DBSession.flush()
-
         eq_([
-                (root.idgroup, True),
-                (sub1.idgroup, False),
+                (root.idgroup, False),
                 (sub2.idgroup, True),
+                (sub21.idgroup, True),
             ], user.supitemgroups())
 
     def test_mapgroups(self):
