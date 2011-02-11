@@ -9,10 +9,8 @@ settings.load_module(__name__)
 from controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Host, Service, StateName, \
-     Map, MapNode, MapNodeHost, MapNodeService, MapNodeLls, MapNodeHls
+from vigilo.models.tables import *
 from vigilo.models.demo import functions as fct
-
 
 class DeleteCascadeTest(unittest.TestCase):
     """Test Sample"""
@@ -84,6 +82,24 @@ class DeleteCascadeTest(unittest.TestCase):
         mnlls_count = DBSession.query(MapNodeHls).count()
         self.assertEquals(mnlls_count, 0)
 
+    def test_conffile(self):
+        """Suppression des mapnodes d'un hôte d'un conffile"""
+        # Mettre localhost sur une carte
+        conffile = ConfFile.get_or_create("/tmp/test_file")
+        h = fct.add_host(u"localhost", conffile=conffile)
+        testmap = fct.add_map(u"Test map")
+        mnh = fct.add_node_host(h, "localhost", testmap)
+        DBSession.flush()
+
+        DBSession.delete(conffile)
+        DBSession.flush()
+
+        # On vérifie que la suppression du fichier de configuration
+        # de l'hôte a bien supprimé les représentations cartographiques.
+        mn_count = DBSession.query(MapNode).count()
+        self.assertEquals(mn_count, 0)
+        mnh_count = DBSession.query(MapNodeHost).count()
+        self.assertEquals(mnh_count, 0)
 
 if __name__ == '__main__':
     unittest.main()

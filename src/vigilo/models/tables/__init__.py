@@ -3,7 +3,7 @@
 """Modèles pour les tables SQL utilisées dans Vigilo."""
 
 __all__ = [
-    'EventHistory', 'Event', 'CorrEvent',
+    'EventHistory', 'Event', 'CorrEvent', 'ConfFile',
     'GraphGroup', 'Graph', 'Host', 'HostClass', 'PerfDataSource',
     'SupItem', 'LowLevelService', 'HighLevelService',
     'Dependency', 'DependencyGroup', 'Version', 'State', 'Permission',
