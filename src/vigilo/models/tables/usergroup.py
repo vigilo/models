@@ -28,12 +28,14 @@ class UserGroup(DeclarativeBase, object):
 
     idgroup = Column(
         Integer,
-        primary_key=True, autoincrement=True,
+        primary_key=True,
+        autoincrement=True,
     )
 
     group_name = Column(
         Unicode(255),
-        unique=True, index=True,
+        unique=True,
+        index=True,
     )
 
     permissions = relation('Permission', secondary=USERGROUP_PERMISSION_TABLE,
@@ -57,9 +59,8 @@ class UserGroup(DeclarativeBase, object):
     def by_group_name(cls, group_name):
         """
         Renvoie le groupe d'utilisateurs dont le nom est L{group_name}.
-        
+
         @return: Groupe d'utilisateurs dont le nom est L{group_name}.
         @rtype: L{UserGroup}
         """
         return DBSession.query(cls).filter(cls.group_name == group_name).first()
-

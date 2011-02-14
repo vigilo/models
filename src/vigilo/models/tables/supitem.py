@@ -169,12 +169,8 @@ class SupItem(DeclarativeBase, object):
         if u"managers" in [g.group_name for g in user.usergroups]:
             return True
         direct_groups = [sg[0] for sg in user.supitemgroups() if sg[1]]
-        subgroups = DBSession.query(GroupHierarchy.idchild
-            ).filter(GroupHierarchy.idparent.in_(direct_groups)
-            ).all()
-        allowed_groups = [g.idchild for g in subgroups]
         for group in self.groups:
-            if group.idgroup in allowed_groups:
+            if group.idgroup in direct_groups:
                 return True
         return False
 
@@ -182,4 +178,3 @@ class SupItem(DeclarativeBase, object):
     def __init__(self, **kwargs):
         """Initialise un objet supervisé."""
         super(SupItem, self).__init__(**kwargs)
-
