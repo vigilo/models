@@ -6,8 +6,7 @@ from vigilo.common.conf import settings
 settings.load_module('vigilo.models')
 
 from vigilo.models.configure import configure_db
-configure_db(settings['database'], 'sqlalchemy_',
-    settings['database']['db_basename'])
+configure_db(settings['database'], 'sqlalchemy_')
 
 from vigilo.models.session import DBSession, metadata
 from vigilo.models.websetup import populate_db
@@ -58,4 +57,3 @@ if __name__ == '__main__':
 
     print "Unknown action '%s'" % action
     sys.exit(2)
-

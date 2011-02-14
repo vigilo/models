@@ -18,10 +18,10 @@ DEFAULT_LANG = None
 HASHING_FUNC = None
 EXTERNAL_AUTH = False
 
-def configure_db(config_obj, prefix, db_basename):
+def configure_db(config_obj, prefix, db_basename=None):
     """
     Permet de configurer la base de données.
-    
+
     @param config_obj: Objet contenant la configuration.
     @type config_obj: C{ConfigObj} ou C{PylonsConfig}
     @param prefix: Préfixe des paramètres de configuration
@@ -34,6 +34,11 @@ def configure_db(config_obj, prefix, db_basename):
         À la place, la valeur de la clé "db_basename" dans
         config_obj est automatiquement utilisée.
     """
+    if db_basename is not None:
+        import warnings
+        warnings.warn(DeprecationWarning(
+            'Passing a third argument to configure_db() is now deprecated.'
+        ))
 
     # Permet de déterminer si l'objet config_obj est une configuration
     # de TurboGears (Pylons) ou bien un objet ConfigObj plus standard.
@@ -96,4 +101,3 @@ def configure_db(config_obj, prefix, db_basename):
     session.DBSession.configure(bind=engine)
     session.metadata.bind = session.DBSession.bind
     return engine
-

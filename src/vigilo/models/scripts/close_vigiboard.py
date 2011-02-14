@@ -50,8 +50,7 @@ def close_green(*args):
 
     from vigilo.models.configure import configure_db
     try:
-        configure_db(settings['database'], 'sqlalchemy_',
-            settings['database']['db_basename'])
+        configure_db(settings['database'], 'sqlalchemy_')
     except KeyError:
         LOGGER.error(_('No database configuration found'))
         sys.exit(1)
