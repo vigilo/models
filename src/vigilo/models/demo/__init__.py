@@ -46,8 +46,7 @@ def run_demo():
     settings.load_module('vigilo.models')
 
     from vigilo.models.configure import configure_db
-    configure_db(settings['database'], 'sqlalchemy_',
-        settings['database']['db_basename'])
+    configure_db(settings['database'], 'sqlalchemy_')
 
     import atexit
     def commit_on_exit():
@@ -68,5 +67,3 @@ def run_demo():
             return
         module = __import__(samples[sample], globals(), locals(), ["main"], -1)
         module.main()
-
-
