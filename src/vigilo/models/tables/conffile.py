@@ -29,6 +29,7 @@ class ConfFile(DeclarativeBase, object):
     name = Column(
         UnicodeText,
         nullable=False,
+        index=True,
         unique=True,
     )
 
