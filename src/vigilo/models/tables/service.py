@@ -133,8 +133,9 @@ class LowLevelService(Service):
         primaryjoin='LowLevelService.idhost == Host.idsupitem')
 
     command = Column(
-        UnicodeText,
-        default=u'', nullable=False,
+        Unicode(512),
+        default=u'',
+        nullable=False,
     )
 
     weight = Column(

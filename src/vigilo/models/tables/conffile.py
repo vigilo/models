@@ -2,7 +2,7 @@
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table ConfFile"""
 from sqlalchemy import Column
-from sqlalchemy.types import UnicodeText, Integer
+from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
 from vigilo.models.session import DeclarativeBase, DBSession
@@ -27,7 +27,7 @@ class ConfFile(DeclarativeBase, object):
     )
 
     name = Column(
-        UnicodeText,
+        Unicode(512),
         nullable=False,
         index=True,
         unique=True,

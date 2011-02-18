@@ -3,7 +3,7 @@
 """Modèle pour la table PerfDataSource"""
 from sqlalchemy import Column
 from sqlalchemy.orm import relation
-from sqlalchemy.types import Integer, UnicodeText, Float
+from sqlalchemy.types import Integer, Unicode, Float
 
 from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
@@ -48,18 +48,12 @@ class PerfDataSource(DeclarativeBase, object):
     host = relation('Host', back_populates="perfdatasources",
                        lazy=True)
 
-    name = Column(
-        UnicodeText,
-        nullable=False)
+    name = Column(Unicode(255), nullable=False)
 
     # GAUGE, COUNTER, ...
-    type = Column(
-        UnicodeText,
-        default=u'', nullable=False)
+    type = Column(Unicode(32), default=u'', nullable=False)
 
-    label = Column(
-        UnicodeText,
-        default=u'')
+    label = Column(Unicode(255), default=u'')
 
     factor = Column(
         Float(precision=None, asdecimal=False),

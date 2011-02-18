@@ -125,4 +125,4 @@ class TestSupItemAbstraction(unittest.TestCase):
         DBSession.flush()
 
         supitem = DBSession.query(Service).one()
-        self.assertEqual(supitem._itemtype, 'highlevel')
+        self.assertTrue(isinstance(supitem, HighLevelService))

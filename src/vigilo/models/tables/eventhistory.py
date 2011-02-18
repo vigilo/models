@@ -3,7 +3,7 @@
 """Modèle pour la table EventHistory"""
 from sqlalchemy import Column
 from sqlalchemy.orm import relation
-from sqlalchemy.types import Integer, UnicodeText, Unicode, Text, DateTime
+from sqlalchemy.types import Integer, Unicode, Text, DateTime
 
 from datetime import datetime
 
@@ -18,19 +18,19 @@ class EventHistory(DeclarativeBase, object):
     à un événement (nouvelle occurrence, changement d'acquittement, etc.).
 
     @ivar idhistory: Identifiant de l'entrée dans l'historique.
-    @ivar type_action: Le type d'action effectué, peut être : 
-        - 'New occurence' : Création d'un évènement 
+    @ivar type_action: Le type d'action effectué, peut être :
+        - 'New occurence' : Création d'un évènement
             corrélé à la réception d'une alerte Nagios ;
         - 'Nagios update state' : Mise à jour de l'état
-            de l'item et de l'évènement corrélé suite 
-            à la réception d'une alerte Nagios ; 
-        - 'Acknowlegement change state' : Remise à zéro de 
+            de l'item et de l'évènement corrélé suite
+            à la réception d'une alerte Nagios ;
+        - 'Acknowlegement change state' : Remise à zéro de
             l'état d'un évènement corrélé acquitté par l'opérateur
             alors que Nagios continue à envoyer des alertes ;
-        - 'Ticket change' : Changement du ticket d'incident par l'opérateur ; 
+        - 'Ticket change' : Changement du ticket d'incident par l'opérateur ;
         - 'Ticket change notification' : Réception d'une
             notification de la modification d'un ticket d'incident ;
-        - 'User comment' : plus utilisé ? ; 
+        - 'User comment' : plus utilisé ? ;
         - 'Oncall' : plus utilisé ? ;
         - 'Forced state' : plus utilisé ?.
     @ivar idevent: Identifiant de l'événement auquel se rapporte
@@ -69,7 +69,7 @@ class EventHistory(DeclarativeBase, object):
 
     event = relation('Event', lazy=True)
 
-    value = Column(UnicodeText)
+    value = Column(Unicode(255))
 
     # On ne peut pas imposer de l'Unicode au champ "text" car son contenu
     # provient parfois de Nagios, qui n'a pas la notion d'encodages.
@@ -119,4 +119,3 @@ class EventHistory(DeclarativeBase, object):
         minutes = divmod(date.seconds, 60)[0]
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
-

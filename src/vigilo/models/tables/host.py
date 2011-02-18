@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, Unicode, UnicodeText
+from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import EXT_CONTINUE
 
@@ -93,13 +93,9 @@ class Host(SupItem):
         Unicode(255),
         index=True, unique=True, nullable=False)
 
-    checkhostcmd = Column(
-        UnicodeText,
-        nullable=False)
+    checkhostcmd = Column(Unicode(255), nullable=False)
 
-    description = Column(
-        UnicodeText,
-        nullable=True)
+    description = Column(Unicode(512), nullable=True)
 
     hosttpl = Column(
         Unicode(255),
