@@ -81,7 +81,7 @@ class Service(SupItem):
     # Nécessaire pour pouvoir récupérer uniquement
     # des instances de services et pas d'hôtes.
     __mapper_args__ = {
-        'polymorphic_identity': u'service',
+        'polymorphic_identity': 2,
     }
 
 class LowLevelService(Service):
@@ -162,7 +162,7 @@ class LowLevelService(Service):
         lazy=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': u'lowlevel',
+        'polymorphic_identity': 3,
         'extension': LlsMapperExt(),
         'inherit_condition': idservice == SupItem.idsupitem,
     }
@@ -224,7 +224,7 @@ class HighLevelService(Service):
     """
     __tablename__ = 'highlevelservice'
     __mapper_args__ = {
-        'polymorphic_identity': u'highlevel',
+        'polymorphic_identity': 4,
         'extension': HlsMapperExt(),
     }
 

@@ -240,5 +240,6 @@ class ClusteredDDL(DDL):
 
 DeclarativeBase = declarative_base(metaclass=PrefixedTables)
 metadata = DeclarativeBase.metadata
-DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False,
-                extension=ZopeTransactionExtension()))
+DBSession = scoped_session(sessionmaker(autoflush=False, autocommit=False,
+		           extension=ZopeTransactionExtension()
+))

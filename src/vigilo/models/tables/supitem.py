@@ -53,9 +53,10 @@ class SupItem(DeclarativeBase, object):
     )
 
     _itemtype = Column(
-        'itemtype', Unicode(16),
+        'itemtype', Integer,
         index=True,
         nullable=False,
+        autoincrement=False,
     )
 
     tags = relation('Tag', secondary=SUPITEM_TAG_TABLE,

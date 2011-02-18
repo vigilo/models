@@ -66,7 +66,7 @@ class Host(SupItem):
     """
     __tablename__ = 'host'
     __mapper_args__ = {
-        'polymorphic_identity': u'host',
+        'polymorphic_identity': 1,
         'extension': HostMapperExt(),
     }
 

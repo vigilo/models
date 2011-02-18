@@ -95,13 +95,13 @@ class PerfDataSource(DeclarativeBase, object):
             C{sourcename} et qui porte sur le service C{service}.
         @rtype: L{PerfDataSource}
         """
-        if isinstance(host, int):
+        if isinstance(host, (int, long)):
             return DBSession.query(cls
                 ).filter(cls.idhost == host
                 ).filter(cls.name == sourcename
                 ).first()
 
         return DBSession.query(cls
-            ).filter(cls.host == host
+            ).filter(cls.idhost == host.idhost
             ).filter(cls.name == sourcename
             ).first()
