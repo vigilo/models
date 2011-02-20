@@ -65,8 +65,8 @@ class ConfItem(DeclarativeBase, object):
         """
         return DBSession.query(cls).join(
                 (Host, Host.idsupitem == cls.idsupitem)
-            ).filter(Host.name == hostname
-            ).filter(cls.name == name
+            ).filter(Host.name == unicode(hostname)
+            ).filter(cls.name == unicode(name)
             ).first()
 
     @classmethod
@@ -88,9 +88,9 @@ class ConfItem(DeclarativeBase, object):
                 (LowLevelService, LowLevelService.idsupitem == cls.idsupitem)
             ).join(
                 (Host, Host.idsupitem == LowLevelService.idhost)
-            ).filter(Host.name == hostname
-            ).filter(LowLevelService.servicename == servicename
-            ).filter(cls.name == name
+            ).filter(Host.name == unicode(hostname)
+            ).filter(LowLevelService.servicename == unicode(servicename)
+            ).filter(cls.name == unicode(name)
             ).first()
 
 
