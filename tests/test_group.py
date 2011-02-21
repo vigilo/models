@@ -5,7 +5,6 @@ from sqlalchemy.schema import DDL
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import GraphGroup, MapGroup, SupItemGroup
-from vigilo.models.tables.grouphierarchy import GroupHierarchy
 from vigilo.models.demo.functions import add_graphgroup, \
                                         add_supitemgroup, \
                                         add_mapgroup
@@ -22,151 +21,50 @@ class TestGraphGroup(ModelTest):
         'name': u'graphgroup'
     }
 
-    def test_creation_loop(self):
-        """
-        Ajout des boucles dans la hiérarchie lors de la création d'un groupe.
-        """
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.idparent == self.obj.idgroup
-                        ).filter(GroupHierarchy.idchild == self.obj.idgroup
-                        ).filter(GroupHierarchy.hops == 0
-                        ).one()
-
     def test_remove_children(self):
         """
         Test la méthode remove_children
         """
-        # Ce hack est nécessaire lors du passage des tests unitaires
-        # avec sqlite3. Il permet de simuler un ON DELETE CASCADE,
-        # car cette fonctionnalité n'est pas présente dans les anciennes
-        # version de sqlite.
-        trigger = DDL(
-            """
-CREATE TRIGGER foobar
-BEFORE DELETE ON %(group)s
-FOR EACH ROW BEGIN
-    DELETE FROM %(grouphierarchy)s WHERE %(grouphierarchy)s.idparent = OLD.idgroup;
-    DELETE FROM %(grouphierarchy)s WHERE %(grouphierarchy)s.idchild = OLD.idgroup;
-END;
-            """,
-            on='sqlite',
-            context={
-                'group': self.klass.__tablename__,
-                'grouphierarchy': GroupHierarchy.__tablename__,
-            }
-        )
-        DBSession.bind.execute(trigger)
-
         child = self.klass(name=u"achild", parent=self.obj)
         DBSession.add(child)
         DBSession.flush()
 
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.idparent == self.obj.idgroup
-                        ).filter(GroupHierarchy.idchild == child.idgroup
-                        ).filter(GroupHierarchy.hops == 1
-                        ).one()
-
         self.obj.remove_children()
         assert_equal(False, self.obj.has_children())
-
-        assert_equal(0,
-            DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.idparent == self.obj.idgroup
-                        ).filter(GroupHierarchy.hops > 0
-                        ).count() )
 
     def test_parent(self):
         """Affectation d'un parent à un groupe."""
         # Au début, nous n'avons pas de parent.
         assert_equal(self.obj.has_parent(), False)
 
-        # On obtient un parent.
-        parent = self.klass(name=u"aparent")
-        DBSession.add(parent)
-        self.obj.parent = parent
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.parent == parent
-                        ).filter(GroupHierarchy.child == self.obj
-                        ).filter(GroupHierarchy.hops == 1
-                        ).one()
-        assert_equal(self.obj.parent, parent)
-        assert_equal(self.obj.has_parent(), True)
+        g1 = self.klass(name=u"g1", parent=self.obj)
+        g2 = self.klass(name=u"g2", parent=self.obj)
+        g11 = self.klass(name=u"g11", parent=g1)
+        DBSession.add(g1)
+        DBSession.add(g2)
+        DBSession.add(g11)
+        DBSession.flush()
 
-        # Notre parent est modifié.
-        anotherparent = self.klass(name=u"anotherparent")
-        DBSession.add(anotherparent)
-        self.obj.parent = anotherparent
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.parent == anotherparent
-                        ).filter(GroupHierarchy.child == self.obj
-                        ).filter(GroupHierarchy.hops == 1
-                        ).one()
-        assert_equal(self.obj.parent, anotherparent)
-        assert_equal(self.obj.has_parent(), True)
-
-        # Suppression du parent.
-        self.obj.parent = None
         assert_equal(self.obj.parent, None)
+        assert_equal(g1.parent, self.obj)
+        assert_equal(g2.parent, self.obj)
+        assert_equal(g11.parent, g1)
+
         assert_equal(self.obj.has_parent(), False)
+        for obj in [g1, g2, g11]:
+            assert_equal(obj.has_parent(), True)
 
-    def test_set_parent2(self):
-        """Affectation d'un parent avec hiérarchies coté enfant et parent."""
-        # on créé un parent sur self.obj
-        parent = self.klass(name=u"aparent")
-        DBSession.add(parent)
-        self.obj.parent = parent
+        g11.parent = g2
+        DBSession.flush()
 
-        # on créé un groupe avec son enfant
-        child = self.klass(name=u"achild")
-        DBSession.add(child)
-        gchild = self.klass(name=u"agrandchild")
-        DBSession.add(gchild)
-        gchild.parent = child
+        assert_equal(self.obj.parent, None)
+        assert_equal(g1.parent, self.obj)
+        assert_equal(g2.parent, self.obj)
+        assert_equal(g11.parent, g2)
 
-        # on raccorde self.obj et l'enfant
-        child.parent = self.obj
-
-        # Vérifications superficielles.
-        assert_equal(4, DBSession.query(GroupHierarchy).filter(
-                            GroupHierarchy.hops == 0).count())
-        assert_equal(3, DBSession.query(GroupHierarchy).filter(
-                            GroupHierarchy.hops == 1).count())
-        assert_equal(2, DBSession.query(GroupHierarchy).filter(
-                            GroupHierarchy.hops == 2).count())
-        assert_equal(1, DBSession.query(GroupHierarchy).filter(
-                            GroupHierarchy.hops == 3).count())
-
-        # Vérification détaillée d'une partie des liens.
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.parent == child
-                        ).filter(GroupHierarchy.child == gchild
-                        ).filter(GroupHierarchy.hops == 1
-                        ).one()
-
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.parent == parent
-                        ).filter(GroupHierarchy.child == self.obj
-                        ).filter(GroupHierarchy.hops == 1
-                        ).one()
-
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.parent == parent
-                        ).filter(GroupHierarchy.child == gchild
-                        ).filter(GroupHierarchy.hops == 3
-                        ).one()
-
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.parent == self.obj
-                        ).filter(GroupHierarchy.child == child
-                        ).filter(GroupHierarchy.hops == 1
-                        ).one()
-
-        DBSession.query(GroupHierarchy
-                        ).filter(GroupHierarchy.parent == self.obj
-                        ).filter(GroupHierarchy.child == gchild
-                        ).filter(GroupHierarchy.hops == 2
-                        ).one()
+        assert_equal(self.obj.has_parent(), False)
+        for obj in [g1, g2, g11]:
+            assert_equal(obj.has_parent(), True)
 
     def test_get_top_groups(self):
         """Récupération des groupes au sommet de la hiérarchie."""
@@ -174,53 +72,54 @@ END;
         assert_equal(len(tops), 1)
         assert_equal(tops[0], self.obj)
 
-    def test_has_children(self):
         """Test de la présence de fils."""
-        assert_equal( False, self.obj.has_children() )
+    def test_has_children(self):
+        assert_equal(False, self.obj.has_children())
 
-        child = self.klass(name=u"achild")
+        child = self.klass(name=u"achild", parent=self.obj)
         DBSession.add(child)
-        DBSession.add(GroupHierarchy(
-            parent=self.obj,
-            child=child,
-            hops=1,
-        ))
         DBSession.flush()
-
-        assert_equal( True, self.obj.has_children() )
+        assert_equal(True, self.obj.has_children())
 
     def test_get_children(self):
         """Récupération des groupes fils."""
-        child = self.klass(name=u"achild")
+        assert_equal([], self.obj.get_children())
+        child = self.klass(name=u"achild", parent=self.obj)
         DBSession.add(child)
-        DBSession.add(GroupHierarchy(
-            parent=self.obj,
-            child=child,
-            hops=1,
-        ))
         DBSession.flush()
-
-        assert_equal( [child, ], self.obj.get_children() )
+        assert_equal([child], self.obj.get_children())
 
     def test_search_for_groups(self):
-        """Teste la récupération de groupes par nom/parent."""
-        root = self.creator.im_func(u'TestRoot', None)
-        child = self.creator.im_func(u'TestChild', root)
-        fake = self.creator.im_func(u'TestRoot', root)
+        """Teste la récupération de groupes par nom et parent."""
+        child = self.klass(name=u"achild", parent=self.obj)
+        DBSession.add(child)
+
+        fake = self.klass(name=self.attrs['name'], parent=self.obj)
+        DBSession.add(fake)
+        DBSession.flush()
 
         # Récupération de la racine.
-        assert_equal(root, self.klass.by_parent_and_name(None, u'TestRoot'))
+        assert_equal(self.obj, self.klass.by_parent_and_name(
+            None, self.attrs['name']))
+
         # Récupération des enfants.
-        assert_equal(child, self.klass.by_parent_and_name(root, u'TestChild'))
-        assert_equal(fake, self.klass.by_parent_and_name(root, u'TestRoot'))
+        assert_equal(child, self.klass.by_parent_and_name(
+            self.obj, u'achild'))
+        assert_equal(fake, self.klass.by_parent_and_name(
+            self.obj, self.attrs['name']))
 
     def test_get_path(self):
         """Génération d'un chemin absolu vers le groupe."""
-        root = self.creator.im_func(u'TestRoot', None)
-        c1 = self.creator.im_func(u'/', root)
+        c1 = self.creator.im_func(u'/', self.obj)
+        c1 = DBSession.query(self.klass).filter(self.klass.name == u'/').first()
         c2 = self.creator.im_func(u'\\', c1)
-
-        assert_equal(c2.get_path(), u'/TestRoot/\\//\\\\')
+        print repr(DBSession.query(
+                self.klass.name,
+                self.klass.left,
+                self.klass.right,
+                self.klass.depth,
+            ).all())
+        assert_equal(c2.get_path(), u'/' + self.attrs['name'] + u'/\\//\\\\')
 
 # On reprend les tests de GraphGroup.
 class TestMapGroup(TestGraphGroup):
@@ -238,5 +137,5 @@ class TestSupItemGroups(TestGraphGroup):
     klass = SupItemGroup
     creator = add_supitemgroup
     attrs = {
-        'name': u'supitemgorup',
+        'name': u'supitemgroup',
     }

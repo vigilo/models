@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 # vim:set expandtab tabstop=4 shiftwidth=4:
 """Modèle pour la table User"""
-from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime
+from sqlalchemy.orm import synonym, relation, aliased
+from sqlalchemy.sql.expression import not_, or_, and_
 import hashlib
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE
 from vigilo.models.tables import SupItemGroup, UserGroup, MapGroup, \
                                     DataPermission
-from .grouphierarchy import GroupHierarchy
 
 __all__ = ('User', )
 
@@ -135,28 +135,37 @@ class User(DeclarativeBase, object):
 
         # Groupes d'éléments supervisés auxquels
         # l'utilisateur a directement accès.
-        direct = DBSession.query(SupItemGroup.idgroup).distinct(
+        sig1 = aliased(SupItemGroup)
+        sig2 = aliased(SupItemGroup)
+        direct = DBSession.query(
+                sig1.idgroup,
+                sig1._grouptype,
+                sig1.left,
+                sig1.right,
+            ).distinct(
             ).join(
-                (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
-                (DataPermission, DataPermission.idgroup == GroupHierarchy.idparent),
+                (sig2, and_(
+                    sig2._grouptype == sig1._grouptype,
+                    sig1.left >= sig2.left,
+                    sig1.right <= sig2.right,
+                )),
+                (DataPermission, DataPermission.idgroup == sig2.idgroup),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                     UserGroup.idgroup),
-            ).filter(USER_GROUP_TABLE.c.username == self.user_name
             ).filter(USER_GROUP_TABLE.c.username == self.user_name)
         if access is not None:
             direct = direct.filter(DataPermission.access.in_(access))
-        direct = direct.all()
-        direct_ids = [sig.idgroup for sig in direct]
+        direct_ids = [sig.idgroup for sig in direct.all()]
 
         # Groupes d'éléments supervisés auxquels l'utilisateur a accès
         # indirectement (droit de passage, mais pas de droit de lecture).
+        sub = direct.subquery()
         indirect = DBSession.query(SupItemGroup.idgroup).distinct(
             ).join(
-                (GroupHierarchy, GroupHierarchy.idparent == \
-                    SupItemGroup.idgroup),
-            ).filter(GroupHierarchy.idchild.in_(direct_ids)
-            ).filter(GroupHierarchy.hops > 0
+                (sub, sub.c.grouptype == SupItemGroup._grouptype)
+            ).filter(SupItemGroup.left < sub.c.tree_left
+            ).filter(SupItemGroup.right > sub.c.tree_right
             ).all()
 
         for sig in indirect:
@@ -220,45 +229,41 @@ class User(DeclarativeBase, object):
         if access is not None and u'r' in access:
             access.add(u'w')
 
+        mg1 = aliased(MapGroup)
+        mg2 = aliased(MapGroup)
         if only_id:
-            columns = MapGroup.idgroup
+            columns = mg1.idgroup
         else:
-            columns = MapGroup
+            columns = mg1
 
         # Groupes de cartes auxquels l'utilisateur a directement accès.
-
-        direct = DBSession.query(columns).distinct(
+        mapgroups = DBSession.query(
+                columns
+            ).distinct(
             ).join(
-                (GroupHierarchy, GroupHierarchy.idchild == MapGroup.idgroup),
-                (DataPermission, DataPermission.idgroup == GroupHierarchy.idparent),
+                (mg2, mg2._grouptype == mg1._grouptype),
+                (DataPermission, DataPermission.idgroup == mg2.idgroup),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                     UserGroup.idgroup),
             ).filter(USER_GROUP_TABLE.c.username == self.user_name)
         if access is not None:
-            direct = direct.filter(DataPermission.access.in_(access))
-        direct = direct.all()
-        direct_ids = [mg.idgroup for mg in direct]
+            mapgroups = mapgroups.filter(DataPermission.access.in_(access))
 
-        # Groupes de cartes auxquels l'utilisateur a accès indirectement
-        # (droit de passage, mais pas de droit de lecture).
-        indirect = DBSession.query(columns).distinct(
-            ).join(
-                (GroupHierarchy, GroupHierarchy.idparent == MapGroup.idgroup),
-            ).filter(GroupHierarchy.idchild.in_(direct_ids)
-            ).all()
-
-        groups = None
         if only_direct:
-            groups = direct
+            mapgroups = mapgroups.filter(mg1.left >= mg2.left
+                        ).filter(mg1.right <= mg2.right)
         else:
-            groups = indirect
+            # Inclus les groupes de cartes auxquels l'utilisateur a accès
+            # indirectement (droit de passage uniquement).
+            mapgroups = mapgroups.filter(not_(or_(
+                    mg1.left >= mg2.right,
+                    mg1.right <= mg2.left
+                )))
 
         if only_id:
-            return [g.idgroup for g in groups]
-        else:
-            return groups
-
+            return [mg.idgroup for mg in mapgroups.all()]
+        return mapgroups.all()
 
     @classmethod
     def by_email_address(cls, email):

@@ -165,6 +165,11 @@ def populate_db(bind, commit=True):
         DBSession.add(tables.StateName(statename=u'DOWN', order=3))
         DBSession.flush()
 
+        DBSession.add(tables.MapGroup(name=u'Root'))
+        DBSession.add(tables.SupItemGroup(name=u'Root'))
+        DBSession.add(tables.GraphGroup(name=u'Root'))
+        DBSession.flush()
+
         version = tables.Version()
         version.name = unicode(module)
         version.version = max_version
