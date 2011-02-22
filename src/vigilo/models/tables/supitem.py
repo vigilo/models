@@ -165,6 +165,8 @@ class SupItem(DeclarativeBase, object):
         @param perm_type: Type d'accès, par défaut "r"
         @type  perm_type: C{str}
         """
+        from vigilo.models.tables.grouphierarchy import GroupHierarchy
+
         if u"managers" in [g.group_name for g in user.usergroups]:
             return True
         direct_groups = [sg[0] for sg in user.supitemgroups() if sg[1]]

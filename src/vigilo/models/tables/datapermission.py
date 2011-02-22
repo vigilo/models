@@ -29,8 +29,7 @@ class DataPermission(DeclarativeBase, object):
             UserGroup.idgroup,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        autoincrement=False,
-        primary_key=True,
+        autoincrement=False, primary_key=True,
     )
 
     usergroup = relation('UserGroup', back_populates='datapermissions')
@@ -41,8 +40,7 @@ class DataPermission(DeclarativeBase, object):
             Group.idgroup,
             ondelete='CASCADE', onupdate='CASCADE',
         ),
-        autoincrement=False,
-        primary_key=True,
+        autoincrement=False, primary_key=True,
     )
 
     group = relation('Group', back_populates='datapermissions')
@@ -58,3 +56,4 @@ class DataPermission(DeclarativeBase, object):
 
     def __unicode__(self):
         return "<%s - %s>" % (unicode(self.group), unicode(self.usergroup))
+

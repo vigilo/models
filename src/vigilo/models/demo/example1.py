@@ -149,8 +149,10 @@ def main():
 
     # SupItemGroup
     servers = add_supitemgroup("Serveurs")
-    linux = add_supitemgroup("Serveurs Linux", servers)
-    windows = add_supitemgroup("Serveurs Windows", servers)
+    linux = add_supitemgroup("Serveurs Linux")
+    windows = add_supitemgroup("Serveurs Windows")
+    add_supitemgroup_parent(linux, servers)
+    add_supitemgroup_parent(windows, servers)
 
     # GraphGroup
     graphes = add_graphgroup("Graphes")
@@ -238,7 +240,7 @@ def main():
     add_perfdatasource2graph(source5, graph_UpTime2)
 
     # Cartographie
-    mg_root = add_mapgroup('Root')
+    mg_root = add_mapgroup('Root', None)
     mg_1 = add_mapgroup('Groupe 1', mg_root)
     mg_1_1 = add_mapgroup('Groupe 1.1', mg_1)
     mg_1_2 = add_mapgroup('Groupe 1.2', mg_1)
