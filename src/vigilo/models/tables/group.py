@@ -396,10 +396,16 @@ class SupItemGroup(Group):
     hls = relation('HighLevelService', secondary=SUPITEM_GROUP_TABLE, lazy=True)
 
     def get_ventilation_candidate(self):
-        return DBSession.query(
-                self.__class__
-            ).filter(self.__class__._grouptype == self._grouptype
-            ).filter(self.__class__.depth == 1
-            ).filter(self.__class__.left <= self.left
-            ).filter(self.__class__.right >= self.right
-            ).one()
+        group = self
+        while group:
+            if group.depth == 1:
+                return group
+            group = group.parent
+        return None
+
+#        return DBSession.query(
+#                self.__class__
+#            ).filter(self.__class__.depth == 1
+#            ).filter(self.__class__.left <= self.left
+#            ).filter(self.__class__.right >= self.right
+#            ).one()
