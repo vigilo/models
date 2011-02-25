@@ -142,7 +142,6 @@ class User(DeclarativeBase, object):
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
                 (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
                     UserGroup.idgroup),
-            ).filter(USER_GROUP_TABLE.c.username == self.user_name
             ).filter(USER_GROUP_TABLE.c.username == self.user_name)
         if access is not None:
             direct = direct.filter(DataPermission.access.in_(access))
