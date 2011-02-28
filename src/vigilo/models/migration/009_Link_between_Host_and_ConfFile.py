@@ -7,11 +7,11 @@ Pour le moment, le champ est optionnel, afin de
 permettre aux administrateurs de migrer leur parc.
 """
 
-from vigilo.models.session import DBSession, ClusteredDDL
+from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
-def upgrade(migrate_engine, cluster_name):
+def upgrade(migrate_engine, actions):
     owner = DBSession.execute(
         'SELECT tableowner '
         'FROM pg_catalog.pg_tables '
@@ -22,7 +22,7 @@ def upgrade(migrate_engine, cluster_name):
             'table': tables.SupItem.__tablename__,
         }).fetchone().tableowner
 
-    ClusteredDDL(
+    MigrationDDL(
         [
             "ALTER TABLE %(fullname)s ADD COLUMN idconffile INTEGER",
             "ALTER TABLE %(fullname)s ADD CONSTRAINT %(fullname)s_idconffile_fkey "
@@ -32,11 +32,12 @@ def upgrade(migrate_engine, cluster_name):
             # Correction des droits sur ConfFile.
             "ALTER TABLE %(db_basename)sconffile OWNER TO %(owner)s",
         ],
-        cluster_name=cluster_name,
-        cluster_sets=[2, 3],
         # Le nom de la contrainte dépend du préfixe utilisé.
         context={
             'db_basename': DB_BASENAME,
             'owner': owner,
         }
     ).execute(DBSession, tables.Host.__table__)
+
+    # Nécessite la mise à jour de VigiReport.
+    actions.upgrade_vigireport = True

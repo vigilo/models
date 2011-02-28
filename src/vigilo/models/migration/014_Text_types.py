@@ -3,12 +3,12 @@
 Ajoute un index sur les noms de fichiers ConfFile, pour gagner en performances.
 """
 
-from vigilo.models.session import DBSession, ClusteredDDL
+from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
-def upgrade(migrate_engine, cluster_name):
-    ClusteredDDL(
+def upgrade(migrate_engine, actions):
+    MigrationDDL(
         [
             "ALTER TABLE %(db_basename)sperfdatasource "
                 "ALTER COLUMN name TYPE varchar(255)",
@@ -25,11 +25,6 @@ def upgrade(migrate_engine, cluster_name):
             "ALTER TABLE %(db_basename)slowlevelservice "
                 "ALTER COLUMN command TYPE varchar(512)",
         ],
-        cluster_name=cluster_name,
-        # La modification n'impacte pas la réplication
-        # vers VigiReport (set n°3).
-        cluster_sets=[2],
-        # Le nom de la contrainte dépend du préfixe utilisé.
         context={
             'db_basename': DB_BASENAME,
         }

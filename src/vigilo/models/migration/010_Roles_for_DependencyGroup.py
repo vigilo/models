@@ -6,22 +6,19 @@ qui indique le role des dépendances du groupe :
 -   "topology" pour des dépendances topologiques
 """
 
-from vigilo.models.session import DBSession, ClusteredDDL
+from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
-def upgrade(migrate_engine, cluster_name):
-    ClusteredDDL(
+def upgrade(migrate_engine, actions):
+    MigrationDDL(
         [
             # Supprime les anciennes
             "DELETE FROM %(fullname)s",
             "ALTER TABLE %(fullname)s ADD COLUMN \"role\" VARCHAR(16) NOT NULL",
         ],
-        cluster_name=cluster_name,
-        cluster_sets=[2],
         context={}
     ).execute(DBSession, tables.DependencyGroup.__table__)
 
-    print   "ATTENTION: Though the schema migration completed successfully,\n" \
-            "you should re-deploy your configuration using option --force " \
-            "to finish the migration."
+    # Nécessite un déploiement forcé.
+    actions.deploy_force = True

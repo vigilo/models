@@ -10,12 +10,12 @@ Ces changements permettent de rendre le backend cohérent avec
 la nomenclature utilisée dans le frontend.
 """
 
-from vigilo.models.session import DBSession, ClusteredDDL
+from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
-def upgrade(migrate_engine, cluster_name):
-    ClusteredDDL(
+def upgrade(migrate_engine, actions):
+    MigrationDDL(
         [
             # Renommage des attributs.
             # Les attributs en "ds_*" sont des relations basées sur "idds_*"
@@ -23,7 +23,5 @@ def upgrade(migrate_engine, cluster_name):
             "ALTER TABLE %(fullname)s RENAME COLUMN idds_from_to_to TO idds_out",
             "ALTER TABLE %(fullname)s RENAME COLUMN idds_to_to_from TO idds_in",
         ],
-        cluster_name=cluster_name,
-        cluster_sets=[2],
         context={}
     ).execute(DBSession, tables.MapServiceLink.__table__)

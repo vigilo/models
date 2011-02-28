@@ -103,27 +103,18 @@ class PrefixedTables(DeclarativeMeta):
                 configure.DB_BASENAME + dict_['__tablename__']
         DeclarativeMeta.__init__(mcs, classname, bases, dict_)
 
-class ClusteredDDL(DDL):
+class MigrationDDL(DDL):
     """
     Exécute une requête SQL destinée à PostgreSQL
     et qui modifie le schéma (DDL).
-    Cette classe prend soin de répliquer la modification
-    sur les nœuds de réplication appropriés si ceux-ci sont
-    disponibles.
     """
 
-    def __init__(self, statement, cluster_name, cluster_sets,
-        context=None, bind=None):
+    def __init__(self, statement, context=None, bind=None):
         """
         Initialisation.
 
         @param statement: Une requête SQL ou une liste de requêtes SQL.
         @param statement: C{basestr} ou C{list} de C{basestr}
-        @param cluster_name: Nom du cluster de réplication.
-        @type cluster_name: C{basestr}
-        @param cluster_sets: Liste des numéros des ensembles de réplication
-            concernés par la requête.
-        @type cluster_sets: C{list} de C{int}
         @param context: Valeurs contextuelles de substitution.
         @type context: C{dict}
         @param bind: Connexion à la base de données maître.
@@ -133,9 +124,7 @@ class ClusteredDDL(DDL):
         # on les combine ici.
         if isinstance(statement, list):
             statement = ';'.join(statement)
-        super(ClusteredDDL, self).__init__(statement, 'postgres', context, bind)
-        self.cluster_name = cluster_name
-        self.cluster_sets = cluster_sets
+        super(MigrationDDL, self).__init__(statement, 'postgres', context, bind)
 
     def execute(self, bind=None, schema_item=None):
         """
@@ -157,66 +146,8 @@ class ClusteredDDL(DDL):
         if self._should_execute(None, schema_item, bind):
             # On évalue le contexte une fois pour toute (il ne changera plus).
             context = self._prepare_context(schema_item, bind)
-            cluster_name = '_' + self.cluster_name
-
-            replicated = bind.execute(
-                'SELECT 1 AS "exists" '
-                'FROM pg_catalog.pg_tables '
-                'WHERE schemaname = :cluster_name '
-                'LIMIT 1;',
-                params={
-                    'cluster_name': cluster_name,
-                }).rowcount
-
-            # Dans le cas où une réplication est en place,
-            # on doit préparer le cluster pour le DDL.
-            if self.cluster_sets and self.cluster_name and replicated:
-                # On prépare le set du cluster, uniquement s'il est présent
-                # (d'où la recherche sur set_id dans sl_set) et si son origine
-                # (set_origin) correspond bien au nœud courant du cluster
-                # (getlocalnodeid).
-                prepare_statement = \
-                    "SELECT %%(cluster_name)s." \
-                        "ddlscript_prepare(:cluster_set,-1) " \
-                    "FROM %%(cluster_name)s.sl_set " \
-                    "WHERE set_origin = %%(cluster_name)s." \
-                        "getlocalnodeid('%%(cluster_name)s') " \
-                    "AND set_id = :cluster_set;"
-                executable = expression.text(prepare_statement % context % {
-                    'cluster_name': cluster_name
-                })
-                for cluster_set in self.cluster_sets:
-                    bind.execute(executable, params={
-                        'cluster_set': int(cluster_set),
-                    })
-
-
-            # Exécution locale du DDL.
             statement = self._expand(schema_item, bind)
             res = bind.execute(expression.text(statement))
-
-            # Propagation du DDL aux autres nœuds.
-            if self.cluster_sets and self.cluster_name and replicated:
-                # On prépare le DDL sur les sets présents tels que l'origine
-                # (set_origin) correspond bien au nœud courant du cluster
-                # (getlocalnodeid).
-                repl_statement = \
-                    "SELECT %%(cluster_name)s." \
-                        "ddlscript_complete(:cluster_set,:statement,-1)" \
-                    "FROM %%(cluster_name)s.sl_set " \
-                    "WHERE set_origin = %%(cluster_name)s." \
-                        "getlocalnodeid('%%(cluster_name)s') " \
-                    "AND set_id = :cluster_set;"
-                executable = expression.text(repl_statement %
-                    self._prepare_context(schema_item, bind) % {
-                        'cluster_name': cluster_name,
-                    })
-                for cluster_set in self.cluster_sets:
-                    bind.execute(executable, params={
-                        'cluster_set': int(cluster_set),
-                        'statement': statement,
-                    })
-
             return res
 
     def _should_execute(self, event, schema_item, bind):
@@ -226,7 +157,7 @@ class ClusteredDDL(DDL):
         # Permet de gérer une session donnée en argument.
         if isinstance(bind, ScopedSession):
             bind = bind.bind
-        return super(ClusteredDDL, self)._should_execute(
+        return super(MigrationDDL, self)._should_execute(
             event, schema_item, bind)
 
     def _prepare_context(self, schema_item, bind):
@@ -236,7 +167,7 @@ class ClusteredDDL(DDL):
         # Permet de gérer une session donnée en argument.
         if isinstance(bind, ScopedSession):
             bind = bind.bind
-        return super(ClusteredDDL, self)._prepare_context(schema_item, bind)
+        return super(MigrationDDL, self)._prepare_context(schema_item, bind)
 
 DeclarativeBase = declarative_base(metaclass=PrefixedTables)
 metadata = DeclarativeBase.metadata

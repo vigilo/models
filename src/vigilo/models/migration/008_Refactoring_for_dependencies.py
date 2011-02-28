@@ -4,11 +4,11 @@ La gestion des dépendances entre les éléments supervisés
 a été revue afin de permettre une plus grande souplesse.
 """
 
-from vigilo.models.session import DBSession, ClusteredDDL
+from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
-def upgrade(migrate_engine, cluster_name):
+def upgrade(migrate_engine, actions):
     supitem_refs = [
         ('lowlevelservice', 'idservice'),
         ('highlevelservice', 'idservice'),
@@ -31,7 +31,7 @@ def upgrade(migrate_engine, cluster_name):
             'table': tables.SupItem.__tablename__,
         }).fetchone().tableowner
 
-    ClusteredDDL(
+    MigrationDDL(
         # Suppression des contraintes référentielles vers Service...
         [
             "ALTER TABLE %%(db_basename)s%(table)s DROP CONSTRAINT "
@@ -97,8 +97,6 @@ def upgrade(migrate_engine, cluster_name):
             # Correction des droits sur DependencyGroup.
             "ALTER TABLE %(db_basename)sdependencygroup OWNER TO %(owner)s",
         ],
-        cluster_name=cluster_name,
-        cluster_sets=[2],
         # Le nom de la contrainte dépend du préfixe utilisé.
         context={
             'db_basename': DB_BASENAME,
@@ -107,5 +105,5 @@ def upgrade(migrate_engine, cluster_name):
         }
     ).execute(DBSession, tables.Dependency.__table__)
 
-    print   "ATTENTION: Though the schema migration completed successfully,\n" \
-            "you should re-deploy your configuration to finish the migration."
+    # Nécessite un déploiement forcé.
+    actions.deploy_force = True

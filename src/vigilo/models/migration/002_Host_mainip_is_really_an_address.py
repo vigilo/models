@@ -6,15 +6,16 @@ pas nécessairement à une adresse IP (v4 ou v6). Il peut par exemple s'agir
 d'un nom d'hôte complètement qualifié (FQDN).
 """
 
-from vigilo.models.session import DBSession, ClusteredDDL
+from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models import tables
 
-def upgrade(migrate_engine, cluster_name):
-    ClusteredDDL(
+def upgrade(migrate_engine, actions):
+    MigrationDDL(
         [
             "ALTER TABLE %(fullname)s RENAME COLUMN mainip TO address",
             "ALTER TABLE %(fullname)s ALTER COLUMN address TYPE varchar(255)",
         ],
-        cluster_name=cluster_name,
-        cluster_sets=[2, 3],
     ).execute(DBSession, tables.Host.__table__)
+
+    # Nécessite une mise à jour de VigiReport.
+    actions.upgrade_vigireport = True

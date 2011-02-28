@@ -37,6 +37,11 @@ def get_migration_scripts(module):
         scripts[ver] = f[:-3]
     return scripts
 
+class MigrationActions(object):
+    def __init__(self):
+        self.deploy_force = False
+        self.upgrade_vigireport = False
+
 def migrate_model(bind, module, scripts, stop_at=None):
     """
     Met à jour le modèle à partir des scripts de migration fournis
@@ -80,6 +85,7 @@ def migrate_model(bind, module, scripts, stop_at=None):
         try:
             versions = scripts.keys()
             sorted(versions)
+            actions = MigrationActions()
             for ver in versions:
                 if ver <= current_version or ver > stop_at:
                     continue
@@ -103,9 +109,7 @@ def migrate_model(bind, module, scripts, stop_at=None):
                             scripts[ver],
                         )).load(require=False)
 
-                    # @FIXME: le 2ème argument est le nom du cluster.
-                    # Il ne devrait probablement pas être hard-codé...
-                    ep(bind, 'vigilo')
+                    ep(bind, actions)
                     version = tables.Version()
                     version.name = module
                     version.version = ver
@@ -116,6 +120,27 @@ def migrate_model(bind, module, scripts, stop_at=None):
                     raise
                 else:
                     transaction.commit()
+
+            # La migration nécessite de redéployer le parc.
+            if actions.deploy_force:
+                print   "ATTENTION: Although the schema migration completed " \
+                        "successfully,\n" \
+                        "you should re-deploy your configuration using " \
+                        "option --force to finish the migration."
+
+            # La migration nécessite de mettre à jour VigiReport.
+            if actions.upgrade_vigireport:
+                print   "ATTENTION: The new schema is likely to be " \
+                        "incompatible with that of your VigiReport " \
+                        "installation.\n" \
+                        "You should upgrade VigiReport as soon as possible."
+
+            # Dans tous les cas, la migration nécessite de mettre à jour
+            # les autres nœuds dans un modèle maître/esclaves.
+            print   "If you have set up a master/backup replication cluster, " \
+                    "you should also upgrade the model for other nodes " \
+                    "in that cluster."
+
         except ImportError:
             # @TODO: log a warning/error or halt the process
             raise

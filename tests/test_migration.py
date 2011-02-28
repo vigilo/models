@@ -5,7 +5,7 @@ Teste les migrations du modèle.
 
 import unittest
 from controller import setup_db, teardown_db
-from vigilo.models.session import DBSession, ClusteredDDL
+from vigilo.models.session import DBSession
 from vigilo.models import tables
 from vigilo.models.websetup import get_migration_scripts, \
                                 migrate_model, populate_db
