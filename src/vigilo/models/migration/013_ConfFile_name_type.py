@@ -3,7 +3,7 @@
 Ajoute un index sur les noms de fichiers ConfFile, pour gagner en performances.
 """
 
-from vigilo.models.session import DBSession, ClusteredDDL
+from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
