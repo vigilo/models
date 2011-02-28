@@ -35,7 +35,7 @@ class StateName(DeclarativeBase, object):
     )
 
     @classmethod
-    def __statename_mapping(cls):
+    def __statename_mapping(cls, force_refresh):
         """
         Renvoie un dictionnaire avec les associations id <-> nom.
         Cette méthode agit comme un cache, les valeurs sont obtenues
@@ -43,30 +43,27 @@ class StateName(DeclarativeBase, object):
         localement. Les requêtes suivantes utilise la valeur enregistrée
         localement sans effectuer de requêtes auprès du serveur SQL.
         """
-        def inner():
-            """Renvoie un itérateur sur le dictionnaire des associations."""
-            query =   DBSession.query(
-                            cls.idstatename,
-                            cls.statename,
-                        )
-            mapping = dict(query.all())
-            while True:
-                yield mapping
-        return inner().next
+        if not getattr(cls, '_cache', None) or force_refresh:
+            values = DBSession.query(cls.idstatename, cls.statename).all()
+            cls._cache = dict(values)
+            cls._reversed_cache = dict([(v, k) for (k, v) in values])
+        return (cls._cache, cls._reversed_cache)
 
     @classmethod
     def statename_to_value(cls, name):
         """Permet d'obtenir l'identifiant associé à un nom d'état donné."""
-        mapping = cls.__statename_mapping()()
-        for k in mapping:
-            if mapping[k] == name:
-                return k
-        raise KeyError, ("No such statename '%s'" % name)
+        try:
+            return cls.__statename_mapping(False)[1][name]
+        except KeyError:
+            return cls.__statename_mapping(True)[1][name]
 
     @classmethod
     def value_to_statename(cls, value):
         """Permet d'obtenir le nom d'état associé à un identifiant donné."""
-        return cls.__statename_mapping()()[value]
+        try:
+            return cls.__statename_mapping(False)[0][value]
+        except KeyError:
+            return cls.__statename_mapping(True)[0][value]
 
     def __init__(self, **kwargs):
         """Initialise un nom d'état."""
@@ -75,4 +72,3 @@ class StateName(DeclarativeBase, object):
     def __unicode__(self):
         """Renvoie la représentation unicode du nom d'état."""
         return self.statename
-

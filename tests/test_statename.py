@@ -40,6 +40,31 @@ class TestStateName(ModelTest):
     def test_value_to_statename(self):
         """Teste la récupération d'un nom d'état par sa valeur."""
         row = DBSession.query(StateName.idstatename).first()
-        statename = self.obj.value_to_statename(row.idstatename)
+        statename = self.klass.value_to_statename(row.idstatename)
         assert_equals(u'Foo', statename)
 
+    def test_cache(self):
+        """Teste le cache des noms d'états."""
+        row = DBSession.query(StateName).first()
+        oldname = self.klass.value_to_statename(row.idstatename)
+        row.statename = row.statename + u'_'
+        DBSession.add(row)
+        DBSession.flush()
+
+        # On s'assure que le cache est bien utilisé :
+        # ie. il renvoie l'ancien nom de l'état.
+        currname = self.klass.value_to_statename(row.idstatename)
+        assert_equals(oldname, currname)
+
+        # De la même manière, le mapping inverse
+        # fonctionne toujours avec l'ancien nom.
+        assert_equals(row.idstatename, self.klass.statename_to_value(oldname))
+
+        # On provoque un rafraîchissement du cache.
+        assert_equals(row.idstatename, self.klass.statename_to_value(row.statename))
+        try:
+            self.klass.statename_to_value(oldname)
+        except:
+            pass
+        else:
+            raise AssertionError, "The cache was not refreshed"
