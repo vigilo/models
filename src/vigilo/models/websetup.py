@@ -210,8 +210,8 @@ def populate_db(bind, commit=True):
 
 def init_db(*args):
     """
-    Cette fonction est appelée par le script vigiboard-init-db
-    pour initialiser la base de données de Vigiboard.
+    Cette fonction est appelée par le script vigilo-updatedb
+    pour initialiser/mettre à jour la base de données de Vigilo.
     """
     from vigilo.common.conf import settings
     settings.load_module(__name__)
