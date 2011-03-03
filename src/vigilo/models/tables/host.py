@@ -179,23 +179,3 @@ class Host(SupItem):
         @rtype: L{Host}
         """
         return DBSession.query(cls).filter(cls.name == hostname).first()
-
-    def is_allowed_for(self, user, perm_type="r"):
-        """
-        Vérifie que l'utilisateur fourni en paramètre à le droit d'accéder au
-        supitem, avec la permission optionnellement spécifiée.
-
-        @todo: probablement à optimiser, ça fait beaucoup de requêtes.
-
-        @param user: L'utilisateur dont la permission est à tester
-        @type  user: L{User}
-        @param perm_type: Type d'accès, par défaut "r"
-        @type  perm_type: C{str}
-        """
-        if super(Host, self).is_allowed_for(user, perm_type):
-            return True
-        # Accès indirect (par le biais d'un service de l'hôte)
-        for service in self.services:
-            if service.is_allowed_for(user, perm_type):
-                return True
-        return False

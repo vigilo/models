@@ -202,6 +202,33 @@ class LowLevelService(Service):
         except Exception:
             return super(LowLevelService, self).__repr__()
 
+    def is_allowed_for(self, user, perm_type="r"):
+        """
+        Vérifie que l'utilisateur fourni en paramètre à le droit d'accéder
+        au service, avec la permission optionnellement spécifiée.
+        L'accès au service est accordé si l'utilisateur appartient à un
+        groupe qui a explicitement la permission sur ce service, ou bien
+        si l'utilisateur a la permission d'accéder à l'hôte qui héberge
+        ce service.
+
+        @todo: probablement à optimiser, ça fait beaucoup de requêtes.
+        @todo: pour le moment, le paramètre perm_type n'est pas utilisé.
+
+        @param user: L'utilisateur dont la permission est à tester
+        @type  user: L{User}
+        @param perm_type: Type d'accès, par défaut "r"
+        @type  perm_type: C{str}
+        @return: True si l'accès est autorisé, False sinon.
+        @rtype: C{bool}
+        """
+        # On regarde si l'utilisateur a une permission explicite
+        # sur le service (en fait, sur le supitem directement).
+        if super(LowLevelService, self).is_allowed_for(user, perm_type):
+            return True
+
+        # Accès indirect (l'utilisateur a les permissions sur l'hôte).
+        return self.host.is_allowed_for(user, perm_type)
+
 
 class HighLevelService(Service):
     """

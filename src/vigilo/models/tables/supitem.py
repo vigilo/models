@@ -159,14 +159,15 @@ class SupItem(DeclarativeBase, object):
         supitem, avec la permission optionnellement spécifiée.
 
         @todo: probablement à optimiser, ça fait beaucoup de requêtes.
+        @todo: pour le moment, le paramètre perm_type n'est pas utilisé.
 
         @param user: L'utilisateur dont la permission est à tester
         @type  user: L{User}
         @param perm_type: Type d'accès, par défaut "r"
         @type  perm_type: C{str}
+        @return: True si l'accès est autorisé, False sinon.
+        @rtype: C{bool}
         """
-        from vigilo.models.tables.grouphierarchy import GroupHierarchy
-
         if u"managers" in [g.group_name for g in user.usergroups]:
             return True
         direct_groups = [sg[0] for sg in user.supitemgroups() if sg[1]]
