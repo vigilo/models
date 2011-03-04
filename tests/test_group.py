@@ -222,6 +222,16 @@ END;
 
         assert_equal(c2.get_path(), u'/TestRoot/\\//\\\\')
 
+    def test_by_path(self):
+        """Récupération des groupes par leur chemin."""
+        root = self.creator.im_func(u'Test', None)
+        c1 = self.creator.im_func(u'Test', root)
+        c2 = self.creator.im_func(u'Test', c1)
+
+        assert_equal(root, self.klass.by_path(u'/Test'))
+        assert_equal(c1, self.klass.by_path(u'/Test/Test'))
+        assert_equal(c2, self.klass.by_path(u'/Test/Test/Test'))
+
 # On reprend les tests de GraphGroup.
 class TestMapGroup(TestGraphGroup):
     """Test de la table MapGroup"""

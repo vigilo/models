@@ -11,6 +11,7 @@ from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
                                                 GRAPH_GROUP_TABLE, \
                                                 SUPITEM_GROUP_TABLE
+from vigilo.common import parse_path
 
 __all__ = ('SupItemGroup', 'MapGroup', 'GraphGroup')
 
@@ -354,6 +355,31 @@ class Group(DeclarativeBase, object):
                     ).filter(GroupHierarchy.hops == 1
                     ).filter(cls.name == name).first()
 
+    @classmethod
+    def by_path(cls, path):
+        """
+        Renvoie le groupe dont le chemin est L{path}.
+
+        @todo: rendre cette méthode moins coûteuse en terme de requêtes SQL.
+
+        @param cls: La classe à utiliser, c'est-à-dire une classe
+            qui hérite de L{Group}.
+        @type cls: C{class}
+        @param path: Chemin menant jusqu'au groupe.
+        @type path: C{unicode}
+        @return: Le groupe demandé ou C{None}.
+        @rtype: L{Group} ou C{None}
+        """
+        parts = parse_path(path)
+        if parts is None:
+            return None
+
+        parent = None
+        for part in parts:
+            parent = cls.by_parent_and_name(parent, part)
+            if parent is None:
+                return None
+        return parent
 
 class MapGroup(Group):
     """
