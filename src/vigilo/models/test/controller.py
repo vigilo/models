@@ -23,7 +23,7 @@ def teardown_db():
 class ModelTest(object):
     """Base unit test case for the models."""
 
-    klass = None
+    klass = object
     attrs = {}
 
     def __init__(self):
