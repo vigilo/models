@@ -12,5 +12,4 @@ configure_db(settings['database'], 'sqlalchemy_')
 # Ce hack est nécessaire afin de pouvoir utiliser pkg_resources
 # sur le dossier "testdata" et obtenir les scripts de migration
 # de test.
-import tests
-sys.path[0:0] = tests.__path__
+sys.path[0:0] = __path__
