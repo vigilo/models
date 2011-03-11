@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Ajoute un index sur les noms de fichiers ConfFile, pour gagner en performances.
+Utilise un type numérique pour représenter les différents types
+d'éléments supervisés au lieu d'un champ textuel.
+Ce changement permet d'obtenir de meilleures performances lors de
+certaines jointures.
 """
 
 from vigilo.models.session import DBSession, MigrationDDL
