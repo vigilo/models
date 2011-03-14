@@ -1,0 +1,47 @@
+#!bin/python
+# -*- coding: utf-8 -*-
+"""
+Liste les migrations appliquées au modèle par rapport à un numéro
+de version passé en argument (voir #532).
+Pour chaque migration, le script affiche le nom du fichier
+correspondant à la migration et la documentation associée
+à la migration (docstring).
+"""
+import sys
+import pkg_resources
+from vigilo.models.websetup import get_migration_scripts
+
+def main(migration_no):
+    """
+    Affiche toutes les migrations depuis la version L{migration_no}
+    (exclue) jusqu'à la version actuelle sur la sortie standard.
+
+    @param migration_no: Numéro de la migration de départ.
+    @type migration_no: C{int}
+    """
+    module = 'vigilo.models'
+    scripts = get_migration_scripts(module)
+
+    def remove_old_migrations(version):
+        return version > migration_no
+
+    versions = filter(remove_old_migrations, scripts.keys())
+    sorted(versions)
+    for (i, ver) in enumerate(versions):
+        if i > 0:
+            print "-" * 30
+
+        ep = pkg_resources.EntryPoint.parse(
+            'upgrade = %s.migration.%s' % (
+                module,
+                scripts[ver],
+            )).load(require=False)
+
+        print scripts[ver] + '.py'
+        print ep.__doc__
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print "Usage: %s <migration>" % sys.argv[0]
+        sys.exit(1)
+    main(int(sys.argv[1]))
