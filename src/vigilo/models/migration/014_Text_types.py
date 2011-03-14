@@ -5,7 +5,6 @@ au lieu de champs de texte de taille arbitraire (TEXT) lorsqu'une taille
 incontrôlée n'est pas nécessaire.
 Ceci permet un gain très important de performances dans les opérations
 de filtrage/jointure/mise à jour.
-lors.
 """
 
 from vigilo.models.session import DBSession, MigrationDDL
