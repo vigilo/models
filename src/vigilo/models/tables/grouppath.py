@@ -25,16 +25,14 @@ class GroupPath(DeclarativeBase, object):
     __tablename__ = 'group_paths'
 
     idgroup = Column(
+        'idgroup',
         Integer,
-        ForeignKey(
-            'group.idgroup',
-            ondelete='CASCADE',
-            onupdate='CASCADE',
-        ),
+        ForeignKey(Group.idgroup),
         nullable=False,
         primary_key=True,
     )
-    path = Column(Unicode)
+
+    path = Column('path', Unicode)
 
     def __unicode__(self):
         return self.path
