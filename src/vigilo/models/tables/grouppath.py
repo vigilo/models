@@ -80,7 +80,7 @@ DDL(
     # La sous-requête est nécessaire pour contourner une limitation
     # de SQLite vis-à-vis du ORDER BY hops.
     r"""
-    CREATE VIEW IF NOT EXISTS %(db_basename)sgroup_paths AS
+    CREATE VIEW %(db_basename)sgroup_paths AS
         SELECT
             idchild AS idgroup,
             ('/' ||
@@ -107,9 +107,21 @@ DDL(
 ).execute_at('after-create', GroupPath.__table__)
 
 
-# Destruction de la vue -- la syntaxe semble interopérable.
 DDL(
     "DROP VIEW IF EXISTS %(db_basename)sgroup_paths",
+    on='postgres',
+    context={
+        'db_basename': DB_BASENAME,
+    },
+).execute_at('before-drop', GroupPath.__table__)
+
+# Les anciennes versions (< 3.3.8) de SQLite ne supportent pas
+# la condition IF EXISTS. Sous RHEL 5.5, c'est SQLite 3.3.6 qui
+# est packagé.
+# Pour plus d'information : http://www.sqlite.org/changes.html
+DDL(
+    "DROP VIEW %(db_basename)sgroup_paths",
+    on='sqlite',
     context={
         'db_basename': DB_BASENAME,
     },
