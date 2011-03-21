@@ -3,15 +3,15 @@
 """Modèle pour la table Group"""
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
-from sqlalchemy.orm import relation, aliased, EXT_CONTINUE, exc
-from sqlalchemy.orm.interfaces import MapperExtension
-from sqlalchemy.sql.expression import exists, not_
+from sqlalchemy.orm import relation, aliased, exc
+from sqlalchemy.sql.expression import exists, not_, and_
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
                                                 GRAPH_GROUP_TABLE, \
                                                 SUPITEM_GROUP_TABLE
-from vigilo.common import parse_path
+from vigilo.models.tables.grouphierarchy import GroupHierarchy
+from sqlalchemy.ext.associationproxy import association_proxy
 
 __all__ = ('SupItemGroup', 'MapGroup', 'GraphGroup')
 
@@ -54,6 +54,10 @@ class Group(DeclarativeBase, object):
         'polymorphic_on': _grouptype,
     }
 
+    # @FIXME: fait échouer les tests de VigiMap lorsque lazy=True.
+    _path_obj = relation('GroupPath', uselist=False, lazy=False)
+    path = association_proxy('_path_obj', 'path')
+
     datapermissions = relation('DataPermission', cascade="all",
                       back_populates='group', lazy=True)
 
@@ -64,7 +68,6 @@ class Group(DeclarativeBase, object):
         @param kwargs: Un dictionnaire avec les informations sur le groupe.
         @type kwargs: C{dict}
         """
-        from vigilo.models.tables.grouphierarchy import GroupHierarchy
         loop = GroupHierarchy(parent=self, child=self, hops=0)
         DBSession.add(loop)
         super(Group, self).__init__(**kwargs)
@@ -81,44 +84,12 @@ class Group(DeclarativeBase, object):
     def __repr__(self):
         return u"<%s \"%s\">" % (self.__class__.__name__, unicode(self.name))
 
-    # Chemin d'accès
-
-    def get_path(self):
-        """
-        Renvoie le chemin d'accès jusqu'au groupe.
-
-        @return: Chemin d'accès jusqu'à ce groupe.
-        @rtype: C{str}
-        """
-        # mise en cache
-        path = getattr(self, "_path", None)
-        if path:
-            return path
-        from .grouphierarchy import GroupHierarchy
-        parts = DBSession.query(
-                Group.name
-            ).join(
-                (GroupHierarchy, GroupHierarchy.idparent == Group.idgroup),
-            ).filter(GroupHierarchy.idchild == self.idgroup
-            ).order_by(GroupHierarchy.hops.desc()
-            ).all()
-        parts = [
-                    p.name.replace('\\', '\\\\').replace('/', '\\/')
-                    for p in parts
-                ]
-        # Force la génération d'un chemin absolu (commençant par '/').
-        parts.insert(0, '')
-        self._path = '/'.join(parts)
-        return self._path
-    path = property(get_path)
-
     # Parents
 
     def has_parent(self):
         """
         Renvoie True si ce groupe a un parent.
         """
-        from .grouphierarchy import GroupHierarchy
         return (DBSession.query(GroupHierarchy)\
             .filter(GroupHierarchy.idchild == self.idgroup)\
             .filter(GroupHierarchy.hops > 0)\
@@ -126,7 +97,6 @@ class Group(DeclarativeBase, object):
 
     def __get_parent(self):
         """Récupère l'instance parente du groupe courant."""
-        from .grouphierarchy import GroupHierarchy
         try:
             parent = DBSession.query(self.__class__).join(
                     (GroupHierarchy, GroupHierarchy.idparent == \
@@ -151,8 +121,6 @@ class Group(DeclarativeBase, object):
             alors cette association est rompue et une nouvelle hiérarchie
             de groupe est construite pour le nouveau parent.
         """
-        from .grouphierarchy import GroupHierarchy
-
         # On récupère tous nos enfants, petits-enfants, etc..
         children = DBSession.query(GroupHierarchy).filter(
                         GroupHierarchy.parent == self)
@@ -194,7 +162,6 @@ class Group(DeclarativeBase, object):
         @return: Parent de plus haut niveau
         @rtype: L{Group}
         """
-        from .grouphierarchy import GroupHierarchy
         top_parent = DBSession.query(Group
             ).join(
                 (GroupHierarchy, GroupHierarchy.idparent == Group.idgroup),
@@ -212,7 +179,6 @@ class Group(DeclarativeBase, object):
         """
         Renvoie True si le groupe a des enfants.
         """
-        from .grouphierarchy import GroupHierarchy
         return ( DBSession.query(self.__class__).join(
             (GroupHierarchy, GroupHierarchy.idchild == self.__class__.idgroup),
         ).filter(GroupHierarchy.idparent == self.idgroup
@@ -223,7 +189,6 @@ class Group(DeclarativeBase, object):
         """
         Renvoie la liste des enfants du groupe.
         """
-        from .grouphierarchy import GroupHierarchy
         children = DBSession.query(self.__class__).join(
                 (GroupHierarchy, GroupHierarchy.idchild == \
                     self.__class__.idgroup),
@@ -245,7 +210,6 @@ class Group(DeclarativeBase, object):
         Renvoie la liste des descendants du groupe, c'est-à-dire
         la liste de ses fils, petit-fils, etc.
         """
-        from .grouphierarchy import GroupHierarchy
         children = DBSession.query(
                 self.__class__
             ).distinct(
@@ -260,8 +224,6 @@ class Group(DeclarativeBase, object):
         Supprime la relation de descendance entre ce groupe
         et tous ses descendants.
         """
-        from .grouphierarchy import GroupHierarchy
-
         children_ids = DBSession.query(
                 GroupHierarchy.idchild
             ).filter(GroupHierarchy.idparent == self.idgroup
@@ -282,8 +244,6 @@ class Group(DeclarativeBase, object):
         @return: Les groupes de premier niveau.
         @rtype: L{list}
         """
-        from .grouphierarchy import GroupHierarchy
-
         # On récupère tous les groupes qui ont un parent.
         children = DBSession.query(cls).distinct(
             ).join(
@@ -327,8 +287,6 @@ class Group(DeclarativeBase, object):
         @return: Le groupe demandé.
         @rtype: L{Group} ou C{None}
         """
-        from .grouphierarchy import GroupHierarchy
-
         # Recherche d'un groupe au sommet de la hiérarchie.
         if parent is None:
             cls_alias1 = aliased(cls)
@@ -370,16 +328,15 @@ class Group(DeclarativeBase, object):
         @return: Le groupe demandé ou C{None}.
         @rtype: L{Group} ou C{None}
         """
-        parts = parse_path(path)
-        if parts is None:
-            return None
-
-        parent = None
-        for part in parts:
-            parent = cls.by_parent_and_name(parent, part)
-            if parent is None:
-                return None
-        return parent
+        from .grouppath import GroupPath
+        return DBSession.query(
+                cls
+            ).join(
+                (GroupPath, and_(
+                    GroupPath.idgroup == cls.idgroup,
+                    GroupPath.path == path,
+                )),
+            ).first()
 
 class MapGroup(Group):
     """

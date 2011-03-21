@@ -45,8 +45,10 @@ class TestGraphGroup(ModelTest):
 CREATE TRIGGER foobar
 BEFORE DELETE ON %(group)s
 FOR EACH ROW BEGIN
-    DELETE FROM %(grouphierarchy)s WHERE %(grouphierarchy)s.idparent = OLD.idgroup;
-    DELETE FROM %(grouphierarchy)s WHERE %(grouphierarchy)s.idchild = OLD.idgroup;
+    DELETE FROM %(grouphierarchy)s
+        WHERE %(grouphierarchy)s.idparent = OLD.idgroup;
+    DELETE FROM %(grouphierarchy)s
+        WHERE %(grouphierarchy)s.idchild = OLD.idgroup;
 END;
             """,
             on='sqlite',
@@ -214,13 +216,12 @@ END;
         assert_equal(child, self.klass.by_parent_and_name(root, u'TestChild'))
         assert_equal(fake, self.klass.by_parent_and_name(root, u'TestRoot'))
 
-    def test_get_path(self):
+    def test_path(self):
         """Génération d'un chemin absolu vers le groupe."""
         root = self.creator.im_func(u'TestRoot', None)
         c1 = self.creator.im_func(u'/', root)
         c2 = self.creator.im_func(u'\\', c1)
-
-        assert_equal(c2.get_path(), u'/TestRoot/\\//\\\\')
+        assert_equal(c2.path, u'/TestRoot/\\//\\\\')
 
     def test_by_path(self):
         """Récupération des groupes par leur chemin."""
@@ -248,5 +249,5 @@ class TestSupItemGroups(TestGraphGroup):
     klass = SupItemGroup
     creator = add_supitemgroup
     attrs = {
-        'name': u'supitemgorup',
+        'name': u'supitemgroup',
     }

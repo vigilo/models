@@ -8,7 +8,7 @@ from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.orm.exc import NoResultFound
 
 from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
-from vigilo.models.tables.group import Group
+#from vigilo.models.tables.group import Group
 
 class GroupHierarchy(DeclarativeBase, object):
     """
@@ -36,7 +36,7 @@ class GroupHierarchy(DeclarativeBase, object):
     idparent = Column(
         Integer,
         ForeignKey(
-            Group.idgroup,
+            'group.idgroup',
             ondelete='CASCADE',
             onupdate='CASCADE',
         ),
@@ -47,7 +47,7 @@ class GroupHierarchy(DeclarativeBase, object):
     idchild = Column(
         Integer,
         ForeignKey(
-            Group.idgroup,
+            'group.idgroup',
             ondelete='CASCADE',
             onupdate='CASCADE',
         ),
@@ -70,7 +70,7 @@ class GroupHierarchy(DeclarativeBase, object):
         """
         Initialise l'instance avec les informations sur une partie de la
         hiérarchie des groupes.
-        
+
         @param kwargs: Un dictionnaire avec les informations
             sur la hiérarchie des groupes.
         @type kwargs: C{dict}
@@ -91,4 +91,3 @@ class GroupHierarchy(DeclarativeBase, object):
             gh = cls(hops=hops, **kw)
             DBSession.add(gh)
             return gh
-

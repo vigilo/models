@@ -18,10 +18,12 @@ def get_migration_scripts(module):
 
     @param module: Nom du module à partir duquel les migrations seront
         chargées. Un sous-module "migration" doit exister sous ce module,
-        contenant des scripts de migration pour le modèle. Les scripts
-        doivent être nommés "<version>_<description>.py". Par exemple :
-        "001_User_Email_Suppression_contrainte_not_null.py".
+        contenant des scripts de migration pour le modèle.
+        Les scripts doivent être nommés "<version>_<description>.py".
+        Par exemple : "001_User_Email_Suppression_contrainte_not_null.py".
     @type  module: C{str}
+    @return: Dictionnaire des migrations disponibles.
+    @rtype: C{dict}
     """
     files = pkg_resources.resource_listdir(module, 'migration')
     scripts = {}
@@ -38,9 +40,16 @@ def get_migration_scripts(module):
     return scripts
 
 class MigrationActions(object):
+    """
+    Conteneur permettant d'indiquer les actions à effectuer
+    suite à la migration du modèle.
+    Chaque action est représentée par un drapeau positionné
+    à C{True} lorsque l'action associée doit être effectuée.
+    """
     def __init__(self):
         self.deploy_force = False
         self.upgrade_vigireport = False
+        self.was_upgraded = False
 
 def migrate_model(bind, module, scripts, stop_at=None):
     """
@@ -70,102 +79,114 @@ def migrate_model(bind, module, scripts, stop_at=None):
 
     module = unicode(module)
 
-    print u"Searching for already installed version of '%s'" % module
+    print (u"Searching for already installed version of '%s' ..." % module),
     current_version = DBSession.query(tables.Version.version).filter(
                             tables.Version.name == module
                         ).scalar()
 
 
-    if current_version:
-        print u"Version %(version)d of %(module)s is already installed" % {
-            'version': current_version,
-            'module': module,
-        }
+    # Si aucune version n'est installée pour le moment,
+    # alors on ne fait rien : populate_db() se chargera
+    # de créer et de remplir les tables pour nous.
+    if not current_version:
+        print "none found"
+        return None
 
-        try:
-            versions = scripts.keys()
-            sorted(versions)
-            actions = MigrationActions()
-            for ver in versions:
-                if ver <= current_version or ver > stop_at:
-                    continue
+    print "found version %d" % current_version
 
-                print u"Upgrading %(module)s to version %(version)d using " \
-                    "the following changeset: '%(script)s'" % {
-                    'module': module,
-                    'version': ver,
-                    'script': scripts[ver],
-                }
+    actions = MigrationActions()
+    try:
+        versions = scripts.keys()
+        sorted(versions)
+        for ver in versions:
+            if ver <= current_version or ver > stop_at:
+                continue
 
-                transaction.begin()
+            print u"Upgrading %(module)s to version %(version)d using " \
+                "the following changeset: '%(script)s'" % {
+                'module': module,
+                'version': ver,
+                'script': scripts[ver] + '.py',
+            }
 
-                try:
-                    # On charge le script correspondant à la version en
-                    # cours de traitement, à partir d'un dossier "migration"
-                    # situé dans le répertoire du module donné en argument.
-                    ep = pkg_resources.EntryPoint.parse(
-                        'upgrade = %s.migration.%s:upgrade' % (
-                            module,
-                            scripts[ver],
-                        )).load(require=False)
+            transaction.begin()
 
-                    ep(bind, actions)
-                    version = tables.Version()
-                    version.name = module
-                    version.version = ver
-                    DBSession.merge(version)
-                    DBSession.flush()
-                except:
-                    transaction.abort()
-                    raise
-                else:
-                    transaction.commit()
+            try:
+                # On charge le script correspondant à la version en
+                # cours de traitement, à partir d'un dossier "migration"
+                # situé dans le répertoire du module donné en argument.
+                ep = pkg_resources.EntryPoint.parse(
+                    'upgrade = %s.migration.%s:upgrade' % (
+                        module,
+                        scripts[ver],
+                    )).load(require=False)
 
-            # La migration nécessite de redéployer le parc.
-            if actions.deploy_force:
-                print   "ATTENTION: Although the schema migration completed " \
-                        "successfully,\n" \
-                        "you should re-deploy your configuration using " \
-                        "option --force to finish the migration."
-
-            # La migration nécessite de mettre à jour VigiReport.
-            if actions.upgrade_vigireport:
-                print   "ATTENTION: The new schema is likely to be " \
-                        "incompatible with that of your VigiReport " \
-                        "installation.\n" \
-                        "You should upgrade VigiReport as soon as possible."
-
-            # Dans tous les cas, la migration nécessite de mettre à jour
-            # les autres nœuds dans un modèle maître/esclaves.
-            print   "If you have set up a master/backup replication cluster, " \
-                    "you should also upgrade the model for other nodes " \
-                    "in that cluster."
-
-        except ImportError:
-            # @TODO: log a warning/error or halt the process
-            raise
-        return True
-    return False
+                ep(bind, actions)
+                version = tables.Version()
+                version.name = module
+                version.version = ver
+                DBSession.merge(version)
+                DBSession.flush()
+            except:
+                transaction.abort()
+                raise
+            else:
+                transaction.commit()
+                actions.was_upgraded = True
+    except ImportError:
+        # @TODO: log a warning/error or halt the process
+        raise
+    return actions
 
 def populate_db(bind, commit=True):
     """Placez les commandes pour peupler la base de données ici."""
-    import logging
-    LOGGER = logging.getLogger(__name__)
-
     from vigilo.models.session import DBSession, metadata
 
     # Chargement du modèle.
     from vigilo.models import tables
+    from vigilo.models.tables.grouppath import GroupPath
 
     # Création des tables
-    print "Creating tables"
-    metadata.create_all(bind=bind)
+    print "Creating required tables"
+
+    # La vue GroupPath dépend de Group et GroupHierarchy.
+    # SQLAlchemy ne peut pas détecter correctement la dépendance.
+    # On crée le schéma en 2 fois pour contourner ce problème.
+    mapped_tables = metadata.tables.copy()
+    del mapped_tables[GroupPath.__tablename__]
+    metadata.create_all(bind=bind, tables=mapped_tables.itervalues())
+    metadata.create_all(bind=bind, tables=[GroupPath.__table__])
 
     module = 'vigilo.models'
     scripts = get_migration_scripts(module)
     max_version = max(scripts.keys())
+    actions = migrate_model(bind, module, scripts)
 
-    if not migrate_model(bind, module, scripts):
+    # S'il y a eu une migration (potentiellement vide),
+    # on affiche les éventuels messages d'information associés.
+    if actions:
+        # La migration nécessite de redéployer le parc.
+        if actions.deploy_force:
+            print   "ATTENTION: Although the schema migration completed " \
+                    "successfully,\n" \
+                    "you should re-deploy your configuration using " \
+                    "option --force to finish the migration."
+
+        # La migration nécessite de mettre à jour VigiReport.
+        if actions.upgrade_vigireport:
+            print   "ATTENTION: The new schema is likely to be " \
+                    "incompatible with that of your VigiReport " \
+                    "installation.\n" \
+                    "You should upgrade VigiReport as soon as possible."
+
+        # Dans tous les cas, une migration nécessite de mettre à jour
+        # les autres nœuds dans un modèle maître/esclaves.
+        if actions.was_upgraded:
+            print   "If you have set up a master/backup replication cluster, " \
+                    "you should also upgrade the model on the other nodes."
+
+    # Sinon, c'est que le modèle n'existait pas, donc on le crée.
+    else:
         print "Setting up the generic tables"
         manager = tables.User()
         manager.user_name = u'manager'

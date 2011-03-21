@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
 """Unit test suite for the models of the application."""
-from os import path, environ
-import sys
-import nose
 from nose.tools import assert_equals
-
 from vigilo.models.session import DBSession, metadata
 from vigilo.models.tables import StateName
+from vigilo.models.tables.grouppath import GroupPath
 
 __all__ = ['ModelTest', 'setup_db', 'teardown_db']
 
 #Create an empty database before we start our tests for this module
 def setup_db():
     """Crée toutes les tables du modèle dans la BDD."""
-    metadata.create_all()
+    # GroupPath dépend de Group & GroupHierarchy,
+    # mais on n'a aucun moyen de le signaler à SQLAlchemy.
+    # Résultat dans SQLite, les tables se retrouveraient créées
+    # dans le mauvais ordre.
+    tables = metadata.tables.copy()
+    del tables[GroupPath.__tablename__]
+    metadata.create_all(tables=tables.itervalues())
+    metadata.create_all(tables=[GroupPath.__table__])
 
 #Teardown that database
 def teardown_db():
