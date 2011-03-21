@@ -3,7 +3,7 @@
 """Modèle pour la table Service"""
 from sqlalchemy import Column
 from sqlalchemy.types import UnicodeText, Unicode, Integer
-from sqlalchemy.orm import relation, column_property
+from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.orm import EXT_CONTINUE
 

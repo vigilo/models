@@ -97,7 +97,6 @@ def add_highlevelservice(servicename, operator="&", message="", priority=1):
     servicename = unicode(servicename)
     s = tables.HighLevelService.by_service_name(servicename)
     if not s:
-        # @TODO: traiter l'opérateur de dépendances.
         s = tables.HighLevelService(
                 servicename=servicename,
                 priority=priority,
@@ -107,9 +106,29 @@ def add_highlevelservice(servicename, operator="&", message="", priority=1):
                 critical_threshold=150)
         DBSession.add(s)
         DBSession.flush()
+        add_dependency_group(None, servicename, 'hls', operator)
     return s
 
 def add_dependency_group(host, service, role, operator='&'):
+    """
+    Ajoute un groupe de dépendances.
+
+    @param host: Hôte sur lequel porte le groupe de dépendances
+        ou None si le groupe porte sur un service de haut niveau.
+    @type host: C{basestring} ou None
+    @param service: Service de l'hôte sur lequel porte le groupe
+        de dépendances ou None s'il porte sur l'hôte lui-même.
+    @type service: C{basestring} ou None
+    @param role: Rôle de ce groupe de dépendances.
+        Peut valoir "hls" pour indiquer qu'il s'agit des dépendances
+        d'un service de haut niveau, ou "topology" pour indiquer
+        qu'il s'agit de dépendances topologiques.
+    @type role: C{str}
+    @param operator: Type d'opérateur de dépendance.
+        Peut valoir "+" (type PLUS), "&" (type ET) ou "|" (type OU).
+    @note: Le type d'opérateur de dépendance n'a de sens que
+        lorsque L{role} vaut "hls".
+    """
     if role != 'hls' and role != 'topology':
         raise ValueError('Valid roles: "hls" or "topology"')
     if host is None:        # HLS
@@ -119,6 +138,12 @@ def add_dependency_group(host, service, role, operator='&'):
     else:                   # LLS
         dependent = tables.LowLevelService.by_host_service_name(
                         unicode(host), unicode(service))
+
+    dg = DBSession.query(tables.DependencyGroup).filter(
+        tables.DependencyGroup.dependent == dependent).first()
+    if dg:
+        return dg
+
     group = tables.DependencyGroup(
         operator=unicode(operator),
         role=unicode(role),
@@ -563,6 +588,18 @@ def add_node_hls(hls, label, map, widget="ServiceElement",
     return n
 
 def add_mapsegment(from_node, to_node, map):
+    """
+    Ajoute un segment entre deux éléments d'une carte.
+
+    @param from_node: Nœud de départ du segment.
+    @type from_node: L{tables.MapNode} ou C{basestring}
+    @param to_node: Nœud d'arrivée du segment.
+    @type to_node: L{tables.MapNode} ou C{basestring}
+    @param map: Carte sur laquelle le segment doit être ajouté.
+    @type map: L{tables.Map}
+    @return: Le segment nouvellement créé.
+    @rtype: L{tables.MapSegment}
+    """
     if isinstance(from_node, basestring):
         from_node = tables.MapNode.by_map_label(map, unicode(from_node))
     if isinstance(to_node, basestring):
@@ -600,6 +637,29 @@ def add_mapllslink(from_node, to_node, lls, map):
 
 def add_perfdatasource(name, host, label=None, max=None,
     vigiloserver="localhost"):
+    """
+    Ajoute un indicateur de performances.
+
+    @param name: Nom de l'indicateur à créer.
+    @type name: C{basestring}
+    @param host: Nom ou instance de l'hôte sur lequel portera l'indicateur.
+    @type host: C{basestring} ou L{tables.Host}
+    @param label: Libellé de l'indicateur (dans VigiRRD)
+        ou None pour utiliser le nom de l'indicateur
+        en guise de libellé.
+    @type label: C{basestring} ou None
+    @param max: Valeur maximale pouvant être atteinte
+        par cette indicateur. Cette valeur permet de calculer
+        le pourcentage d'utilisation de la ressource associée
+        à l'indicateur.
+    @type max: C{float}
+    @param vigiloserver: Serveur Vigilo qui créera le graphe
+        correspondant à cet indicateur. VigiRRD doit être
+        installé sur ce serveur.
+    @type vigiloserver: C{basestring} ou L{tables.VigiloServer}
+    @return: L'indicateur nouvellement créé.
+    @rtype: L{tables.PerfDataSource}
+    """
     name = unicode(name)
     if isinstance(host, basestring):
         host = tables.Host.by_host_name(unicode(host))
@@ -619,6 +679,19 @@ def add_perfdatasource(name, host, label=None, max=None,
     return ds
 
 def add_graph(name, vlabel="", template="graph"):
+    """
+    Ajoute un graphe.
+
+    @param name: Nom du graphe à ajouter.
+    @type name: C{basestring}
+    @param vlabel: Libellé de l'axe vertical (axe des ordonnées).
+    @type vlabel: C{basestring}
+    @param template: Le modèle à utiliser pour représenter
+        le graphe (dans VigiRRD).
+    @type template: C{basestring}
+    @return: Le graphe nouvellement créé.
+    @rtype: L{tables.Graph}
+    """
     name = unicode(name)
     gr = tables.Graph(name=name,
                       vlabel=unicode(vlabel),

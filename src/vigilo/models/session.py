@@ -23,7 +23,6 @@ from zope.sqlalchemy import ZopeTransactionExtension
 from sqlalchemy.orm.scoping import ScopedSession
 from sqlalchemy.schema import DDL, _bind_or_error
 from sqlalchemy.sql import expression
-from sqlalchemy.exc import ProgrammingError
 
 import vigilo.models.configure as configure
 

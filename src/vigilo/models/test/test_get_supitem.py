@@ -5,7 +5,8 @@ from nose.tools import assert_equals
 from controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Host, LowLevelService, HighLevelService, SupItem, StateName
+from vigilo.models.tables import Host, LowLevelService, HighLevelService, \
+                                    SupItem, StateName
 
 class TestGetSupItem(unittest.TestCase):
     """Test de la méthode get_supitem de la classe 'SupItem'"""

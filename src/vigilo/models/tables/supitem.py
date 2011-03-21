@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.orm import relation, aliased
 from sqlalchemy.orm.interfaces import MapperExtension
 from sqlalchemy.orm import EXT_CONTINUE
-from sqlalchemy.types import Integer, Unicode
+from sqlalchemy.types import Integer
 from sqlalchemy.sql import functions
 
 from vigilo.models.session import DeclarativeBase, DBSession

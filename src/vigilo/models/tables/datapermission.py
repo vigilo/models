@@ -6,7 +6,7 @@ from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
 
-from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
+from vigilo.models.session import DeclarativeBase, ForeignKey
 from vigilo.models.tables.usergroup import UserGroup
 from vigilo.models.tables.group import Group
 
@@ -56,4 +56,3 @@ class DataPermission(DeclarativeBase, object):
 
     def __unicode__(self):
         return "<%s - %s>" % (unicode(self.group), unicode(self.usergroup))
-

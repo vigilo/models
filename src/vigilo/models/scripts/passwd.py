@@ -16,6 +16,10 @@ __all__ = (
 )
 
 def change_password(*args):
+    """
+    Change le mot de passe d'un utilisateur
+    dans la base de données de Vigilo.
+    """
 
     from vigilo.common.gettext import translate
     _ = translate(__name__)
@@ -28,7 +32,6 @@ def change_password(*args):
     parser.add_option("-c", "--config", action="store", dest="config",
         type="string", default=None, help=_("Load configuration from "
         "this file."))
-    parser
 
     (options, args) = parser.parse_args()
 
@@ -39,7 +42,7 @@ def change_password(*args):
         settings.load_module(__name__)
 
     from vigilo.common.logging import get_logger
-    LOGGER = get_logger(__name__)
+    logger = get_logger(__name__)
 
     if len(args) > 1:
         print _('Too many arguments')
@@ -63,7 +66,7 @@ def change_password(*args):
         username = args[0]
 
     msg = _("Changing Vigilo password for user '%s'.")
-    LOGGER.info(msg, username)
+    logger.info(msg, username)
     print msg % username
 
     # Si l'utilisateur n'est pas "root" (UID 0),
@@ -98,12 +101,12 @@ def change_password(*args):
         transaction.commit()
     except Exception:
         msg = _("An exception occurred while updating password for user '%s'.")
-        LOGGER.exception(msg, username)
+        logger.exception(msg, username)
         print msg % username
         sys.exit(1)
 
     # Si on arrive ici, c'est que tout s'est bien passé.
     msg = _("Successfully updated password for user '%s'.")
-    LOGGER.info(msg, username)
+    logger.info(msg, username)
     print msg % username
     sys.exit(0)

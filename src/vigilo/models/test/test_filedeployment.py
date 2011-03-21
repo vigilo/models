@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Test suite for ServiceGroup class"""
+"""Tests pour la classe FileDeployment."""
 import os
 import tempfile
 import shutil
@@ -14,6 +14,8 @@ from controller import ModelTest
 
 
 class TestFileDeployment(ModelTest):
+    """Tests pour la classe FileDeployment."""
+
     tmpdir = None
     klass = FileDeployment
     attrs = {
@@ -33,7 +35,7 @@ class TestFileDeployment(ModelTest):
         f = open(self.attrs['src_path'], 'w')
         f.write("this is a sample file to deploy")
         f.close()
-        
+
         super(TestFileDeployment, self).setup()
 
     def tearDown(self):
@@ -46,11 +48,10 @@ class TestFileDeployment(ModelTest):
         obj = DBSession.query(self.klass).one()
         obj.process_hashcode()
         DBSession.flush()
-        
+
         # checks the hashcode
         shaob = hashlib.sha1(os.path.join(self.tmpdir, u'sample_dep.src'))
         shaob.update('sample_dep.dest')
         shaob.update("this is a sample file to deploy")
-        
-        assert_equal(u'' + shaob.hexdigest(), obj.hashcode)
 
+        assert_equal(u'' + shaob.hexdigest(), obj.hashcode)

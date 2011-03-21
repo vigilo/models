@@ -1,17 +1,28 @@
 # -*- coding: utf-8 -*-
 
 """
-Module permettant de créer facilement des générateur de données factices pour
-les démonstrations.
+Module permettant de créer facilement des générateurs de données factices
+pour les démonstrations.
 """
 
 from pkg_resources import resource_listdir, working_set
 
-__all__ = ("samples",)
+__all__ = ("samples", )
 
 samples = {}
 
 def list_samples(module):
+    """
+    Renvoie la liste des scénarios de démonstration
+    fournis par un module donné.
+
+    @param module: Module à interroger.
+    @type module: C{str}
+    @return: Dictionnaire contenant l'emplacement des différents
+        scénarios de démonstration fournis par le module,
+        indexés par leur nom.
+    @rtype: C{dict}
+    """
     mod_samples = {}
     for subfile in resource_listdir(module, ""):
         if not subfile.endswith(".py"):
@@ -31,6 +42,12 @@ for entry in working_set.iter_entry_points("vigilo.models.demo", "samples"):
 
 
 def run_demo():
+    """
+    Insère des données d'exemple dans la base de données
+    à partir d'un scénario de démonstration.
+    Plusieurs scénarios différents peuvent être cumulés
+    en passant leurs différents noms à ce programme.
+    """
     import optparse
     from vigilo.common.gettext import translate_narrow
     _ = translate_narrow(__name__)

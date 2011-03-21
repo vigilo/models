@@ -12,6 +12,6 @@ def upgrade(migrate_engine, actions):
     @type actions: C{Engine}
     @param actions: Objet indiquant les actions supplémentaires qui devront
         être menées suite à la migration du schéma.
-    @type actions: C{vigilo.models.websetup.MigrationActions}
+    @type actions: C{MigrationActions}
     """
     pass

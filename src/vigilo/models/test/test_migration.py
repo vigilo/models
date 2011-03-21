@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Teste les migrations du modèle.
+Teste le fonctionnement général du mécanisme
+de migration de la base de données.
 """
 
 import unittest
@@ -12,6 +13,8 @@ from vigilo.models.websetup import get_migration_scripts, \
 import transaction
 
 class TestMigration(unittest.TestCase):
+    """Teste le fonctionnement général des migrations."""
+
     def setUp(self):
         setup_db()
 
@@ -36,7 +39,7 @@ class TestMigration(unittest.TestCase):
         """Teste la migration (partielle/totale) du modèle."""
 
         # Recherche des scripts de migration dans le dossier des tests.
-        module = u'testdata'
+        module = u'vigilo.models.test.testdata'
         scripts = get_migration_scripts(module)
 
         expected_scripts = {

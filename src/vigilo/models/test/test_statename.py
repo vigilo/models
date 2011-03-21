@@ -58,13 +58,19 @@ class TestStateName(ModelTest):
 
         # De la même manière, le mapping inverse
         # fonctionne toujours avec l'ancien nom.
-        assert_equals(row.idstatename, self.klass.statename_to_value(oldname))
+        assert_equals(
+            row.idstatename,
+            self.klass.statename_to_value(oldname)
+        )
 
         # On provoque un rafraîchissement du cache.
-        assert_equals(row.idstatename, self.klass.statename_to_value(row.statename))
+        assert_equals(
+            row.idstatename,
+            self.klass.statename_to_value(row.statename)
+        )
         try:
             self.klass.statename_to_value(oldname)
-        except:
+        except Exception:
             pass
         else:
             raise AssertionError, "The cache was not refreshed"

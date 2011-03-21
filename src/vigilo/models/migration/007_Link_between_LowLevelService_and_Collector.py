@@ -10,11 +10,24 @@ from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
+    """
+    Migre le modèle.
+
+    @param migrate_engine: Connexion à la base de données,
+        pouvant être utilisée durant la migration.
+    @type migrate_engine: C{Engine}
+    @param actions: Conteneur listant les actions à effectuer
+        lorsque cette migration aura été appliquée.
+    @type actions: C{MigrationActions}
+    """
+
     MigrationDDL(
         [
             "ALTER TABLE %(fullname)s ADD COLUMN idcollector INTEGER",
-            "ALTER TABLE %(fullname)s ADD CONSTRAINT %(fullname)s_idcollector_fkey "
-                "FOREIGN KEY(idcollector) REFERENCES %(db_basename)ssupitem(idsupitem) "
+            "ALTER TABLE %(fullname)s "
+                "ADD CONSTRAINT %(fullname)s_idcollector_fkey "
+                "FOREIGN KEY(idcollector) "
+                "REFERENCES %(db_basename)ssupitem(idsupitem) "
                 "ON UPDATE CASCADE ON DELETE SET NULL",
         ],
         # Le nom de la contrainte dépend du préfixe utilisé.

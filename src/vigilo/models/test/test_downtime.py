@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Test suite for Downtime class"""
 from datetime import datetime
-from nose.tools import assert_equals
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, LowLevelService, User

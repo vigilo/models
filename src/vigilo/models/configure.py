@@ -52,16 +52,16 @@ def configure_db(config_obj, prefix, db_basename=None):
 
     # Paramétrage du modèle. Doit être fait en tout premier.
     # vigilo.models.session dépend de cette initialisation.
-    from vigilo.models import configure
+    global DB_BASENAME, DEFAULT_LANG, HASHING_FUNC, EXTERNAL_AUTH
 
     # Préfixe des noms de tables.
-    configure.DB_BASENAME = config_obj.get('db_basename', '')
+    DB_BASENAME = config_obj.get('db_basename', '')
 
     # Langue par défaut des utilisateurs.
-    configure.DEFAULT_LANG = config_obj.get('lang', None)
+    DEFAULT_LANG = config_obj.get('lang', None)
 
     # Fonction de hachage des mots de passe.
-    configure.HASHING_FUNC = config_obj.get(
+    HASHING_FUNC = config_obj.get(
         'password_hashing_function', None)
 
     # Utilisation ou non d'une authentification externe (ex: Kerberos).
@@ -73,9 +73,9 @@ def configure_db(config_obj, prefix, db_basename=None):
             'external_auth' in config_obj and config_obj['external_auth'] or \
             'use_kerberos' in config_obj and config_obj['use_kerberos'] or \
             None
-        configure.EXTERNAL_AUTH = asbool(external_auth)
+        EXTERNAL_AUTH = asbool(external_auth)
     else:
-        configure.EXTERNAL_AUTH = \
+        EXTERNAL_AUTH = \
             'external_auth' in config_obj and \
             config_obj.as_bool('external_auth') or \
             'use_kerberos' in config_obj and \

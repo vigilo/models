@@ -9,7 +9,7 @@ settings.load_module(__name__)
 from controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import *
+from vigilo.models import tables
 from vigilo.models.demo import functions as fct
 
 class DeleteCascadeTest(unittest.TestCase):
@@ -18,7 +18,7 @@ class DeleteCascadeTest(unittest.TestCase):
     def setUp(self):
         """Call before every test case."""
         setup_db()
-        DBSession.add(StateName(statename=u'OK', order=0))
+        DBSession.add(tables.StateName(statename=u'OK', order=0))
         fct.add_mapgroup('Root')
         DBSession.flush()
 
@@ -39,9 +39,9 @@ class DeleteCascadeTest(unittest.TestCase):
         DBSession.flush()
         # On vérifie que la suppression de l'hôte a bien supprimé ses
         # représentations cartographiques
-        mn_count = DBSession.query(MapNode).count()
+        mn_count = DBSession.query(tables.MapNode).count()
         self.assertEquals(mn_count, 0)
-        mnh_count = DBSession.query(MapNodeHost).count()
+        mnh_count = DBSession.query(tables.MapNodeHost).count()
         self.assertEquals(mnh_count, 0)
 
     def test_lls_mapnode(self):
@@ -56,11 +56,11 @@ class DeleteCascadeTest(unittest.TestCase):
         DBSession.flush()
         # On vérifie que la suppression du lls a bien supprimé ses
         # représentations cartographiques
-        mn_count = DBSession.query(MapNode).count()
+        mn_count = DBSession.query(tables.MapNode).count()
         self.assertEquals(mn_count, 0)
-        mns_count = DBSession.query(MapNodeService).count()
+        mns_count = DBSession.query(tables.MapNodeService).count()
         self.assertEquals(mns_count, 0)
-        mnlls_count = DBSession.query(MapNodeLls).count()
+        mnlls_count = DBSession.query(tables.MapNodeLls).count()
         self.assertEquals(mnlls_count, 0)
 
     def test_hls_mapnode(self):
@@ -75,17 +75,17 @@ class DeleteCascadeTest(unittest.TestCase):
         DBSession.flush()
         # On vérifie que la suppression du hls a bien supprimé ses
         # représentations cartographiques
-        mn_count = DBSession.query(MapNode).count()
+        mn_count = DBSession.query(tables.MapNode).count()
         self.assertEquals(mn_count, 0)
-        mns_count = DBSession.query(MapNodeService).count()
+        mns_count = DBSession.query(tables.MapNodeService).count()
         self.assertEquals(mns_count, 0)
-        mnlls_count = DBSession.query(MapNodeHls).count()
+        mnlls_count = DBSession.query(tables.MapNodeHls).count()
         self.assertEquals(mnlls_count, 0)
 
     def test_conffile(self):
         """Suppression des mapnodes d'un hôte d'un conffile"""
         # Mettre localhost sur une carte
-        conffile = ConfFile.get_or_create("/tmp/test_file")
+        conffile = tables.ConfFile.get_or_create("/tmp/test_file")
         h = fct.add_host(u"localhost", conffile=conffile)
         testmap = fct.add_map(u"Test map")
         mnh = fct.add_node_host(h, "localhost", testmap)
@@ -96,9 +96,9 @@ class DeleteCascadeTest(unittest.TestCase):
 
         # On vérifie que la suppression du fichier de configuration
         # de l'hôte a bien supprimé les représentations cartographiques.
-        mn_count = DBSession.query(MapNode).count()
+        mn_count = DBSession.query(tables.MapNode).count()
         self.assertEquals(mn_count, 0)
-        mnh_count = DBSession.query(MapNodeHost).count()
+        mnh_count = DBSession.query(tables.MapNodeHost).count()
         self.assertEquals(mnh_count, 0)
 
 if __name__ == '__main__':

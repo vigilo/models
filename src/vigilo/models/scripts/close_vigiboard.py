@@ -42,17 +42,17 @@ def close_green(*args):
         settings.load_module(__name__)
 
     from vigilo.common.logging import get_logger
-    LOGGER = get_logger(__name__)
+    logger = get_logger(__name__)
 
     if args:
-        LOGGER.error(_('Too many arguments'))
+        logger.error(_('Too many arguments'))
         sys.exit(1)
 
     from vigilo.models.configure import configure_db
     try:
         configure_db(settings['database'], 'sqlalchemy_')
     except KeyError:
-        LOGGER.error(_('No database configuration found'))
+        logger.error(_('No database configuration found'))
         sys.exit(1)
 
     from vigilo.models.session import DBSession
@@ -96,7 +96,7 @@ def close_green(*args):
         DBSession.flush()
 
     transaction.commit()
-    LOGGER.info(
+    logger.info(
         _("Successfully closed %d events matching the given criteria."),
         len(events)
     )

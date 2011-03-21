@@ -27,7 +27,7 @@ class TestMapNodeHost(ModelTest):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
         # Création des objets nécessaires  aux relations.
-        map = Map(
+        new_map = Map(
                 mtime=datetime.today(),
                 title=u'Carte 1',
                 background_color=u'#66FFFF',
@@ -35,7 +35,7 @@ class TestMapNodeHost(ModelTest):
                 background_position=u'top right',
                 background_repeat=u'no-repeat',
         )
-        DBSession.add(map)
+        DBSession.add(new_map)
         DBSession.flush()
         host = Host(
             name=u"host1.example.com",
@@ -49,8 +49,7 @@ class TestMapNodeHost(ModelTest):
         )
         DBSession.add(host)
         DBSession.flush()
-        return dict(map=map,
-                    host=host)
+        return dict(map=new_map, host=host)
 
 
 class TestMapNodeLls(ModelTest):
@@ -72,7 +71,7 @@ class TestMapNodeLls(ModelTest):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
         # Création des objets nécessaires  aux relations.
-        map = Map(
+        new_map = Map(
                 mtime=datetime.today(),
                 title=u'Carte 1',
                 background_color=u'#66FFFF',
@@ -80,7 +79,7 @@ class TestMapNodeLls(ModelTest):
                 background_position=u'top right',
                 background_repeat=u'no-repeat',
         )
-        DBSession.add(map)
+        DBSession.add(new_map)
         DBSession.flush()
         host = Host(
             name=u"host1.example.com",
@@ -94,16 +93,14 @@ class TestMapNodeLls(ModelTest):
         )
         DBSession.add(host)
         DBSession.flush()
-        service=LowLevelService(
+        service = LowLevelService(
             servicename=u'myservice',
             weight=100,
             host=host,
         )
         DBSession.add(service)
         DBSession.flush()
-        return dict(map=map,
-                    service=service,
-                    )
+        return dict(map=new_map, service=service)
 
 
 class TestMapNodeHls(ModelTest):
@@ -125,7 +122,7 @@ class TestMapNodeHls(ModelTest):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
         # Création des objets nécessaires  aux relations.
-        map = Map(
+        new_map = Map(
                 mtime=datetime.today(),
                 title=u'Carte 1',
                 background_color=u'#66FFFF',
@@ -133,7 +130,7 @@ class TestMapNodeHls(ModelTest):
                 background_position=u'top right',
                 background_repeat=u'no-repeat',
         )
-        DBSession.add(map)
+        DBSession.add(new_map)
         DBSession.flush()
         host = Host(
             name=u"host1.example.com",
@@ -147,7 +144,7 @@ class TestMapNodeHls(ModelTest):
         )
         DBSession.add(host)
         DBSession.flush()
-        service=HighLevelService(
+        service = HighLevelService(
             servicename=u'myservice',
             message= u'Hello world',
             warning_threshold= 50,
@@ -156,6 +153,4 @@ class TestMapNodeHls(ModelTest):
         )
         DBSession.add(service)
         DBSession.flush()
-        return dict(map=map,
-                    service=service,
-                    )
+        return dict(map=new_map, service=service)

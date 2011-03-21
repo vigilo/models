@@ -122,8 +122,6 @@ class User(DeclarativeBase, object):
         @rtype: C{list} of Ctuple{} of C{int}, C{bool}
         """
         result = {}
-        columns = None
-
         if hasattr(access, '__iter__'):
             access = set(map(unicode, access))
         elif access is not None:
@@ -137,10 +135,12 @@ class User(DeclarativeBase, object):
         # l'utilisateur a directement accès.
         direct = DBSession.query(SupItemGroup.idgroup).distinct(
             ).join(
-                (GroupHierarchy, GroupHierarchy.idchild == SupItemGroup.idgroup),
-                (DataPermission, DataPermission.idgroup == GroupHierarchy.idparent),
+                (GroupHierarchy, GroupHierarchy.idchild ==
+                    SupItemGroup.idgroup),
+                (DataPermission, DataPermission.idgroup ==
+                    GroupHierarchy.idparent),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
-                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup ==
                     UserGroup.idgroup),
             ).filter(USER_GROUP_TABLE.c.username == self.user_name)
         if access is not None:
@@ -192,10 +192,11 @@ class User(DeclarativeBase, object):
             Sinon, la fonction renvoie la liste des groupes
         @type only_id: C{bool}
 
-        @param only_direct: Indique si on retourne uniquement les groupes de cartes
-            auxquels l'utilisateur à directement accés ou tous les groupes
-            y compris ceux auxquels il a indirectement accés (droit de passage,
-            mais pas droit de lecture)
+        @param only_direct: Indique si on retourne uniquement
+            les groupes de cartes auxquels l'utilisateur a directement
+            accés ou tous les groupes, y compris ceux auxquels il a
+            indirectement accés (droit de passage, mais pas de droit
+            de lecture)
         @type only_direct: C{bool}
 
         @param access: La liste des types d'accès qui autoriseront
@@ -207,7 +208,6 @@ class User(DeclarativeBase, object):
         @rtype: C{list} of C{int} if L{only_id} is True, C{list} of C{Group}
             otherwise.
         """
-        result = {}
         columns = None
 
         if hasattr(access, '__iter__'):
@@ -229,9 +229,10 @@ class User(DeclarativeBase, object):
         direct = DBSession.query(columns).distinct(
             ).join(
                 (GroupHierarchy, GroupHierarchy.idchild == MapGroup.idgroup),
-                (DataPermission, DataPermission.idgroup == GroupHierarchy.idparent),
+                (DataPermission, DataPermission.idgroup ==
+                    GroupHierarchy.idparent),
                 (UserGroup, UserGroup.idgroup == DataPermission.idusergroup),
-                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup == \
+                (USER_GROUP_TABLE, USER_GROUP_TABLE.c.idgroup ==
                     UserGroup.idgroup),
             ).filter(USER_GROUP_TABLE.c.username == self.user_name)
         if access is not None:

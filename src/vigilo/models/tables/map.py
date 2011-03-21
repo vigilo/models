@@ -105,6 +105,17 @@ class Map(DeclarativeBase, object):
 
     @classmethod
     def has_submaps(cls, idmap):
+        """
+        Indique si une carte possède des sous-cartes ou non.
+
+        @param cls: Classe à utiliser pour le test.
+        @type cls: L{Map}
+        @param idmap: Identifiant de la carte pour laquelle
+            le test doit avoir lieu.
+        @type idmap: C{int}
+        @return: Drapeau indiquant si la carte a des sous-cartes.
+        @rtype: C{bool}
+        """
         from .mapnode import MapNode
         map_alias = aliased(Map)
         return (DBSession.query(
@@ -120,6 +131,17 @@ class Map(DeclarativeBase, object):
 
     @classmethod
     def get_submaps(cls, idmap):
+        """
+        Renvoie l'ensemble des instances de sous-cartes d'une carte.
+
+        @param cls: Classe à utiliser pour l'obtention des sous-cartes.
+        @type cls: L{Map}
+        @param idmap: Identifiant de la carte dont les sous-cartes
+            doivent être retournées.
+        @type idmap: C{int}
+        @return: Sous-cartes de la carte identifiée par L{idmap}.
+        @rtype: C{list} of L{Map}
+        """
         from .mapnode import MapNode
         map_alias = aliased(Map)
         return (DBSession.query(map_alias) \

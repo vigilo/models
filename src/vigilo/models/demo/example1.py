@@ -4,6 +4,11 @@
 from vigilo.models.demo.functions import *
 
 def main():
+    """
+    Scénario de démonstration n°1.
+    Peut être invoqué à l'aide de la commande C{vigilo-models-demo}.
+    """
+
     # Affectation des permissions aux groupes d'utilisateurs.
     managers = tables.UserGroup.by_group_name(u'managers')
 
@@ -109,20 +114,35 @@ def main():
         "Load reached a warning level")
 
     # DependencyGroup
-    depgroup_connexion = add_dependency_group(None, 'Connexion', 'hls', '&')
-    depgroup_portail = add_dependency_group(None, 'Portail web', 'hls', '&')
-    depgroup_processes = add_dependency_group('messagerie', 'Processes', 'topology', '&')
-    depgroup_cpu = add_dependency_group('messagerie', 'CPU', 'topology', '&')
-    depgroup_ram = add_dependency_group('messagerie', 'RAM', 'topology', '&')
-    depgroup_eth = add_dependency_group('messagerie', 'Interface eth0', 'topology', '&')
-    depgroup_processes2 = add_dependency_group('host1.example.com', 'Processes', 'topology', '&')
-    depgroup_cpu2 = add_dependency_group('host1.example.com', 'CPU', 'topology', '&')
-    depgroup_ram2 = add_dependency_group('host1.example.com', 'RAM', 'topology', '&')
-    depgroup_eth2 = add_dependency_group('host1.example.com', 'Interface eth0', 'topology', '&')
-    depgroup_eth3 = add_dependency_group('firewall', 'Interface eth1', 'topology', '&')
-    depgroup_eth4 = add_dependency_group('firewall', 'Interface eth0', 'topology', '&')
-    depgroup_eth5 = add_dependency_group('routeur1', 'Interface eth1', 'topology', '&')
-    depgroup_eth6 = add_dependency_group('routeur2', 'Interface eth1', 'topology', '&')
+    host1 = 'host1.example.com'
+    depgroup_connexion = \
+        add_dependency_group(None, 'Connexion', 'hls', '&')
+    depgroup_portail = \
+        add_dependency_group(None, 'Portail web', 'hls', '&')
+    depgroup_processes = \
+        add_dependency_group('messagerie', 'Processes', 'topology', '&')
+    depgroup_cpu = \
+        add_dependency_group('messagerie', 'CPU', 'topology', '&')
+    depgroup_ram = \
+        add_dependency_group('messagerie', 'RAM', 'topology', '&')
+    depgroup_eth = \
+        add_dependency_group('messagerie', 'Interface eth0', 'topology', '&')
+    depgroup_processes2 = \
+        add_dependency_group(host1, 'Processes', 'topology', '&')
+    depgroup_cpu2 = \
+        add_dependency_group(host1, 'CPU', 'topology', '&')
+    depgroup_ram2 = \
+        add_dependency_group(host1, 'RAM', 'topology', '&')
+    depgroup_eth2 = \
+        add_dependency_group(host1, 'Interface eth0', 'topology', '&')
+    depgroup_eth3 = \
+        add_dependency_group('firewall', 'Interface eth1', 'topology', '&')
+    depgroup_eth4 = \
+        add_dependency_group('firewall', 'Interface eth0', 'topology', '&')
+    depgroup_eth5 = \
+        add_dependency_group('routeur1', 'Interface eth1', 'topology', '&')
+    depgroup_eth6 = \
+        add_dependency_group('routeur2', 'Interface eth1', 'topology', '&')
 
     # Dependency
     add_dependency(depgroup_connexion, ('host2.example.com', 'Interface eth0'))

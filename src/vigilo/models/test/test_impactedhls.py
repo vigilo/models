@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test suite for ImpactedHLS class"""
-from vigilo.models.tables import HighLevelService, ImpactedHLS, ImpactedPath, Host
+from vigilo.models.tables import HighLevelService, Host, \
+                                    ImpactedHLS, ImpactedPath
 from vigilo.models.session import DBSession
 
 from controller import ModelTest

@@ -7,7 +7,7 @@ __all__ = [
     'GraphGroup', 'Graph', 'Host', 'HostClass', 'PerfDataSource',
     'SupItem', 'LowLevelService', 'HighLevelService',
     'Dependency', 'DependencyGroup', 'Version', 'State', 'Permission',
-    'UserGroup', 'User', 'Tag',
+    'UserGroup', 'User', 'Tag', 'SupItemGroup',
     'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost', 'MapNodeHls',
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
     'Application', 'VigiloServer', 'Ventilation',
@@ -53,6 +53,9 @@ from .change import Change
 from .confitem import ConfItem
 from .conffile import ConfFile
 from .hlshistory import HLSHistory
+
+# Importation des vues.
+from .grouppath import GroupPath
 
 # Spécifique projets
 from pkg_resources import working_set

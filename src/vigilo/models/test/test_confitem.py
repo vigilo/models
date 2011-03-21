@@ -49,7 +49,8 @@ class TestServiceConfItem(ModelTest):
         return dict(supitem=service,)
 
     def test_get_by_host_service_confitem_name(self):
-        ob = ConfItem.by_host_service_confitem_name(u'myhost', u'myservice', u'retry_interval')
+        ob = ConfItem.by_host_service_confitem_name(
+            u'myhost', u'myservice', self.attrs['name'])
         assert_equals('4', ob.value)
 
 
@@ -87,5 +88,5 @@ class TestHostConfItem(ModelTest):
         return dict(supitem=host,)
 
     def test_get_by_host_confitem_name(self):
-        ob = ConfItem.by_host_confitem_name(u'myhost', u'check_interval')
+        ob = ConfItem.by_host_confitem_name(u'myhost', self.attrs['name'])
         assert_equals('5', ob.value)

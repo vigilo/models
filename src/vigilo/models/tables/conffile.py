@@ -57,6 +57,18 @@ class ConfFile(DeclarativeBase, object):
 
     @classmethod
     def get_or_create(cls, filename):
+        """
+        Retourne une instance correspondant au fichier donné,
+        en la créant si aucune instance n'existe.
+
+        @param cls: Classe à utiliser.
+        @type cls: L{ConfFile}
+        @param filename: Nom du fichier de configuration.
+        @type filename: C{basestring}
+        @return: Instance correspondant au fichier
+            de configuration L{filename}.
+        @rtype: L{ConfFile}
+        """
         filename = unicode(filename)
         instance = cls.by_filename(filename)
         if not instance:

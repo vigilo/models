@@ -21,7 +21,7 @@ class TestMapLlsLink(ModelTest):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
         # Création des objets nécessaires  aux relations.
-        map = Map(
+        new_map = Map(
                 mtime=datetime.today(),
                 title=u'Carte 1',
                 background_color=u'#66FFFF',
@@ -29,7 +29,7 @@ class TestMapLlsLink(ModelTest):
                 background_position=u'top right',
                 background_repeat=u'no-repeat',
         )
-        DBSession.add(map)
+        DBSession.add(new_map)
         DBSession.flush()
         host1 = Host(
             name=u"host1.example.com",
@@ -54,20 +54,20 @@ class TestMapLlsLink(ModelTest):
             weight=41,
         )
         DBSession.add(host2)
-        reference=LowLevelService(
+        reference = LowLevelService(
             servicename=u'myservice',
             weight=100,
             host=host1,
         )
         from_node = MapNodeHost(label=u'Host 1',
-            idmap=map.idmap,
+            idmap=new_map.idmap,
             x_pos=220,
             y_pos=350,
             idhost=host1.idhost,
             icon=u'server',
         )
         to_node = MapNodeHost(label=u'Host 2',
-            idmap=map.idmap,
+            idmap=new_map.idmap,
             x_pos=220,
             y_pos=350,
             idhost=host1.idhost,
@@ -77,7 +77,8 @@ class TestMapLlsLink(ModelTest):
         DBSession.add(to_node)
         DBSession.add(reference)
         DBSession.flush()
+
         return dict(from_node=from_node,
                     to_node=to_node,
-                    map=map,
+                    map=new_map,
                     reference=reference)

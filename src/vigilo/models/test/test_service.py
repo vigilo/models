@@ -19,9 +19,6 @@ class TestLowLevelService(ModelTest):
         'weight': 100,
     }
 
-    def __init__(self):
-        ModelTest.__init__(self)
-
     def do_get_dependencies(self):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
@@ -42,7 +39,8 @@ class TestLowLevelService(ModelTest):
 
     def test_by_host_service_name(self):
         """Récupération d'un LowLevelService par son nom d'hôte/service."""
-        ob = LowLevelService.by_host_service_name(u'myhost', u'myservice')
+        ob = LowLevelService.by_host_service_name(
+            u'myhost', self.attrs['servicename'])
         assert_equals(ob.weight, 100)
 
     def test_default_state(self):
@@ -73,12 +71,9 @@ class TestHighLevelService(ModelTest):
         'priority': 1,
     }
 
-    def __init__(self):
-        ModelTest.__init__(self)
-
     def test_by_service_name(self):
         """Récupération d'un HighLevelService par son nom."""
-        ob = HighLevelService.by_service_name(u'myservice')
+        ob = HighLevelService.by_service_name(self.attrs['servicename'])
         assert_equals(ob.critical_threshold, 80)
 
     def test_default_state(self):
@@ -87,7 +82,13 @@ class TestHighLevelService(ModelTest):
             DBSession.query(self.klass).one().state.state))
 
 class TestSupItemAbstraction(unittest.TestCase):
+    """
+    Teste l'abstraction des hôtes/services
+    en tant qu'éléments supervisés (SupItem).
+    """
+
     def setUp(self):
+        """Préparatifs pour les tests."""
         super(TestSupItemAbstraction, self).setUp()
         setup_db()
         DBSession.add(StateName(statename=u'OK', order=1))
@@ -95,13 +96,14 @@ class TestSupItemAbstraction(unittest.TestCase):
         DBSession.flush()
 
     def tearDown(self):
+        """Nettoyage à l'issue des tests."""
         DBSession.rollback()
         DBSession.expunge_all()
         teardown_db()
         super(TestSupItemAbstraction, self).tearDown()
 
     def test_get_abstract_service(self):
-        """Une interrogation sur Service ne doit pas retourner un Host"""
+        """Une interrogation sur Service ne doit pas retourner un Host."""
         host = Host(
             name=u'myhost',
             checkhostcmd=u'halt',

@@ -59,17 +59,17 @@ def clean_vigiboard(*args):
         settings.load_module(__name__)
 
     from vigilo.common.logging import get_logger
-    LOGGER = get_logger(__name__)
+    logger = get_logger(__name__)
 
     if args:
-        LOGGER.error(_('Too many arguments'))
+        logger.error(_('Too many arguments'))
         sys.exit(1)
 
     from vigilo.models.configure import configure_db
     try:
         configure_db(settings['database'], 'sqlalchemy_')
     except KeyError:
-        LOGGER.error(_('No database configuration found'))
+        logger.error(_('No database configuration found'))
         sys.exit(1)
 
     from vigilo.models.session import DBSession
@@ -101,7 +101,7 @@ def clean_vigiboard(*args):
             ids = [event.idevent for event in ids]
             nb_deleted = DBSession.query(Event).filter(
                             Event.idevent.in_(ids)).delete()
-            LOGGER.info(_("Deleted %(nb_deleted)d closed events which were "
+            logger.info(_("Deleted %(nb_deleted)d closed events which were "
                             "at least %(days)d days old.") % {
                             'nb_deleted': nb_deleted,
                             'days': options.days,
@@ -114,7 +114,7 @@ def clean_vigiboard(*args):
                                 HLSHistory
                             ).filter(HLSHistory.timestamp <= old_date
                             ).delete()
-            LOGGER.info(_("Deleted %(nb_deleted)d entries in the history "
+            logger.info(_("Deleted %(nb_deleted)d entries in the history "
                         "for high level services which were at least "
                         "%(days)d days old.") % {
                             'nb_deleted': nb_deleted,
@@ -129,7 +129,7 @@ def clean_vigiboard(*args):
             dbsize = DBSession.query(pg_database_size(url.database)).scalar()
 
             if dbsize > options.size:
-                LOGGER.info(_("The database is %(size)d bytes big, which is "
+                logger.info(_("The database is %(size)d bytes big, which is "
                     "more than the limit (%(limit)d bytes). I will now delete "
                     "old closed events and history entries to make room for "
                     "new ones.") % {
@@ -153,7 +153,7 @@ def clean_vigiboard(*args):
 
                 nb_deleted = DBSession.query(Event).filter(
                                 Event.idevent == idevent).delete()
-                LOGGER.info(_("Deleted closed event #%d to make room for "
+                logger.info(_("Deleted closed event #%d to make room for "
                                 "new events.") % idevent)
                 if not nb_deleted:
                     break
@@ -161,7 +161,7 @@ def clean_vigiboard(*args):
 
             # Affiche quelques statistiques.
             dbsize = DBSession.query(pg_database_size(url.database)).scalar()
-            LOGGER.info(_("Deleted %(nb_deleted)d closed events. "
+            logger.info(_("Deleted %(nb_deleted)d closed events. "
                 "The database is now %(size)d bytes big (limit: "
                 "%(limit)d bytes)") % {
                     'nb_deleted': total_deleted,
@@ -188,7 +188,7 @@ def clean_vigiboard(*args):
 
             # Affichage de statistiques actualisées.
             dbsize = DBSession.query(pg_database_size(url.database)).scalar()
-            LOGGER.info(_("Deleted %(nb_deleted)d history entries on "
+            logger.info(_("Deleted %(nb_deleted)d history entries on "
                         "high level services. The database is now %(size)d "
                         "bytes big (limit: %(limit)d bytes)") % {
                             'nb_deleted': total_deleted,

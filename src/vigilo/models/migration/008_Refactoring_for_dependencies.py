@@ -9,6 +9,17 @@ from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
+    """
+    Migre le modèle.
+
+    @param migrate_engine: Connexion à la base de données,
+        pouvant être utilisée durant la migration.
+    @type migrate_engine: C{Engine}
+    @param actions: Conteneur listant les actions à effectuer
+        lorsque cette migration aura été appliquée.
+    @type actions: C{MigrationActions}
+    """
+
     supitem_refs = [
         ('lowlevelservice', 'idservice'),
         ('highlevelservice', 'idservice'),
@@ -86,11 +97,15 @@ def upgrade(migrate_engine, actions):
             "ALTER TABLE %(fullname)s RENAME COLUMN idsupitem2 TO idsupitem",
 
             # Ajout des nouvelles contraintes dans Dependency.
-            "ALTER TABLE %(fullname)s ADD CONSTRAINT %(fullname)s_idgroup_fkey "
-                "FOREIGN KEY(idgroup) REFERENCES %(db_basename)sdependencygroup(idgroup) "
+            "ALTER TABLE %(fullname)s "
+                "ADD CONSTRAINT %(fullname)s_idgroup_fkey "
+                "FOREIGN KEY(idgroup) "
+                "REFERENCES %(db_basename)sdependencygroup(idgroup) "
                 "ON UPDATE CASCADE ON DELETE CASCADE",
-            "ALTER TABLE %(fullname)s ADD CONSTRAINT %(fullname)s_idsupitem_fkey "
-                "FOREIGN KEY(idsupitem) REFERENCES %(db_basename)ssupitem(idsupitem) "
+            "ALTER TABLE %(fullname)s "
+                "ADD CONSTRAINT %(fullname)s_idsupitem_fkey "
+                "FOREIGN KEY(idsupitem) "
+                "REFERENCES %(db_basename)ssupitem(idsupitem) "
                 "ON UPDATE CASCADE ON DELETE CASCADE",
             "ALTER TABLE %(fullname)s ADD PRIMARY KEY (idgroup, idsupitem)",
 

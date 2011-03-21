@@ -5,7 +5,7 @@ from sqlalchemy import Column
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer
 
-from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
+from vigilo.models.session import DeclarativeBase, ForeignKey
 from vigilo.models.tables.supitem import SupItem
 from vigilo.models.tables.dependencygroup import DependencyGroup
 

@@ -3,8 +3,8 @@
 import hashlib
 from nose.tools import eq_
 
-from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup,\
-                                MapGroup, Map, DataPermission
+from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup, \
+                                MapGroup, DataPermission
 from vigilo.models.session import DBSession
 
 from controller import ModelTest
@@ -56,10 +56,6 @@ class TestUser(ModelTest):
         DBSession.add(sub21)
         DBSession.flush()
 
-        perm = Permission(permission_name=u'manage')
-        perm.usergroups.append(usergroup)
-        DBSession.flush()
-
         dataperm = DataPermission(
             usergroup=usergroup,
             group=sub2,
@@ -108,11 +104,18 @@ class TestUser(ModelTest):
 
         # g1111 est considéré comme un groupe direct par mapgroups()
         # car l'accès est autorisé récursivement.
-        eq_([g1.idgroup, g11.idgroup, g111.idgroup, g1111.idgroup],
-            user.mapgroups(True))
+        expected = sorted([
+            g1.idgroup,
+            g11.idgroup,
+            g111.idgroup,
+            g1111.idgroup,
+        ])
+        received = sorted(user.mapgroups(True))
+        eq_(expected, received)
 
-        eq_([g111, g1111],
-            user.mapgroups(False, True))
+        expected = sorted([g111, g1111])
+        received = sorted(user.mapgroups(False, True))
+        eq_(expected, received)
 
     def test_hash_function(self):
         """Hachage des mots de passe (accentués) avec md5."""
