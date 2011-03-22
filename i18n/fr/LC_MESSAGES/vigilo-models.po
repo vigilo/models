@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version:  vigilo.models\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
 "POT-Creation-Date: 2010-02-16 09:45+0100\n"
-"PO-Revision-Date: 2010-11-19 12:34+0100\n"
+"PO-Revision-Date: 2011-03-22 10:43+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -17,21 +17,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: src/vigilo/models/demo/__init__.py:41
+#: src/vigilo/models/demo/__init__.py:58
 #, python-format
 msgid "No sample selected. Available samples: %s"
 msgstr "Aucun exemple sélectionné. Exemples disponibles : %s"
 
-#: src/vigilo/models/demo/__init__.py:67
+#: src/vigilo/models/demo/__init__.py:83
 #, python-format
 msgid "Sample '%s' cannot be found."
 msgstr "Exemple '%s' non trouvé."
 
-#: src/vigilo/models/scripts/passwd.py:24
+#: src/vigilo/models/scripts/close_vigiboard.py:29
+msgid "Close events for hosts in the 'UP' state."
+msgstr "Fermer les événements pour les hôtes dans l'état 'UP'."
+
+#: src/vigilo/models/scripts/close_vigiboard.py:31
+msgid "Close events for services in the 'OK' state."
+msgstr "Fermer les événements pour les services dans l'état 'OK'."
+
+#: src/vigilo/models/scripts/close_vigiboard.py:33
+#: src/vigilo/models/scripts/passwd.py:33
+#: src/vigilo/models/scripts/purge_vigiboard.py:50
+msgid "Load configuration from this file."
+msgstr "Utiliser la configuration définie dans ce fichier."
+
+#: src/vigilo/models/scripts/close_vigiboard.py:48
+#: src/vigilo/models/scripts/passwd.py:48
+#: src/vigilo/models/scripts/purge_vigiboard.py:65
+msgid "Too many arguments"
+msgstr "Trop d'arguments"
+
+#: src/vigilo/models/scripts/close_vigiboard.py:55
+#: src/vigilo/models/scripts/passwd.py:55
+#: src/vigilo/models/scripts/purge_vigiboard.py:72
+msgid "No database configuration found"
+msgstr "Configuration de la base de données non trouvée"
+
+#: src/vigilo/models/scripts/close_vigiboard.py:100
+#, python-format
+msgid "Successfully closed %d events matching the given criteria."
+msgstr "%d événements fermés avec succès, correspondant aux critères donnés."
+
+#: src/vigilo/models/scripts/passwd.py:28
 msgid "%prog [options] [username]"
 msgstr "%prog [option] [nom d'utilisateur]"
 
-#: src/vigilo/models/scripts/passwd.py:25
+#: src/vigilo/models/scripts/passwd.py:29
 msgid ""
 "Changes Vigilo's password for user 'username' or the currently logged in "
 "user if this argument is omitted."
@@ -39,58 +70,43 @@ msgstr ""
 "Modifie le mot de passe Vigilo de l'utilisateur \"nom d'utilisateur\" ou "
 "de l'utilisateur qui lance la commande si cet argument est omis."
 
-#: src/vigilo/models/scripts/passwd.py:29
-#: src/vigilo/models/scripts/purge_vigiboard.py:50
-msgid "Load configuration from this file."
-msgstr "Utiliser la configuration définie dans ce fichier."
-
-#: src/vigilo/models/scripts/passwd.py:45
-#: src/vigilo/models/scripts/purge_vigiboard.py:65
-msgid "Too many arguments"
-msgstr "Trop d'arguments"
-
-#: src/vigilo/models/scripts/passwd.py:53
-#: src/vigilo/models/scripts/purge_vigiboard.py:73
-msgid "No database configuration found"
-msgstr "Configuration de la base de données non trouvée"
-
-#: src/vigilo/models/scripts/passwd.py:66
+#: src/vigilo/models/scripts/passwd.py:68
 #, python-format
 msgid "Changing Vigilo password for user '%s'."
 msgstr "Modification du mot de passe Vigilo pour l'utilisateur '%s'."
 
-#: src/vigilo/models/scripts/passwd.py:73
+#: src/vigilo/models/scripts/passwd.py:75
 msgid "Enter current password: "
 msgstr "Mot de passe actuel : "
 
-#: src/vigilo/models/scripts/passwd.py:78
+#: src/vigilo/models/scripts/passwd.py:80
 msgid "Bad login or password."
 msgstr "Identifiant ou mot de passe incorrect."
 
-#: src/vigilo/models/scripts/passwd.py:81
+#: src/vigilo/models/scripts/passwd.py:83
 msgid "Enter new password: "
 msgstr "Nouveau mot de passe : "
 
-#: src/vigilo/models/scripts/passwd.py:82
+#: src/vigilo/models/scripts/passwd.py:84
 msgid "Confirm new password: "
 msgstr "Confirmer : "
 
-#: src/vigilo/models/scripts/passwd.py:87
+#: src/vigilo/models/scripts/passwd.py:89
 msgid "Sorry, passwords do not match."
 msgstr "Désolé, les mots de passe ne coïncident pas."
 
-#: src/vigilo/models/scripts/passwd.py:93
+#: src/vigilo/models/scripts/passwd.py:95
 msgid "Password unchanged."
 msgstr "Le mot de passe n'a pas été modifié."
 
-#: src/vigilo/models/scripts/passwd.py:101
+#: src/vigilo/models/scripts/passwd.py:103
 #, python-format
 msgid "An exception occurred while updating password for user '%s'."
 msgstr ""
 "Une erreur est survenue durant la mise à jour du mot de passe de "
 "l'utilisateur '%s'."
 
-#: src/vigilo/models/scripts/passwd.py:107
+#: src/vigilo/models/scripts/passwd.py:109
 #, python-format
 msgid "Successfully updated password for user '%s'."
 msgstr "Le mot de passe de l'utilisateur '%s' a été mis à jour avec succès."
@@ -113,7 +129,7 @@ msgstr ""
 "la base de données de Vigilo occupe plus de SIZE octets. SIZE doit être "
 "un entier strictement positif."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:105
+#: src/vigilo/models/scripts/purge_vigiboard.py:104
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d closed events which were at least %(days)d days "
@@ -122,7 +138,7 @@ msgstr ""
 "%(nb_deleted)d événements clos agés d'au moins %(days)d jours ont été "
 "supprimés\""
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:118
+#: src/vigilo/models/scripts/purge_vigiboard.py:117
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d entries in the history for high level services "
@@ -131,7 +147,7 @@ msgstr ""
 "%(nb_deleted)d entrées dans l'historique des services de haut niveau, "
 "agées d'au moins %(days)d jours ont été supprimées."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:133
+#: src/vigilo/models/scripts/purge_vigiboard.py:132
 #, python-format
 msgid ""
 "The database is %(size)d bytes big, which is more than the limit "
@@ -142,12 +158,12 @@ msgstr ""
 "(%(limit)d octets). Je vais supprimer les anciens événements clos et les "
 "entrées d'historique afin de libérer de l'espace."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:157
+#: src/vigilo/models/scripts/purge_vigiboard.py:156
 #, python-format
 msgid "Deleted closed event #%d to make room for new events."
 msgstr "Suppression de l'événement clos #%d pour faire de la place."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:165
+#: src/vigilo/models/scripts/purge_vigiboard.py:164
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
@@ -156,7 +172,7 @@ msgstr ""
 "%(nb_deleted)d événements clos supprimés. La base de données occupe "
 "désormais %(size)d octets (limite : %(limit)d octets)"
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:192
+#: src/vigilo/models/scripts/purge_vigiboard.py:191
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d history entries on high level services. The "
@@ -165,4 +181,3 @@ msgstr ""
 "%(nb_deleted)d entrées d'historique sur les services de haut niveau "
 "supprimées. La database occupe désormais %(size)d octets (limite : "
 "%(limit)d octets)"
-
