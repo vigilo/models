@@ -188,15 +188,14 @@ class Group(DeclarativeBase, object):
         ).filter(GroupHierarchy.hops == 1
         ).count() > 0)
 
-    def get_children(self, hops=1):
+    def get_children(self, hops=1, limit=None, start=None):
         """
         Renvoie la liste des enfants du groupe.
         """
         children = DBSession.query(self.__class__).join(
                 (GroupHierarchy, GroupHierarchy.idchild == \
                     self.__class__.idgroup),
-            ).filter(GroupHierarchy.idparent == self.idgroup
-            ).order_by(self.__class__.name.asc())
+            ).filter(GroupHierarchy.idparent == self.idgroup)
 
         # Pas de limite sur la distance, on retourne tous les enfants,
         # on exclut juste le nœud courant.
@@ -204,6 +203,12 @@ class Group(DeclarativeBase, object):
             children = children.filter(GroupHierarchy.hops > 0)
         else:
             children = children.filter(GroupHierarchy.hops == hops)
+        if start is not None:
+            children = children.filter(self.__class__.idgroup > start)
+        children = children.order_by(self.__class__.name.asc())
+        if limit is not None:
+            children = children.limit(limit)
+
         return children.all()
 
     children = property(get_children)
@@ -221,6 +226,25 @@ class Group(DeclarativeBase, object):
             ).filter(GroupHierarchy.idparent == self.idgroup
             ).filter(GroupHierarchy.hops > 0).all()
         return children
+
+    def count_children(self, hops=1, start=None):
+        """
+        Renvoie le nombre d'enfants du groupe.
+        """
+        from .grouphierarchy import GroupHierarchy
+        children = DBSession.query(self.__class__).join(
+                (GroupHierarchy,
+                    GroupHierarchy.idchild == self.__class__.idgroup),
+            ).filter(GroupHierarchy.idparent == self.idgroup)
+        # Pas de limite sur la distance, on compte tous les enfants,
+        # on exclut juste le nœud courant.
+        if not hops:
+            children = children.filter(GroupHierarchy.hops > 0)
+        else:
+            children = children.filter(GroupHierarchy.hops == hops)
+        if start is not None:
+            children = children.filter(self.__class__.idgroup > start)
+        return children.count()
 
     def remove_children(self):
         """
@@ -356,6 +380,29 @@ class MapGroup(Group):
                     back_populates='groups',
                     order_by='Map.title',
                     cascade="all")
+
+    def get_maps(self, start=None, limit=None):
+        """Renvoie les cartes du groupe."""
+        from .map import Map
+        maps = DBSession.query(Map).join(
+                    (MAP_GROUP_TABLE, MAP_GROUP_TABLE.c.idmap == Map.idmap)
+                ).filter(MAP_GROUP_TABLE.c.idgroup == self.idgroup)
+        if start is not None:
+            maps = maps.filter(Map.idmap > start)
+        maps = maps.order_by(Map.title.asc())
+        if limit is not None:
+            maps = maps.limit(limit)
+        return maps.all()
+
+    def count_maps(self, start=None):
+        """Renvoie le nombre de cartes du groupe."""
+        from .map import Map
+        maps = DBSession.query(Map).join(
+                (MAP_GROUP_TABLE, MAP_GROUP_TABLE.c.idmap == Map.idmap)
+                ).filter(MAP_GROUP_TABLE.c.idgroup == self.idgroup)
+        if start is not None:
+            maps = maps.filter(Map.idmap > start)
+        return maps.count()
 
 class GraphGroup(Group):
     """
