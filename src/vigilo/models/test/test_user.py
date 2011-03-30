@@ -46,7 +46,7 @@ class TestUser(ModelTest):
         usergroup.users.append(user)
         DBSession.flush()
 
-        root = SupItemGroup(name=u'root')
+        root = SupItemGroup(name=u'root', parent=None)
         DBSession.add(root)
         sub1 = SupItemGroup(name=u'sub1', parent=root)
         DBSession.add(sub1)
@@ -79,7 +79,7 @@ class TestUser(ModelTest):
         usergroup.users.append(user)
         DBSession.flush()
 
-        g1 = MapGroup(name=u'groupe 1')
+        g1 = MapGroup(name=u'groupe 1', parent=None)
         DBSession.add(g1)
         g11 = MapGroup(name=u'groupe 1.1', parent=g1)
         DBSession.add(g11)

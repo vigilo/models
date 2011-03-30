@@ -71,8 +71,9 @@ class Group(DeclarativeBase, object):
         @param kwargs: Un dictionnaire avec les informations sur le groupe.
         @type kwargs: C{dict}
         """
-        loop = GroupHierarchy(parent=self, child=self, hops=0)
-        DBSession.add(loop)
+        if 'parent' in kwargs:
+            loop = GroupHierarchy(parent=self, child=self, hops=0)
+            DBSession.add(loop)
         super(Group, self).__init__(**kwargs)
 
     def __unicode__(self):
@@ -126,7 +127,13 @@ class Group(DeclarativeBase, object):
         """
         # On récupère tous nos enfants, petits-enfants, etc..
         children = DBSession.query(GroupHierarchy).filter(
-                        GroupHierarchy.parent == self)
+                        GroupHierarchy.parent == self).all()
+
+        if not children:
+            loop = GroupHierarchy(parent=self, child=self, hops=0)
+            DBSession.add(loop)
+            DBSession.flush()
+            children = [loop]
 
         # Supprime tous les liens de parenté du groupe courant
         # et de ses enfants (sans limite de profondeur) vers nos
@@ -364,6 +371,7 @@ class Group(DeclarativeBase, object):
                     GroupPath.path == path,
                 )),
             ).first()
+
 
 class MapGroup(Group):
     """

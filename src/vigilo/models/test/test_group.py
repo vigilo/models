@@ -19,7 +19,8 @@ class TestGraphGroup(ModelTest):
     klass = GraphGroup
     creator = add_graphgroup
     attrs = {
-        'name': u'graphgroup'
+        'name': u'graphgroup',
+        'parent': None,
     }
 
     def test_creation_loop(self):
@@ -84,7 +85,7 @@ END;
         assert_equal(self.obj.has_parent(), False)
 
         # On obtient un parent.
-        parent = self.klass(name=u"aparent")
+        parent = self.klass(name=u"aparent", parent=None)
         DBSession.add(parent)
         self.obj.parent = parent
         DBSession.query(GroupHierarchy
@@ -96,7 +97,7 @@ END;
         assert_equal(self.obj.has_parent(), True)
 
         # Notre parent est modifié.
-        anotherparent = self.klass(name=u"anotherparent")
+        anotherparent = self.klass(name=u"anotherparent", parent=None)
         DBSession.add(anotherparent)
         self.obj.parent = anotherparent
         DBSession.query(GroupHierarchy
@@ -115,14 +116,14 @@ END;
     def test_set_parent2(self):
         """Affectation d'un parent avec hiérarchies coté enfant et parent."""
         # on créé un parent sur self.obj
-        parent = self.klass(name=u"aparent")
+        parent = self.klass(name=u"aparent", parent=None)
         DBSession.add(parent)
         self.obj.parent = parent
 
         # on créé un groupe avec son enfant
-        child = self.klass(name=u"achild")
+        child = self.klass(name=u"achild", parent=None)
         DBSession.add(child)
-        gchild = self.klass(name=u"agrandchild")
+        gchild = self.klass(name=u"agrandchild", parent=None)
         DBSession.add(gchild)
         gchild.parent = child
 
@@ -240,7 +241,8 @@ class TestMapGroup(TestGraphGroup):
     klass = MapGroup
     creator = add_mapgroup
     attrs = {
-        'name': u'mapgroup'
+        'name': u'mapgroup',
+        'parent': None,
     }
 
 class TestSupItemGroups(TestGraphGroup):
@@ -250,4 +252,5 @@ class TestSupItemGroups(TestGraphGroup):
     creator = add_supitemgroup
     attrs = {
         'name': u'supitemgroup',
+        'parent': None,
     }
