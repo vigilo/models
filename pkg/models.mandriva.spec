@@ -17,25 +17,17 @@ BuildRequires:   python-setuptools
 BuildRequires:   python-babel
 
 Requires:   python >= 2.5
-Requires:   python-babel >= 0.9.4
-Requires:   python-setuptools
-Requires:   python-psycopg2
-Requires:   python-sqlalchemy
-Requires:   python-zope.sqlalchemy >= 0.4
-Requires:   python-pastescript >= 1.7
-Requires:   vigilo-common
-Requires:   python-transaction
-######### Dependance from python dependance tree #########
 Requires:   vigilo-models
 Requires:   vigilo-common
 Requires:   python-transaction
-Requires:   python-pastescript
+Requires:   python-pastescript >= 1.7
 Requires:   python-setuptools
-Requires:   python-zope.sqlalchemy
-Requires:   python-sqlalchemy
+Requires:   python-zope.sqlalchemy >= 0.4
+Requires:   python-sqlalchemy >= 0.5
+Requires:   python-sqlalchemy < 0.6
 Requires:   python-psycopg2
-Requires:   python-babel
-Requires:   python-zope-interface 
+Requires:   python-babel >= 0.9.4
+Requires:   python-zope-interface
 Requires:   python-configobj
 Requires:   python-pastedeploy
 Requires:   python-paste

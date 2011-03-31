@@ -21,6 +21,7 @@ Requires:   python-babel >= 0.9.4
 Requires:   python-distribute
 Requires:   python-psycopg2
 Requires:   python-sqlalchemy >= 0.5
+Requires:   python-sqlalchemy < 0.6
 Requires:   python-zope-sqlalchemy >= 0.4
 Requires:   python-paste-script >= 1.7
 Requires:   vigilo-common
