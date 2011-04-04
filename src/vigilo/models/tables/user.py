@@ -4,13 +4,13 @@
 from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime
-import hashlib
+import hashlib, random
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE
 from vigilo.models.tables import SupItemGroup, UserGroup, MapGroup, \
                                     DataPermission
-from .grouphierarchy import GroupHierarchy
+from vigilo.models.tables.grouphierarchy import GroupHierarchy
 
 __all__ = ('User', )
 
@@ -72,6 +72,17 @@ class User(DeclarativeBase, object):
     usergroups = relation('UserGroup', secondary=USER_GROUP_TABLE,
         back_populates='users', lazy=True, order_by='UserGroup.group_name')
 
+    def _generate_token(self):
+        # MD5 est utilisé ici uniquement parce qu'il est également disponible
+        # côté SGBD et utilisé ainsi par le script de migration.
+        return unicode(hashlib.md5(str(random.random())).hexdigest())
+
+    # Le token est généré automatiquement à la volée.
+    token = Column(
+        Unicode(32),
+        nullable=False,
+        default=_generate_token,
+    )
 
     def __init__(self, **kwargs):
         """
@@ -379,3 +390,6 @@ class User(DeclarativeBase, object):
 
     language = synonym('_language', descriptor=property(_get_language,
                                                         _set_language))
+
+    def renew_token(self):
+        self.token = self._generate_token()
