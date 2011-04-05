@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 """Test suite for ServiceGroup class"""
+
+import string
+
 from nose.tools import assert_equal
 from sqlalchemy.schema import DDL
 
@@ -8,7 +11,7 @@ from vigilo.models.tables import GraphGroup, MapGroup, SupItemGroup
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
 from vigilo.models.demo.functions import add_graphgroup, \
                                         add_supitemgroup, \
-                                        add_mapgroup
+                                        add_mapgroup, add_map
 
 from controller import ModelTest
 
@@ -205,6 +208,52 @@ END;
 
         assert_equal( [child, ], self.obj.get_children() )
 
+    def test_get_children_order(self):
+        """La fonction get_children doit trier par ordre alphabétique"""
+        names = [ u"achild_%s" % l for l in string.ascii_lowercase ]
+        reversed_names = names[:]
+        reversed_names.reverse()
+        for name in reversed_names:
+            child = self.klass(name=name)
+            DBSession.add(child)
+            DBSession.add(GroupHierarchy(
+                parent=self.obj,
+                child=child,
+                hops=1,
+            ))
+        DBSession.flush()
+        assert_equal( names, [ c.name for c in self.obj.get_children() ] )
+
+    def test_get_children_limit(self):
+        """L'option limit de get_children doit limiter le nombre retourné"""
+        for i in range(10):
+            child = self.klass(name=u"achild%d" % i)
+            DBSession.add(child)
+            DBSession.add(GroupHierarchy(
+                parent=self.obj,
+                child=child,
+                hops=1,
+            ))
+        DBSession.flush()
+        assert_equal( 5, len(self.obj.get_children(limit=5)) )
+
+    def test_get_children_offset(self):
+        """L'option offset de get_children doit décaler le résultat"""
+        # on créé en ordre inverse pour tester le tri aussi
+        names = [ u"achild%d" % i for i in range(9, 0, -1) ]
+        for name in names:
+            child = self.klass(name=name)
+            DBSession.add(child)
+            DBSession.add(GroupHierarchy(
+                parent=self.obj,
+                child=child,
+                hops=1,
+            ))
+        DBSession.flush()
+        names.reverse() # get_children va trier
+        result_names = [ c.name for c in self.obj.get_children(offset=5) ]
+        assert_equal(names[5:], result_names)
+
     def test_search_for_groups(self):
         """Teste la récupération de groupes par nom/parent."""
         root = self.creator.im_func(u'TestRoot', None)
@@ -244,6 +293,37 @@ class TestMapGroup(TestGraphGroup):
         'name': u'mapgroup',
         'parent': None,
     }
+
+    def test_get_maps(self):
+        """La fonction get_maps doit récupérer les cartes du groupe"""
+        # on créé en ordre inverse pour tester le tri
+        titles = [ u"test_map_%d" % i for i in range(9, 0, -1) ]
+        for title in titles:
+            add_map(title, self.obj)
+        DBSession.flush()
+        titles.reverse() # get_maps va trier
+        result_titles = [ c.title for c in self.obj.get_maps() ]
+        assert_equal(titles, result_titles)
+
+    def test_get_maps_limit(self):
+        """La fonction get_maps doit récupérer les cartes du groupe"""
+        titles = [ u"test_map_%d" % i for i in range(10) ]
+        for title in titles:
+            add_map(title, self.obj)
+        DBSession.flush()
+        assert_equal(5, len(self.obj.get_maps(limit=5)))
+
+    def test_get_maps_offset(self):
+        """L'option offset de get_maps doit décaler le résultat"""
+        # on créé en ordre inverse pour tester le tri aussi
+        titles = [ u"test_map_%d" % i for i in range(9, 0, -1) ]
+        for title in titles:
+            add_map(title, self.obj)
+        DBSession.flush()
+        titles.reverse() # get_maps va trier
+        result_titles = [ c.title for c in self.obj.get_maps(offset=5) ]
+        assert_equal(titles[5:], result_titles)
+
 
 class TestSupItemGroups(TestGraphGroup):
     """Test de la table SupItemGroup"""

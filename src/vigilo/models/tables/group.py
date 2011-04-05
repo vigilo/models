@@ -195,7 +195,7 @@ class Group(DeclarativeBase, object):
         ).filter(GroupHierarchy.hops == 1
         ).count() > 0)
 
-    def get_children(self, hops=1, limit=None, start=None):
+    def get_children(self, hops=1, limit=None, offset=None):
         """
         Renvoie la liste des enfants du groupe.
         """
@@ -210,11 +210,11 @@ class Group(DeclarativeBase, object):
             children = children.filter(GroupHierarchy.hops > 0)
         else:
             children = children.filter(GroupHierarchy.hops == hops)
-        if start is not None:
-            children = children.filter(self.__class__.idgroup > start)
         children = children.order_by(self.__class__.name.asc())
         if limit is not None:
             children = children.limit(limit)
+        if offset is not None:
+            children = children.offset(offset)
 
         return children.all()
 
@@ -234,7 +234,7 @@ class Group(DeclarativeBase, object):
             ).filter(GroupHierarchy.hops > 0).all()
         return children
 
-    def count_children(self, hops=1, start=None):
+    def count_children(self, hops=1):
         """
         Renvoie le nombre d'enfants du groupe.
         """
@@ -249,8 +249,6 @@ class Group(DeclarativeBase, object):
             children = children.filter(GroupHierarchy.hops > 0)
         else:
             children = children.filter(GroupHierarchy.hops == hops)
-        if start is not None:
-            children = children.filter(self.__class__.idgroup > start)
         return children.count()
 
     def remove_children(self):
@@ -389,27 +387,25 @@ class MapGroup(Group):
                     order_by='Map.title',
                     cascade="all")
 
-    def get_maps(self, start=None, limit=None):
+    def get_maps(self, limit=None, offset=None):
         """Renvoie les cartes du groupe."""
         from .map import Map
         maps = DBSession.query(Map).join(
                     (MAP_GROUP_TABLE, MAP_GROUP_TABLE.c.idmap == Map.idmap)
                 ).filter(MAP_GROUP_TABLE.c.idgroup == self.idgroup)
-        if start is not None:
-            maps = maps.filter(Map.idmap > start)
         maps = maps.order_by(Map.title.asc())
         if limit is not None:
             maps = maps.limit(limit)
+        if offset is not None:
+            maps = maps.offset(offset)
         return maps.all()
 
-    def count_maps(self, start=None):
+    def count_maps(self):
         """Renvoie le nombre de cartes du groupe."""
         from .map import Map
         maps = DBSession.query(Map).join(
                 (MAP_GROUP_TABLE, MAP_GROUP_TABLE.c.idmap == Map.idmap)
                 ).filter(MAP_GROUP_TABLE.c.idgroup == self.idgroup)
-        if start is not None:
-            maps = maps.filter(Map.idmap > start)
         return maps.count()
 
 class GraphGroup(Group):
