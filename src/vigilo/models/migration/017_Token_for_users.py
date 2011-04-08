@@ -21,7 +21,13 @@ def upgrade(migrate_engine, actions):
     """
     MigrationDDL(
         [
-            "ALTER TABLE %(fullname)s ADD COLUMN token VARCHAR(32) NOT NULL "
-                "DEFAULT md5(cast(random() as text));",
+            # On utilise NULL comme valeur par défaut car sinon,
+            # les valeurs générées côté serveurs de backup sont
+            # différentes de celles côté serveur nominal.
+            # Il sera nécessaire de générer manuellement le token
+            # via VigiAdmin.
+            "ALTER TABLE %(fullname)s ADD COLUMN token VARCHAR(32) "
+            "DEFAULT NULL"
+#                "DEFAULT md5(cast(random() as text));",
         ]
     ).execute(DBSession, tables.User.__table__)
