@@ -1,23 +1,20 @@
-%define module  models
-%define name    vigilo-%{module}
-%define version 2.0.0
-%define release 1%{?svn}%{?dist}
+%define module  @SHORT_NAME@
 
-Name:       %{name}
-Summary:    Vigilo data models (ORM)
-Version:    %{version}
-Release:    %{release}
+Name:       vigilo-%{module}
+Summary:    @SUMMARY@
+Version:    @VERSION@
+Release:    1%{?svn}%{?dist}
 Source0:    %{name}-%{version}.tar.gz
-URL:        http://www.projet-vigilo.org
+URL:        @URL@
 Group:      System/Servers
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-build
 License:    GPLv2
+Buildarch:  noarch
 
 BuildRequires:   python-setuptools
 BuildRequires:   python-babel
 
 Requires:   python >= 2.5
-Requires:   vigilo-models
 Requires:   vigilo-common
 Requires:   python-transaction
 Requires:   python-pastescript >= 1.7
@@ -32,11 +29,10 @@ Requires:   python-configobj
 Requires:   python-pastedeploy
 Requires:   python-paste
 
-Buildarch:  noarch
 
 
 %description
-This library gives an API to the Vigilo data models.
+@DESCRIPTION@
 This library is part of the Vigilo Project <http://vigilo-project.org>
 
 %prep
