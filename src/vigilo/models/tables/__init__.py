@@ -56,6 +56,7 @@ from .hlshistory import HLSHistory
 
 # Importation des vues.
 from .grouppath import GroupPath
+from .usersupitem import UserSupItem
 
 # Spécifique projets
 from pkg_resources import working_set

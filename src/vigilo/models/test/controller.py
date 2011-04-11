@@ -4,6 +4,7 @@ from nose.tools import assert_equals
 from vigilo.models.session import DBSession, metadata
 from vigilo.models.tables import StateName
 from vigilo.models.tables.grouppath import GroupPath
+from vigilo.models.tables.usersupitem import UserSupItem
 
 __all__ = ['ModelTest', 'setup_db', 'teardown_db']
 
@@ -14,10 +15,12 @@ def setup_db():
     # mais on n'a aucun moyen de le signaler à SQLAlchemy.
     # Résultat dans SQLite, les tables se retrouveraient créées
     # dans le mauvais ordre.
+    # Idem pour la vue UserSupItem (6 dépendances).
     tables = metadata.tables.copy()
     del tables[GroupPath.__tablename__]
+    del tables[UserSupItem.__tablename__]
     metadata.create_all(tables=tables.itervalues())
-    metadata.create_all(tables=[GroupPath.__table__])
+    metadata.create_all(tables=[GroupPath.__table__, UserSupItem.__table__])
 
 #Teardown that database
 def teardown_db():
