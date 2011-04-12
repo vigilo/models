@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# vim: set fileencoding=utf-8 sw=4 ts=4 et :
 """
 Script permettant de refermer automatiquement les événements
 se trouvant dans l'état OK et/ou UP dans VigiBoard.
@@ -6,6 +7,7 @@ se trouvant dans l'état OK et/ou UP dans VigiBoard.
 
 import sys, os
 import transaction
+import time
 from datetime import datetime
 from optparse import OptionParser
 import pwd # Disponible uniquement sur Unix-like
@@ -25,6 +27,9 @@ def close_green(*args):
     _ = translate(__name__)
 
     parser = OptionParser()
+    parser.add_option("-d", "--days", action="store", dest="days",
+        type="int", default=None, help=_("Close events which are "
+        "at least DAYS old. DAYS must be a positive non-zero integer."))
     parser.add_option("-u", "--up", action="store_true", dest="state_up",
         default=False, help=_("Close events for hosts in the 'UP' state."))
     parser.add_option("-k", "--ok", action="store_true", dest="state_ok",
@@ -70,14 +75,19 @@ def close_green(*args):
         parser.print_usage()
         sys.exit(1)
 
-    events = DBSession.query(
+    query = DBSession.query(
             CorrEvent
         ).join(
             (Event, Event.idevent == CorrEvent.idcause),
             (StateName, StateName.idstatename == Event.current_state),
         ).filter(StateName.statename.in_(sought_states)
-        ).filter(CorrEvent.status != u'AAClosed').all()
+        ).filter(CorrEvent.status != u'AAClosed')
+    if options.days is not None and options.days > 0:
+        # Génère une date qui se trouve options.days jours dans le passé.
+        old_date = datetime.fromtimestamp(time.time() - options.days * 86400) 
+        query = query.filter(CorrEvent.timestamp_active <= old_date)
 
+    events = query.all()
     username = unicode(pwd.getpwuid(os.getuid())[0])
     for event in events:
         # On ajoute un message dans l'historique pour la traçabilité.
