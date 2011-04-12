@@ -3,8 +3,8 @@ EPYDOC_PARSE = vigilo\.models\.(tables|test)
 all: build
 include buildenv/Makefile.common
 
-install: install_python install_data
-install_pkg: install_python_pkg install_data
+install: build install_python install_data
+install_pkg: build install_python_pkg install_data
 
 install_python: settings.ini $(PYTHON)
 	$(PYTHON) setup.py install --record=INSTALLED_FILES
