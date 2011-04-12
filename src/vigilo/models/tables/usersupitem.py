@@ -66,7 +66,7 @@ DDL(
         SELECT %(lowlevelservice_table)s.idservice AS idsupitem,
             %(lowlevelservice_table)s.servicename AS servicename,
             %(host_table)s.name AS hostname,
-            %(supitemgroup_table)s.idgroup AS idsupitemgroup,
+            gh.idparent AS idsupitemgroup,
             %(usertousergroups_table)s.username AS username
         FROM %(lowlevelservice_table)s
         JOIN %(host_table)s
@@ -76,32 +76,35 @@ DDL(
                 %(lowlevelservice_table)s.idhost
             OR %(supitemgroup_table)s.idsupitem =
                 %(lowlevelservice_table)s.idservice
-        JOIN %(grouphierarchy_table)s
-            ON %(grouphierarchy_table)s.idchild =
-                %(supitemgroup_table)s.idgroup
+        JOIN %(grouphierarchy_table)s gh
+            ON gh.idchild = %(supitemgroup_table)s.idgroup
+        JOIN %(grouphierarchy_table)s gh2
+            ON gh2.idchild = gh.idparent
         JOIN %(datapermission_table)s
             ON %(datapermission_table)s.idgroup =
-                %(grouphierarchy_table)s.idparent
+                gh2.idparent
         JOIN %(usertousergroups_table)s
-            ON %(usertousergroups_table)s.idgroup = 
+            ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup
     UNION ALL
         SELECT %(host_table)s.idhost AS idsupitem,
             NULL AS servicename,
             %(host_table)s.name AS hostname,
-            %(supitemgroup_table)s.idgroup AS idsupitemgroup,
+            gh.idparent AS idsupitemgroup,
             %(usertousergroups_table)s.username AS username
         FROM %(host_table)s
         JOIN %(supitemgroup_table)s
             ON %(supitemgroup_table)s.idsupitem = %(host_table)s.idhost
-        JOIN %(grouphierarchy_table)s
-            ON %(grouphierarchy_table)s.idchild =
+        JOIN %(grouphierarchy_table)s gh
+            ON gh.idchild =
                 %(supitemgroup_table)s.idgroup
+        JOIN %(grouphierarchy_table)s gh2
+            ON gh2.idchild = gh.idparent
         JOIN %(datapermission_table)s
             ON %(datapermission_table)s.idgroup =
-                %(grouphierarchy_table)s.idparent
+                gh2.idparent
         JOIN %(usertousergroups_table)s
-            ON %(usertousergroups_table)s.idgroup = 
+            ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup;
     """,
     on='postgres',
@@ -126,7 +129,7 @@ DDL(
         SELECT %(lowlevelservice_table)s.idservice AS idsupitem,
             %(lowlevelservice_table)s.servicename AS servicename,
             %(host_table)s.name AS hostname,
-            %(supitemgroup_table)s.idgroup AS idsupitemgroup,
+            gh.idparent AS idsupitemgroup,
             %(usertousergroups_table)s.username AS username
         FROM %(lowlevelservice_table)s
         JOIN %(host_table)s
@@ -136,32 +139,35 @@ DDL(
                 %(lowlevelservice_table)s.idhost
             OR %(supitemgroup_table)s.idsupitem =
                 %(lowlevelservice_table)s.idservice
-        JOIN %(grouphierarchy_table)s
-            ON %(grouphierarchy_table)s.idchild =
-                %(supitemgroup_table)s.idgroup
+        JOIN %(grouphierarchy_table)s gh
+            ON gh.idchild = %(supitemgroup_table)s.idgroup
+        JOIN %(grouphierarchy_table)s gh2
+            ON gh2.idchild = gh.idparent
         JOIN %(datapermission_table)s
             ON %(datapermission_table)s.idgroup =
-                %(grouphierarchy_table)s.idparent
+                gh2.idparent
         JOIN %(usertousergroups_table)s
-            ON %(usertousergroups_table)s.idgroup = 
+            ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup
     UNION ALL
         SELECT %(host_table)s.idhost AS idsupitem,
             NULL AS servicename,
             %(host_table)s.name AS hostname,
-            %(supitemgroup_table)s.idgroup AS idsupitemgroup,
+            gh.idparent AS idsupitemgroup,
             %(usertousergroups_table)s.username AS username
         FROM %(host_table)s
         JOIN %(supitemgroup_table)s
             ON %(supitemgroup_table)s.idsupitem = %(host_table)s.idhost
-        JOIN %(grouphierarchy_table)s
-            ON %(grouphierarchy_table)s.idchild =
+        JOIN %(grouphierarchy_table)s gh
+            ON gh.idchild =
                 %(supitemgroup_table)s.idgroup
+        JOIN %(grouphierarchy_table)s gh2
+            ON gh2.idchild = gh.idparent
         JOIN %(datapermission_table)s
             ON %(datapermission_table)s.idgroup =
-                %(grouphierarchy_table)s.idparent
+                gh2.idparent
         JOIN %(usertousergroups_table)s
-            ON %(usertousergroups_table)s.idgroup = 
+            ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup;
     """,
     on='sqlite',

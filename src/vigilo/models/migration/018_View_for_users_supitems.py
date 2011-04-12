@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Ajout d'une vue associant à chaque
-utilisateur les supitems auxquels il a accès.
+Ajout d'une vue associant à chaque utilisateur
+les objets supervisés auxquels il a accès.
 """
 
 def upgrade(migrate_engine, actions):
