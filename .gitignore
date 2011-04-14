@@ -2,3 +2,4 @@
 /build/lib/vigilo
 /dist
 /src/*.egg-info
+doc/images/*.dot.png
