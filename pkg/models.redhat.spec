@@ -55,7 +55,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc COPYING README.txt doc/*
+%doc COPYING.txt README.txt doc/*
 %attr(755,root,root) %{_bindir}/*
 %config(noreplace) %{_sysconfdir}/vigilo
 %{python26_sitelib}/*
