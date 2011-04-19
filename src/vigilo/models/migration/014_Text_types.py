@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2006-2011 CS-SI
+# License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
+
 """
 Utilisation de chaînes de caractères de taille maximale fixée (VARCHAR)
 au lieu de champs de texte de taille arbitraire (TEXT) lorsqu'une taille
