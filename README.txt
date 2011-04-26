@@ -34,6 +34,17 @@ Installation
 L'installation se fait par la commande ``make install`` (à exécuter en
 ``root``).
 
+Vous devez ensuite créer l'utilisateur et la base de données Vigilo. Exemple
+sous PostgreSQL::
+
+    sudo -u postgres createuser -D -R -S -P vigilo
+    sudo -u postgres createdb -O vigilo -E UTF8 -T template0 vigilo
+
+Enfin, après avoir installé tous les composants de Vigilo, vous pourrez
+initialiser la base de données Vigilo grâce à la commande::
+
+    vigilo-updatedb
+
 
 License
 -------
