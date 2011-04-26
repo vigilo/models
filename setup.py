@@ -42,7 +42,7 @@ setup(name='vigilo-models',
         "Babel >= 0.9.4",
         "setuptools",
         "psycopg2",
-        "SQLAlchemy < 0.6.0",
+        "SQLAlchemy < 0.6.0dev",
         "zope.sqlalchemy >= 0.4",
         "PasteScript >= 1.7", # setup_requires has issues
         "vigilo-common",
