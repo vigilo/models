@@ -199,7 +199,7 @@ def populate_db(bind, commit=True):
         manager.user_name = u'manager'
         manager.email = u'manager@somedomain.com'
         manager.fullname = u'Manager'
-        manager.password = u'managepass'
+        manager.password = u'iddad'
         DBSession.add(manager)
         DBSession.flush()
 
