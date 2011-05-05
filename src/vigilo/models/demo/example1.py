@@ -48,10 +48,10 @@ def main():
     add_host('shows.how.vigigraph.may.make.an.ellipse')
 
     # Tags
-    add_tag("important", ("messagerie", None))
-    add_tag("mco", ("par.linux1", None))
-    add_tag("important", ("proto4", None))
-    add_tag("security", ("firewall", None))
+    add_tag(("messagerie", None), "important")
+    add_tag(("par.linux1", None), "mco")
+    add_tag(("proto4", None), "important")
+    add_tag(("firewall", None), "security")
 
     # LowLevelService
     add_lowlevelservice('host1.example.com', 'Interface eth0')

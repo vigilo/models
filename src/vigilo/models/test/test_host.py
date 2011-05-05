@@ -4,10 +4,11 @@ from nose.tools import assert_equals
 
 from vigilo.models.tables import Host, StateName
 from vigilo.models.session import DBSession
+from test_tag import TagTestMixin
 
 from controller import ModelTest
 
-class TestHost(ModelTest):
+class TestHost(ModelTest, TagTestMixin):
     """Test de la table host"""
 
     klass = Host

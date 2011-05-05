@@ -189,47 +189,28 @@ def add_dependency(group, depended):
     DBSession.flush()
 
 
-def add_tag(name, supitem=None):
+def add_tag(supitem, name, value=None):
     """
     Ajoute une étiquette (tag), en l'associant éventuellement
     à un élément supervisé existant.
 
-    @param name: Nom de l'étiquette.
-    @type name: C{basestr}
     @param supitem: Élément supervisé auquel attacher l'étiquette.
     @type supitem: C{tables.SupItem}
+    @param name: Nom de l'étiquette.
+    @type name: C{basestr}
+    @param value: Valeur de l'étiquette.
+    @type value: C{basestr}
     @return: Instance de l'étiquette créée ou existante.
     @rtype: L{tables.Tag}
     """
-    t = tables.Tag.by_tag_name(unicode(name))
-    if not t:
-        t = tables.Tag(name=unicode(name), value=u"1")
-        DBSession.add(t)
-        DBSession.flush()
-    if supitem is not None:
-        add_tag2supitem(t, supitem)
-    return t
-
-def add_tag2supitem(tag, supitem):
-    """
-    Associe une étiquette (tag) à un élément supervisé.
-
-    @param tag: Instance de l'étiquette.
-    @type tag: L{tables.Tag}
-    @param supitem: Instance de l'élément supervisé ou tuple (hôte, service)
-        décrivant l'élément.
-    @type supitem: L{tables.SupItem} ou C{tuple}
-    """
     if isinstance(supitem, tuple):
-        supitem = map(unicode, supitem)
-        idsupitem = tables.SupItem.get_supitem(*supitem)
-        if not idsupitem:
-            return
-        supitem = DBSession.query(tables.SupItem).get(idsupitem)
-    if tag not in supitem.tags:
-        supitem.tags.append(tag)
-    DBSession.flush()
+        supitem = map(lambda x: unicode(x) if x is not None else x, supitem)
+        supitem = DBSession.query(tables.SupItem).get(
+            tables.SupItem.get_supitem(*supitem))
 
+    supitem.tags[name] = value
+    DBSession.flush()
+    return
 
 #
 # Groupes

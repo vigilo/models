@@ -1,57 +1,30 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2011 CS-SI
-# License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
-
 """Test suite for Tag class"""
+
 from nose.tools import assert_equals
 
-from vigilo.models.tables import Tag, Host, LowLevelService
+from vigilo.models.tables import Tag
 from vigilo.models.session import DBSession
 
-from controller import ModelTest
+class TagTestMixin(object):
+    def test_delete_tag(self):
+        """Suppression d'un tag."""
+        self.obj.tags['foo'] = 'bar'
+        DBSession.flush()
+        assert_equals(1, len(self.obj.tags))
 
-class TestTag(ModelTest):
-    """Test de la table Tag"""
+        del self.obj.tags['foo']
+        DBSession.flush()
+        assert_equals(0, len(self.obj.tags))
 
-    klass = Tag
-    attrs = {
-        'name': u'test',
-        'value': u'Foo bar baz',
-    }
-
-    def __init__(self):
-        ModelTest.__init__(self)
-
-    def test_tag_association(self):
-        """Il doit être possible d'associer un tag à un hôte."""
-        host = Host(
-            name=u'myhost',
-            checkhostcmd=u'halt -f',
-            snmpcommunity=u'public',
-            description=u'My Host',
-            hosttpl=u'template',
-            address=u'127.0.0.1',
-            snmpport=u'1234',
-            weight=42,
-        )
-        DBSession.add(host)
-
-        service = LowLevelService(
-            host=host,
-            servicename=u'myservice',
-            weight=42,
-        )
-        DBSession.add(service)
-
-        self.obj.supitems.append(host)
-        self.obj.supitems.append(service)
+    def test_null_tags(self):
+        """Affectation de la valeur None à un Tag."""
+        self.obj.tags['foo'] = None
         DBSession.flush()
 
-        host = Host.by_host_name(u'myhost')
-        assert_equals(1, len(host.tags))
-        assert_equals(self.obj, host.tags[0])
-
-        service = LowLevelService.by_host_service_name(
-                    hostname=u'myhost', servicename=u'myservice')
-        assert_equals(1, len(service.tags))
-        assert_equals(self.obj, service.tags[0])
+    def test_by_supitem_and_tag_name(self):
+        """Récupération d'un tag par supitem et nom."""
+        self.obj.tags['foo'] = 'bar'
+        DBSession.flush()
+        tag = Tag.by_supitem_and_tag_name(self.obj, 'foo')
+        assert_equals(tag.value, self.obj.tags['foo'])

@@ -10,10 +10,11 @@ from vigilo.models.tables import Host, Service, StateName, \
                                     LowLevelService, HighLevelService
 from vigilo.models.session import DBSession
 from vigilo.models.demo.functions import add_lowlevelservice
+from test_tag import TagTestMixin
 
 from controller import ModelTest, setup_db, teardown_db
 
-class TestLowLevelService(ModelTest):
+class TestLowLevelService(ModelTest, TagTestMixin):
     """Test de la classe LowLevelService."""
 
     klass = LowLevelService
@@ -62,7 +63,7 @@ class TestLowLevelService(ModelTest):
         assert_equals(service.collector, collector)
 
 
-class TestHighLevelService(ModelTest):
+class TestHighLevelService(ModelTest, TagTestMixin):
     """Test de la classe HighLevelService."""
 
     klass = HighLevelService
@@ -83,6 +84,7 @@ class TestHighLevelService(ModelTest):
         """L'état initial d'un service de haut niveau est 'OK'."""
         assert_equals(u'OK', StateName.value_to_statename(
             DBSession.query(self.klass).one().state.state))
+
 
 class TestSupItemAbstraction(unittest.TestCase):
     """

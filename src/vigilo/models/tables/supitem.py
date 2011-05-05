@@ -10,10 +10,12 @@ from sqlalchemy.orm.interfaces import MapperExtension
 from sqlalchemy.orm import EXT_CONTINUE
 from sqlalchemy.types import Integer
 from sqlalchemy.sql import functions
+from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy.ext.associationproxy import association_proxy
 
 from vigilo.models.session import DeclarativeBase, DBSession
-from vigilo.models.tables.secondary_tables import SUPITEM_TAG_TABLE, \
-                                                    SUPITEM_GROUP_TABLE
+from vigilo.models.tables.secondary_tables import SUPITEM_GROUP_TABLE
+from vigilo.models.tables.tag import Tag
 
 __all__ = ('SupItem', 'SupItemMapperExt')
 
@@ -62,8 +64,10 @@ class SupItem(DeclarativeBase, object):
         autoincrement=False,
     )
 
-    tags = relation('Tag', secondary=SUPITEM_TAG_TABLE,
-        back_populates='supitems', lazy=True)
+    _tags = relation(Tag,
+        collection_class=attribute_mapped_collection('name'),
+        cascade="all,delete-orphan")
+    tags = association_proxy('_tags', 'value', creator=Tag)
 
     groups = relation('SupItemGroup', secondary=SUPITEM_GROUP_TABLE,
                 back_populates='supitems', lazy=True)

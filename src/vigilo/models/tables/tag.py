@@ -5,16 +5,15 @@
 
 """Modèle pour la table Tag"""
 from sqlalchemy import Column
-from sqlalchemy.types import Unicode
-from sqlalchemy.orm import relation
+from sqlalchemy.types import Unicode, Integer
+from sqlalchemy.orm import relation, synonym
 
-from vigilo.models.session import DeclarativeBase, DBSession
-from vigilo.models.tables.secondary_tables import SUPITEM_TAG_TABLE
+from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
 
 class Tag(DeclarativeBase, object):
     """
     Un tag associé soit à un élément supervisé.
-    
+
     @ivar name: Nom du tag.
     @ivar value: Valeur associée au tag.
     @ivar supitems: Liste des éléments supervisés (L{SupItem}s) auxquels
@@ -23,38 +22,70 @@ class Tag(DeclarativeBase, object):
 
     __tablename__ = 'tag'
 
+    idsupitem = Column(
+        Integer,
+        ForeignKey(
+            'supitem.idsupitem',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+        ),
+        primary_key=True,
+        autoincrement=True,
+    )
+
     name = Column(
         Unicode(255),
-        primary_key=True, index=True)
+        primary_key=True,
+        index=True,
+    )
 
-    value = Column(Unicode(255), nullable=True)
+    _value = Column(
+        'value',
+        Unicode(255),
+        nullable=True,
+    )
 
-    supitems = relation('SupItem', secondary=SUPITEM_TAG_TABLE,
-        back_populates='tags', lazy=True)
+    supitem = relation('SupItem', lazy=True)
 
+    def __get_value(self):
+        return self._value
 
-    def __init__(self, **kwargs):
+    def __set_value(self, value):
+        if value is not None:
+            value = unicode(value)
+        self._value = value
+
+    value = synonym("_value", map_column=True,
+        descriptor=property(__get_value, __set_value))
+
+    def __init__(self, name, value=None, **kwargs):
         """Initialise un tag."""
-        super(Tag, self).__init__(**kwargs)
+        if value is not None:
+            value = unicode(value)
+        super(Tag, self).__init__(name=unicode(name), value=value, **kwargs)
 
     def __unicode__(self):
         """
         Représentation unicode du tag.
-        
+
         @return: Le nom du tag.
         @rtype: C{unicode}
         """
         return self.name
 
     @classmethod
-    def by_tag_name(cls, tagname):
+    def by_supitem_and_tag_name(cls, supitem, tagname):
         """
         Récupère un tag par son nom.
 
+        @param supitem: Instance sur laquelle porte le tag.
+        @type: L{SupItem}
         @param tagname: Nom du tag à récupérer.
         @type tagname: C{unicode}
         @return: Instance du Tag.
         @rtype: L{Tag}
         """
-        return DBSession.query(cls).filter(cls.name == tagname).first()
-
+        if not isinstance(supitem, int):
+            supitem = supitem.idsupitem
+        return DBSession.query(cls).filter(cls.name == unicode(tagname)
+            ).filter(cls.idsupitem == supitem).first()

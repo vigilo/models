@@ -28,18 +28,6 @@ USERGROUP_PERMISSION_TABLE = Table(
             primary_key=True),
 )
 
-SUPITEM_TAG_TABLE = Table(
-    'tags2supitems', metadata,
-    Column('service', Integer, ForeignKey(
-                'supitem.idsupitem',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('name', Unicode(255), ForeignKey(
-                'tag.name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True)
-)
-
 EVENTSAGGREGATE_TABLE = Table(
     'eventsaggregate', metadata,
     Column('idevent', Integer, ForeignKey(
