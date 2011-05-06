@@ -25,22 +25,23 @@ def upgrade(migrate_engine, actions):
     """
     MigrationDDL(
         [
-            # Renommage de l'ancienne table .
-            "ALTER TABLE %(fullname)s RENAME TO %(db_basename)stag_migration",
-
-            # Création de la nouvelle table à partir des anciennes.
-            "CREATE TABLE %(fullname)s AS "
+            # Préparation des données dans une table temporaire.
+            "CREATE TABLE %(db_basename)stag_migration AS "
                 "SELECT service AS idsupitem, name, value "
-                "FROM %(db_basename)stag_migration "
+                "FROM %(db_basename)stag "
                 "NATURAL JOIN %(db_basename)stags2supitems",
 
-            # Réaffectation de l'index à la nouvelle table
-            # (précédemment affecté à *tag_migration).
-            "DROP INDEX ix_%(db_basename)stag_name",
-            "CREATE INDEX ix_%(db_basename)stag_name "
-                "ON %(db_basename)stag (name)",
+            # Suppression de la table d'association devenue obsolète.
+            "DROP TABLE %(db_basename)stags2supitems",
 
-            # Ajout des contraintes sur la nouvelle table.
+            # Purge de l'ancienne table des tags.
+            "TRUNCATE %(fullname)s",
+
+            # Ajout de la nouvelle colonne.
+            "ALTER TABLE %(fullname)s ADD COLUMN idsupitem INTEGER NOT NULL",
+
+            # Mise à jour des contraintes.
+            "ALTER TABLE %(fullname)s DROP CONSTRAINT %(db_basename)stag_pkey",
             "ALTER TABLE %(fullname)s ADD "
                 "CONSTRAINT %(db_basename)stag_idsupitem_fkey "
                 "FOREIGN KEY (idsupitem) "
@@ -49,9 +50,14 @@ def upgrade(migrate_engine, actions):
                 "ON DELETE CASCADE",
             "ALTER TABLE %(fullname)s ADD PRIMARY KEY (idsupitem, name)",
 
-            # Suppression de l'ancienne table d'association
-            # et de l'ancienne table de tags.
-            "DROP TABLE %(db_basename)stags2supitems",
+            # Copie des données depuis la table temporaire,
+            # puis suppression de celle-ci.
+            # ATTENTION: l'ordre des champs DOIT être spécifié
+            # pour coller au schéma de la table temporaire,
+            # car le ADD COLUMN ajoute la colonne en fin de table.
+            "INSERT INTO %(fullname)s "
+                "SELECT name, value, idsupitem "
+                "FROM %(db_basename)stag_migration",
             "DROP TABLE %(db_basename)stag_migration",
         ],
         # Le nom de la contrainte dépend du préfixe utilisé.
