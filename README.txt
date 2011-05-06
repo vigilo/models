@@ -40,8 +40,17 @@ sous PostgreSQL::
     sudo -u postgres createuser -D -R -S -P vigilo
     sudo -u postgres createdb -O vigilo -E UTF8 -T template0 vigilo
 
-Enfin, après avoir installé tous les composants de Vigilo, vous pourrez
-initialiser la base de données Vigilo grâce à la commande::
+Puis, dans le cas de PostgreSQL, il faut autoriser l'accès local à
+l'utilisateur Vigilo dans la configuration du serveur. Pour cela, éditer le
+fichier ``/var/lib/pgsql/data/pg_hba.conf`` et ajouter les lignes suivantes en
+début de fichier::
+
+    local  vigilo  vigilo                md5
+    host   vigilo  vigilo  127.0.0.1/32  md5
+
+Et recharger le serveur PostgreSQL. Enfin, après avoir installé tous les
+composants de Vigilo, vous pourrez initialiser la base de données Vigilo grâce
+à la commande::
 
     vigilo-updatedb
 
