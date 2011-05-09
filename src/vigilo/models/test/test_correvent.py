@@ -60,12 +60,12 @@ class TestCorrEvent(ModelTest):
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""
-        form1 = re.compile("^\w* \w* \d*:\d*:\d*$")
-        form2 = re.compile("^\w* \d*:\d*:\d*$")
-        date = self.obj.get_date("timestamp_active")
-        assert_true(form1.match(date) or form2.match(date))
+        # Motif pour une date du type "Mar 15, 2011 2:44:21 PM".
+        form1 = re.compile("^\w* \d{1,2}, \d{4} \d{1,2}:\d{1,2}:\d{1,2} [PA]M$")
+        result = self.obj.get_date("timestamp_active", "en")
+        assert_true(form1.match(result))
 
     def test_get_since_date(self):
         """La fonction GetSinceDate doit renvoyer un objet formaté"""
         assert_true(re.compile("^\d*d \d*h \d'$").match(
-            self.obj.get_since_date("timestamp_active")))
+            self.obj.get_since_date("timestamp_active", "en")))
