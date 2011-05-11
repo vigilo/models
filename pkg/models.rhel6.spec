@@ -23,6 +23,7 @@ Requires:   python-zope-sqlalchemy >= 0.4
 Requires:   python-paste-script >= 1.7
 Requires:   vigilo-common
 Requires:   python-transaction
+Requires:   python-networkx
 
 
 %description

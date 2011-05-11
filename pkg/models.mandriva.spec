@@ -28,7 +28,7 @@ Requires:   python-zope-interface
 Requires:   python-configobj
 Requires:   python-pastedeploy
 Requires:   python-paste
-
+Requires:   python-networkx
 
 
 %description

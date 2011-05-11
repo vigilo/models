@@ -47,6 +47,7 @@ setup(name='vigilo-models',
         "PasteScript >= 1.7", # setup_requires has issues
         "vigilo-common",
         "transaction",
+        "networkx",
     ],
     extras_require ={
         'tests': tests_require

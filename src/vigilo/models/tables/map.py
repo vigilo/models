@@ -4,6 +4,7 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table Map"""
+import networkx as nx
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime, Integer, Boolean
 from sqlalchemy.orm import relation, aliased
@@ -107,7 +108,7 @@ class Map(DeclarativeBase, object):
             ).first()
 
     @classmethod
-    def has_submaps(cls, idmap):
+    def has_submaps(cls, idmap, break_cycles=False):
         """
         Indique si une carte possède des sous-cartes ou non.
 
@@ -116,24 +117,43 @@ class Map(DeclarativeBase, object):
         @param idmap: Identifiant de la carte pour laquelle
             le test doit avoir lieu.
         @type idmap: C{int}
+        @param break_cycles: Drapeau indiquant que les sous-cartes qui
+            génèreraient des boucles doivent être ignorées.
+        @type break_cycles: C{bool}
         @return: Drapeau indiquant si la carte a des sous-cartes.
         @rtype: C{bool}
         """
         from .mapnode import MapNode
-        map_alias = aliased(Map)
-        return (DBSession.query(
-                    map_alias
-                ).join(
-                    (SUB_MAP_NODE_MAP_TABLE, SUB_MAP_NODE_MAP_TABLE.c.idmap == \
-                        map_alias.idmap),
-                    (MapNode, MapNode.idmapnode == \
+        submaps = DBSession.query(Map.idmap).join(
+                    (SUB_MAP_NODE_MAP_TABLE, SUB_MAP_NODE_MAP_TABLE.c.idmap ==
+                        Map.idmap),
+                    (MapNode, MapNode.idmapnode ==
                         SUB_MAP_NODE_MAP_TABLE.c.mapnodeid),
-                    (cls, cls.idmap == MapNode.idmap),
-                ).filter(cls.idmap == idmap
-                ).count() > 0)
+                ).filter(MapNode.idmap == idmap)
+
+        if not break_cycles:
+            return submaps.count() > 0
+
+        paths = DBSession.query(
+                MapNode.idmap,
+                Map.idmap,
+            ).distinct().join(
+                (SUB_MAP_NODE_MAP_TABLE,
+                    SUB_MAP_NODE_MAP_TABLE.c.mapnodeid ==
+                    MapNode.idmapnode),
+                (Map, Map.idmap == SUB_MAP_NODE_MAP_TABLE.c.idmap),
+            ).all()
+
+        graph = nx.DiGraph()
+        for path in paths:
+            graph.add_edge(path[0], path[1])
+
+        return len([submap for submap in submaps
+                if not nx.shortest_path(graph, submap.idmap, idmap)]) > 0
+
 
     @classmethod
-    def get_submaps(cls, idmap):
+    def get_submaps(cls, idmap, break_cycles=False):
         """
         Renvoie l'ensemble des instances de sous-cartes d'une carte.
 
@@ -142,15 +162,38 @@ class Map(DeclarativeBase, object):
         @param idmap: Identifiant de la carte dont les sous-cartes
             doivent être retournées.
         @type idmap: C{int}
+        @param break_cycles: Drapeau indiquant que les sous-cartes qui
+            génèreraient des boucles doivent être ignorées.
+        @type break_cycles: C{bool}
         @return: Sous-cartes de la carte identifiée par L{idmap}.
         @rtype: C{list} of L{Map}
         """
         from .mapnode import MapNode
-        map_alias = aliased(Map)
-        return (DBSession.query(map_alias) \
-            .join((SUB_MAP_NODE_MAP_TABLE,
-                   SUB_MAP_NODE_MAP_TABLE.c.idmap == map_alias.idmap)) \
-            .join((MapNode,
-                   MapNode.idmapnode == SUB_MAP_NODE_MAP_TABLE.c.mapnodeid)) \
-            .join((cls, cls.idmap == MapNode.idmap)) \
-            .filter(cls.idmap == idmap).distinct().order_by(Map.title).all())
+        submaps = DBSession.query(Map).distinct().join(
+                (SUB_MAP_NODE_MAP_TABLE, SUB_MAP_NODE_MAP_TABLE.c.idmap ==
+                    Map.idmap),
+                (MapNode, MapNode.idmapnode ==
+                    SUB_MAP_NODE_MAP_TABLE.c.mapnodeid),
+            ).filter(MapNode.idmap == idmap
+            ).order_by(Map.title).all()
+
+        if not break_cycles:
+            return submaps
+
+        paths = DBSession.query(
+                MapNode.idmap,
+                Map.idmap,
+            ).distinct().join(
+                (SUB_MAP_NODE_MAP_TABLE,
+                    SUB_MAP_NODE_MAP_TABLE.c.mapnodeid ==
+                    MapNode.idmapnode),
+                (Map, Map.idmap == SUB_MAP_NODE_MAP_TABLE.c.idmap),
+            ).all()
+
+        graph = nx.DiGraph()
+        for path in paths:
+            graph.add_edge(path[0], path[1])
+
+        return [submap for submap in submaps
+                if not nx.shortest_path(graph, submap.idmap, idmap)]
+
