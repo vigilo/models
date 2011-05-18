@@ -177,7 +177,7 @@ def populate_db(bind, commit=True):
             print   "ATTENTION: Although the schema migration completed " \
                     "successfully,\n" \
                     "you should re-deploy your configuration using " \
-                    "option --force to finish the migration."
+                    "option '--force deploy' to finish the migration."
 
         # La migration nécessite de mettre à jour VigiReport.
         if actions.upgrade_vigireport:
