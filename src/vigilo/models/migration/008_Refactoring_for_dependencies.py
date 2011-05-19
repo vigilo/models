@@ -124,4 +124,4 @@ def upgrade(migrate_engine, actions):
     ).execute(DBSession, tables.Dependency.__table__)
 
     # Nécessite un déploiement forcé.
-    actions.deploy_force = True
+    actions.sync_force = True

@@ -50,7 +50,7 @@ class MigrationActions(object):
     à C{True} lorsque l'action associée doit être effectuée.
     """
     def __init__(self):
-        self.deploy_force = False
+        self.sync_force = False
         self.upgrade_vigireport = False
         self.was_upgraded = False
 
@@ -173,11 +173,11 @@ def populate_db(bind, commit=True):
     # on affiche les éventuels messages d'information associés.
     if actions:
         # La migration nécessite de redéployer le parc.
-        if actions.deploy_force:
+        if actions.sync_force:
             print   "ATTENTION: Although the schema migration completed " \
                     "successfully,\n" \
-                    "you should re-deploy your configuration using " \
-                    "option '--force deploy' to finish the migration."
+                    "you should re-sync your configuration using " \
+                    "'vigiconf deploy --force db-sync' to finish the migration."
 
         # La migration nécessite de mettre à jour VigiReport.
         if actions.upgrade_vigireport:
