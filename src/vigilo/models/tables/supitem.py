@@ -139,14 +139,15 @@ class SupItem(DeclarativeBase, object):
         # Si le nom du service vaut None, l'item est un hôte.
         if not servicename:
             return DBSession.query(Host.idhost
-                        ).filter(Host.name == hostname
+                        ).filter(Host.name == unicode(hostname)
                         ).scalar()
 
         # Lorsque l'item est un service de haut niveau.
         if not hostname:
             return DBSession.query(HighLevelService.idservice
-                        ).filter(HighLevelService.servicename == servicename,
-                        ).scalar()
+                    ).filter(
+                        HighLevelService.servicename == unicode(servicename),
+                    ).scalar()
 
         # Sinon, l'item est un service de bas niveau.
         return DBSession.query(LowLevelService.idservice
@@ -154,8 +155,8 @@ class SupItem(DeclarativeBase, object):
                         (Host, LowLevelService.idhost == Host.idhost)
                     ).filter(
                          and_(
-                            LowLevelService.servicename == servicename,
-                            Host.name == hostname
+                            LowLevelService.servicename == unicode(servicename),
+                            Host.name == unicode(hostname)
                         )
                     ).scalar()
 
