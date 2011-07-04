@@ -33,9 +33,14 @@ class SupItemMapperExt(MapperExtension):
     def after_insert(self, mapper, connection, instance):
         from vigilo.models.tables.state import State
         from vigilo.models.tables.statename import StateName
-        s = State(idsupitem=instance.idsupitem,
-                         state=StateName.statename_to_value(u"OK"),
-                         message=u"")
+        from vigilo.models.tables.service import HighLevelService
+
+        if isinstance(instance, HighLevelService):
+            state = StateName.statename_to_value(u"UNKNOWN")
+        else:
+            state = StateName.statename_to_value(u"OK")
+
+        s = State(idsupitem=instance.idsupitem, state=state, message=u"")
         DBSession.merge(s)
         return EXT_CONTINUE
 

@@ -21,6 +21,7 @@ class DeleteCascadeTest(unittest.TestCase):
         """Call before every test case."""
         setup_db()
         DBSession.add(tables.StateName(statename=u'OK', order=0))
+        DBSession.add(tables.StateName(statename=u'UNKNOWN', order=1))
         fct.add_mapgroup('Root')
         DBSession.flush()
 
