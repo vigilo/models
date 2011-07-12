@@ -84,6 +84,7 @@ class CorrEvent(DeclarativeBase, object):
     timestamp_active = Column(
         DateTime(timezone=False),
         nullable=False,
+        index=True,
     )
 
     events = relation('Event', lazy=True,
