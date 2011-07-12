@@ -16,7 +16,6 @@ __all__ = [
     'Application', 'VigiloServer', 'Ventilation',
     'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
     'FileDeployment', 'Change', 'ConfItem',  'MapNodeLls', 'MapNodeService',
-    'CorrelationContext',
 ]
 
 from .eventhistory import EventHistory
@@ -57,7 +56,6 @@ from .change import Change
 from .confitem import ConfItem
 from .conffile import ConfFile
 from .hlshistory import HLSHistory
-from .correlation_context import CorrelationContext
 
 # Importation des vues.
 from .grouppath import GroupPath
