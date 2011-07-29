@@ -52,6 +52,8 @@ class DependencyGroup(DeclarativeBase, object):
             SupItem.idsupitem,
             ondelete='CASCADE',
             onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )

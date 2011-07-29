@@ -37,14 +37,19 @@ class Downtime(DeclarativeBase, object):
 
     iddowntime = Column(
         Integer,
-        primary_key=True, nullable=False, autoincrement=True
+        primary_key=True,
+        nullable=False,
+        autoincrement=True
     )
 
     idsupitem = Column(
         Integer,
         ForeignKey(
             SupItem.idsupitem,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )
@@ -57,7 +62,10 @@ class Downtime(DeclarativeBase, object):
         Unicode(255),
         ForeignKey(
             User.user_name,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )
@@ -74,7 +82,10 @@ class Downtime(DeclarativeBase, object):
         Integer,
         ForeignKey(
             DowntimeStatus.idstatus,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )

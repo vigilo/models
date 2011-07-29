@@ -32,9 +32,13 @@ class State(DeclarativeBase, object):
         Integer,
         ForeignKey(
             SupItem.idsupitem,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
-        autoincrement=False, primary_key=True,
+        autoincrement=False,
+        primary_key=True,
     )
 
     supitem = relation('SupItem', back_populates="state", lazy=True)
@@ -49,7 +53,10 @@ class State(DeclarativeBase, object):
         'state', Integer,
         ForeignKey(
             StateName.idstatename,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )

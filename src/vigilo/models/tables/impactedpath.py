@@ -40,7 +40,10 @@ class ImpactedPath(DeclarativeBase, object):
         Integer,
         ForeignKey(
             SupItem.idsupitem,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )

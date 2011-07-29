@@ -35,6 +35,8 @@ class HLSHistory(DeclarativeBase, object):
             HighLevelService.idservice,
             onupdate='CASCADE',
             ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         autoincrement=False,
         nullable=False,
@@ -50,9 +52,13 @@ class HLSHistory(DeclarativeBase, object):
     idstatename = Column(
         Integer,
         ForeignKey(
-            StateName.idstatename
+            StateName.idstatename,
+            deferrable=True,
+            initially='IMMEDIATE',
         )
     )
+
+    statename = relation('StateName', lazy=True)
 
     def __init__(self, **kwargs):
         """

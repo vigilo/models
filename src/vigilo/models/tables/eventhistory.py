@@ -66,8 +66,12 @@ class EventHistory(DeclarativeBase, object):
             Event.idevent,
             onupdate='CASCADE',
             ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
-        index=True, nullable=False, autoincrement=False,
+        index=True,
+        nullable=False,
+        autoincrement=False,
     )
 
     event = relation('Event', lazy=True)

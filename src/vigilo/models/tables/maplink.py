@@ -43,22 +43,37 @@ class MapLink(DeclarativeBase, object):
         Integer,
         ForeignKey(
             MapNode.idmapnode,
-            ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False)
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        nullable=False,
+    )
 
     idto_node = Column(
         Integer,
         ForeignKey(
             MapNode.idmapnode,
-            ondelete='CASCADE', onupdate='CASCADE'),
-        nullable=False)
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        nullable=False,
+    )
 
     idmap = Column(
         Integer,
         ForeignKey(
             Map.idmap,
-            onupdate="CASCADE", ondelete="CASCADE"),
-        nullable=False)
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        nullable=False,
+    )
 
     type_link = Column('type_link', Unicode(16), nullable=False)
 
@@ -118,16 +133,23 @@ class MapServiceLink(MapLink):
         Integer,
         ForeignKey(
             MapLink.idmaplink,
-            onupdate='CASCADE', ondelete='CASCADE'),
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
         primary_key=True,
-        nullable=False
-        )
+        nullable=False,
+    )
 
     idref = Column(
         Integer,
         ForeignKey(
             Service.idsupitem,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )
@@ -138,7 +160,10 @@ class MapServiceLink(MapLink):
         Integer,
         ForeignKey(
             Graph.idgraph,
-            ondelete='CASCADE', onupdate='CASCADE'
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
     )
 
@@ -150,6 +175,8 @@ class MapServiceLink(MapLink):
             PerfDataSource.idperfdatasource,
             ondelete='CASCADE',
             onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
     )
 
@@ -159,6 +186,8 @@ class MapServiceLink(MapLink):
             PerfDataSource.idperfdatasource,
             ondelete='CASCADE',
             onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
     )
 
@@ -213,7 +242,11 @@ class MapSegment(MapLink):
         Integer,
         ForeignKey(
             MapLink.idmaplink,
-            onupdate='CASCADE', ondelete='CASCADE'),
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
         primary_key=True,
         nullable=False
     )

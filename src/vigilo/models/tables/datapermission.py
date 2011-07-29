@@ -30,9 +30,13 @@ class DataPermission(DeclarativeBase, object):
         Integer,
         ForeignKey(
             UserGroup.idgroup,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
-        autoincrement=False, primary_key=True,
+        autoincrement=False,
+        primary_key=True,
     )
 
     usergroup = relation('UserGroup', back_populates='datapermissions')
@@ -41,9 +45,13 @@ class DataPermission(DeclarativeBase, object):
         Integer,
         ForeignKey(
             Group.idgroup,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
-        autoincrement=False, primary_key=True,
+        autoincrement=False,
+        primary_key=True,
     )
 
     group = relation('Group', back_populates='datapermissions')

@@ -113,8 +113,11 @@ class LowLevelService(Service):
             SupItem.idsupitem,
             ondelete='CASCADE',
             onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
-        autoincrement=False, primary_key=True,
+        autoincrement=False,
+        primary_key=True,
     )
 
     servicename = Column(
@@ -128,6 +131,8 @@ class LowLevelService(Service):
             Host.idhost,
             ondelete='CASCADE',
             onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )
@@ -156,6 +161,8 @@ class LowLevelService(Service):
             SupItem.idsupitem,
             ondelete='SET NULL',
             onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         default=None,
         nullable=True,
@@ -263,7 +270,10 @@ class HighLevelService(Service):
         Integer,
         ForeignKey(
             SupItem.idsupitem,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         autoincrement=False, primary_key=True,
     )

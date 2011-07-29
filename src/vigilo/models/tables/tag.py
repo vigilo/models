@@ -22,6 +22,19 @@ class Tag(DeclarativeBase, object):
 
     __tablename__ = 'tag'
 
+    idsupitem = Column(
+        Integer,
+        ForeignKey(
+            'supitem.idsupitem',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=True,
+    )
+
     name = Column(
         Unicode(255),
         primary_key=True,
@@ -32,18 +45,6 @@ class Tag(DeclarativeBase, object):
         'value',
         Unicode(255),
         nullable=True,
-    )
-
-    # DOIT être en dernière position.
-    idsupitem = Column(
-        Integer,
-        ForeignKey(
-            'supitem.idsupitem',
-            onupdate="CASCADE",
-            ondelete="CASCADE",
-        ),
-        primary_key=True,
-        autoincrement=True,
     )
 
     supitem = relation('SupItem', lazy=True)

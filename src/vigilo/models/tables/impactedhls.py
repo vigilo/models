@@ -37,9 +37,13 @@ class ImpactedHLS(DeclarativeBase, object):
         Integer,
         ForeignKey(
             ImpactedPath.idpath,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
-        primary_key=True, autoincrement=False,
+        primary_key=True,
+        autoincrement=False,
     )
 
     path = relation('ImpactedPath', back_populates='impacted_hls', lazy=True)
@@ -48,9 +52,13 @@ class ImpactedHLS(DeclarativeBase, object):
         Integer,
         ForeignKey(
             HighLevelService.idservice,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
-        primary_key=True, autoincrement=False,
+        primary_key=True,
+        autoincrement=False,
     )
 
     hls = relation('HighLevelService', back_populates='impacts', lazy=True)

@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table confitem"""
-from sqlalchemy import Column, ForeignKey
+from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, DBSession
+from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
 from vigilo.models.tables import SupItem, Host, LowLevelService
 
 class ConfItem(DeclarativeBase, object):
@@ -42,7 +42,10 @@ class ConfItem(DeclarativeBase, object):
         Integer,
         ForeignKey(
             SupItem.idsupitem,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )

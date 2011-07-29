@@ -55,7 +55,10 @@ class CorrEvent(DeclarativeBase, object):
         Integer,
         ForeignKey(
             Event.idevent,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         autoincrement=False,
         nullable=False,

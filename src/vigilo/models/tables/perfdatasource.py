@@ -36,14 +36,18 @@ class PerfDataSource(DeclarativeBase, object):
 
     idperfdatasource = Column(
         Integer,
-        primary_key=True, autoincrement=True,
+        primary_key=True,
+        autoincrement=True,
     )
 
     idhost = Column(
         Integer,
         ForeignKey(
             Host.idhost,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )

@@ -57,7 +57,10 @@ class Event(DeclarativeBase, object):
         Integer,
         ForeignKey(
             SupItem.idsupitem,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )
@@ -77,7 +80,10 @@ class Event(DeclarativeBase, object):
         'current_state', Integer,
         ForeignKey(
             StateName.idstatename,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )
@@ -116,7 +122,10 @@ class Event(DeclarativeBase, object):
         'initial_state', Integer,
         ForeignKey(
             StateName.idstatename,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )
@@ -134,7 +143,10 @@ class Event(DeclarativeBase, object):
         'peak_state', Integer,
         ForeignKey(
             StateName.idstatename,
-            ondelete='CASCADE', onupdate='CASCADE',
+            ondelete='CASCADE',
+            onupdate='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )

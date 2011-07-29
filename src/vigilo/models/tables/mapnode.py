@@ -52,8 +52,13 @@ class MapNode(DeclarativeBase, object):
         Integer,
         ForeignKey(
             Map.idmap,
-            onupdate="CASCADE", ondelete="CASCADE"),
-        nullable=False)
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        nullable=False,
+    )
 
     x_pos = Column(Integer, nullable=True)
 
@@ -151,17 +156,27 @@ class MapNodeHost(MapNode):
         Integer,
         ForeignKey(
             MapNode.idmapnode,
-            onupdate='CASCADE', ondelete='CASCADE'),
-        autoincrement=True, primary_key=True,
-        nullable=False
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        autoincrement=True,
+        primary_key=True,
+        nullable=False,
     )
 
     idhost = Column(
         Integer,
         ForeignKey(
             Host.idhost,
-            onupdate='CASCADE', ondelete='CASCADE'),
-        nullable=False)
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        nullable=False,
+    )
 
     host = relation('Host', lazy=True)
 
@@ -195,8 +210,13 @@ class MapNodeService(MapNode):
         Integer,
         ForeignKey(
             MapNode.idmapnode,
-            onupdate='CASCADE', ondelete='CASCADE'),
-        autoincrement=False, primary_key=True,
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        autoincrement=False,
+        primary_key=True,
         nullable=False
     )
 
@@ -204,7 +224,10 @@ class MapNodeService(MapNode):
         Integer,
         ForeignKey(
             Service.idsupitem,
-            onupdate='CASCADE', ondelete='CASCADE',
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
         ),
         nullable=False,
     )

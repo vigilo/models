@@ -18,108 +18,266 @@ from vigilo.models.session import metadata, ForeignKey, Table
 
 USERGROUP_PERMISSION_TABLE = Table(
     'usergrouppermissions', metadata,
-    Column('idgroup', Integer, ForeignKey(
-                'usergroup.idgroup',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idpermission', Integer, ForeignKey(
-                'permission.idpermission',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
+    Column(
+        'idgroup',
+        Integer,
+        ForeignKey(
+            'usergroup.idgroup',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
+    Column(
+        'idpermission',
+        Integer,
+        ForeignKey(
+            'permission.idpermission',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
 )
 
 EVENTSAGGREGATE_TABLE = Table(
     'eventsaggregate', metadata,
-    Column('idevent', Integer, ForeignKey(
-                'event.idevent',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('idcorrevent', Integer, ForeignKey(
-                'correvent.idcorrevent',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
+    Column(
+        'idevent',
+        Integer,
+        ForeignKey(
+            'event.idevent',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
+    Column(
+        'idcorrevent',
+        Integer,
+        ForeignKey(
+            'correvent.idcorrevent',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
 )
 
 USER_GROUP_TABLE = Table(
     'usertousergroups', metadata,
-    Column('username', Unicode(255), ForeignKey(
-                'user.user_name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idgroup', Integer, ForeignKey(
-                'usergroup.idgroup',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True)
+    Column(
+        'username',
+        Unicode(255),
+        ForeignKey(
+            'user.user_name',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
+    Column(
+        'idgroup',
+        Integer,
+        ForeignKey(
+            'usergroup.idgroup',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
 )
 
 MAP_GROUP_TABLE = Table(
     'mapgroup', metadata,
-    Column('idgroup', Integer, ForeignKey(
-                'group.idgroup',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('idmap', Integer, ForeignKey(
-                'map.idmap',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
+    Column(
+        'idgroup',
+        Integer,
+        ForeignKey(
+            'group.idgroup',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
+    Column(
+        'idmap',
+        Integer,
+        ForeignKey(
+            'map.idmap',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
 )
 
 SUB_MAP_NODE_MAP_TABLE = Table(
+    # @TODO: renommer en "submaps".
     'submapmapnodetable', metadata,
-    Column('mapnodeid', Integer, ForeignKey(
-                'mapnode.idmapnode',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idmap', Integer, ForeignKey(
-                'map.idmap',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True)
+    Column(
+        # @TODO: renommer en "idmapnode".
+        'mapnodeid',
+        Integer,
+        ForeignKey(
+            'mapnode.idmapnode',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
+    Column(
+        'idmap',
+        Integer,
+        ForeignKey(
+            'map.idmap',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
 )
 
 HOST_HOSTCLASS_TABLE = Table(
     'host2hostclass', metadata,
-    Column('hostname', Unicode(255), ForeignKey(
-                'host.name',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True),
-    Column('idclass', Integer, ForeignKey(
-                'hostclass.idclass',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
+    Column(
+        'hostname',
+        Unicode(255),
+        ForeignKey(
+            # @TODO: On devrait plutôt utiliser host.idhost.
+            'host.name',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
+    Column(
+        'idclass',
+        Integer,
+        ForeignKey(
+            'hostclass.idclass',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
 )
 
 SUPITEM_GROUP_TABLE = Table(
     'supitemgroup', metadata,
-    Column('idsupitem', Integer, ForeignKey(
-                'supitem.idsupitem',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('idgroup', Integer, ForeignKey(
-                'group.idgroup',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
+    Column(
+        'idsupitem',
+        Integer,
+        ForeignKey(
+            'supitem.idsupitem',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
+    Column(
+        'idgroup',
+        Integer,
+        ForeignKey(
+            'group.idgroup',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
 )
 
 GRAPH_GROUP_TABLE = Table(
     'graphgroup', metadata,
-    Column('idgraph', Integer, ForeignKey(
-                'graph.idgraph',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('idgroup', Integer, ForeignKey(
-                'group.idgroup',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
+    Column(
+        'idgraph',
+        Integer,
+        ForeignKey(
+            'graph.idgraph',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
+    Column(
+        'idgroup',
+        Integer,
+        ForeignKey(
+            'group.idgroup',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
 )
 
 GRAPH_PERFDATASOURCE_TABLE = Table(
     'graphperfdatasource', metadata,
-    Column('idperfdatasource', Integer, ForeignKey(
-                'perfdatasource.idperfdatasource',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False),
-    Column('idgraph', Integer, ForeignKey(
-                'graph.idgraph',
-                onupdate="CASCADE", ondelete="CASCADE"),
-            primary_key=True, autoincrement=False)
+    Column(
+        'idperfdatasource',
+        Integer,
+        ForeignKey(
+            'perfdatasource.idperfdatasource',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
+    Column(
+        'idgraph',
+        Integer,
+        ForeignKey(
+            'graph.idgraph',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+        autoincrement=False,
+    ),
 )
