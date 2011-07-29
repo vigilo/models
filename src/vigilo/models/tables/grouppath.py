@@ -53,7 +53,7 @@ DDL(
 # Création de la vue pour PostgreSQL.
 DDL(
     r"""
-    CREATE OR REPLACE VIEW %(db_basename)sgroup_paths AS
+    CREATE OR REPLACE VIEW %(fullname)s AS
     SELECT
         g2.idgroup AS idgroup,
         ('/' || array_to_string(ARRAY(
@@ -81,7 +81,7 @@ DDL(
     # La sous-requête est nécessaire pour contourner une limitation
     # de SQLite vis-à-vis du ORDER BY hops.
     r"""
-    CREATE VIEW IF NOT EXISTS %(db_basename)sgroup_paths AS
+    CREATE VIEW IF NOT EXISTS %(fullname)s AS
         SELECT
             idchild AS idgroup,
             ('/' ||
@@ -117,14 +117,14 @@ DDL(
 # (3.6.20 pour RHEL 6.0 -- qui peut être backporté si nécessaire).
 # On suppose que SQLite 3.5.4 ou plus est disponible.
 DDL(
-    "DROP VIEW IF EXISTS %(db_basename)sgroup_paths",
+    "DROP VIEW IF EXISTS %(fullname)s",
     context={
         'db_basename': DB_BASENAME,
     },
 ).execute_at('before-drop', GroupPath.__table__)
 
 DDL(
-    "CREATE TABLE IF NOT EXISTS %(db_basename)sgroup_paths (foo INTEGER)",
+    "CREATE TABLE %(fullname)s (foo INTEGER)",
     context={
         'db_basename': DB_BASENAME,
     },

@@ -19,9 +19,9 @@ class Legend(DeclarativeBase, object):
     __tablename__ = 'legend'
 
     minthreshold = Column(
-            Integer,
-            primary_key=True,
-            autoincrement=False
+        Integer,
+        primary_key=True,
+        autoincrement=False
     )
 
     fillcolor = Column(

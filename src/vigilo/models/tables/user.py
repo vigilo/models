@@ -83,7 +83,7 @@ class User(DeclarativeBase, object):
     # Le token est généré automatiquement à la volée.
     token = Column(
         Unicode(32),
-        nullable=False,
+        nullable=True,
         default=_generate_token,
     )
 

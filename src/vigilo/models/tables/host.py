@@ -82,16 +82,6 @@ class Host(SupItem):
         primary_key=True, autoincrement=False,
     )
 
-    idconffile = Column(
-        Integer,
-        ForeignKey(
-            ConfFile.idconffile,
-            onupdate='CASCADE',
-            ondelete='CASCADE',
-        ),
-        nullable=True
-    )
-
     name = Column(
         Unicode(255),
         index=True, unique=True, nullable=False)
@@ -133,6 +123,17 @@ class Host(SupItem):
 
     perfdatasources = relation('PerfDataSource', lazy=True, cascade="all",
                         back_populates='host')
+
+    # DOIT être en dernière position.
+    idconffile = Column(
+        Integer,
+        ForeignKey(
+            ConfFile.idconffile,
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+        ),
+        nullable=True
+    )
 
     def _get_graphs(self):
         from vigilo.models.tables.graph import Graph
