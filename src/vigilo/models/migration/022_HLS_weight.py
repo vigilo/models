@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Ajoute un index sur la colonne timestamp_active des correvents, pour optimiser
-une requête utilisée dans la règle UpdateOccurencesCount du corrélateur.
-Ticket: #774
+Rend le poids associé aux services de haut niveau statique.
+
+Ce changement permet de simplifier grandement la configuration
+des services de haut niveau dans VigiConf puisqu'il n'est plus
+nécessaire de calculer (récursivement) l'apport relatif de chaque
+dépendance pour choisir les seuils à appliquer au service de haut
+niveau.
+
+Voir le ticket #406.
 """
 
 from vigilo.models.session import DBSession, MigrationDDL
