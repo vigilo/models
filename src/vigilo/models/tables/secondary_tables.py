@@ -133,11 +133,9 @@ MAP_GROUP_TABLE = Table(
 )
 
 SUB_MAP_NODE_MAP_TABLE = Table(
-    # @TODO: renommer en "submaps".
-    'submapmapnodetable', metadata,
+    'submaps', metadata,
     Column(
-        # @TODO: renommer en "idmapnode".
-        'mapnodeid',
+        'idmapnode',
         Integer,
         ForeignKey(
             'mapnode.idmapnode',
@@ -165,17 +163,17 @@ SUB_MAP_NODE_MAP_TABLE = Table(
 HOST_HOSTCLASS_TABLE = Table(
     'host2hostclass', metadata,
     Column(
-        'hostname',
-        Unicode(255),
+        'idhost',
+        Integer,
         ForeignKey(
-            # @TODO: On devrait plutôt utiliser host.idhost.
-            'host.name',
+            'host.idhost',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
             initially='IMMEDIATE',
         ),
         primary_key=True,
+        autoincrement=False,
     ),
     Column(
         'idclass',
