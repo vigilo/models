@@ -7,11 +7,37 @@
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
+from sqlalchemy.schema import Index
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey, PrefixedTables
+from sqlalchemy.ext.declarative import DeclarativeMeta
 from vigilo.models.tables import SupItem, Host, LowLevelService
 
-class ConfItem(DeclarativeBase, object):
+class ConfItemIndexMeta(PrefixedTables):
+    """
+    Cette méta-classe ajoute un index sur les colonnes "name"
+    et "idsupitem", utilisée par VigiConf lors de la mise à jour
+    des entrées de la table L{ConfItem}.
+    """
+    def __init__(cls, *args, **kw):
+        if getattr(cls, '_decl_class_registry', None) is None:
+            return
+
+        super(ConfItemIndexMeta, cls).__init__(*args, **kw)
+        Index(
+            'ix_%s_key' % cls.__tablename__,
+            cls.name, cls.idsupitem,
+            unique=True
+        )
+
+class ConfItemMixin(object):
+    """
+    Ce mixin permet simplement d'intégrer la méta-classe,
+    afin d'éviter un conflit entre méta-classes dans ConfItem.
+    """
+    __metaclass__ = ConfItemIndexMeta
+
+class ConfItem(DeclarativeBase, ConfItemMixin):
     """
     Un confitem (élément de configuration) est associé à un élément
     supervisé.
@@ -36,7 +62,6 @@ class ConfItem(DeclarativeBase, object):
     name = Column(Unicode(50), nullable=False)
 
     value = Column(Unicode(100), nullable=False)
-
 
     idsupitem = Column(
         Integer,
