@@ -62,6 +62,7 @@ class Event(DeclarativeBase, object):
             deferrable=True,
             initially='IMMEDIATE',
         ),
+        index=True,
         nullable=False,
     )
 
