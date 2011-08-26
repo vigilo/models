@@ -4,7 +4,8 @@ Ajoute différents indexes qui permettent d'accroitre de manière
 importante les performances du corrélateur.
 
 Les indexes ajoutés concernent :
-- La colonne "idsupitem" de la table "CorrEvent".
+- La colonne "idsupitem" de la table "Event".
+- La colonne "current_state" de la table "Event".
 """
 
 from vigilo.models.session import DBSession, MigrationDDL
@@ -27,6 +28,8 @@ def upgrade(migrate_engine, actions):
         [
             "CREATE INDEX ix_%(db_basename)sevent_idsupitem "
                 "ON %(db_basename)sevent (idsupitem)",
+            "CREATE INDEX ix_%(db_basename)sevent_current_state "
+                "ON %(db_basename)sevent (current_state)",
         ],
         context={
             'db_basename': DB_BASENAME,
