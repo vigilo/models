@@ -47,26 +47,57 @@ class StateName(DeclarativeBase, object):
         localement sans effectuer de requêtes auprès du serveur SQL.
         """
         if not getattr(cls, '_cache', None) or force_refresh:
-            values = DBSession.query(cls.idstatename, cls.statename).all()
-            cls._cache = dict(values)
-            cls._reversed_cache = dict([(v, k) for (k, v) in values])
+            values = DBSession.query(cls.idstatename, cls.statename, cls.order).all()
+            cls._cache = {}
+            cls._reversed_cache = {}
+            for value in values:
+                cls._cache[value.idstatename] = {
+                        "name": value.statename,
+                        "order": value.order, }
+                cls._reversed_cache[value.statename] = {
+                        "id": value.idstatename,
+                        "order": value.order, }
         return (cls._cache, cls._reversed_cache)
 
     @classmethod
     def statename_to_value(cls, name):
         """Permet d'obtenir l'identifiant associé à un nom d'état donné."""
         try:
-            return cls.__statename_mapping(False)[1][name]
+            return cls.__statename_mapping(False)[1][name]["id"]
         except KeyError:
-            return cls.__statename_mapping(True)[1][name]
+            return cls.__statename_mapping(True)[1][name]["id"]
 
     @classmethod
     def value_to_statename(cls, value):
         """Permet d'obtenir le nom d'état associé à un identifiant donné."""
         try:
-            return cls.__statename_mapping(False)[0][value]
+            return cls.__statename_mapping(False)[0][value]["name"]
         except KeyError:
-            return cls.__statename_mapping(True)[0][value]
+            return cls.__statename_mapping(True)[0][value]["name"]
+
+    @classmethod
+    def compare_from_statenames(cls, sn1, sn2):
+        """
+        Compare deux noms d'états en fonction de leur ordre. Retour compatible
+        avec la fonction C{cmp}.
+        """
+        try:
+            mapping = cls.__statename_mapping(False)[1]
+        except KeyError:
+            mapping = cls.__statename_mapping(True)[1]
+        return cmp(mapping[sn1]["order"], mapping[sn2]["order"])
+
+    @classmethod
+    def compare_from_values(cls, sn1, sn2):
+        """
+        Compare deux noms d'états en fonction de leur ordre. Retour compatible
+        avec la fonction C{cmp}.
+        """
+        try:
+            mapping = cls.__statename_mapping(False)[0]
+        except KeyError:
+            mapping = cls.__statename_mapping(True)[0]
+        return cmp(mapping[sn1]["order"], mapping[sn2]["order"])
 
     def __init__(self, **kwargs):
         """Initialise un nom d'état."""

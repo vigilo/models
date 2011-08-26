@@ -95,22 +95,13 @@ class Event(DeclarativeBase, object):
 
     def _set_current_state(self, value):
         """Modifie la valeur textuelle de l'état courant."""
+        if self._current_state == value:
+            return # rien n'a changé, inutile de gérer le peak state
         if self._peak_state is None:
             self._peak_state = value
             self._initial_state = value
-
         else:
-            statename = aliased(StateName)
-            statename2 = aliased(StateName)
-            higher =    DBSession.query(
-                            statename.idstatename,
-                            statename2.idstatename,
-                        ).filter(statename.idstatename == self._peak_state
-                        ).filter(statename2.idstatename == value
-                        ).filter(statename2.order > statename.order
-                        ).all()
-
-            if higher:
+            if StateName.compare_from_values(self._peak_state, value):
                 self._peak_state = value
         self._current_state = value
 
