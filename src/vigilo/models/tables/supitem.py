@@ -155,13 +155,16 @@ class SupItem(DeclarativeBase, object):
                     ).scalar()
 
         # Sinon, l'item est un service de bas niveau.
+        # La jointure sur Host.__table__ évite de récupérer
+        # TOUS les attributs de Host + seconde jointure sur SupItem.
         return DBSession.query(LowLevelService.idservice
                     ).join(
-                        (Host, LowLevelService.idhost == Host.idhost)
+                        (Host.__table__, LowLevelService.idhost == \
+                            Host.__table__.c.idhost)
                     ).filter(
                          and_(
                             LowLevelService.servicename == unicode(servicename),
-                            Host.name == unicode(hostname)
+                            Host.__table__.c.name == unicode(hostname)
                         )
                     ).scalar()
 
