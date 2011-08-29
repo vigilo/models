@@ -47,5 +47,6 @@ class Version(DeclarativeBase, object):
         @return: Informations de version sur le composant L{object_name}.
         @rtype: L{Version}
         """
-        return DBSession.query(cls).filter(cls.name == object_name).first()
+        return DBSession.query(cls).filter(
+            cls.name == unicode(object_name)).first()
 
