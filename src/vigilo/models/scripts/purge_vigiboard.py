@@ -83,7 +83,7 @@ def clean_vigiboard(*args):
         sys.exit(1)
 
     if options.days is not None:
-        if options.days > 0:
+        if options.days >= 0:
             # Génère une date qui se trouve options.days jours dans le passé.
             old_date = datetime.fromtimestamp(
                 time.time() - options.days * 86400)
@@ -125,7 +125,7 @@ def clean_vigiboard(*args):
                         })
 
     if options.size is not None:
-        if options.size > 0:
+        if options.size >= 0:
             # Calcule la taille actuelle de la base de données Vigilo.
             from sqlalchemy.engine.url import make_url
             url = make_url(settings['database']['sqlalchemy_url'])
