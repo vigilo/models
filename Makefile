@@ -17,6 +17,7 @@ install_data: $(wildcard tools/*)
 
 lint: lint_pylint
 tests: tests_nose
+doc: apidoc
 clean: clean_python
 
 .PHONY: install_pkg install_python install_python_pkg install_data
