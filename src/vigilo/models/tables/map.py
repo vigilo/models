@@ -128,7 +128,7 @@ class Map(DeclarativeBase, object):
                     (SUB_MAP_NODE_MAP_TABLE, SUB_MAP_NODE_MAP_TABLE.c.idmap ==
                         Map.idmap),
                     (MapNode, MapNode.idmapnode ==
-                        SUB_MAP_NODE_MAP_TABLE.c.mapnodeid),
+                        SUB_MAP_NODE_MAP_TABLE.c.idmapnode),
                 ).filter(MapNode.idmap == idmap)
 
         if not break_cycles:
@@ -139,7 +139,7 @@ class Map(DeclarativeBase, object):
                 Map.idmap,
             ).distinct().join(
                 (SUB_MAP_NODE_MAP_TABLE,
-                    SUB_MAP_NODE_MAP_TABLE.c.mapnodeid ==
+                    SUB_MAP_NODE_MAP_TABLE.c.idmapnode ==
                     MapNode.idmapnode),
                 (Map, Map.idmap == SUB_MAP_NODE_MAP_TABLE.c.idmap),
             ).all()
@@ -173,7 +173,7 @@ class Map(DeclarativeBase, object):
                 (SUB_MAP_NODE_MAP_TABLE, SUB_MAP_NODE_MAP_TABLE.c.idmap ==
                     Map.idmap),
                 (MapNode, MapNode.idmapnode ==
-                    SUB_MAP_NODE_MAP_TABLE.c.mapnodeid),
+                    SUB_MAP_NODE_MAP_TABLE.c.idmapnode),
             ).filter(MapNode.idmap == idmap
             ).order_by(Map.title).all()
 
@@ -185,7 +185,7 @@ class Map(DeclarativeBase, object):
                 Map.idmap,
             ).distinct().join(
                 (SUB_MAP_NODE_MAP_TABLE,
-                    SUB_MAP_NODE_MAP_TABLE.c.mapnodeid ==
+                    SUB_MAP_NODE_MAP_TABLE.c.idmapnode ==
                     MapNode.idmapnode),
                 (Map, Map.idmap == SUB_MAP_NODE_MAP_TABLE.c.idmap),
             ).all()
