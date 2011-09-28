@@ -12,4 +12,3 @@ include settings_tests.ini
 
 include deployment/settings.ini
 include *.py
-include tools/*
