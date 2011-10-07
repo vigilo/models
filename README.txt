@@ -25,7 +25,7 @@ Les modèles ont besoin des modules Python suivants :
 - psycopg2 (pour PostgreSQL)
 - sqlalchemy 0.5.x
 - zope-sqlalchemy >= 0.4
-- paste-script >= 1.7
+- paste-deploy
 - transaction
 
 

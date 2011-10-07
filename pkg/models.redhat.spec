@@ -25,7 +25,7 @@ Requires:   python26-distribute
 Requires:   python26-psycopg2
 Requires:   python26-sqlalchemy0.5
 Requires:   python26-zope-sqlalchemy >= 0.4
-Requires:   python26-paste-script >= 1.7
+Requires:   python26-paste-deploy
 Requires:   vigilo-common
 Requires:   python26-transaction
 Requires:   python26-networkx

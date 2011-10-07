@@ -44,7 +44,7 @@ setup(name='vigilo-models',
         "psycopg2",
         "SQLAlchemy < 0.6.0dev",
         "zope.sqlalchemy >= 0.4",
-        "PasteScript >= 1.7", # setup_requires has issues
+        "PasteDeploy",
         "vigilo-common",
         "transaction",
         "networkx",

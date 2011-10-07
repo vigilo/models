@@ -17,7 +17,6 @@ BuildRequires:   python-babel
 Requires:   python >= 2.5
 Requires:   vigilo-common
 Requires:   python-transaction
-Requires:   python-pastescript >= 1.7
 Requires:   python-setuptools
 Requires:   python-zope.sqlalchemy >= 0.4
 Requires:   python-sqlalchemy >= 0.5
