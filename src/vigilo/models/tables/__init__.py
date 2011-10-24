@@ -9,6 +9,7 @@ __all__ = [
     'EventHistory', 'Event', 'CorrEvent', 'ConfFile',
     'GraphGroup', 'Graph', 'Host', 'HostClass', 'PerfDataSource',
     'SupItem', 'LowLevelService', 'HighLevelService',
+    'HLSPriority', 'HLSHistory',
     'Dependency', 'DependencyGroup', 'Version', 'State', 'Permission',
     'UserGroup', 'User', 'Tag', 'SupItemGroup',
     'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost', 'MapNodeHls',
@@ -56,6 +57,7 @@ from .change import Change
 from .confitem import ConfItem
 from .conffile import ConfFile
 from .hlshistory import HLSHistory
+from .hlspriority import HLSPriority
 
 # Importation des vues.
 from .grouppath import GroupPath

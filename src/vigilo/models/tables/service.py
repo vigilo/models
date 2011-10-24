@@ -6,13 +6,15 @@
 """Modèle pour la table Service"""
 from sqlalchemy import Column
 from sqlalchemy.types import UnicodeText, Unicode, Integer
-from sqlalchemy.orm import relation
+from sqlalchemy.orm import relation, EXT_CONTINUE
 from sqlalchemy.schema import UniqueConstraint
-from sqlalchemy.orm import EXT_CONTINUE
+from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy.ext.associationproxy import association_proxy
 
 from vigilo.models.session import DBSession, ForeignKey
 from vigilo.models.tables.supitem import SupItem, SupItemMapperExt
 from vigilo.models.tables.host import Host
+from vigilo.models.tables.hlspriority import HLSPriority
 
 __all__ = ('Service', 'LowLevelService', 'HighLevelService')
 
@@ -304,10 +306,11 @@ class HighLevelService(Service):
         nullable=True,
     )
 
-    priority = Column(
-        Integer,
-        nullable=False,
-    )
+    _priorities = relation(HLSPriority,
+        collection_class=attribute_mapped_collection('idstatename'),
+        cascade="all,delete-orphan")
+    priorities = association_proxy(
+        '_priorities', 'priority', creator=HLSPriority)
 
     impacts = relation('ImpactedHLS', back_populates='hls',
                        lazy=True, cascade="all")

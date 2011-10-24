@@ -31,7 +31,6 @@ class TestHLSHistory(ModelTest):
             message=u'Ouch',
             warning_threshold=42,
             critical_threshold=42,
-            priority=42,
         )
         DBSession.add(hls)
         DBSession.flush()

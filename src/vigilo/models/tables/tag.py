@@ -32,7 +32,7 @@ class Tag(DeclarativeBase, object):
             initially='IMMEDIATE',
         ),
         primary_key=True,
-        autoincrement=True,
+        autoincrement=False,
     )
 
     name = Column(

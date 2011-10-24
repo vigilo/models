@@ -152,7 +152,6 @@ class TestMapNodeHls(ModelTest):
             message= u'Hello world',
             warning_threshold= 50,
             critical_threshold= 80,
-            priority= 1,
         )
         DBSession.add(service)
         DBSession.flush()

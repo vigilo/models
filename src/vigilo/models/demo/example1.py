@@ -103,8 +103,12 @@ def main():
     add_lowlevelservice('localhost', 'Swap Usage')
 
     # HighLevelService
-    add_highlevelservice("Connexion", message="Ouch", priority=3)
-    add_highlevelservice("Portail web", message="Ouch", priority=1)
+    add_highlevelservice("Connexion", message="Ouch", priorities={
+                            u'UNKNOWN': 3,
+                            u'WARNING': 3,
+                            u'CRITICAL': 3,
+                        })
+    add_highlevelservice("Portail web", message="Ouch")
 
     # State
     add_svc_state(

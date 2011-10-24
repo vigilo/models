@@ -72,7 +72,6 @@ class TestHighLevelService(ModelTest, TagTestMixin):
         'message': u'Hello world',
         'warning_threshold': 50,
         'critical_threshold': 80,
-        'priority': 1,
     }
 
     def test_by_service_name(self):
@@ -127,7 +126,6 @@ class TestSupItemAbstraction(unittest.TestCase):
             message=u'foo',
             warning_threshold=42,
             critical_threshold=42,
-            priority=42,
         )
         DBSession.add(hls)
         DBSession.flush()

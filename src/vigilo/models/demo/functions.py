@@ -72,8 +72,6 @@ def add_lowlevelservice(host, servicename, statename="OK",
         s = tables.LowLevelService(
                 servicename=servicename,
                 idhost=host.idhost,
-                #servicetype=u"normal",
-                #priority=1,
                 weight=weight,
                 command=u"dummy")
         DBSession.add(s)
@@ -81,7 +79,7 @@ def add_lowlevelservice(host, servicename, statename="OK",
         add_svc_state((host.name, servicename), statename, message)
     return s
 
-def add_highlevelservice(servicename, operator="&", message="", priority=1):
+def add_highlevelservice(servicename, operator="&", message="", priorities=None):
     """
     Ajoute un service de haut niveau.
 
@@ -92,21 +90,28 @@ def add_highlevelservice(servicename, operator="&", message="", priority=1):
     @param message: Message qui sera envoyé à Nagios lorsque l'état de
         ce service de haut niveau change. Il peut contenir des formats.
     @type message: C{basestr}
-    @param priority: Priorité associée à ce service de haut niveau.
-    @type priority: C{int}
+    @param priorities: Dictionnaire dont les clés doivent correspondre
+        à des noms d'états dans la base de données et les valeurs à la
+        priorité associée à ce service de haut niveau lorsqu'il se trouve
+        dans l'état indiqué.
+    @type priorities: C{dict}
     @return: Instance du service de haut niveau créée ou existante.
     @rtype: L{tables.HighLevelService}
     """
+    if priorities is None:
+        priorities = {}
     servicename = unicode(servicename)
     s = tables.HighLevelService.by_service_name(servicename)
     if not s:
         s = tables.HighLevelService(
                 servicename=servicename,
-                priority=priority,
                 weight=0,
                 message=unicode(message),
                 warning_threshold=300,
                 critical_threshold=150)
+        # Ajoute les priorités pour chacun des états possibles du HLS.
+        for sn in DBSession.query(tables.StateName.statename).all():
+            s.priorities[sn.statename] = priorities.get(sn.statename, 1)
         DBSession.add(s)
         DBSession.flush()
         add_dependency_group(None, servicename, 'hls', operator)
