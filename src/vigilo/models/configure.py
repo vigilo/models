@@ -12,14 +12,12 @@ __all__ = (
     'DB_BASENAME',
     'DEFAULT_LANG',
     'HASHING_FUNC',
-    'EXTERNAL_AUTH',
     'configure_db',
 )
 
 DB_BASENAME = ''
 DEFAULT_LANG = None
 HASHING_FUNC = None
-EXTERNAL_AUTH = False
 
 def configure_db(config_obj, prefix, db_basename=None):
     """
@@ -55,7 +53,7 @@ def configure_db(config_obj, prefix, db_basename=None):
 
     # Paramétrage du modèle. Doit être fait en tout premier.
     # vigilo.models.session dépend de cette initialisation.
-    global DB_BASENAME, DEFAULT_LANG, HASHING_FUNC, EXTERNAL_AUTH
+    global DB_BASENAME, DEFAULT_LANG, HASHING_FUNC
 
     # Préfixe des noms de tables.
     DB_BASENAME = config_obj.get('db_basename', '')
@@ -66,24 +64,6 @@ def configure_db(config_obj, prefix, db_basename=None):
     # Fonction de hachage des mots de passe.
     HASHING_FUNC = config_obj.get(
         'password_hashing_function', None)
-
-    # Utilisation ou non d'une authentification externe (ex: Kerberos).
-    # Note de rétro-compatibilité : si la clé "external_auth" n'est
-    # pas définie, on se rabat sur la clé "use_kerberos".
-    if using_tg:
-        from paste.deploy.converters import asbool
-        external_auth = \
-            'external_auth' in config_obj and config_obj['external_auth'] or \
-            'use_kerberos' in config_obj and config_obj['use_kerberos'] or \
-            None
-        EXTERNAL_AUTH = asbool(external_auth)
-    else:
-        EXTERNAL_AUTH = \
-            'external_auth' in config_obj and \
-            config_obj.as_bool('external_auth') or \
-            'use_kerberos' in config_obj and \
-            config_obj.as_bool('use_kerberos') or \
-            None
 
     import vigilo.models.session as session
 

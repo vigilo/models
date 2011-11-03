@@ -310,7 +310,7 @@ class User(DeclarativeBase, object):
         """
         self._password = self._hash_password(password)
 
-    def validate_password(self, password):
+    def validate_password(self, password, allow_missing=False):
         """
         Teste si le mot de passe proposé correspond au mot de passe de
         l'utilisateur.
@@ -318,16 +318,18 @@ class User(DeclarativeBase, object):
         @param password: Le mot de passe donné par l'utilisateur pour
             s'authentifier, en texte clair.
         @type password: C{str}
+        @param allow_missing: Indique si un mot de passe absent donne
+            systématiquement accès ou si on contraire il refuse
+            systématiquement l'accès.
+        @type allow_missing: C{bool}
         @return: Un booléen indiquant si le mot de passe est correct.
         @rtype: C{bool}
         """
-        from vigilo.models.configure import EXTERNAL_AUTH
-        if EXTERNAL_AUTH:
-            return True
-
-        # Petite précaution
+        # Petite précaution : si aucun mot de passe n'a été défini,
+        # on laisse l'appelant décider du comportement à adopter.
+        # Par défaut, la validation échouera systématiquement.
         if self._password is None:
-            return False
+            return bool(allow_missing)
         return self._hash_password(password) == self._password
 
     @staticmethod

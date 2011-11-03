@@ -79,7 +79,7 @@ def change_password(*args):
 
     user = tables.User.by_user_name(unicode(username))
     if user is None or (current_user.pw_uid != 0 and \
-        not user.validate_password(current_password)):
+        not user.validate_password(current_password, True)):
         print _("Bad login or password.")
         sys.exit(1)
 
