@@ -101,7 +101,9 @@ class Event(DeclarativeBase, object):
             self._peak_state = value
             self._initial_state = value
         else:
-            if StateName.compare_from_values(self._peak_state, value):
+            # Si l'ancien état est moins grave que le nouveau,
+            # on se met à jour.
+            if StateName.compare_from_values(self._peak_state, value) < 0:
                 self._peak_state = value
         self._current_state = value
 

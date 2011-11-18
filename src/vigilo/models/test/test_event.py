@@ -102,3 +102,26 @@ class TestEvent(ModelTest):
         state = StateName.value_to_statename(self.obj.peak_state)
         assert_equal(u'CRITICAL', state,
             "Expected peak state = 'CRITICAL', got %r." % state)
+
+    def test_peak_state(self):
+        """Le pire état est automatiquement calculé et mis à jour."""
+        assert_equal(u'WARNING',
+            StateName.value_to_statename(self.obj.peak_state),
+            "The peak state should have been 'WARNING', got %r." %
+            StateName.value_to_statename(self.obj.peak_state))
+
+        # L'état courant passe à 'CRITICAL' -> le pire état devient 'CRITICAL'.
+        self.obj.current_state = StateName.statename_to_value(u'CRITICAL')
+
+        assert_equal(u'CRITICAL',
+            StateName.value_to_statename(self.obj.peak_state),
+            "The peak state should have been 'CRITICAL', got %r." %
+            StateName.value_to_statename(self.obj.peak_state))
+
+        # L'état courant passe à 'OK' -> le pire état reste 'CRITICAL'.
+        self.obj.current_state = StateName.statename_to_value(u'OK')
+
+        assert_equal(u'CRITICAL',
+            StateName.value_to_statename(self.obj.peak_state),
+            "The peak state should have been 'CRITICAL', got %r." %
+            StateName.value_to_statename(self.obj.peak_state))
