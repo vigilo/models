@@ -425,29 +425,137 @@ def add_ventilation(host, server, application):
 # États
 #
 
-def add_svc_state(service, statename, message):
+def add_svc_state(service, statename, message=None, timestamp=None):
     """
-    Met à jour l'état d'un service de bas niveau.
+    Met à jour l'état d'un service (bas niveau ou haut niveau).
 
-    @param service: Service de bas niveau dont l'état doit être
-        mis à jour, exprimé sous la forme d'une instance ou bien
-        d'un tuple (hôte, service).
-    @type service: C{tuple} ou L{tables.LowLevelService}
+    @param service: Si c'est un tuple (hôte, service), on cherche un service de
+        bas niveau. Si c'est une chaîne on cherche un service de haut niveau.
+        Si c'est une instance on l'utilise telle quelle.
+    @type  service: C{tuple} ou C{str} ou L{tables.LowLevelService} ou
+        L{tables.HighLevelService}
     @param statename: Nouvel état du service.
-    @type statename: C{basestr}
+    @type  statename: C{basestr}
     @param message: Message associé au nouvel état.
-    @type message: C{basestr}
+    @type  message: C{basestr}
     """
     if isinstance(service, tuple):
         service = map(unicode, service)
         service = tables.LowLevelService.by_host_service_name(*service)
     elif isinstance(service, basestring):
         service = tables.HighLevelService.by_service_name(service)
+    if timestamp is None:
+        timestamp = datetime.now()
     s = tables.State(idsupitem=service.idservice,
                     state=tables.StateName.statename_to_value(statename),
-                    message=message)
+                    message=unicode(message),
+                    timestamp=timestamp,
+                    )
     s = DBSession.merge(s)
     DBSession.flush()
+    return s
+
+def add_host_state(host, statename, message=None, timestamp=None):
+    """
+    Met à jour l'état d'un hôte
+
+    @param host: Nom, ID, ou instance de l'hôte.
+    @type  host: C{str} ou C{int} ou L{tables.Host}
+    @param statename: Nouvel état de l'hôte.
+    @type  statename: C{basestr}
+    @param message: Message associé au nouvel état.
+    @type  message: C{basestr}
+    """
+    if isinstance(host, int):
+        idhost = host
+    elif isinstance(host, basestring):
+        idhost = tables.Host.by_name(host).idhost
+    else:
+        idhost = host.idhost
+    if timestamp is None:
+        timestamp = datetime.now()
+    s = tables.State(idsupitem=idhost,
+                    state=tables.StateName.statename_to_value(statename),
+                    message=unicode(message),
+                    timestamp=timestamp,
+                    )
+    s = DBSession.merge(s)
+    DBSession.flush()
+    return s
+
+
+#
+# Évènements
+#
+
+def add_event(supitem, statename, message, timestamp=None):
+    """
+    Ajoute un événement
+
+    @param supitem: ID ou instance du supitem
+    @type  supitem: C{int} ou sous-classe de L{tables.SupItem}
+    @param statename: Nouvel état
+    @type  statename: C{basestr}
+    @param message: Message associé au nouvel état.
+    @type  message: C{basestr}
+    @param timestamp: timestamp de l'événement (par défaut: maintenant)
+    @type  timestamp: C{datetime.datetime.DateTime}
+    """
+    if isinstance(supitem, int):
+        idsupitem = supitem
+    elif isinstance(supitem, tables.Host):
+        idsupitem = supitem.idhost
+    elif isinstance(supitem, tables.service.Service):
+        idsupitem = supitem.idservice
+    elif isinstance(supitem, tables.SupItem):
+        idsupitem = supitem.idsupitem
+    if timestamp is None:
+        timestamp = datetime.now()
+    e = tables.Event(
+                idsupitem=idsupitem,
+                current_state=tables.StateName.statename_to_value(statename),
+                timestamp=timestamp,
+                message=unicode(message),
+                )
+    e = DBSession.merge(e)
+    DBSession.flush()
+    return e
+
+
+def add_correvent(events, cause=None, status="None", priority=4, timestamp=None):
+    """
+    Ajoute un événement corrélé
+
+    @param events: liste d'évènements bruts à associer
+    @type  events: C{list}
+    @param cause:  évènement brut à utiliser comme cause. Si None, on prend le
+        premier de la liste L{events}.
+    @type  cause:  L{tables.Event} ou C{None}
+    @param status: état de l'évènement corrélé
+    @type  status: C{str}
+    @param priority: priorité de l'événement corrélé
+    @type  priority: C{int}
+    @param timestamp: timestamp de l'événement (par défaut: maintenant)
+    @type  timestamp: C{datetime.datetime.DateTime}
+    """
+    # on veut des instances de Event dans la liste
+    for i in range(len(events)):
+        if isinstance(events[i], int):
+            events[i] = DBSession.query(tables.Event).get(events[i])
+    if cause is None:
+        cause = events[0]
+    if timestamp is None:
+        timestamp = datetime.now()
+    ce = tables.CorrEvent(
+                idcause=cause.idevent,
+                events=events,
+                priority=priority,
+                status=unicode(status),
+                timestamp_active=timestamp,
+                )
+    ce = DBSession.merge(ce)
+    DBSession.flush()
+    return ce
 
 
 #
