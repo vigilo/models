@@ -12,6 +12,7 @@ from datetime import datetime
 
 from vigilo.models.session import DeclarativeBase, ForeignKey
 from vigilo.models.tables.event import Event
+from vigilo.models.tables.statename import StateName
 
 __all__ = ('EventHistory', )
 
@@ -87,6 +88,19 @@ class EventHistory(DeclarativeBase, object):
     # Le nom d'utilisateur peut être vide dans le cas où le changement
     # est provoqué par Nagios.
     username = Column(Unicode(255))
+
+    state = Column(
+        Integer,
+        ForeignKey(
+            StateName.idstatename,
+            onupdate='CASCADE',
+            ondelete='CASCADE',
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        nullable=True,
+        autoincrement=False,
+    )
 
 
     def __init__(self, **kwargs):
