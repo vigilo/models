@@ -29,7 +29,6 @@ class TestLowLevelService(ModelTest, TagTestMixin):
         # Création de l'hôte physique sur lequel portera la dépendance.
         host = Host(
             name=u'myhost',
-            checkhostcmd=u'halt',
             snmpcommunity=u'public',
             description=u'My Host',
             hosttpl=u'foo',
@@ -111,7 +110,6 @@ class TestSupItemAbstraction(unittest.TestCase):
         """Une interrogation sur Service ne doit pas retourner un Host."""
         host = Host(
             name=u'myhost',
-            checkhostcmd=u'halt',
             snmpcommunity=u'public',
             description=u'My Host',
             hosttpl=u'foo',

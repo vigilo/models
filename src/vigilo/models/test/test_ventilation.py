@@ -24,7 +24,6 @@ class TestVentilation(ModelTest):
         ModelTest.do_get_dependencies(self)
         DBSession.add(Host(
             name=u'myhost',
-            checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             description=u'My Host',
             hosttpl=u'template',

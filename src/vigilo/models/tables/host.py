@@ -51,7 +51,6 @@ class Host(SupItem):
 
     @ivar idhost: Identifiant de l'hôte.
     @ivar name: Nom complet (FQDN) unique de l'hôte.
-    @ivar checkhostcmd: Commande à exécuter pour vérifier l'état de l'hôte.
     @ivar description: Une description intelligible de l'hôte.
     @ivar hosttpl: ???.
     @todo: documenter l'attribut hosttpl.
@@ -101,8 +100,6 @@ class Host(SupItem):
     name = Column(
         Unicode(255),
         index=True, unique=True, nullable=False)
-
-    checkhostcmd = Column(Unicode(255), nullable=False)
 
     description = Column(Unicode(512), nullable=True)
 

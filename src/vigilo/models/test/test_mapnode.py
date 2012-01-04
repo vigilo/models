@@ -42,7 +42,6 @@ class TestMapNodeHost(ModelTest):
         DBSession.flush()
         host = Host(
             name=u"host1.example.com",
-            checkhostcmd=u'halt',
             snmpcommunity=u'public',
             description=u'Host 1',
             hosttpl=u'foo',
@@ -86,7 +85,6 @@ class TestMapNodeLls(ModelTest):
         DBSession.flush()
         host = Host(
             name=u"host1.example.com",
-            checkhostcmd=u'halt',
             snmpcommunity=u'public',
             description=u'Host 1',
             hosttpl=u'foo',
@@ -137,7 +135,6 @@ class TestMapNodeHls(ModelTest):
         DBSession.flush()
         host = Host(
             name=u"host1.example.com",
-            checkhostcmd=u'halt',
             snmpcommunity=u'public',
             description=u'Host 1',
             hosttpl=u'foo',

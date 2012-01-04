@@ -36,7 +36,6 @@ class TestEvent(ModelTest):
 
         host = Host(
             name=u'myhost',
-            checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             description=u'My Host',
             hosttpl=u'template',

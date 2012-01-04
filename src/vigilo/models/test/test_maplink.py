@@ -36,7 +36,6 @@ class TestMapLlsLink(ModelTest):
         DBSession.flush()
         host1 = Host(
             name=u"host1.example.com",
-            checkhostcmd=u'halt',
             snmpcommunity=u'public',
             description=u'Host 1',
             hosttpl=u'foo',
@@ -48,7 +47,6 @@ class TestMapLlsLink(ModelTest):
         DBSession.flush()
         host2 = Host(
             name=u"host2.example.com",
-            checkhostcmd=u'halt',
             snmpcommunity=u'public',
             description=u'Host 2',
             hosttpl=u'foo',

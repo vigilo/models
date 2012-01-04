@@ -21,7 +21,6 @@ class TestHostClass(ModelTest):
         ModelTest.do_get_dependencies(self)
         host =  Host(
             name=u'myhost',
-            checkhostcmd=u'halt -f',
             snmpcommunity=u'public',
             description=u'My Host',
             hosttpl=u'template',

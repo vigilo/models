@@ -14,7 +14,6 @@ class TestHost(ModelTest, TagTestMixin):
     klass = Host
     attrs = {
         'name': u'myhost',
-        'checkhostcmd': u'halt -f',
         'snmpcommunity': u'public',
         'description': u'My Host',
         'hosttpl': u'template',

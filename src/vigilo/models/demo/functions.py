@@ -32,7 +32,6 @@ def add_host(hostname, conffile=None):
     if not h:
         h = tables.Host(
                 name=unicode(hostname),
-                checkhostcmd=u'dummy',
                 hosttpl=u'dummy',
                 address=u"127.0.0.1",
                 snmpcommunity=u"public",
