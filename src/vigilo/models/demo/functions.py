@@ -522,7 +522,8 @@ def add_event(supitem, statename, message, timestamp=None):
     return e
 
 
-def add_correvent(events, cause=None, status="None", priority=4, timestamp=None):
+def add_correvent(events, cause=None, status=tables.CorrEvent.ACK_NONE,
+                  priority=4, timestamp=None):
     """
     Ajoute un événement corrélé
 
@@ -531,8 +532,8 @@ def add_correvent(events, cause=None, status="None", priority=4, timestamp=None)
     @param cause:  évènement brut à utiliser comme cause. Si None, on prend le
         premier de la liste L{events}.
     @type  cause:  L{tables.Event} ou C{None}
-    @param status: état de l'évènement corrélé
-    @type  status: C{str}
+    @param status: état de prise en compte de l'évènement corrélé
+    @type  status: C{int}
     @param priority: priorité de l'événement corrélé
     @type  priority: C{int}
     @param timestamp: timestamp de l'événement (par défaut: maintenant)
@@ -546,11 +547,12 @@ def add_correvent(events, cause=None, status="None", priority=4, timestamp=None)
         cause = events[0]
     if timestamp is None:
         timestamp = datetime.now()
+
     ce = tables.CorrEvent(
                 idcause=cause.idevent,
                 events=events,
                 priority=priority,
-                status=unicode(status),
+                ack=status,
                 timestamp_active=timestamp,
                 )
     ce = DBSession.merge(ce)

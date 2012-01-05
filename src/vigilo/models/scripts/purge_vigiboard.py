@@ -78,6 +78,11 @@ def clean_vigiboard(*args):
     from vigilo.models.session import DBSession
     from vigilo.models.tables import Event, CorrEvent, StateName, HLSHistory
 
+    sought_states = [
+        StateName.statename_to_value(u'OK'),
+        StateName.statename_to_value(u'UP'),
+    ]
+
     if options.days is None and options.size is None:
         parser.print_usage()
         sys.exit(1)
@@ -98,8 +103,8 @@ def clean_vigiboard(*args):
                     Event.idevent
                 ).join(
                     (CorrEvent, Event.idevent == CorrEvent.idcause)
-                ).filter(StateName.statename.in_([u'OK', u'UP'])
-                ).filter(CorrEvent.status == u'AAClosed'
+                ).filter(CorrEvent.current_state.in_(sought_states)
+                ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
                 ).filter(CorrEvent.timestamp_active <= old_date).all()
             ids = [event.idevent for event in ids]
             nb_deleted = DBSession.query(Event).filter(
@@ -148,9 +153,11 @@ def clean_vigiboard(*args):
                         Event.idevent
                     ).join(
                         (CorrEvent, Event.idevent == CorrEvent.idcause)
-                    ).filter(StateName.statename.in_([u'OK', u'UP'])
-                    ).filter(CorrEvent.status == u'AAClosed'
+                    ).filter(CorrEvent.current_state.in_(sought_states)
+                    ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
                     ).order_by(CorrEvent.timestamp_active.asc()).scalar()
+
+                # Il n'y a plus aucun événement corrélé pouvant être supprimé.
                 if idevent is None:
                     break
 
@@ -162,8 +169,13 @@ def clean_vigiboard(*args):
                     break
                 total_deleted += nb_deleted
 
+                # On met à jour la taille connue de la base de données.
+                dbsize = DBSession.query(
+                            pg_database_size(url.database)
+                        ).scalar()
+
+
             # Affiche quelques statistiques.
-            dbsize = DBSession.query(pg_database_size(url.database)).scalar()
             logger.info(_("Deleted %(nb_deleted)d closed events. "
                 "The database is now %(size)d bytes big (limit: "
                 "%(limit)d bytes)") % {
@@ -180,6 +192,9 @@ def clean_vigiboard(*args):
                 idhistory = DBSession.query(HLSHistory.idhistory
                                 ).order_by(HLSHistory.timestamp.asc()
                                 ).scalar()
+
+                # Il n'y a plus d'entrée d'historique concernant un service
+                # de haut niveau pouvant être supprimée.
                 if idhistory is None:
                     break
 
@@ -189,8 +204,12 @@ def clean_vigiboard(*args):
                     break
                 total_deleted += nb_deleted
 
+                # On met à jour la taille connue de la base de données.
+                dbsize = DBSession.query(
+                            pg_database_size(url.database)
+                        ).scalar()
+
             # Affichage de statistiques actualisées.
-            dbsize = DBSession.query(pg_database_size(url.database)).scalar()
             logger.info(_("Deleted %(nb_deleted)d history entries on "
                         "high level services. The database is now %(size)d "
                         "bytes big (limit: %(limit)d bytes)") % {

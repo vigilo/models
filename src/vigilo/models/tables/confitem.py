@@ -11,7 +11,6 @@ from sqlalchemy.schema import Index
 
 from vigilo.models.session import DeclarativeBase, DBSession, \
                                     ForeignKey, PrefixedTables
-from sqlalchemy.ext.declarative import DeclarativeMeta
 from vigilo.models.tables import SupItem, Host, LowLevelService
 
 class ConfItemIndexMeta(PrefixedTables):
@@ -20,14 +19,14 @@ class ConfItemIndexMeta(PrefixedTables):
     et "idsupitem", utilisée par VigiConf lors de la mise à jour
     des entrées de la table L{ConfItem}.
     """
-    def __init__(cls, *args, **kw):
-        if getattr(cls, '_decl_class_registry', None) is None:
+    def __init__(mcs, *args, **kw):
+        if getattr(mcs, '_decl_class_registry', None) is None:
             return
 
-        super(ConfItemIndexMeta, cls).__init__(*args, **kw)
+        super(ConfItemIndexMeta, mcs).__init__(*args, **kw)
         Index(
-            'ix_%s_key' % cls.__tablename__,
-            cls.name, cls.idsupitem,
+            'ix_%s_key' % mcs.__tablename__,
+            mcs.name, mcs.idsupitem,
             unique=True
         )
 

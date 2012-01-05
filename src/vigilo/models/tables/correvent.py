@@ -28,7 +28,9 @@ class CorrEvent(DeclarativeBase, object):
     @ivar priority: Priorité de l'alerte.
     @ivar trouble_ticket: URL du ticket d'incident se rapportant à
         l'événement corrélé.
-    @ivar status: Statut de la prise en compte de cet événement corrélé.
+    @ivar ack: État de prise en compte de cet événement corrélé.
+        Il s'agit d'une des constantes ACK_NONE, ACK_KNOWN ou ACK_CLOSED
+        définies ci-dessous.
     @ivar occurrence: Compteur d'occurrences de l'événement corrélé.
         Il est incrémenté par le corrélateur chaque fois que l'état de
         l'événement oscille alors que l'opérateur n'est pas encore intervenu.
@@ -44,6 +46,14 @@ class CorrEvent(DeclarativeBase, object):
     """
 
     __tablename__ = 'correvent'
+
+    # Constantes pour l'état d'acquittement:
+    # - None : événement pas encore pris en compte.
+    ACK_NONE = 0
+    # - Known : événement pris en compte mais pas acquitté.
+    ACK_KNOWN = 1
+    # - Closed : événement acquitté (pouvant être fermé).
+    ACK_CLOSED = 2
 
     idcorrevent = Column(
         Integer,
@@ -76,17 +86,18 @@ class CorrEvent(DeclarativeBase, object):
 
     trouble_ticket = Column(Unicode(255))
 
-    # État d'acquittement: None, Acknowledged ou AAClosed
-    # (Acknowledged And Closed).
-    status = Column(Unicode(16),
-        nullable=False,
-        server_default=DefaultClause('None', for_update=False))
-
     occurrence = Column(Integer)
 
     timestamp_active = Column(
         DateTime(timezone=False),
         nullable=False,
+        index=True,
+    )
+
+    ack = Column(
+        Integer,
+        nullable=False,
+        server_default=DefaultClause(str(ACK_NONE), for_update=False),
         index=True,
     )
 

@@ -68,9 +68,9 @@ def close_green(*args):
 
     sought_states = []
     if options.state_up:
-        sought_states.append(u'UP')
+        sought_states.append(StateName.statename_to_value(u'UP'))
     if options.state_ok:
-        sought_states.append(u'OK')
+        sought_states.append(StateName.statename_to_value(u'OK'))
 
     # Le script doit être appelé avec au moins une
     # des deux options parmi -k et -u pour être utile.
@@ -82,12 +82,11 @@ def close_green(*args):
             CorrEvent
         ).join(
             (Event, Event.idevent == CorrEvent.idcause),
-            (StateName, StateName.idstatename == Event.current_state),
-        ).filter(StateName.statename.in_(sought_states)
-        ).filter(CorrEvent.status != u'AAClosed')
+        ).filter(Event.current_state.in_(sought_states)
+        ).filter(CorrEvent.ack != CorrEvent.ACK_CLOSED)
     if options.days is not None and options.days > 0:
         # Génère une date qui se trouve options.days jours dans le passé.
-        old_date = datetime.fromtimestamp(time.time() - options.days * 86400) 
+        old_date = datetime.fromtimestamp(time.time() - options.days * 86400)
         query = query.filter(CorrEvent.timestamp_active <= old_date)
 
     events = query.all()
@@ -105,7 +104,7 @@ def close_green(*args):
         DBSession.add(history)
 
         # On referme l'événement.
-        event.status = u"AAClosed"
+        event.ack = CorrEvent.ACK_CLOSED
         DBSession.flush()
 
     transaction.commit()
