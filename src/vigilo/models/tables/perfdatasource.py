@@ -77,7 +77,8 @@ class PerfDataSource(DeclarativeBase, object):
 
     def __repr__(self):
         return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
-                                          str(self.name), str(self.host.name))
+                                          self.name.encode('utf-8'),
+                                          self.host.name.encode('utf-8'))
 
     @classmethod
     def by_host_and_source_name(cls, host, sourcename):
