@@ -20,6 +20,10 @@ class TestMigration(unittest.TestCase):
 
     def setUp(self):
         setup_db()
+        # On supprime les noms d'états insérés par défaut.
+        # La migration les recréera de toutes façons.
+        DBSession.query(tables.StateName).delete()
+        DBSession.flush()
 
     def tearDown(self):
         DBSession.rollback()

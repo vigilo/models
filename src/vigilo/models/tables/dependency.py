@@ -61,6 +61,12 @@ class Dependency(DeclarativeBase, object):
 
     supitem = relation('SupItem')
 
+    distance = Column(
+        Integer,
+        primary_key=False,
+        nullable=True,
+    )
+
     def __init__(self, **kwargs):
         super(Dependency, self).__init__(**kwargs)
 

@@ -94,10 +94,6 @@ class TestSupItemAbstraction(unittest.TestCase):
         """Préparatifs pour les tests."""
         super(TestSupItemAbstraction, self).setUp()
         setup_db()
-        DBSession.add(StateName(statename=u'OK', order=1))
-        DBSession.add(StateName(statename=u'UP', order=1))
-        DBSession.add(StateName(statename=u'WARNING', order=1))
-        DBSession.flush()
 
     def tearDown(self):
         """Nettoyage à l'issue des tests."""

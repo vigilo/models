@@ -24,7 +24,6 @@ class CorrEvent(DeclarativeBase, object):
     @ivar idcause: Identifiant de l'événement qui a été identifié
         comme cause principale de l'alerte.
     @ivar cause: Instance de l'événement identifié comme cause de l'alerte.
-    @ivar impact: Nombre d'hôtes impactés par l'événement corrélé.
     @ivar priority: Priorité de l'alerte.
     @ivar trouble_ticket: URL du ticket d'incident se rapportant à
         l'événement corrélé.
@@ -76,8 +75,6 @@ class CorrEvent(DeclarativeBase, object):
 
     cause = relation('Event', lazy=True,
         primaryjoin='CorrEvent.idcause == Event.idevent')
-
-    impact = Column(Integer)
 
     priority = Column(
         Integer,

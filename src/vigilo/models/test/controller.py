@@ -9,7 +9,28 @@ from vigilo.models.tables import StateName
 from vigilo.models.tables.grouppath import GroupPath
 from vigilo.models.tables.usersupitem import UserSupItem
 
-__all__ = ['ModelTest', 'setup_db', 'teardown_db']
+__all__ = ['ModelTest', 'setup_db', 'teardown_db', 'Options']
+
+class Options(object):
+    """
+    Simule les options telles qu'elles pourraient être
+    créées par C{OptionParser}.
+    """
+
+    def __init__(self, options=None, **kwargs):
+        if options is None:
+            options = {}
+        self.__dict__.update(options, **kwargs)
+
+def populate_statename():
+    DBSession.add(StateName(statename=u'OK', order=1))
+    DBSession.add(StateName(statename=u'UNKNOWN', order=2))
+    DBSession.add(StateName(statename=u'WARNING', order=3))
+    DBSession.add(StateName(statename=u'CRITICAL', order=4))
+    DBSession.add(StateName(statename=u'UP', order=1))
+    DBSession.add(StateName(statename=u'UNREACHABLE', order=2))
+    DBSession.add(StateName(statename=u'DOWN', order=4))
+    DBSession.flush()
 
 #Create an empty database before we start our tests for this module
 def setup_db():
@@ -24,6 +45,7 @@ def setup_db():
     del tables[UserSupItem.__tablename__]
     metadata.create_all(tables=tables.itervalues())
     metadata.create_all(tables=[GroupPath.__table__, UserSupItem.__table__])
+    populate_statename()
 
 #Teardown that database
 def teardown_db():
@@ -69,14 +91,6 @@ class ModelTest(object):
         Use this method to pull in other objects that need to be created
         for this object to be built properly.
         """
-        DBSession.add(StateName(statename=u'OK', order=1))
-        DBSession.add(StateName(statename=u'UNKNOWN', order=2))
-        DBSession.add(StateName(statename=u'WARNING', order=3))
-        DBSession.add(StateName(statename=u'CRITICAL', order=4))
-        DBSession.add(StateName(statename=u'UP', order=1))
-        DBSession.add(StateName(statename=u'UNREACHABLE', order=2))
-        DBSession.add(StateName(statename=u'DOWN', order=4))
-        DBSession.flush()
         return {}
 
     def test_create_obj(self):

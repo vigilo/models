@@ -29,9 +29,9 @@ class TestStateName(ModelTest):
         car elle insère déjà des noms d'états.
         On veut éviter toute interférence dans les tests.
         """
-        # On n'appelle pas le parent car ici
-        # on ne VEUT PAS que des StateName
-        # soient insérés par défaut.
+        # On supprime les StateName insérés par défaut.
+        DBSession.query(StateName).delete()
+        DBSession.flush()
         return {}
 
     def test_statename_to_value(self):

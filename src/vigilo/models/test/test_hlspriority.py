@@ -13,9 +13,8 @@ class TestHLSPriority(unittest.TestCase):
         super(TestHLSPriority, self).setUp(*args, **kwargs)
         setup_db()
 
-        self.statename = StateName(statename=u'OK', order=1)
-        DBSession.add(self.statename)
-        DBSession.add(StateName(statename=u'UNKNOWN', order=2))
+        self.statename = DBSession.query(StateName).filter(
+            StateName.statename == u'OK').one()
 
         self.hls = HighLevelService(
             servicename = u'Connexion',

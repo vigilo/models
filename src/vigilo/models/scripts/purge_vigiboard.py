@@ -9,14 +9,20 @@ des événements associés à VigiBoard.
 
 import sys
 import time
+from datetime import datetime
+
+from optparse import OptionParser
+from sqlalchemy.engine.url import make_url
 import sqlalchemy.sql.functions as sqlfuncs
 from sqlalchemy import types as sqltypes
 import transaction
-from datetime import datetime
-from optparse import OptionParser
+
+from vigilo.common.gettext import translate, translate_narrow
+_ = translate(__name__)
+N_ = translate_narrow(__name__)
 
 __all__ = (
-    'clean_vigiboard',
+    'main',
 )
 
 class pg_database_size(sqlfuncs.GenericFunction):
@@ -32,49 +38,22 @@ class pg_database_size(sqlfuncs.GenericFunction):
     def __init__(self, arg, **kwargs):
         super(pg_database_size, self).__init__(args=[arg], **kwargs)
 
-def clean_vigiboard(*args):
+
+def clean_vigiboard(logger, options, url):
     """
-    Cette fonction supprime les événements les plus anciens
-    des tables utilisées par VigiBoard.
+    Cette fonction supprime les événements les plus anciens et
+    correspondant à des agrégats fermés des tables utilisées
+    par VigiBoard.
+
+    @param logger: Logger à utiliser pour afficher des messages.
+    @type logger: C{logging.Logger}
+    @param options: Liste d'options demandées par l'utilisateur
+        du script.
+    @type options: C{optparse.Values}
+    @param url: Adresse de la base de données, sous la forme d'une URL
+        déjà pré-traitée par SQLAlchemy.
+    @type url: C{sqlalchemy.engine.url.URL}
     """
-
-    from vigilo.common.gettext import translate
-    _ = translate(__name__)
-
-    parser = OptionParser()
-    parser.add_option("-d", "--days", action="store", dest="days",
-        type="int", default=None, help=_("Remove closed events which are "
-        "at least DAYS old. DAYS must be a positive non-zero integer."))
-    parser.add_option("-s", "--size", action="store", dest="size",
-        type="int", default=None, help=_("Remove closed events, starting "
-        "with the oldest ones, when the Vigilo database starts occupying "
-        "more then SIZE bytes. SIZE must be a positive non-zero integer."))
-    parser.add_option("-c", "--config", action="store", dest="config",
-        type="string", default=None, help=_("Load configuration from "
-        "this file."))
-
-    (options, args) = parser.parse_args()
-
-    from vigilo.common.conf import settings
-    if options.config:
-        settings.load_file(options.config)
-    else:
-        settings.load_module(__name__)
-
-    from vigilo.common.logging import get_logger
-    logger = get_logger(__name__)
-
-    if args:
-        logger.error(_('Too many arguments'))
-        sys.exit(1)
-
-    from vigilo.models.configure import configure_db
-    try:
-        configure_db(settings['database'], 'sqlalchemy_')
-    except KeyError:
-        logger.error(_('No database configuration found'))
-        sys.exit(1)
-
     from vigilo.models.session import DBSession
     from vigilo.models.tables import Event, CorrEvent, StateName, HLSHistory
 
@@ -82,10 +61,6 @@ def clean_vigiboard(*args):
         StateName.statename_to_value(u'OK'),
         StateName.statename_to_value(u'UP'),
     ]
-
-    if options.days is None and options.size is None:
-        parser.print_usage()
-        sys.exit(1)
 
     if options.days is not None:
         if options.days >= 0:
@@ -103,7 +78,7 @@ def clean_vigiboard(*args):
                     Event.idevent
                 ).join(
                     (CorrEvent, Event.idevent == CorrEvent.idcause)
-                ).filter(CorrEvent.current_state.in_(sought_states)
+                ).filter(Event.current_state.in_(sought_states)
                 ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
                 ).filter(CorrEvent.timestamp_active <= old_date).all()
             ids = [event.idevent for event in ids]
@@ -132,8 +107,6 @@ def clean_vigiboard(*args):
     if options.size is not None:
         if options.size >= 0:
             # Calcule la taille actuelle de la base de données Vigilo.
-            from sqlalchemy.engine.url import make_url
-            url = make_url(settings['database']['sqlalchemy_url'])
             dbsize = DBSession.query(pg_database_size(url.database)).scalar()
 
             if dbsize > options.size:
@@ -153,7 +126,7 @@ def clean_vigiboard(*args):
                         Event.idevent
                     ).join(
                         (CorrEvent, Event.idevent == CorrEvent.idcause)
-                    ).filter(CorrEvent.current_state.in_(sought_states)
+                    ).filter(Event.current_state.in_(sought_states)
                     ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
                     ).order_by(CorrEvent.timestamp_active.asc()).scalar()
 
@@ -217,6 +190,68 @@ def clean_vigiboard(*args):
                             'size': dbsize,
                             'limit': options.size,
                         })
+    DBSession.flush()
 
-    transaction.commit()
-    sys.exit(0)
+
+def main(*args):
+    """
+    Point d'entrée du script qui supprime les événements
+    obsolètes du bac à événements (VigiBoard).
+
+    @note: Cette fonction ne rend pas la main, mais quitte
+        l'exécution de Python à la fin de sa propre exécution.
+        Les codes de retour possibles pour le script sont :
+        * 0 : pas d'erreur
+        * 1 : exception levée durant l'exécution
+        * 2 : paramètres / options incorrects pour le script
+    """
+    parser = OptionParser()
+    parser.add_option("-d", "--days", action="store", dest="days",
+        type="int", default=None, help=_("Remove closed events which are "
+        "at least DAYS old. DAYS must be a positive non-zero integer."))
+    parser.add_option("-s", "--size", action="store", dest="size",
+        type="int", default=None, help=_("Remove closed events, starting "
+        "with the oldest ones, when the Vigilo database starts occupying "
+        "more then SIZE bytes. SIZE must be a positive non-zero integer."))
+    parser.add_option("-c", "--config", action="store", dest="config",
+        type="string", default=None, help=_("Load configuration from "
+        "this file."))
+
+    (options, args) = parser.parse_args()
+
+    from vigilo.common.conf import settings
+    if options.config:
+        settings.load_file(options.config)
+    else:
+        settings.load_module(__name__)
+
+    from vigilo.common.logging import get_logger
+    logger = get_logger(__name__)
+
+    if args:
+        logger.error(_('Too many arguments'))
+        sys.exit(2)
+
+    from vigilo.models.configure import configure_db
+    try:
+        configure_db(settings['database'], 'sqlalchemy_')
+    except KeyError:
+        logger.error(_('No database configuration found'))
+        sys.exit(2)
+
+    url = make_url(settings['database']['sqlalchemy_url'])
+
+    if options.days is None and options.size is None:
+        parser.error(N_(
+            "Either -d or -s must be used. "
+            "See %s --help for more information.") % sys.argv[0])
+        sys.exit(2)
+
+    try:
+        clean_vigiboard(logger, options, url)
+        transaction.commit()
+        sys.exit(0)
+    except:
+        logger.exception(_('Some error occurred:'))
+        transaction.abort()
+        sys.exit(1)

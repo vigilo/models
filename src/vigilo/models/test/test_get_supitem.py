@@ -2,14 +2,14 @@
 # Copyright (C) 2006-2011 CS-SI
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
-"""Test suite for StateName class"""
+"""Test suite for SupItem.get_supitem"""
 import unittest
 from nose.tools import assert_equals
 from controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import Host, LowLevelService, HighLevelService, \
-                                    SupItem, StateName
+from vigilo.models.tables import Host, LowLevelService, \
+                                    HighLevelService, SupItem
 
 class TestGetSupItem(unittest.TestCase):
     """Test de la méthode get_supitem de la classe 'SupItem'"""
@@ -20,8 +20,6 @@ class TestGetSupItem(unittest.TestCase):
         item (hôte, service de haut niveau, ou service de bas niveau).
         """
         setup_db()
-        DBSession.add(StateName(statename=u'OK', order=1))
-        DBSession.add(StateName(statename=u'UP', order=1))
         DBSession.flush()
         # Ajout d'un hôte dans la BDD
         host1 = Host(
