@@ -43,7 +43,7 @@ def add_host(hostname, conffile=None):
     return h
 
 def add_lowlevelservice(host, servicename, statename="OK",
-                        message="", weight=100):
+                        message="", weight=100, warning_weight=100):
     """
     Ajoute un service de bas niveau sur un hôte.
 
@@ -58,9 +58,16 @@ def add_lowlevelservice(host, servicename, statename="OK",
     @param weight: Poids associé au service lorsqu'il se trouve
         dans l'état OK.
     @type weight: C{int}
+    @param warning_weight: Poids associé au service lorsqu'il se trouve
+        dans l'état WARNING.
+    @type warning_weight: C{int}
     @return: Instance du service créée ou existante.
     @rtype: L{tables.LowLevelService}
     """
+    if warning_weight is None:
+        warning_weight = weight
+    if warning_weight > weight:
+        raise ValueError("warning_weight must be less than or equal to weight")
     if isinstance(host, basestring):
         hostname = host
         host = tables.Host.by_host_name(unicode(hostname))
@@ -73,6 +80,7 @@ def add_lowlevelservice(host, servicename, statename="OK",
                 servicename=servicename,
                 idhost=host.idhost,
                 weight=weight,
+                warning_weight=warning_weight,
                 command=u"dummy")
         DBSession.add(s)
         DBSession.flush()
@@ -80,7 +88,7 @@ def add_lowlevelservice(host, servicename, statename="OK",
     return s
 
 def add_highlevelservice(servicename, operator="&", message="",
-                        priorities=None, weight=0):
+                        priorities=None, weight=0, warning_weight=None):
     """
     Ajoute un service de haut niveau.
 
@@ -99,9 +107,16 @@ def add_highlevelservice(servicename, operator="&", message="",
     @param weight: Poids associé au service lorsqu'il se trouve
         dans l'état OK.
     @type weight: C{int}
+    @param warning_weight: Poids associé au service lorsqu'il se trouve
+        dans l'état WARNING.
+    @type warning_weight: C{int}
     @return: Instance du service de haut niveau créée ou existante.
     @rtype: L{tables.HighLevelService}
     """
+    if warning_weight is None:
+        warning_weight = weight
+    if warning_weight > weight:
+        raise ValueError("warning_weight must be less than or equal to weight")
     if priorities is None:
         priorities = {}
     servicename = unicode(servicename)
@@ -110,6 +125,7 @@ def add_highlevelservice(servicename, operator="&", message="",
         s = tables.HighLevelService(
                 servicename=servicename,
                 weight=weight,
+                warning_weight=warning_weight,
                 message=unicode(message),
                 warning_threshold=300,
                 critical_threshold=150)
