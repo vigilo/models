@@ -5,9 +5,7 @@
 """Test suite for ConfItem class"""
 from nose.tools import assert_equals
 
-from vigilo.models.session import DBSession
 from vigilo.models.demo import functions
-from vigilo.models.tables import Host, LowLevelService
 from vigilo.models.tables import ConfItem
 from controller import ModelTest
 
@@ -20,10 +18,6 @@ class TestServiceConfItem(ModelTest):
         name = u'retry_interval',
         value = u"4"
     )
-
-    def __init__(self):
-        """Initialisation du test."""
-        ModelTest.__init__(self)
 
     def do_get_dependencies(self):
         """Insertion de données dans la base préalable aux tests."""
@@ -48,10 +42,6 @@ class TestHostConfItem(ModelTest):
         name = u"check_interval",
         value = u"5"
     )
-
-    def __init__(self):
-        """Initialisation du test."""
-        ModelTest.__init__(self)
 
     def do_get_dependencies(self):
         """Insertion de données dans la base préalable aux tests."""

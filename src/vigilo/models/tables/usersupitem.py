@@ -10,12 +10,11 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.schema import DDL
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.configure import DB_BASENAME
 
 from vigilo.models.tables.service import LowLevelService
 from vigilo.models.tables.host import Host
-from vigilo.models.tables.group import SupItemGroup
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
 from vigilo.models.tables.datapermission import DataPermission
 
@@ -86,7 +85,7 @@ DDL(
             ON %(datapermission_table)s.idgroup =
                 %(grouphierarchy_table)s.idparent
         JOIN %(usertousergroups_table)s
-            ON %(usertousergroups_table)s.idgroup = 
+            ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup
     UNION ALL
         SELECT %(host_table)s.idhost AS idsupitem,
@@ -104,7 +103,7 @@ DDL(
             ON %(datapermission_table)s.idgroup =
                 %(grouphierarchy_table)s.idparent
         JOIN %(usertousergroups_table)s
-            ON %(usertousergroups_table)s.idgroup = 
+            ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup;
     """,
     on='postgres',
@@ -146,7 +145,7 @@ DDL(
             ON %(datapermission_table)s.idgroup =
                 %(grouphierarchy_table)s.idparent
         JOIN %(usertousergroups_table)s
-            ON %(usertousergroups_table)s.idgroup = 
+            ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup
     UNION ALL
         SELECT %(host_table)s.idhost AS idsupitem,
@@ -164,7 +163,7 @@ DDL(
             ON %(datapermission_table)s.idgroup =
                 %(grouphierarchy_table)s.idparent
         JOIN %(usertousergroups_table)s
-            ON %(usertousergroups_table)s.idgroup = 
+            ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup;
     """,
     on='sqlite',

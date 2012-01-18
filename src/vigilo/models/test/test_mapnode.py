@@ -5,10 +5,8 @@
 """Test suite for LowLevelService & HighLevelService classes"""
 from datetime import datetime
 
-from vigilo.models.tables import Host, LowLevelService, HighLevelService, \
-        Map, MapNodeHost, MapNodeLls, MapNodeHls
+from vigilo.models.tables import MapNodeHost, MapNodeLls, MapNodeHls
 from vigilo.models.demo import functions
-from vigilo.models.session import DBSession
 
 from controller import ModelTest
 

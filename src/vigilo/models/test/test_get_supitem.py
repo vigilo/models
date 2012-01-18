@@ -4,7 +4,6 @@
 
 """Test suite for SupItem.get_supitem"""
 import unittest
-from nose.tools import assert_equals
 from controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession

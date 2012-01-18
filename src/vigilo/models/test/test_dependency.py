@@ -3,9 +3,8 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Test suite for Dependency class"""
-from vigilo.models.tables import Dependency, DependencyGroup
+from vigilo.models.tables import Dependency
 from vigilo.models.demo import functions
-from vigilo.models.session import DBSession
 
 from controller import ModelTest
 

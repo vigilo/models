@@ -5,7 +5,6 @@
 """Test suite for ConfItem class"""
 from nose.tools import assert_equals, assert_not_equals
 
-from vigilo.models.session import DBSession
 from vigilo.models.tables import ConfFile
 from controller import ModelTest
 
@@ -17,10 +16,6 @@ class TestConfFile(ModelTest):
     attrs = dict(
         name = u'dummy.xml',
     )
-
-    def __init__(self):
-        """Initialisation du test."""
-        ModelTest.__init__(self)
 
     def test_retrieval(self):
         """Récupération d'une instance de ConfFile par nom de fichier."""

@@ -7,7 +7,6 @@ from nose.tools import assert_true
 from datetime import datetime
 import re
 
-from vigilo.models.session import DBSession
 from vigilo.models.demo import functions
 from vigilo.models.tables import CorrEvent
 from controller import ModelTest

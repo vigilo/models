@@ -4,10 +4,8 @@ Teste les scénarios de démonstration.
 """
 
 import unittest
-import transaction
-from controller import setup_db, teardown_db
+from controller import teardown_db
 from vigilo.models import demo
-from vigilo.models.tables import StateName
 from vigilo.models.session import DBSession
 from vigilo.models.websetup import populate_db
 

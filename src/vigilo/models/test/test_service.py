@@ -6,7 +6,7 @@
 import unittest
 from nose.tools import assert_equals
 
-from vigilo.models.tables import Host, Service, StateName, \
+from vigilo.models.tables import Service, StateName, \
                                     LowLevelService, HighLevelService
 from vigilo.models.session import DBSession
 from vigilo.models.demo import functions

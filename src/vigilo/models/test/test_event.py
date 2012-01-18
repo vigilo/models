@@ -7,7 +7,6 @@ import re
 from datetime import datetime
 from nose.tools import assert_true, assert_equal
 
-from vigilo.models.session import DBSession
 from vigilo.models.demo import functions
 from vigilo.models.tables import Event, StateName
 

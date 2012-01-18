@@ -6,12 +6,12 @@
 """Modèle pour la table Event"""
 from babel.dates import format_datetime
 from sqlalchemy import Column
-from sqlalchemy.orm import synonym, relation, aliased
+from sqlalchemy.orm import synonym, relation
 from sqlalchemy.types import Text, DateTime, Integer
 
 from datetime import datetime
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, ForeignKey
 from vigilo.models.tables.statename import StateName
 from vigilo.models.tables.supitem import SupItem
 

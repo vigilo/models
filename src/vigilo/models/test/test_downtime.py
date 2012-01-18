@@ -7,7 +7,6 @@ from datetime import datetime
 
 from vigilo.models.session import DBSession
 from vigilo.models.demo import functions
-from vigilo.models.tables import Host, LowLevelService, User
 from vigilo.models.tables import Downtime, DowntimeStatus
 
 from controller import ModelTest

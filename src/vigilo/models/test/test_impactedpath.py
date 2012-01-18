@@ -5,7 +5,6 @@
 """Test suite for ImpactedPath class"""
 from vigilo.models.tables import ImpactedPath
 from vigilo.models.demo import functions
-from vigilo.models.session import DBSession
 
 from controller import ModelTest
 
