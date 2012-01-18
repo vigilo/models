@@ -55,7 +55,8 @@ def add_lowlevelservice(host, servicename, statename="OK",
     @type statename: C{basestr}
     @param message: Message associé à l'état initial du service.
     @type message: C{basestr}
-    @param weight: Poids associé au service.
+    @param weight: Poids associé au service lorsqu'il se trouve
+        dans l'état OK.
     @type weight: C{int}
     @return: Instance du service créée ou existante.
     @rtype: L{tables.LowLevelService}
@@ -78,7 +79,8 @@ def add_lowlevelservice(host, servicename, statename="OK",
         add_svc_state((host.name, servicename), statename, message)
     return s
 
-def add_highlevelservice(servicename, operator="&", message="", priorities=None):
+def add_highlevelservice(servicename, operator="&", message="",
+                        priorities=None, weight=0):
     """
     Ajoute un service de haut niveau.
 
@@ -94,6 +96,9 @@ def add_highlevelservice(servicename, operator="&", message="", priorities=None)
         priorité associée à ce service de haut niveau lorsqu'il se trouve
         dans l'état indiqué.
     @type priorities: C{dict}
+    @param weight: Poids associé au service lorsqu'il se trouve
+        dans l'état OK.
+    @type weight: C{int}
     @return: Instance du service de haut niveau créée ou existante.
     @rtype: L{tables.HighLevelService}
     """
@@ -104,7 +109,7 @@ def add_highlevelservice(servicename, operator="&", message="", priorities=None)
     if not s:
         s = tables.HighLevelService(
                 servicename=servicename,
-                weight=0,
+                weight=weight,
                 message=unicode(message),
                 warning_threshold=300,
                 critical_threshold=150)
@@ -113,7 +118,8 @@ def add_highlevelservice(servicename, operator="&", message="", priorities=None)
             s.priorities[sn.statename] = priorities.get(sn.statename, 1)
         DBSession.add(s)
         DBSession.flush()
-        add_dependency_group(None, servicename, 'hls', operator)
+        if operator:
+            add_dependency_group(None, servicename, 'hls', operator)
     return s
 
 def add_dependency_group(host, service, role, operator='&'):
@@ -138,6 +144,16 @@ def add_dependency_group(host, service, role, operator='&'):
     """
     if role != 'hls' and role != 'topology':
         raise ValueError('Valid roles: "hls" or "topology"')
+    if isinstance(host, tables.Host):
+        host = host.name
+        service = None
+    if isinstance(service, tables.LowLevelService):
+        host = service.host.name
+        service = service.servicename
+    if isinstance(service, tables.HighLevelService):
+        host = None
+        service = service.servicename
+
     if host is None:        # HLS
         dependent = tables.HighLevelService.by_service_name(unicode(service))
     elif service is None:   # Host
@@ -161,7 +177,7 @@ def add_dependency_group(host, service, role, operator='&'):
     return group.idgroup
 
 
-def add_dependency(group, depended):
+def add_dependency(group, depended, distance=None):
     """
     Ajoute une dépendance à un groupe de dépendances.
 
@@ -177,18 +193,22 @@ def add_dependency(group, depended):
     else:
         idgroup = group.idgroup
 
-    host, service = depended
-    if host is None:        # HLS
-        dependency = tables.HighLevelService.by_service_name(unicode(service))
-    elif service is None:   # Host
-        dependency = tables.Host.by_host_name(unicode(host))
-    else:                   # LLS
-        dependency = tables.LowLevelService.by_host_service_name(
-                        unicode(host), unicode(service))
+    if isinstance(depended, tables.SupItem):
+        dependency = depended
+    else:
+        host, service = depended
+        if host is None:        # HLS
+            dependency = tables.HighLevelService.by_service_name(unicode(service))
+        elif service is None:   # Host
+            dependency = tables.Host.by_host_name(unicode(host))
+        else:                   # LLS
+            dependency = tables.LowLevelService.by_host_service_name(
+                            unicode(host), unicode(service))
 
     DBSession.add(tables.Dependency(
         idgroup=idgroup,
         supitem=dependency,
+        distance=distance,
     ))
     DBSession.flush()
 
@@ -873,19 +893,21 @@ def add_user(username, email, fullname, password, groupname):
         DBSession.add(user)
         DBSession.flush()
     else:
-        raise ValueError, "User already exists"
+        raise ValueError("User already exists")
 
-    groupname = unicode(groupname)
-    group = tables.UserGroup.by_group_name(groupname)
-    if not group:
-        group = tables.UserGroup(group_name=groupname)
-        DBSession.add(group)
-        DBSession.flush()
+    if groupname is not None:
+        groupname = unicode(groupname)
+        group = tables.UserGroup.by_group_name(groupname)
+        if not group:
+            group = tables.UserGroup(group_name=groupname)
+            DBSession.add(group)
+            DBSession.flush()
 
-    if not user in group.users:
-        group.users.append(user)
-        DBSession.add(group)
+        if not user in group.users:
+            group.users.append(user)
+            DBSession.add(group)
     DBSession.flush()
+    return user
 
 def add_usergroup(groupname):
     """

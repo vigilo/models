@@ -7,6 +7,7 @@ from datetime import datetime
 
 from vigilo.models.tables import Host, LowLevelService, HighLevelService, \
         Map, MapNodeHost, MapNodeLls, MapNodeHls
+from vigilo.models.demo import functions
 from vigilo.models.session import DBSession
 
 from controller import ModelTest
@@ -23,34 +24,16 @@ class TestMapNodeHost(ModelTest):
         'minimize': True,
         }
 
-    def __init__(self):
-        ModelTest.__init__(self)
-
     def do_get_dependencies(self):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
+
+        # Création du groupe de cartes racine.
+        functions.add_mapgroup(u'Root')
+
         # Création des objets nécessaires  aux relations.
-        new_map = Map(
-                mtime=datetime.today(),
-                title=u'Carte 1',
-                background_color=u'#66FFFF',
-                background_image=u'France',
-                background_position=u'top right',
-                background_repeat=u'no-repeat',
-        )
-        DBSession.add(new_map)
-        DBSession.flush()
-        host = Host(
-            name=u"host1.example.com",
-            snmpcommunity=u'public',
-            description=u'Host 1',
-            hosttpl=u'foo',
-            address=u'127.0.0.1',
-            snmpport=42,
-            weight=42,
-        )
-        DBSession.add(host)
-        DBSession.flush()
+        new_map = functions.add_map(u'Carte 1')
+        host = functions.add_host(u'host1.example.com')
         return dict(map=new_map, host=host)
 
 
@@ -66,41 +49,17 @@ class TestMapNodeLls(ModelTest):
         'minimize': True,
         }
 
-    def __init__(self):
-        ModelTest.__init__(self)
-
     def do_get_dependencies(self):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
-        # Création des objets nécessaires  aux relations.
-        new_map = Map(
-                mtime=datetime.today(),
-                title=u'Carte 1',
-                background_color=u'#66FFFF',
-                background_image=u'France',
-                background_position=u'top right',
-                background_repeat=u'no-repeat',
-        )
-        DBSession.add(new_map)
-        DBSession.flush()
-        host = Host(
-            name=u"host1.example.com",
-            snmpcommunity=u'public',
-            description=u'Host 1',
-            hosttpl=u'foo',
-            address=u'127.0.0.1',
-            snmpport=42,
-            weight=42,
-        )
-        DBSession.add(host)
-        DBSession.flush()
-        service = LowLevelService(
-            servicename=u'myservice',
-            weight=100,
-            host=host,
-        )
-        DBSession.add(service)
-        DBSession.flush()
+
+        # Création du groupe de cartes racine.
+        functions.add_mapgroup(u'Root')
+
+        # Création des objets nécessaires aux relations.
+        new_map = functions.add_map(u'Carte 1')
+        host = functions.add_host(u'host1.example.com')
+        service = functions.add_lowlevelservice(host, u'myservice')
         return dict(map=new_map, service=service)
 
 
@@ -116,40 +75,14 @@ class TestMapNodeHls(ModelTest):
         'minimize': True,
         }
 
-    def __init__(self):
-        ModelTest.__init__(self)
-
     def do_get_dependencies(self):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
+
+        # Création du groupe de cartes racine.
+        functions.add_mapgroup(u'Root')
+
         # Création des objets nécessaires  aux relations.
-        new_map = Map(
-                mtime=datetime.today(),
-                title=u'Carte 1',
-                background_color=u'#66FFFF',
-                background_image=u'France',
-                background_position=u'top right',
-                background_repeat=u'no-repeat',
-        )
-        DBSession.add(new_map)
-        DBSession.flush()
-        host = Host(
-            name=u"host1.example.com",
-            snmpcommunity=u'public',
-            description=u'Host 1',
-            hosttpl=u'foo',
-            address=u'127.0.0.1',
-            snmpport=42,
-            weight=42,
-        )
-        DBSession.add(host)
-        DBSession.flush()
-        service = HighLevelService(
-            servicename=u'myservice',
-            message= u'Hello world',
-            warning_threshold= 50,
-            critical_threshold= 80,
-        )
-        DBSession.add(service)
-        DBSession.flush()
+        new_map = functions.add_map(u'Carte 1')
+        service = functions.add_highlevelservice(u'myservice')
         return dict(map=new_map, service=service)

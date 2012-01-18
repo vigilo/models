@@ -8,7 +8,8 @@ from datetime import datetime
 from nose.tools import assert_true
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import EventHistory, Host, LowLevelService, Event
+from vigilo.models.demo import functions
+from vigilo.models.tables import EventHistory
 
 from controller import ModelTest
 
@@ -24,42 +25,13 @@ class TestEventHistory(ModelTest):
         'timestamp': datetime.now(),
     }
 
-    def __init__(self):
-        ModelTest.__init__(self)
-
     def do_get_dependencies(self):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
-        host = Host(
-            name=u'myhost',
-            snmpcommunity=u'public',
-            description=u'My Host',
-            hosttpl=u'template',
-            address=u'127.0.0.1',
-            snmpport=1234,
-            weight=42,
-        )
-        DBSession.add(host)
-
-        service = LowLevelService(
-            host=host,
-            servicename=u'monservice',
-            command=u'halt',
-            weight=42,
-        )
-        DBSession.add(service)
-        DBSession.flush()
-
-        DBSession.add(Event(
-            idevent=42,
-            timestamp=datetime.now(),
-            supitem=service,
-            current_state=u'OK',
-            message=u'Foo',
-            ))
-        DBSession.flush()
-
-        return dict(idevent=DBSession.query(Event.idevent)[0].idevent)
+        host = functions.add_host(u'myhost')
+        service = functions.add_lowlevelservice(host, u'myservice')
+        event = functions.add_event(service, u'OK', u'Foo')
+        return dict(idevent=event.idevent)
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""

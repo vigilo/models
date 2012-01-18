@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2006-2011 CS-SI
+# License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
+
 """Test suite for Tag class"""
 
 import unittest
 from controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import HighLevelService, StateName, HLSPriority
+from vigilo.models.demo import functions
+from vigilo.models.tables import StateName, HLSPriority, HighLevelService
 
 class TestHLSPriority(unittest.TestCase):
     def setUp(self, *args, **kwargs):
@@ -13,17 +17,14 @@ class TestHLSPriority(unittest.TestCase):
         super(TestHLSPriority, self).setUp(*args, **kwargs)
         setup_db()
 
+        self.hls = functions.add_highlevelservice(u'Connexion')
+        DBSession.expunge_all()
+        DBSession.query(HLSPriority).delete()
+        DBSession.flush()
+        self.hls = DBSession.query(HighLevelService).one()
         self.statename = DBSession.query(StateName).filter(
             StateName.statename == u'OK').one()
 
-        self.hls = HighLevelService(
-            servicename = u'Connexion',
-            message = u'Ouch',
-            warning_threshold = 300,
-            critical_threshold = 150,
-        )
-        DBSession.add(self.hls)
-        DBSession.flush()
 
     def tearDown(self):
         """Nettoyage à l'issue des tests."""
@@ -35,6 +36,7 @@ class TestHLSPriority(unittest.TestCase):
     def test_add_priority_by_id(self):
         """Ajout priorité pour un HLS par ID."""
         self.hls.priorities[StateName.statename_to_value(u'OK')] = 42
+        DBSession.merge(self.hls)
         DBSession.flush()
         entry = DBSession.query(HLSPriority).one()
         self.assertEquals(entry.idhls, self.hls.idservice)

@@ -6,6 +6,7 @@
 from nose.tools import assert_equals
 
 from vigilo.models.session import DBSession
+from vigilo.models.demo import functions
 from vigilo.models.tables import Host, LowLevelService
 from vigilo.models.tables import ConfItem
 from controller import ModelTest
@@ -27,28 +28,9 @@ class TestServiceConfItem(ModelTest):
     def do_get_dependencies(self):
         """Insertion de données dans la base préalable aux tests."""
         ModelTest.do_get_dependencies(self)
-
-        host = Host(
-            name=u'myhost',
-            snmpcommunity=u'public',
-            description=u'My Host',
-            hosttpl=u'template',
-            address=u'127.0.0.1',
-            snmpport=1234,
-            weight=42,
-        )
-        DBSession.add(host)
-
-        service = LowLevelService(
-            host=host,
-            servicename=u'myservice',
-            command=u'halt',
-            weight=42,
-        )
-        DBSession.add(service)
-        DBSession.flush()
-
-        return dict(supitem=service,)
+        host = functions.add_host(u'myhost')
+        service = functions.add_lowlevelservice(host, u'myservice')
+        return dict(supitem=service)
 
     def test_get_by_host_service_confitem_name(self):
         ob = ConfItem.by_host_service_confitem_name(
@@ -74,19 +56,8 @@ class TestHostConfItem(ModelTest):
     def do_get_dependencies(self):
         """Insertion de données dans la base préalable aux tests."""
         ModelTest.do_get_dependencies(self)
-
-        host = Host(
-            name=u'myhost',
-            snmpcommunity=u'public',
-            description=u'My Host',
-            hosttpl=u'template',
-            address=u'127.0.0.1',
-            snmpport=1234,
-            weight=42,
-        )
-        DBSession.add(host)
-
-        return dict(supitem=host,)
+        host = functions.add_host(u'myhost')
+        return dict(supitem=host)
 
     def test_get_by_host_confitem_name(self):
         ob = ConfItem.by_host_confitem_name(u'myhost', self.attrs['name'])

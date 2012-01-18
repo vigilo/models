@@ -8,7 +8,8 @@ from datetime import datetime
 import re
 
 from vigilo.models.session import DBSession
-from vigilo.models.tables import CorrEvent, Event, LowLevelService, Host
+from vigilo.models.demo import functions
+from vigilo.models.tables import CorrEvent
 from controller import ModelTest
 
 class TestCorrEvent(ModelTest):
@@ -27,35 +28,10 @@ class TestCorrEvent(ModelTest):
     def do_get_dependencies(self):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
-        host = Host(
-            name=u'myhost',
-            snmpcommunity=u'public',
-            description=u'My Host',
-            hosttpl=u'template',
-            address=u'127.0.0.1',
-            snmpport=u'1234',
-            weight=42,
-        )
-        DBSession.add(host)
-        DBSession.flush()
-
-        service = LowLevelService(
-            host=host,
-            servicename=u'myservice',
-            command=u'halt',
-            weight=42,
-        )
-        DBSession.add(service)
-
-        DBSession.add(Event(
-            timestamp=datetime.now(),
-            supitem=service,
-            current_state=u'OK',
-            message=u'Foo',
-            ))
-        DBSession.flush()
-
-        return dict(idcause=DBSession.query(Event).first().idevent)
+        host = functions.add_host(u'myhost')
+        service = functions.add_lowlevelservice(host, u'myservice')
+        event = functions.add_event(service, u'OK', u'Foo')
+        return dict(idcause=event.idevent)
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""

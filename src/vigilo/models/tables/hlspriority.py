@@ -88,6 +88,16 @@ class HLSPriority(DeclarativeBase, HLSPriorityMixin):
     hls = relation('HighLevelService', lazy=True)
 
     def __init__(self, statename, priority):
+        """
+        Associe une nouvelle priorité à un service de haut niveau
+        en fonction de son état.
+
+        @param statename: État pour lequel la priorité doit être modifiée.
+        @type statename: C{int} or C{basestr} or L{StateName}
+        @param priority: Nouvelle priorité pour ce service de haut niveau
+            et cet état.
+        @type priority: C{int}
+        """
         if isinstance(statename, basestring):
             statename = StateName.statename_to_value(statename)
         elif isinstance(statename, StateName):
@@ -109,6 +119,17 @@ class HLSPriority(DeclarativeBase, HLSPriorityMixin):
     @classmethod
     def by_hls_and_statename(cls, hls, statename):
         """
+        Retourne la priorité associée à un service de haut niveau
+        pour un état donné.
+
+        @param hls: Service de haut niveau dont on souhaite connaître
+            la priorité.
+        @type hls: C{int} or L{vigilo.models.tables.HighLevelService}
+        @param statename: État pour lequel la priorité doit être retournée.
+        @type statename: C{int} or C{basestr} or L{StateName}
+        @return: Priorité associée au service de haut niveau
+            en fonction de l'état donné.
+        @rtype: L{HLSPriority}
         """
         if not isinstance(hls, int):
             hls = hls.idservice

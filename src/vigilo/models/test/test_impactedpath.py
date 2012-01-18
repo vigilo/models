@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2006-2011 CS-SI
+# License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
+
 """Test suite for ImpactedPath class"""
-from vigilo.models.tables import ImpactedPath, Host
+from vigilo.models.tables import ImpactedPath
+from vigilo.models.demo import functions
 from vigilo.models.session import DBSession
 
 from controller import ModelTest
@@ -11,24 +15,8 @@ class TestImpactedPath(ModelTest):
     klass = ImpactedPath
     attrs = {}
 
-    def __init__(self):
-        """Initialisation du test."""
-        ModelTest.__init__(self)
-
     def do_get_dependencies(self):
         """Création des dépendances du test."""
         ModelTest.do_get_dependencies(self)
-        host = Host(
-            name=u'myhost',
-            snmpcommunity=u'public',
-            description=u'My Host',
-            hosttpl=u'template',
-            address=u'127.0.0.1',
-            snmpport=u'1234',
-            weight=42,
-        )
-        DBSession.add(host)
-        DBSession.flush()
-
+        host = functions.add_host(u'myhost')
         return dict(supitem=host)
-

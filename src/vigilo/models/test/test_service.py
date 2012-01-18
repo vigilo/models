@@ -9,7 +9,7 @@ from nose.tools import assert_equals
 from vigilo.models.tables import Host, Service, StateName, \
                                     LowLevelService, HighLevelService
 from vigilo.models.session import DBSession
-from vigilo.models.demo.functions import add_lowlevelservice
+from vigilo.models.demo import functions
 from test_tag import TagTestMixin
 
 from controller import ModelTest, setup_db, teardown_db
@@ -27,17 +27,7 @@ class TestLowLevelService(ModelTest, TagTestMixin):
         """Generate some data for the test"""
         ModelTest.do_get_dependencies(self)
         # Création de l'hôte physique sur lequel portera la dépendance.
-        host = Host(
-            name=u'myhost',
-            snmpcommunity=u'public',
-            description=u'My Host',
-            hosttpl=u'foo',
-            address=u'127.0.0.1',
-            snmpport=42,
-            weight=42,
-        )
-        DBSession.add(host)
-        DBSession.flush()
+        host = functions.add_host(u'myhost')
         return dict(host=host)
 
     def test_by_host_service_name(self):
@@ -54,7 +44,10 @@ class TestLowLevelService(ModelTest, TagTestMixin):
     def test_collector_relation(self):
         """Bon fonctionnement de l'association service -> collector."""
         service = DBSession.query(self.klass).one()
-        collector = add_lowlevelservice(service.host.name, u'Collector')
+        collector = functions.add_lowlevelservice(
+            service.host.name,
+            u'Collector'
+        )
         service.idcollector = collector.idservice
         DBSession.flush()
 
@@ -71,12 +64,14 @@ class TestHighLevelService(ModelTest, TagTestMixin):
         'message': u'Hello world',
         'warning_threshold': 50,
         'critical_threshold': 80,
+        'weight': 100,
     }
 
     def test_by_service_name(self):
         """Récupération d'un HighLevelService par son nom."""
         ob = HighLevelService.by_service_name(self.attrs['servicename'])
         assert_equals(ob.critical_threshold, 80)
+        assert_equals(ob.weight, 100)
 
     def test_default_state(self):
         """L'état initial d'un service de haut niveau est 'UNKNOWN'."""
@@ -104,25 +99,7 @@ class TestSupItemAbstraction(unittest.TestCase):
 
     def test_get_abstract_service(self):
         """Une interrogation sur Service ne doit pas retourner un Host."""
-        host = Host(
-            name=u'myhost',
-            snmpcommunity=u'public',
-            description=u'My Host',
-            hosttpl=u'foo',
-            address=u'127.0.0.1',
-            snmpport=42,
-            weight=42,
-        )
-        DBSession.add(host)
-
-        hls = HighLevelService(
-            servicename=u'hls',
-            message=u'foo',
-            warning_threshold=42,
-            critical_threshold=42,
-        )
-        DBSession.add(hls)
-        DBSession.flush()
-
+        host = functions.add_host(u'myhost')
+        hls = functions.add_highlevelservice(u'hls', message="foo")
         supitem = DBSession.query(Service).one()
         self.assertTrue(isinstance(supitem, HighLevelService))
