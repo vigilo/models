@@ -20,7 +20,7 @@ from sqlalchemy import ForeignKey as SaForeignKey, \
                         ForeignKeyConstraint as SaForeignKeyConstraint
 from sqlalchemy import Table as SaTable
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker, query
 from zope.sqlalchemy import ZopeTransactionExtension
 
 from sqlalchemy.orm.scoping import ScopedSession
@@ -171,8 +171,40 @@ class MigrationDDL(DDL):
             bind = bind.bind
         return super(MigrationDDL, self)._prepare_context(schema_item, bind)
 
+class Query(query.Query):
+    """
+    Une extension de la classe de requête par défaut de SQLAlchemy
+    qui ajoute le support des constructions "SELECT DISTINCT ON (...) ..."
+    de PostgreSQL (backport de SQLAlchemy 0.7).
+    Cf. http://www.sqlalchemy.org/trac/ticket/1069
+    et  http://www.sqlalchemy.org/trac/changeset/a7f581395db1/
+    """
+    @query._generative(query.Query._no_statement_condition)
+    def distinct(self, *criterion):
+        """
+        Backport depuis SQLAlchemy 0.7.
+        Ajoute un ``DISTINCT`` à la requête et retourne la nouvelle
+        ``Query`` ainsi créée.
+
+        :param \*expr: expressions optionnels se rapportant à des colonnes
+              et qui généreront une expression DISTINCT ON dans PostgreSQL.
+        """
+        if not criterion:
+            self._distinct = True
+        else:
+            criterion = [
+                self._adapt_clause(
+                    expression._literal_as_text(o),
+                    True, True)
+                for o in criterion
+            ]
+            if isinstance(self._distinct, list):
+                self._distinct += criterion
+            else:
+                self._distinct = criterion
+
 DeclarativeBase = declarative_base(metaclass=PrefixedTables)
 metadata = DeclarativeBase.metadata
 DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False,
-		           extension=ZopeTransactionExtension()
+		           extension=ZopeTransactionExtension(), query_cls=Query,
 ))
