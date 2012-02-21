@@ -28,6 +28,7 @@ Requires:   python-configobj
 Requires:   python-pastedeploy
 Requires:   python-paste
 Requires:   python-networkx
+Requires:   python-argparse
 
 
 %description

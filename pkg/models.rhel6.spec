@@ -24,6 +24,7 @@ Requires:   python-paste-deploy
 Requires:   vigilo-common
 Requires:   python-transaction
 Requires:   python-networkx
+Requires:   python-argparse
 
 
 %description

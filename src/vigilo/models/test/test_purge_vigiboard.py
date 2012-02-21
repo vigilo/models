@@ -68,9 +68,9 @@ class TestPurgeVigiBoard(unittest.TestCase):
 
 
     def tearDown(self):
-        teardown_db()
         DBSession.expunge_all()
         transaction.abort()
+        teardown_db()
 
 
     def test_purge_one_day(self):

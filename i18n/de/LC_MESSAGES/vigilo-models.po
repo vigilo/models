@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: vigilo-models 2.0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2010-11-19 12:34+0100\n"
-"PO-Revision-Date: 2011-03-22 10:43+0100\n"
+"PO-Revision-Date: 2012-02-24 10:54+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -18,52 +18,78 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: src/vigilo/models/demo/__init__.py:58
+#: src/vigilo/models/demo/__init__.py:60
 #, python-format
 msgid "No sample selected. Available samples: %s"
 msgstr "Kein Beispiel ausgewählt. Verfügbare Beispiele: %s"
 
-#: src/vigilo/models/demo/__init__.py:83
+#: src/vigilo/models/demo/__init__.py:85
 #, python-format
 msgid "Sample '%s' cannot be found."
 msgstr "Beispiel '%s' kann nicht gefunden werden."
 
-#: src/vigilo/models/scripts/close_vigiboard.py:29
+#: src/vigilo/models/scripts/close_vigiboard.py:63
+#, python-format
+msgid "closing event on %s"
+msgstr ""
+
+#: src/vigilo/models/scripts/close_vigiboard.py:96
+#, fuzzy
+msgid ""
+"Close events which are at least DAYS old. DAYS must be a positive non-"
+"zero integer."
+msgstr ""
+"Abgeschlossene Ereignisse, die mindestens TAGE alt sind, entfernen. TAGE "
+"müssen ein positiver nicht-Null Integer sein."
+
+#: src/vigilo/models/scripts/close_vigiboard.py:99
 msgid "Close events for hosts in the 'UP' state."
 msgstr ""
 
-#: src/vigilo/models/scripts/close_vigiboard.py:31
+#: src/vigilo/models/scripts/close_vigiboard.py:101
 msgid "Close events for services in the 'OK' state."
 msgstr ""
 
-#: src/vigilo/models/scripts/close_vigiboard.py:33
-#: src/vigilo/models/scripts/passwd.py:33
-#: src/vigilo/models/scripts/purge_vigiboard.py:50
+#: src/vigilo/models/scripts/close_vigiboard.py:103
+#: src/vigilo/models/scripts/passwd.py:36
+#: src/vigilo/models/scripts/purge_vigiboard.py:217
+#: src/vigilo/models/scripts/permissions/main.py:35
 msgid "Load configuration from this file."
 msgstr "Konfiguration aus dieser Datei laden."
 
-#: src/vigilo/models/scripts/close_vigiboard.py:48
-#: src/vigilo/models/scripts/passwd.py:48
-#: src/vigilo/models/scripts/purge_vigiboard.py:65
+#: src/vigilo/models/scripts/close_vigiboard.py:118
+#: src/vigilo/models/scripts/passwd.py:51
+#: src/vigilo/models/scripts/purge_vigiboard.py:232
 msgid "Too many arguments"
 msgstr "Zu viele Argumente"
 
-#: src/vigilo/models/scripts/close_vigiboard.py:55
-#: src/vigilo/models/scripts/passwd.py:55
-#: src/vigilo/models/scripts/purge_vigiboard.py:72
+#: src/vigilo/models/scripts/close_vigiboard.py:125
+#: src/vigilo/models/scripts/passwd.py:58
+#: src/vigilo/models/scripts/purge_vigiboard.py:239
+#: src/vigilo/models/scripts/permissions/main.py:183
 msgid "No database configuration found"
 msgstr "Keine Datenbank-Konfiguration gefunden"
 
-#: src/vigilo/models/scripts/close_vigiboard.py:100
+#: src/vigilo/models/scripts/close_vigiboard.py:131
+#, python-format
+msgid "Either -k or -u must be used. See %s --help for more information."
+msgstr ""
+
+#: src/vigilo/models/scripts/close_vigiboard.py:140
+#: src/vigilo/models/scripts/purge_vigiboard.py:255
+msgid "Some error occurred:"
+msgstr ""
+
+#: src/vigilo/models/scripts/close_vigiboard.py:145
 #, python-format
 msgid "Successfully closed %d events matching the given criteria."
 msgstr ""
 
-#: src/vigilo/models/scripts/passwd.py:28
+#: src/vigilo/models/scripts/passwd.py:31
 msgid "%prog [options] [username]"
 msgstr "%prog [Optionen] [Benutzername]"
 
-#: src/vigilo/models/scripts/passwd.py:29
+#: src/vigilo/models/scripts/passwd.py:32
 msgid ""
 "Changes Vigilo's password for user 'username' or the currently logged in "
 "user if this argument is omitted."
@@ -71,66 +97,48 @@ msgstr ""
 "Ändert das Kennwort von Vigilo für den Benutzer 'Benutzername' oder den "
 "derzeit angemeldeten Benutzer, wenn dieses Argument ausgelassen wird."
 
-#: src/vigilo/models/scripts/passwd.py:68
+#: src/vigilo/models/scripts/passwd.py:71
 #, python-format
 msgid "Changing Vigilo password for user '%s'."
 msgstr "Das Vigilo-Kennwort für Benutzer '%s' wird geändert."
 
-#: src/vigilo/models/scripts/passwd.py:75
+#: src/vigilo/models/scripts/passwd.py:78
 msgid "Enter current password: "
 msgstr "Aktuelles Kennwort eingeben: "
 
-#: src/vigilo/models/scripts/passwd.py:80
+#: src/vigilo/models/scripts/passwd.py:83
 msgid "Bad login or password."
 msgstr "Benutzername oder Kennwort nicht korrekt."
 
-#: src/vigilo/models/scripts/passwd.py:83
+#: src/vigilo/models/scripts/passwd.py:86
 msgid "Enter new password: "
 msgstr "Neues Kennwort eingeben: "
 
-#: src/vigilo/models/scripts/passwd.py:84
+#: src/vigilo/models/scripts/passwd.py:87
 msgid "Confirm new password: "
 msgstr "Neues Kennwort bestätigen: "
 
-#: src/vigilo/models/scripts/passwd.py:89
+#: src/vigilo/models/scripts/passwd.py:92
 msgid "Sorry, passwords do not match."
 msgstr "Leider stimmen die Kennwörter nicht überein."
 
-#: src/vigilo/models/scripts/passwd.py:95
+#: src/vigilo/models/scripts/passwd.py:98
 msgid "Password unchanged."
 msgstr "Kennwort nicht geändert."
 
-#: src/vigilo/models/scripts/passwd.py:103
+#: src/vigilo/models/scripts/passwd.py:106
 #, python-format
 msgid "An exception occurred while updating password for user '%s'."
 msgstr ""
 "Bei der Aktualisierung des Kennworts für Benutzer '%s' ist eine Ausnahme "
 "aufgetreten."
 
-#: src/vigilo/models/scripts/passwd.py:109
+#: src/vigilo/models/scripts/passwd.py:112
 #, python-format
 msgid "Successfully updated password for user '%s'."
 msgstr "Das Kennwort für Benutzer '%s' wurde erfolgreich aktualisiert."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:43
-msgid ""
-"Remove closed events which are at least DAYS old. DAYS must be a positive"
-" non-zero integer."
-msgstr ""
-"Abgeschlossene Ereignisse, die mindestens TAGE alt sind, entfernen. TAGE "
-"müssen ein positiver nicht-Null Integer sein."
-
-#: src/vigilo/models/scripts/purge_vigiboard.py:46
-msgid ""
-"Remove closed events, starting with the oldest ones, when the Vigilo "
-"database starts occupying more then SIZE bytes. SIZE must be a positive "
-"non-zero integer."
-msgstr ""
-"Abgeschlossene Ereignisse entfernen und dabei mit den ältesten beginnen, "
-"wenn die Vigilo Datenbank beginnt, mehr als GRÖSSE Bytes einzunehmen. "
-"GRÖSSE muss ein positiver nicht-Null Integer sein."
-
-#: src/vigilo/models/scripts/purge_vigiboard.py:104
+#: src/vigilo/models/scripts/purge_vigiboard.py:87
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d closed events which were at least %(days)d days "
@@ -139,7 +147,7 @@ msgstr ""
 "Gelöschte %(nb_deleted)d abgeschlossene Ereignisse, die mindestens "
 "%(days)d Tage alt sind."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:117
+#: src/vigilo/models/scripts/purge_vigiboard.py:100
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d entries in the history for high level services "
@@ -148,7 +156,7 @@ msgstr ""
 "Gelöschte %(nb_deleted)d Enträge im Verlauf für High-Level Services, die "
 "mindestens %(days)d Tage alt sind."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:132
+#: src/vigilo/models/scripts/purge_vigiboard.py:113
 #, python-format
 msgid ""
 "The database is %(size)d bytes big, which is more than the limit "
@@ -159,14 +167,14 @@ msgstr ""
 "(%(limit)d bytes). Die alten abgeschlossenen Ereignisse und "
 "Verlaufseinträge jetzt löschen, um Platz für neue zu schaffen."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:156
+#: src/vigilo/models/scripts/purge_vigiboard.py:139
 #, python-format
 msgid "Deleted closed event #%d to make room for new events."
 msgstr ""
 "Gelöschtes abgeschlossenes Ereignis #%d um Platz für neue Ereignisse zu "
 "schaffen."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:164
+#: src/vigilo/models/scripts/purge_vigiboard.py:152
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
@@ -175,7 +183,7 @@ msgstr ""
 "Gelöschtes %(nb_deleted)d abgeschlossenes Ereignis. Die Datenbank ist "
 "jetzt %(size)d Byte groß (limit: %(limit)d bytes)"
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:191
+#: src/vigilo/models/scripts/purge_vigiboard.py:186
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d history entries on high level services. The "
@@ -183,4 +191,215 @@ msgid ""
 msgstr ""
 "Gelöschte %(nb_deleted)d Verlaufseinträge über High-Level-Services. Die "
 "Datenbank ist jetzt %(size)d Byte groß (limit: %(limit)d bytes)"
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:210
+msgid ""
+"Remove closed events which are at least DAYS old. DAYS must be a positive"
+" non-zero integer."
+msgstr ""
+"Abgeschlossene Ereignisse, die mindestens TAGE alt sind, entfernen. TAGE "
+"müssen ein positiver nicht-Null Integer sein."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:213
+msgid ""
+"Remove closed events, starting with the oldest ones, when the Vigilo "
+"database starts occupying more then SIZE bytes. SIZE must be a positive "
+"non-zero integer."
+msgstr ""
+"Abgeschlossene Ereignisse entfernen und dabei mit den ältesten beginnen, "
+"wenn die Vigilo Datenbank beginnt, mehr als GRÖSSE Bytes einzunehmen. "
+"GRÖSSE muss ein positiver nicht-Null Integer sein."
+
+#: src/vigilo/models/scripts/purge_vigiboard.py:245
+#, python-format
+msgid "Either -d or -s must be used. See %s --help for more information."
+msgstr ""
+
+#. TRANSLATORS: Used in a sentence such as:
+#. TRANSLATORS: "Added ... permission on Foo for usergroup Bar".
+#: src/vigilo/models/scripts/permissions/commands.py:26
+#: src/vigilo/models/scripts/permissions/main.py:75
+#: src/vigilo/models/scripts/permissions/main.py:114
+msgid "read-only"
+msgstr ""
+
+#. TRANSLATORS: Used in a sentence such as:
+#. TRANSLATORS: "Added ... permission on Foo for usergroup Bar".
+#: src/vigilo/models/scripts/permissions/commands.py:30
+#: src/vigilo/models/scripts/permissions/main.py:76
+#: src/vigilo/models/scripts/permissions/main.py:115
+msgid "read/write"
+msgstr ""
+
+#. TRANSLATORS: Used in a sentence such as:
+#. TRANSLATORS: "Removed ... permission on Foo for usergroup Bar".
+#: src/vigilo/models/scripts/permissions/commands.py:34
+msgid "all"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:62
+#: src/vigilo/models/scripts/permissions/commands.py:190
+#, python-format
+msgid "No such usergroup '%s'"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:69
+#: src/vigilo/models/scripts/permissions/commands.py:197
+#, python-format
+msgid ""
+"Could not parse <object group> (%s). Make sure the value is correct and "
+"try again."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:82
+#: src/vigilo/models/scripts/permissions/commands.py:210
+#, python-format
+msgid "No match found for group '%(group)s' with type '%(type)s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:91
+#: src/vigilo/models/scripts/permissions/commands.py:218
+#, python-format
+msgid ""
+"Multiple groups named '%(group)s' with type '%(type)s' were found. Use "
+"--batch to set permissions on multiple groups at once."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:98
+#: src/vigilo/models/scripts/permissions/commands.py:225
+msgid "The following groups were found:"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:114
+#, python-format
+msgid ""
+"Usergroup '%(usergroup)s' already has %(perm)s permissions on '%(path)s'."
+" No change required."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:126
+#, python-format
+msgid ""
+"Conflict detected: usergroup '%(usergroup)s' already has %(perm)s "
+"permissions on '%(path)s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:151
+#, python-format
+msgid ""
+"Successfully set %(perm)s permissions on '%(path)s' for usergroup "
+"'%(usergroup)s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:161
+#, python-format
+msgid ""
+"Successfully set %(perm)s permissions on %(nb_groups)d groups for "
+"usergroup '%(usergroup)s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:248
+#, python-format
+msgid ""
+"Successfully removed %(perm)s permissions on '%(path)s' for usergroup "
+"'%(usergroup)s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:259
+#, python-format
+msgid ""
+"Successfully removed %(perm)s permissions on %(nb_groups)d groups for "
+"usergroup '%(usergroup)s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:293
+#, python-format
+msgid "%(count)d groups found with type '%(type)s':"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:42
+msgid "Commands"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:49
+msgid "Display this program's version and exit."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:56
+msgid ""
+"Add or update permissions for the given usergroup to a certain group of "
+"objects."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:60
+#: src/vigilo/models/scripts/permissions/main.py:99
+msgid "Usergroup to act upon."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:64
+msgid ""
+"Type of object group to act upon: 'monitored' for groups of monitored "
+"items, 'map' for groups of maps, or 'graph' for groups of graphs"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:69
+#: src/vigilo/models/scripts/permissions/main.py:108
+msgid ""
+"Group to act upon. This can be either the full path to the group, or a "
+"relative one."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:73
+#: src/vigilo/models/scripts/permissions/main.py:112
+#, python-format
+msgid "Type of permission to give: 'ro' (%(ro)s) or 'rw' (%(rw)s)."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:79
+#: src/vigilo/models/scripts/permissions/main.py:118
+msgid ""
+"In case multiple groups of objects are found with the given name and "
+"type, apply the permissions for all of them at once."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:83
+msgid "Resolve conflicts by updating existing permissions."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:95
+msgid "Remove permissions for a given usergroup on a certain group of objects."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:103
+msgid ""
+"Type of object group to act upon: 'monitored' for groups of monitored "
+"items, 'map' for groups of maps, or 'graph' for groups of graphs."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:128
+msgid "Display the list of existing usergroups and other groups of objects."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:134
+msgid ""
+"Type of object group to act upon: 'monitored' for groups of monitored "
+"items, 'map' for groups of maps, 'graph' for groups of graphs, or 'user' "
+"for usergroups."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:143
+#, python-format
+msgid "Alias for '%(prog)s add --update'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:148
+#: src/vigilo/models/scripts/permissions/main.py:152
+#: src/vigilo/models/scripts/permissions/main.py:156
+#, python-format
+msgid "Alias for '%(prog)s remove'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:207
+msgid "You must be root to use this script."
+msgstr ""
 
