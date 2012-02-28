@@ -26,6 +26,7 @@ from zope.sqlalchemy import ZopeTransactionExtension
 from sqlalchemy.orm.scoping import ScopedSession
 from sqlalchemy.schema import DDL, _bind_or_error
 from sqlalchemy.sql import expression
+from sqlalchemy import exc as sa_exc
 
 import vigilo.models.configure as configure
 
@@ -179,7 +180,22 @@ class Query(query.Query):
     Cf. http://www.sqlalchemy.org/trac/ticket/1069
     et  http://www.sqlalchemy.org/trac/changeset/a7f581395db1/
     """
-    @query._generative(query.Query._no_statement_condition)
+    def _no_statement_condition(self, meth):
+        """
+        Récopié depuis SQLAlchemy 0.5.6 avec des ajustements pour rester
+        compatible avec SQLAlchemy 0.5.5. Nécessaire car la méthode était
+        privée dans 0.5.5 et n'est devenue protégée que dans 0.5.6.
+        """
+        # self._enable_assertions n'existe que depuis SA 0.5.6.
+        if not getattr(self, '_enable_assertions', True):
+            return
+        if self._statement:
+            raise sa_exc.InvalidRequestError(
+                ("Query.%s() being called on a Query with an existing full "
+                 "statement - can't apply criterion.") % meth)
+
+
+    @query._generative(_no_statement_condition)
     def distinct(self, *criterion):
         """
         Backport depuis SQLAlchemy 0.7.
