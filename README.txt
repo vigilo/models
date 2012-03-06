@@ -37,16 +37,18 @@ L'installation se fait par la commande ``make install`` (à exécuter en
 Vous devez ensuite créer l'utilisateur et la base de données Vigilo. Exemple
 sous PostgreSQL::
 
-    sudo -u postgres createuser -D -R -S -P vigilo
-    sudo -u postgres createdb -O vigilo -E UTF8 -T template0 vigilo
+    sudo -u postgres createuser --no-inherit --no-createdb --no-createrole \
+                                --no-superuser --pwprompt vigilo
+    sudo -u postgres createdb vigilo --owner vigilo --encoding UTF8
 
 Puis, dans le cas de PostgreSQL, il faut autoriser l'accès local à
 l'utilisateur Vigilo dans la configuration du serveur. Pour cela, éditer le
 fichier ``/var/lib/pgsql/data/pg_hba.conf`` et ajouter les lignes suivantes en
 début de fichier::
 
-    local  vigilo  vigilo                md5
-    host   vigilo  vigilo  127.0.0.1/32  md5
+    local   vigilo      vigilo                            md5
+    host    vigilo      vigilo      127.0.0.1/32          md5
+    host    vigilo      vigilo      ::1/128               md5
 
 Et recharger le serveur PostgreSQL. Enfin, après avoir installé tous les
 composants de Vigilo, vous pourrez initialiser la base de données Vigilo grâce
