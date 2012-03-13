@@ -43,10 +43,10 @@ This library is part of the Vigilo Project <http://vigilo-project.org>
 %install
 rm -rf $RPM_BUILD_ROOT
 make install_pkg \
-	DESTDIR=$RPM_BUILD_ROOT \
-	PREFIX=%{_prefix} \
-	SYSCONFDIR=%{_sysconfdir} \
-	PYTHON=%{__python}
+    DESTDIR=$RPM_BUILD_ROOT \
+    PREFIX=%{_prefix} \
+    SYSCONFDIR=%{_sysconfdir} \
+    PYTHON=%{__python}
 
 %find_lang %{name}
 
@@ -63,5 +63,5 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Mon Feb 08 2010 Aurelien Bompard <aurelien.bompard@c-s.fr> - 1.0-1
+* Mon Feb 08 2010 Aurelien Bompard <aurelien.bompard@c-s.fr>
 - initial package
