@@ -21,7 +21,10 @@ Par exemple, voici la valeur correspondant à une installation mono-poste par d�
 
     postgres://vigilo:vigilo@localhost/vigilo
 
-**ATTENTION** : à l'heure actuelle, seul PostgreSQL a fait l'objet de tests intensifs. D'autres SGBD peuvent également fonctionner, mais aucun support ne sera fourni pour ces SGBD.
+..  warning::
+    À l'heure actuelle, seul PostgreSQL a fait l'objet de tests intensifs.
+    D'autres SGBD peuvent également fonctionner, mais aucun support ne sera
+    fourni pour ces SGBD.
 
 Choix d'un préfixe pour les tables de la base de données
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -33,4 +36,3 @@ la section [database].
 
 Utilisez de préférence un préfixe ne contenant que des caractères
 alpha-numériques ou le caractère « _ ».
-
