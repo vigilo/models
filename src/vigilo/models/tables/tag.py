@@ -81,9 +81,9 @@ class Tag(DeclarativeBase, object):
         Récupère un tag par son nom.
 
         @param supitem: Instance sur laquelle porte le tag.
-        @type: L{SupItem}
+        @type  supitem: L{SupItem}
         @param tagname: Nom du tag à récupérer.
-        @type tagname: C{unicode}
+        @type  tagname: C{unicode}
         @return: Instance du Tag.
         @rtype: L{Tag}
         """

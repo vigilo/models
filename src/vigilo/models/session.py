@@ -198,7 +198,7 @@ class Query(query.Query):
     @query._generative(_no_statement_condition)
     def distinct(self, *criterion):
         """
-        Backport depuis SQLAlchemy 0.7.
+        X{Backport} depuis SQLAlchemy 0.7.
         Ajoute un ``DISTINCT`` à la requête et retourne la nouvelle
         ``Query`` ainsi créée.
 
