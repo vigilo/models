@@ -3,10 +3,9 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 """Test suite for Ventilation class"""
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 from vigilo.models.demo import functions
-from vigilo.models.tables import Ventilation, Host, VigiloServer, Application
-from vigilo.models.session import DBSession
+from vigilo.models.tables import Ventilation
 
 class TestVentilation(ModelTest):
     """Test de la table Ventilation"""

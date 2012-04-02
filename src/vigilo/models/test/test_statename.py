@@ -8,7 +8,7 @@ from nose.tools import assert_equals
 from vigilo.models.tables import StateName
 from vigilo.models.session import DBSession
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestStateName(ModelTest):
     """Test de la table StateName."""
@@ -73,7 +73,8 @@ class TestStateName(ModelTest):
         )
         try:
             self.klass.statename_to_value(oldname)
-        except Exception:
+        except Exception: # pylint: disable-msg=W0703
+            # W0703: Catch "Exception"
             pass
         else:
             raise AssertionError, "The cache was not refreshed"

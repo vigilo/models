@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 import transaction
 
-from controller import setup_db, teardown_db, Options
+from vigilo.models.test.controller import setup_db, teardown_db, Options
 
 from vigilo.models.demo import functions as fn
 from vigilo.models.scripts.close_vigiboard import close_green

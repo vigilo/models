@@ -8,8 +8,10 @@ changements d'état.
 Voir ticket #931.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import EventHistory, StateName
 
 def upgrade(migrate_engine, actions):

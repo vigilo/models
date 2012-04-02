@@ -6,7 +6,7 @@
 from nose.tools import assert_equals, assert_not_equals
 
 from vigilo.models.tables import ConfFile
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestConfFile(ModelTest):
     """Unit test case for the ``ConfFile`` model."""

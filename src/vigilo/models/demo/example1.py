@@ -4,6 +4,9 @@
 
 """Insère des données de test dans la base de données."""
 
+# pylint: disable-msg=W0612
+# W0612: Unused variables
+
 from vigilo.models.demo import functions
 from vigilo.models import tables
 

@@ -184,6 +184,8 @@ class SupItem(DeclarativeBase, object):
         @return: True si l'accès est autorisé, False sinon.
         @rtype: C{bool}
         """
+        # pylint: disable-msg=W0613
+        # W0613: Unused argument 'perm_type'
         if u"managers" in [g.group_name for g in user.usergroups]:
             return True
         direct_groups = [sg[0] for sg in user.supitemgroups() if sg[1]]

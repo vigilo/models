@@ -8,7 +8,7 @@ from datetime import datetime
 from vigilo.models.session import DBSession
 from vigilo.models.tables import State, Host
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestHostState(ModelTest):
     """Test de la table State avec un Host"""

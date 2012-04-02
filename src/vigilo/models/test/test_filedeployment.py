@@ -3,6 +3,7 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Tests pour la classe FileDeployment."""
+
 import os
 import tempfile
 import shutil
@@ -13,7 +14,7 @@ from nose.tools import assert_equal
 
 from vigilo.models.session import DBSession
 from vigilo.models.tables import FileDeployment
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 
 class TestFileDeployment(ModelTest):

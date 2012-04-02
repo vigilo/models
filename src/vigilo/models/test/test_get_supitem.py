@@ -4,11 +4,13 @@
 
 """Test suite for SupItem.get_supitem"""
 import unittest
-from controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession
 from vigilo.models.demo import functions
 from vigilo.models.tables import SupItem
+
+from vigilo.models.test.controller import setup_db, teardown_db
+
 
 class TestGetSupItem(unittest.TestCase):
     """Test de la méthode get_supitem de la classe 'SupItem'"""

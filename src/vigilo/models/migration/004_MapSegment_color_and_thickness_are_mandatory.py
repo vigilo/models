@@ -7,6 +7,9 @@ Rend obligatoire la sélection la couleur et l'épaisseur du trait
 dans un segment sur une carte.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from sqlalchemy.schema import DDL
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models import tables

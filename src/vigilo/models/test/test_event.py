@@ -10,7 +10,7 @@ from nose.tools import assert_true, assert_equal
 from vigilo.models.demo import functions
 from vigilo.models.tables import Event, StateName
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestEvent(ModelTest):
     """Test de la table Event"""

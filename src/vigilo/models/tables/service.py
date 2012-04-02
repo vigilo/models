@@ -220,7 +220,8 @@ class LowLevelService(Service):
         try:
             return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
                             str(self.servicename), str(self.host.name))
-        except Exception:
+        except Exception: # pylint: disable-msg=W0703
+            # W0703: Catch "Exception"
             return super(LowLevelService, self).__repr__()
 
     def is_allowed_for(self, user, perm_type="r"):

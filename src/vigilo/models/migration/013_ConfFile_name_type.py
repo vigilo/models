@@ -12,6 +12,9 @@ Cette modification permet un gain important en performances lors
 d'opérations de recherche ou de jointure sur la table ConfFile.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables

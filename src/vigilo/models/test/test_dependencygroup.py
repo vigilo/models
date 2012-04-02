@@ -3,7 +3,7 @@
 from vigilo.models.tables import DependencyGroup, Host
 from vigilo.models.session import DBSession
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestDependencyGroup(ModelTest):
     """Test de la table DependencyGroup."""

@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
+
 """Tests du script de gestion des permissions."""
+
+# pylint: disable-msg=C0111,W0613,R0904,W0212
+# - C0111: Missing docstring
+# - W0613: Unused argument
+# - R0904: Too many public methods
+# - W0212: Access to a protected member of a client class
+
 import unittest
-import time
-from datetime import datetime
 import transaction
 
-from controller import setup_db, teardown_db, Options
+from vigilo.models.test.controller import setup_db, teardown_db
 
 from vigilo.models.scripts.permissions import commands
 from vigilo.models import tables
@@ -98,7 +104,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
 
     def test_add_multiple_error(self):
         """Pas de permission sur plusieurs groupes par défaut."""
-        for (incode, outcode) in commands._permissions.iteritems():
+        for incode in commands._permissions:
             print "Test permission %s" % incode
             options = NamespaceStub(
                 permission=incode,
@@ -169,7 +175,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
 
     def test_add_conflict(self):
         """Détection des conflits de permission."""
-        for (incode, outcode) in commands._permissions.iteritems():
+        for incode in commands._permissions:
             print "Test permission %s" % incode
             # On simule l'existence d'une permission avant le début du test.
             # Si le test porte sur la permission "lecture seule", alors la

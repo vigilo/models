@@ -6,7 +6,7 @@
 from vigilo.models.tables import ImpactedPath
 from vigilo.models.demo import functions
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestImpactedPath(ModelTest):
     """Unit test case for the ``ImpactedPath`` model."""

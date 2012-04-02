@@ -8,6 +8,10 @@ Fait en sorte que les étiquettes (tags) soient associées
 De plus, les étiquettes associés à un hôte/service peuvent
 désormais être manipulées comme un dictionnaire classique.
 """
+
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables

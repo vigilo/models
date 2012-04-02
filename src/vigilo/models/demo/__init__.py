@@ -55,7 +55,7 @@ def run_demo():
     _ = translate_narrow(__name__)
 
     parser = optparse.OptionParser("Usage: %prog sample1 [sample2...]")
-    opts, args = parser.parse_args()
+    args = parser.parse_args()[1]
     if not args:
         parser.error(_("No sample selected. Available samples: %s")
                 % ", ".join(samples.keys()))

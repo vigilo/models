@@ -10,7 +10,7 @@ from nose.tools import assert_true
 from vigilo.models.demo import functions
 from vigilo.models.tables import EventHistory
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestEventHistory(ModelTest):
     """Test de la table EventHistory"""

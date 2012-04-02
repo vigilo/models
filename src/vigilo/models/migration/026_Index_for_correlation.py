@@ -8,6 +8,9 @@ Les indexes ajoutés concernent :
 - La colonne "current_state" de la table "Event".
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import Event

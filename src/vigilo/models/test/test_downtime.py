@@ -9,7 +9,7 @@ from vigilo.models.session import DBSession
 from vigilo.models.demo import functions
 from vigilo.models.tables import Downtime, DowntimeStatus
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestDowntime(ModelTest):
     """Unit test case for the ``Downtime`` model."""

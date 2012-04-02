@@ -136,7 +136,8 @@ def main(*args):
     try:
         res = close_green(logger, options)
         transaction.commit()
-    except:
+    except Exception: # pylint: disable-msg=W0703
+        # W0703: Catch "Exception"
         logger.exception(_('Some error occurred:'))
         transaction.abort()
         sys.exit(1)

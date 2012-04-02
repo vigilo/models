@@ -7,7 +7,7 @@ from nose.tools import assert_equals
 
 from vigilo.models.demo import functions
 from vigilo.models.tables import ConfItem
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestServiceConfItem(ModelTest):
     """Unit test case for the ``ConfItem`` model."""

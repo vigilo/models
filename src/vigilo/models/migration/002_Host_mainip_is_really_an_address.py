@@ -9,6 +9,9 @@ pas nécessairement à une adresse IP (v4 ou v6). Il peut par exemple s'agir
 d'un nom d'hôte complètement qualifié (FQDN).
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models import tables
 

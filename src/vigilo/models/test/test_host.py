@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """Test suite for Host class"""
+
 from nose.tools import assert_equals
 
 from vigilo.models.tables import Host, StateName
 from vigilo.models.session import DBSession
-from test_tag import TagTestMixin
 
-from controller import ModelTest
+from vigilo.models.test.test_tag import TagTestMixin
+from vigilo.models.test.controller import ModelTest
 
 class TestHost(ModelTest, TagTestMixin):
     """Test de la table host"""

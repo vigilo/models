@@ -3,7 +3,7 @@
 from vigilo.models.tables import PerfDataSource
 from vigilo.models.demo import functions
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestPerfDataSource(ModelTest):
     """Test de la table perfdatasource"""

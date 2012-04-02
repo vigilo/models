@@ -3,6 +3,9 @@
 Ajout d'une vue associant à chaque groupe le chemin d'accès correspondant.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 def upgrade(migrate_engine, actions):
     """
     Migre le modèle.

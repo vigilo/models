@@ -3,7 +3,7 @@
 from nose.tools import assert_equal
 from vigilo.models.tables import Application
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestApplication(ModelTest):
     """Unit test case for the ``Application`` model."""

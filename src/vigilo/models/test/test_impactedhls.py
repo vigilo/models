@@ -7,7 +7,7 @@ from vigilo.models.tables import ImpactedHLS, ImpactedPath
 from vigilo.models.demo import functions
 from vigilo.models.session import DBSession
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestImpactedHLS(ModelTest):
     """Unit test case for the ``ImpactedHLS`` model."""

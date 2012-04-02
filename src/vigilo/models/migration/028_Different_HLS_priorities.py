@@ -7,8 +7,10 @@ dans lequel celui-ci se retrouve (UNKNOWN, WARNING ou CRITICAL).
 Voir ticket #874.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import HighLevelService
 
 def upgrade(migrate_engine, actions):

@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
+
 """Test de fermetures automatique d'événements dans VigiBoard."""
+
 import unittest
 import time
 from datetime import datetime
+
 import transaction
 
-from controller import setup_db, teardown_db, Options
+from vigilo.common.logging import get_logger
+LOGGER = get_logger(__name__)
 
 from vigilo.models.demo import functions as fn
 from vigilo.models.scripts.purge_vigiboard import clean_vigiboard
 from vigilo.models import tables
 from vigilo.models.session import DBSession
 
-from vigilo.common.logging import get_logger
-LOGGER = get_logger(__name__)
+from vigilo.models.test.controller import setup_db, teardown_db, Options
+
 
 class TestPurgeVigiBoard(unittest.TestCase):
     """

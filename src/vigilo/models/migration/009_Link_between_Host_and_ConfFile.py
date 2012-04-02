@@ -10,6 +10,9 @@ Pour le moment, le champ est optionnel, afin de
 permettre aux administrateurs de migrer leur parc.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables

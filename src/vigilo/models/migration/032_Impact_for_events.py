@@ -17,6 +17,9 @@ C'est grâce à ce champ qu'on peut se passer de EventsAggregate.
 Voir également le ticket #467.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import CorrEvent, Dependency

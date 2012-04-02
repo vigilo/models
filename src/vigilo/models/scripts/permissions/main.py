@@ -187,7 +187,7 @@ def _prepare_db(options):
     return True
 
 
-def main(*args):
+def main():
     """
     Point d'entrée pour le script de réglage des permissions.
     """
@@ -203,7 +203,6 @@ def main(*args):
     }
 
     current_user = pwd.getpwuid(os.getuid())
-    username = current_user.pw_name
     # Seul "root" (UID 0) est autorisé à changer les permissions
     # dans Vigilo de façon arbitraire.
     if current_user.pw_uid != 0:

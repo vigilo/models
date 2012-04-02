@@ -3,7 +3,7 @@
 from vigilo.models.session import DBSession
 from vigilo.models.tables import Host, HostClass
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestHostClass(ModelTest):
     """Test de la table HostClass"""

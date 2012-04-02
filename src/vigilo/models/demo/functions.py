@@ -2,6 +2,9 @@
 # Copyright (C) 2006-2011 CS-SI
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
+# pylint: disable-msg=W0622
+# W0622: Redefining built-in 'map'
+
 """
 Fonctions permettant de peupler les tables du modèle.
 La plupart de ces fonctions tentent d'ajouter un nouvel
@@ -244,7 +247,8 @@ def add_tag(supitem, name, value=None):
     @rtype: L{tables.Tag}
     """
     if isinstance(supitem, tuple):
-        supitem = map(lambda x: unicode(x) if x is not None else x, supitem)
+        #supitem = map(lambda x: unicode(x) if x is not None else x, supitem)
+        supitem = [ unicode(x) if x is not None else x for x in supitem ]
         supitem = DBSession.query(tables.SupItem).get(
             tables.SupItem.get_supitem(*supitem))
 
@@ -373,7 +377,7 @@ def add_lls2group(lls, group):
     if isinstance(lls, basestring):
         raise ValueError("I need a host name too !")
     if isinstance(lls, tuple):
-        lls = map(unicode, lls)
+        lls = [ unicode(l) for l in lls ]
         lls = tables.LowLevelService.by_host_service_name(*lls)
     if isinstance(group, basestring):
         group = tables.SupItemGroup.by_group_name(unicode(group))
@@ -475,7 +479,7 @@ def add_svc_state(service, statename, message=None, timestamp=None):
     @type  message: C{basestr}
     """
     if isinstance(service, tuple):
-        service = map(unicode, service)
+        service = [ unicode(s) for s in service ]
         service = tables.LowLevelService.by_host_service_name(*service)
     elif isinstance(service, basestring):
         service = tables.HighLevelService.by_service_name(service)
@@ -671,7 +675,7 @@ def add_map2group(map, group):
         DBSession.flush()
 
 def add_node_host(host, label, map, widget="ServiceElement",
-                    x=None, y=None, icon=None, submaps=[]):
+                    x=None, y=None, icon=None, submaps=None):
     if isinstance(host, basestring):
         host = tables.Host.by_host_name(unicode(host))
     n = tables.MapNodeHost.by_map_label(map, unicode(label))
@@ -680,6 +684,8 @@ def add_node_host(host, label, map, widget="ServiceElement",
                               x_pos=x, y_pos=y, widget=unicode(widget),
                               idhost=host.idhost, icon=unicode(icon))
         DBSession.add(n)
+    if submaps is None:
+        submaps = []
     for submap in submaps:
         if submap.idmap not in [s.idmap for s in n.submaps]:
             n.submaps.append(submap)
@@ -687,7 +693,7 @@ def add_node_host(host, label, map, widget="ServiceElement",
     return n
 
 def add_node_lls(lls, label, map, widget="ServiceElement",
-                    x=None, y=None, icon=None, submaps=[]):
+                    x=None, y=None, icon=None, submaps=None):
     if isinstance(lls, basestring):
         raise ValueError("I need a host name too !")
     if isinstance(lls, tuple):
@@ -699,6 +705,8 @@ def add_node_lls(lls, label, map, widget="ServiceElement",
                               x_pos=x, y_pos=y, widget=unicode(widget),
                               idservice=lls.idservice, icon=unicode(icon))
         DBSession.add(n)
+    if submaps is None:
+        submaps = []
     for submap in submaps:
         if submap.idmap not in [s.idmap for s in n.submaps]:
             n.submaps.append(submap)
@@ -706,7 +714,7 @@ def add_node_lls(lls, label, map, widget="ServiceElement",
     return n
 
 def add_node_hls(hls, label, map, widget="ServiceElement",
-                    x=None, y=None, icon=None, submaps=[]):
+                    x=None, y=None, icon=None, submaps=None):
     if isinstance(hls, basestring):
         hls = tables.HighLevelService.by_service_name(hls)
     n = tables.MapNodeHls.by_map_label(map, unicode(label))
@@ -715,6 +723,8 @@ def add_node_hls(hls, label, map, widget="ServiceElement",
                               x_pos=x, y_pos=y, widget=unicode(widget),
                               idservice=hls.idservice, icon=unicode(icon))
         DBSession.add(n)
+    if submaps is None:
+        submaps = []
     for submap in submaps:
         if submap.idmap not in [s.idmap for s in n.submaps]:
             n.submaps.append(submap)

@@ -8,7 +8,7 @@ from datetime import datetime
 from vigilo.models.tables import HLSHistory, StateName
 from vigilo.models.demo import functions
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestHLSHistory(ModelTest):
     """Unit test case for the ``HLSHistory`` model."""

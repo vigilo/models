@@ -8,6 +8,10 @@ une clé (privée) à chaque utilisateur. Cette clé pourra ensuite être
 utilisée pour accéder à certaines informations de Vigilo via une API,
 sans avoir recours à une authentification.
 """
+
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models import tables
 

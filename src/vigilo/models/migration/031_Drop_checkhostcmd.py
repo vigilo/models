@@ -7,6 +7,9 @@ générateurs de VigiConf (ce pour quoi cet attribut existait)
 serait trop coûteuse.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.tables import Host
 

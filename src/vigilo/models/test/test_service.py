@@ -3,16 +3,19 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Test suite for LowLevelService & HighLevelService classes"""
+
 import unittest
+
 from nose.tools import assert_equals
 
 from vigilo.models.tables import Service, StateName, \
                                     LowLevelService, HighLevelService
 from vigilo.models.session import DBSession
 from vigilo.models.demo import functions
-from test_tag import TagTestMixin
 
-from controller import ModelTest, setup_db, teardown_db
+from vigilo.models.test.test_tag import TagTestMixin
+from vigilo.models.test.controller import ModelTest, setup_db, teardown_db
+
 
 class TestLowLevelService(ModelTest, TagTestMixin):
     """Test de la classe LowLevelService."""
@@ -103,7 +106,7 @@ class TestSupItemAbstraction(unittest.TestCase):
 
     def test_get_abstract_service(self):
         """Une interrogation sur Service ne doit pas retourner un Host."""
-        host = functions.add_host(u'myhost')
-        hls = functions.add_highlevelservice(u'hls', message="foo")
+        functions.add_host(u'myhost')
+        functions.add_highlevelservice(u'hls', message="foo")
         supitem = DBSession.query(Service).one()
         self.assertTrue(isinstance(supitem, HighLevelService))

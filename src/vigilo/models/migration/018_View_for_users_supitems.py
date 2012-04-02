@@ -4,6 +4,9 @@ Ajout d'une vue associant à chaque utilisateur
 les objets supervisés auxquels il a accès.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 def upgrade(migrate_engine, actions):
     """
     Migre le modèle.

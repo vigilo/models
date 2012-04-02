@@ -7,7 +7,7 @@
 import networkx as nx
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime, Integer, Boolean
-from sqlalchemy.orm import relation, aliased
+from sqlalchemy.orm import relation
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \

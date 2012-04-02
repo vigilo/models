@@ -5,8 +5,10 @@ Ajoute un index et une contrainte d'unicité sur les colonnes
 Cet ajout améliore les performances des "deploy" de VigiConf.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import ConfItem
 
 def upgrade(migrate_engine, actions):

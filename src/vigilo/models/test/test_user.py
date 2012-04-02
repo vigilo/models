@@ -3,6 +3,13 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Test suite for User class"""
+
+# pylint: disable-msg=C0111,W0613,R0904,W0212
+# - C0111: Missing docstring
+# - W0613: Unused argument
+# - R0904: Too many public methods
+# - W0212: Access to a protected member of a client class
+
 import hashlib
 from nose.tools import eq_
 
@@ -10,7 +17,7 @@ from vigilo.models.tables import User, SupItemGroup, Permission, UserGroup, \
                                 MapGroup, DataPermission
 from vigilo.models.session import DBSession
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestUser(ModelTest):
     """Unit test case for the ``User`` model."""

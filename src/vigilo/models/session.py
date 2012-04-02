@@ -77,6 +77,8 @@ class Table(SaTable):
     qui ajoute automatiquement le préfixe des tables de
     Vigilo.
     """
+    # pylint: disable-msg=W0223
+    # W0223: Method '_export_columns' is abstract but is not overridden
 
     def __init__(self, name, *args, **kwargs):
         """
@@ -148,7 +150,7 @@ class MigrationDDL(DDL):
 
         if self._should_execute(None, schema_item, bind):
             # On évalue le contexte une fois pour toute (il ne changera plus).
-            context = self._prepare_context(schema_item, bind)
+            self._prepare_context(schema_item, bind)
             statement = self._expand(schema_item, bind)
             res = bind.execute(expression.text(statement))
             return res
@@ -195,7 +197,8 @@ class Query(query.Query):
                  "statement - can't apply criterion.") % meth)
 
 
-    @query._generative(_no_statement_condition)
+    @query._generative(_no_statement_condition) # pylint: disable-msg=W0212
+    # W0212: Access to a protected member of a client class
     def distinct(self, *criterion):
         """
         X{Backport} depuis SQLAlchemy 0.7.
@@ -205,6 +208,8 @@ class Query(query.Query):
         :param \*expr: expressions optionnels se rapportant à des colonnes
               et qui généreront une expression DISTINCT ON dans PostgreSQL.
         """
+        # pylint: disable-msg=W0212
+        # W0212: Access to a protected member of a client class
         if not criterion:
             self._distinct = True
         else:

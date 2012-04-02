@@ -6,7 +6,7 @@
 from vigilo.models.tables import Dependency
 from vigilo.models.demo import functions
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestDependency(ModelTest):
     """Test de la table Dependency."""

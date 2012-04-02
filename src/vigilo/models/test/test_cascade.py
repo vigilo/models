@@ -7,7 +7,7 @@ import unittest
 from vigilo.common.conf import settings
 settings.load_module(__name__)
 
-from controller import setup_db, teardown_db
+from vigilo.models.test.controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession
 from vigilo.models import tables
@@ -33,7 +33,7 @@ class DeleteCascadeTest(unittest.TestCase):
         # Mettre localhost sur une carte
         h = fct.add_host(u"localhost")
         testmap = fct.add_map(u"Test map")
-        mnh = fct.add_node_host(h, "localhost", testmap)
+        fct.add_node_host(h, "localhost", testmap)
         DBSession.flush()
         DBSession.delete(h)
         DBSession.flush()
@@ -50,7 +50,7 @@ class DeleteCascadeTest(unittest.TestCase):
         h = fct.add_host(u"localhost")
         s = fct.add_lowlevelservice(h, "testservice")
         testmap = fct.add_map(u"Test map")
-        mnh = fct.add_node_lls(s, "testservice", testmap)
+        fct.add_node_lls(s, "testservice", testmap)
         DBSession.flush()
         DBSession.delete(s)
         DBSession.flush()
@@ -66,10 +66,10 @@ class DeleteCascadeTest(unittest.TestCase):
     def test_hls_mapnode(self):
         """Suppression des mapnodes d'un hls supprimé (#57)"""
         # Mettre localhost sur une carte
-        h = fct.add_host(u"localhost")
+        fct.add_host(u"localhost")
         s = fct.add_highlevelservice("testservice")
         testmap = fct.add_map(u"Test map")
-        mnh = fct.add_node_hls(s, "testservice", testmap)
+        fct.add_node_hls(s, "testservice", testmap)
         DBSession.flush()
         DBSession.delete(s)
         DBSession.flush()
@@ -88,7 +88,7 @@ class DeleteCascadeTest(unittest.TestCase):
         conffile = tables.ConfFile.get_or_create("/tmp/test_file")
         h = fct.add_host(u"localhost", conffile=conffile)
         testmap = fct.add_map(u"Test map")
-        mnh = fct.add_node_host(h, "localhost", testmap)
+        fct.add_node_host(h, "localhost", testmap)
         DBSession.flush()
 
         DBSession.delete(conffile)

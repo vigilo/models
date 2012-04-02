@@ -137,7 +137,7 @@ class User(DeclarativeBase, object):
         """
         result = {}
         if hasattr(access, '__iter__'):
-            access = set(map(unicode, access))
+            access = set([ unicode(a) for a in access ])
         elif access is not None:
             access = set([unicode(access)])
 
@@ -225,7 +225,7 @@ class User(DeclarativeBase, object):
         columns = None
 
         if hasattr(access, '__iter__'):
-            access = set(map(unicode, access))
+            access = set([ unicode(a) for a in access ])
         elif access is not None:
             access = set([unicode(access)])
 

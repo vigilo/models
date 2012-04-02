@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
+
 """Test suite for the Map classe"""
-from nose.tools import assert_equal
+
 from datetime import datetime
 
+from nose.tools import assert_equal
+
 from vigilo.models.tables import Map
-from controller import ModelTest
 from vigilo.models.demo.functions import add_mapgroup, add_map2group
+
+from vigilo.models.test.controller import ModelTest
+
 
 class TestMap(ModelTest):
     """Test de la classe Map."""

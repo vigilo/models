@@ -8,12 +8,16 @@ de migration de la base de données.
 """
 
 import unittest
-from controller import setup_db, teardown_db
+
+import transaction
+
 from vigilo.models.session import DBSession
 from vigilo.models import tables
 from vigilo.models.websetup import get_migration_scripts, \
                                 migrate_model, populate_db
-import transaction
+
+from vigilo.models.test.controller import setup_db, teardown_db
+
 
 class TestMigration(unittest.TestCase):
     """Teste le fonctionnement général des migrations."""

@@ -16,7 +16,7 @@ from vigilo.models.demo.functions import add_graphgroup, \
                                         add_supitemgroup, \
                                         add_mapgroup, add_map
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestGraphGroup(ModelTest):
     """Test de la table GraphGroup"""
@@ -213,7 +213,7 @@ END;
 
     def test_get_children_order(self):
         """La fonction get_children doit trier par ordre alphabétique"""
-        names = [ u"achild_%s" % l for l in string.ascii_lowercase ]
+        names = [ u"achild_%s" % chr(c) for c in range(ord('a'), ord('z')) ]
         reversed_names = names[:]
         reversed_names.reverse()
         for name in reversed_names:

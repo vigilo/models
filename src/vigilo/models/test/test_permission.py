@@ -2,7 +2,7 @@
 """Test suite for Permission class"""
 from vigilo.models.tables import Permission
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestPermission(ModelTest):
     """Unit test case for the ``Permission`` model."""

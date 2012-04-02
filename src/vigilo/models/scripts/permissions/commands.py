@@ -297,6 +297,8 @@ def cmd_list(options):
     @return: Code de sortie (0 = pas d'erreur, autre = erreur).
     @rtype: C{int}
     """
+    # pylint: disable-msg=W0212
+    # W0212: Access to a protected member _grouptype of a client class
     object_type = _objects[options.object_type]
 
     if object_type == tables.UserGroup:

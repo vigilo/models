@@ -11,7 +11,7 @@ from vigilo.models.tables import State, LowLevelService
 from vigilo.models.demo import functions
 from vigilo.models.session import DBSession
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestServiceState(ModelTest):
     """Test de la table State avec un service"""

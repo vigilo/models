@@ -4,11 +4,15 @@ Teste les migrations du modèle.
 """
 
 import unittest
-from controller import setup_db, teardown_db
+
+import transaction
+
 from vigilo.models.session import DBSession
 from vigilo.models.tables.grouppath import GroupPath
 from vigilo.models.demo.functions import add_supitemgroup
-import transaction
+
+from vigilo.models.test.controller import setup_db, teardown_db
+
 
 class TestMigration(unittest.TestCase):
     def setUp(self):

@@ -3,12 +3,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Test suite for LowLevelService & HighLevelService classes"""
-from datetime import datetime
 
 from vigilo.models.tables import MapLlsLink
 from vigilo.models.demo import functions
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestMapLlsLink(ModelTest):
     """Test de la classe MapLlsLink."""

@@ -2,7 +2,7 @@
 """Test suite for UserGroup class"""
 from vigilo.models.tables import UserGroup
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestUserGroup(ModelTest):
     """Unit test case for the ``Group`` model."""

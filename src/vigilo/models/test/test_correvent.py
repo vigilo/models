@@ -9,7 +9,7 @@ import re
 
 from vigilo.models.demo import functions
 from vigilo.models.tables import CorrEvent
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestCorrEvent(ModelTest):
     """Test de la table CorrEvent"""

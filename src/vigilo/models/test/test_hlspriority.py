@@ -5,11 +5,13 @@
 """Test suite for Tag class"""
 
 import unittest
-from controller import setup_db, teardown_db
 
 from vigilo.models.session import DBSession
 from vigilo.models.demo import functions
 from vigilo.models.tables import StateName, HLSPriority, HighLevelService
+
+from vigilo.models.test.controller import setup_db, teardown_db
+
 
 class TestHLSPriority(unittest.TestCase):
     def setUp(self, *args, **kwargs):

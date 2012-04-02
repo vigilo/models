@@ -171,7 +171,8 @@ class Host(SupItem):
     def __repr__(self):
         try:
             return str(self.name)
-        except Exception:
+        except Exception: # pylint: disable-msg=W0703
+            # W0703: Catch "Exception"
             return super(Host, self).__str__()
 
     @classmethod

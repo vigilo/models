@@ -251,7 +251,8 @@ def main(*args):
         clean_vigiboard(logger, options, url)
         transaction.commit()
         sys.exit(0)
-    except:
+    except Exception: # pylint: disable-msg=W0703
+        # W0703: Catch "Exception"
         logger.exception(_('Some error occurred:'))
         transaction.abort()
         sys.exit(1)

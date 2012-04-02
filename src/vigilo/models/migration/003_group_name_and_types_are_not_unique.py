@@ -8,6 +8,9 @@ Les groupes sont désormais organisés en arborescence et le même nom
 peut donc apparaître à plusieurs endroits dans cette arborescence.
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables

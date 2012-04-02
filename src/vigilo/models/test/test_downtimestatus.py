@@ -7,7 +7,7 @@ from nose.tools import assert_equals
 
 from vigilo.models.tables import DowntimeStatus
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestDowntimeStatus(ModelTest):
     """Unit test case for the ``DowntimeStatus`` model."""

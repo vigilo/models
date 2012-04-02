@@ -102,7 +102,8 @@ def change_password(*args):
     try:
         DBSession.flush()
         transaction.commit()
-    except Exception:
+    except Exception: # pylint: disable-msg=W0703
+        # W0703: Catch "Exception"
         msg = _("An exception occurred while updating password for user '%s'.")
         logger.exception(msg, username)
         print msg % username

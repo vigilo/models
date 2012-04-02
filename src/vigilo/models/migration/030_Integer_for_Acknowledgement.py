@@ -12,8 +12,10 @@ La liste suivante donne les correspondances entre les anciennes valeurs
 *   "AAClosed"      : `CorrEvent.ACK_CLOSED`
 """
 
+# pylint: disable-msg=W0613
+# W0613: Unused arguments
+
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import CorrEvent, EventHistory
 
 def upgrade(migrate_engine, actions):

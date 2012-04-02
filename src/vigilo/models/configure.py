@@ -53,6 +53,8 @@ def configure_db(config_obj, prefix, db_basename=None):
 
     # Paramétrage du modèle. Doit être fait en tout premier.
     # vigilo.models.session dépend de cette initialisation.
+    # pylint: disable-msg=W0603
+    # W0603: Using the global statement
     global DB_BASENAME, DEFAULT_LANG, HASHING_FUNC
 
     # Préfixe des noms de tables.

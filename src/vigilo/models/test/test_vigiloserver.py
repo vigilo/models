@@ -4,7 +4,7 @@ from nose.tools import assert_equals
 
 from vigilo.models.tables import VigiloServer
 
-from controller import ModelTest
+from vigilo.models.test.controller import ModelTest
 
 class TestVigiloServer(ModelTest):
 

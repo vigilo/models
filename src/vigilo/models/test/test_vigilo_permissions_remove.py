@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
+
 """Tests du script de gestion des permissions."""
+
+# pylint: disable-msg=C0111,W0613,R0904,W0212
+# - C0111: Missing docstring
+# - W0613: Unused argument
+# - R0904: Too many public methods
+# - W0212: Access to a protected member of a client class
+
 import unittest
-import time
-from datetime import datetime
 import transaction
 
-from controller import setup_db, teardown_db, Options
+from vigilo.models.test.controller import setup_db, teardown_db
 
 from vigilo.models.scripts.permissions import commands
 from vigilo.models import tables
