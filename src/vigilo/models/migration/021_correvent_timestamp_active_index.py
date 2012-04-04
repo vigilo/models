@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2011-2012 CS-SI
+# License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
+
 """
 Ajoute un index sur la colonne timestamp_active des correvents, pour optimiser
 une requête utilisée dans la règle UpdateOccurencesCount du corrélateur.
