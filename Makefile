@@ -1,7 +1,7 @@
 NAME := models
 EPYDOC_PARSE = vigilo\.models\.(tables|test)
 all: build
-include buildenv/Makefile.common
+include buildenv/Makefile.common.python
 
 install: build install_python
 install_pkg: build install_python_pkg
