@@ -214,15 +214,24 @@ class LowLevelService(Service):
 
     def __unicode__(self):
         """Représentation unicode de l'objet."""
-        return "%s (%s)" % (self.servicename, self.host.name)
+        return u"%s (%s)" % (self.servicename, self.host.name)
 
     def __repr__(self):
-        try:
-            return "<%s \"%s\" on \"%s\">" % (self.__class__.__name__,
-                            str(self.servicename), str(self.host.name))
-        except Exception: # pylint: disable-msg=W0703
-            # W0703: Catch "Exception"
+        # Le service n'a pas encore de nom (on est en train de le créer).
+        if not self.servicename:
             return super(LowLevelService, self).__repr__()
+        # Le service n'a pas encore d'hôte où l'hôte n'a pas encore de nom
+        # (il est en cours de création).
+        if not (self.host and self.host.name):
+            return '<%s "%s" on ?>' % (
+                self.__class__.__name__,
+                self.servicename.encode('utf-8')
+            )
+        return "<%s \"%s\" on \"%s\">" % (
+            self.__class__.__name__,
+            self.servicename.encode('utf-8'),
+            self.host.name.encode('utf-8')
+        )
 
     def is_allowed_for(self, user, perm_type="r"):
         """
