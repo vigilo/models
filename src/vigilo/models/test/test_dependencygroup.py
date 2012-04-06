@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# Copyright (C) 2011-2012 CS-SI
+# License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
+
 """Test suite for DependencyGroup class"""
 from vigilo.models.tables import DependencyGroup, Host
 from vigilo.models.session import DBSession
