@@ -27,13 +27,16 @@ def change_password(*args):
     from vigilo.common.gettext import translate
     _ = translate(__name__)
 
+    usage=_("%prog [options] [username]"),
     parser = OptionParser(
-        usage=_("%prog [options] [username]"),
         description=_("Changes Vigilo's password for user 'username' "
             "or the currently logged in user if this argument is omitted."),
     )
     parser.add_option("-c", "--config", action="store", dest="config",
         type="string", default=None, help=_("Load configuration from "
+        "this file."))
+    parser.add_option("-f", action="store", dest="passfile", metavar="FILE",
+        type="string", default=None, help=_("Read the new password from "
         "this file."))
 
     (options, args) = parser.parse_args()
@@ -83,8 +86,13 @@ def change_password(*args):
         print _("Bad login or password.")
         sys.exit(1)
 
-    new_password = getpass.getpass(_("Enter new password: "))
-    new_password2 = getpass.getpass(_("Confirm new password: "))
+    if options.passfile:
+        passfile = open(options.passfile, "r")
+        new_password = new_password2 = passfile.readline().strip()
+        passfile.close()
+    else:
+        new_password = getpass.getpass(_("Enter new password: "))
+        new_password2 = getpass.getpass(_("Confirm new password: "))
 
     # Le nouveau mot de passe et sa
     # confirmation doivent coïncider.
