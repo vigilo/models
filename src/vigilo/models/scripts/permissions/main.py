@@ -7,6 +7,8 @@ d'un utilisateur dans la base de données de Vigilo.
 """
 
 import os, pwd, sys
+import warnings
+
 import argparse
 import pkg_resources
 
@@ -34,19 +36,24 @@ def _parse_args(args):
     common_options.add_argument("-c", "--config", type=str,
         help=N_("Load configuration from this file."))
 
-    # Parser de plus haut niveau.
-    parser = argparse.ArgumentParser(
-        add_help=False,
-        parents=[common_options],
+    # L'attribut "version" d'ArgumentParser est deprecated depuis argparse 1.1,
+    # mais RHEL 6 utilise encore la version 1.0.1. On ignore l'avertissement.
+    warnings.filterwarnings(
+        "ignore",
+        'The "version" argument to ArgumentParser is deprecated.*',
+        DeprecationWarning
     )
-    subparsers = parser.add_subparsers(dest='action', title=N_('Commands'))
 
+    # Parser de plus haut niveau.
     dist = pkg_resources.get_distribution('vigilo-models')
     # Pylint croit que "dist" est de type <str> ...
     #pylint: disable-msg=E1103
-    parser.add_argument("-V", "--version", action="version",
+    parser = argparse.ArgumentParser(
+        add_help=False,
+        parents=[common_options],
         version="%%(prog)s %s" % dist.version,
-        help=N_("Display this program's version and exit."))
+    )
+    subparsers = parser.add_subparsers(dest='action', title=N_('Commands'))
 
     # Commande d'ajout/mise à jour de permissions.
     parser_add = subparsers.add_parser(
