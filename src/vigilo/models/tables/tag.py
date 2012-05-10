@@ -57,8 +57,7 @@ class Tag(DeclarativeBase, object):
             value = unicode(value)
         self._value = value
 
-    value = synonym("_value", map_column=True,
-        descriptor=property(__get_value, __set_value))
+    value = synonym("_value", descriptor=property(__get_value, __set_value))
 
     def __init__(self, name, value=None, **kwargs):
         """Initialise un tag."""
