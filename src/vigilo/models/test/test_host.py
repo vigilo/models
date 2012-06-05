@@ -27,6 +27,6 @@ class TestHost(ModelTest, TagTestMixin):
     }
 
     def test_default_state(self):
-        """L'état initial d'un hôte est 'OK'."""
-        assert_equals(u'OK', StateName.value_to_statename(
+        """L'état initial d'un hôte est 'UP'."""
+        assert_equals(u'UP', StateName.value_to_statename(
             DBSession.query(self.klass).one().state.state))

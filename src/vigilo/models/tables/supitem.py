@@ -22,10 +22,14 @@ __all__ = ('SupItem', 'SupItemMapperExt')
 
 class SupItemMapperExt(MapperExtension):
     """
-    Quand un SupItem est ajouté en base, son état par défaut est OK. Ce
-    comportement est similaire à celui de Nagios. Si l'état n'est pas OK en
-    réalité, Nagios le détectera et enverra une notification, ce qui mettra à
-    jour l'état en base de données.
+    Quand un service (de bas niveau ou de haut niveau) est ajouté en base
+    de données, son état est initialisé à UNKNOWN (afin de refléter fidèlement
+    la connaissance qu'on a du service à cet instant là).
+    Nagios est configuré afin de suivre la même logique (par défaut, il suppose
+    que les services sont OK initialement sinon).
+
+    Nagios nous enverra une notification avec le nouvel état dès qu'il aura
+    été déterminé, ce qui mettra à jour l'état en base de données.
 
     Fonctionnalité SQLAlchemy utilisée :
     http://www.sqlalchemy.org/docs/05/reference/orm/interfaces.html#sqlalchemy.orm.interfaces.MapperExtension
@@ -33,12 +37,14 @@ class SupItemMapperExt(MapperExtension):
     def after_insert(self, mapper, connection, instance):
         from vigilo.models.tables.state import State
         from vigilo.models.tables.statename import StateName
-        from vigilo.models.tables.service import HighLevelService
+        from vigilo.models.tables.service import Service
 
-        if isinstance(instance, HighLevelService):
+        # Pour un service (HLS ou LLS) : on initialise à UNKNOWN.
+        if isinstance(instance, Service):
             state = StateName.statename_to_value(u"UNKNOWN")
+        # Pour un hôte : on initialise à UP.
         else:
-            state = StateName.statename_to_value(u"OK")
+            state = StateName.statename_to_value(u"UP")
 
         s = State(idsupitem=instance.idsupitem, state=state, message=u"")
         DBSession.merge(s)

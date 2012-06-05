@@ -42,8 +42,8 @@ class TestLowLevelService(ModelTest, TagTestMixin):
         assert_equals(ob.warning_weight, 101)
 
     def test_default_state(self):
-        """L'état initial d'un service de bas niveau est 'OK'."""
-        assert_equals(u'OK', StateName.value_to_statename(
+        """L'état initial d'un service de bas niveau est 'UNKNOWN'."""
+        assert_equals(u'UNKNOWN', StateName.value_to_statename(
             DBSession.query(self.klass).one().state.state))
 
     def test_collector_relation(self):
