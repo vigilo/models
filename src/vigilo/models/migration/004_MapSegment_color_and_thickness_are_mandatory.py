@@ -9,6 +9,8 @@ dans un segment sur une carte.
 
 # pylint: disable-msg=W0613
 # W0613: Unused arguments
+# pylint: disable-msg=C0103
+# Invalid name "..." (should match ...)
 
 from sqlalchemy.schema import DDL
 from vigilo.models.session import DBSession, MigrationDDL

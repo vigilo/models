@@ -13,6 +13,8 @@ Voir ticket #931.
 
 # pylint: disable-msg=W0613
 # W0613: Unused arguments
+# pylint: disable-msg=C0103
+# Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.tables import EventHistory, StateName

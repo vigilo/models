@@ -15,6 +15,8 @@ Voir ticket #800.
 
 # pylint: disable-msg=W0613
 # W0613: Unused arguments
+# pylint: disable-msg=C0103
+# Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
@@ -90,4 +92,3 @@ def upgrade(migrate_engine, actions):
             'new_column': 'idmapnode',
         }
     ).execute(DBSession, secondary_tables.SUB_MAP_NODE_MAP_TABLE)
-

@@ -10,6 +10,8 @@ Cet ajout améliore les performances des "deploy" de VigiConf.
 
 # pylint: disable-msg=W0613
 # W0613: Unused arguments
+# pylint: disable-msg=C0103
+# Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.tables import ConfItem
@@ -32,4 +34,3 @@ def upgrade(migrate_engine, actions):
             "ADD CONSTRAINT ix_%(fullname)s_key UNIQUE (name, idsupitem)",
         ],
     ).execute(DBSession, ConfItem.__table__)
-

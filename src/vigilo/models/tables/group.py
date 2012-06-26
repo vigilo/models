@@ -241,7 +241,6 @@ class Group(DeclarativeBase, object):
         """
         Renvoie le nombre d'enfants du groupe.
         """
-        from .grouphierarchy import GroupHierarchy
         children = DBSession.query(self.__class__).join(
                 (GroupHierarchy,
                     GroupHierarchy.idchild == self.__class__.idgroup),

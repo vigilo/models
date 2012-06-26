@@ -15,6 +15,8 @@ la nomenclature utilisée dans le frontend.
 
 # pylint: disable-msg=W0613
 # W0613: Unused arguments
+# pylint: disable-msg=C0103
+# Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models import tables

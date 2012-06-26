@@ -1,20 +1,27 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2006-2012 CS-SI
+# Copyright (C) 2006-2011 CS-SI
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
-
 """
-Supprime la contrainte d'unicité de l'adresse email
-de l'utilisateur et rend le champ optionnel.
+Ajoute une colonne "creation_date" dans la table SupItem
+qui contient la date de création de l'objet dans la base
+de données.
+
+La date de création des objets qui se trouvaient dans la base
+de données avant l'application de cette migration est positionnée
+à la date de la migration elle-même.
+
+Voir également le ticket #999.
 """
 
-# pylint: disable-msg=W0613
-# W0613: Unused arguments
 # pylint: disable-msg=C0103
 # Invalid name "..." (should match ...)
 
+import time
+import datetime
+
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
-from vigilo.models import tables
+from vigilo.models.tables import SupItem
 
 def upgrade(migrate_engine, actions):
     """
@@ -27,14 +34,14 @@ def upgrade(migrate_engine, actions):
         lorsque cette migration aura été appliquée.
     @type actions: C{MigrationActions}
     """
-
     MigrationDDL(
         [
-            "DROP INDEX ix_%(db_basename)suser_email",
-            "ALTER TABLE %(fullname)s ALTER COLUMN email DROP NOT NULL",
+            "ALTER TABLE %(fullname)s "
+                "ADD COLUMN creation_date TIMESTAMP WITHOUT TIME ZONE",
+            "UPDATE %(fullname)s SET creation_date = NOW()",
+            "ALTER TABLE %(fullname)s ALTER COLUMN creation_date SET NOT NULL",
         ],
-        # Le nom de la contrainte dépend du préfixe utilisé.
         context={
             'db_basename': DB_BASENAME,
         }
-    ).execute(DBSession, tables.User.__table__)
+    ).execute(DBSession, SupItem.__table__)

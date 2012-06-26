@@ -8,7 +8,7 @@ from sqlalchemy import Column
 from sqlalchemy.orm import relation, aliased
 from sqlalchemy.orm.interfaces import MapperExtension
 from sqlalchemy.orm import EXT_CONTINUE
-from sqlalchemy.types import Integer
+from sqlalchemy.types import Integer, DateTime
 from sqlalchemy.sql import functions
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -73,6 +73,12 @@ class SupItem(DeclarativeBase, object):
         index=True,
         nullable=False,
         autoincrement=False,
+    )
+
+    creation_date = Column(
+        DateTime,
+        nullable=False,
+        default=functions.now(),
     )
 
     _tags = relation(Tag,

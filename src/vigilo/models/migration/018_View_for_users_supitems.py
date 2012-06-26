@@ -9,6 +9,8 @@ les objets supervisés auxquels il a accès.
 
 # pylint: disable-msg=W0613
 # W0613: Unused arguments
+# pylint: disable-msg=C0103
+# Invalid name "..." (should match ...)
 
 def upgrade(migrate_engine, actions):
     """
