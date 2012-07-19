@@ -71,10 +71,14 @@ class TestStateName(ModelTest):
             row.idstatename,
             self.klass.statename_to_value(row.statename)
         )
+
         try:
             self.klass.statename_to_value(oldname)
-        except Exception: # pylint: disable-msg=W0703
-            # W0703: Catch "Exception"
+        except KeyError:
+            # On s'attend à avoir une KeyError car l'ancien nom
+            # n'existe plus (ni dans la base, ni dans le cache).
             pass
+        except Exception, e:
+            self.fail("Got an unexpected exception: %s (%s)" % (type(e), e))
         else:
-            raise AssertionError, "The cache was not refreshed"
+            self.fail("The cache was not refreshed")
