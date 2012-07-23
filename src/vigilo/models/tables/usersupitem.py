@@ -8,9 +8,8 @@ Vue des supitems auxquels les utilisateurs ont accès
 
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
-from sqlalchemy.schema import DDL
 
-from vigilo.models.session import DeclarativeBase
+from vigilo.models.session import DeclarativeBase, DDL
 from vigilo.models.configure import DB_BASENAME
 
 from vigilo.models.tables.service import LowLevelService
@@ -57,8 +56,10 @@ class UserSupItem(DeclarativeBase, object):
 
 # Suppression de la table automatiquement générée par SQLAlchemy.
 DDL(
-    "DROP TABLE IF EXISTS %(fullname)s"
-).execute_at('after-create', UserSupItem.__table__)
+    "DROP TABLE IF EXISTS %(fullname)s",
+    'after-create',
+    UserSupItem.__table__,
+)
 
 
 # Création de la vue pour PostgreSQL.
@@ -106,7 +107,9 @@ DDL(
             ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup;
     """,
-    on='postgres',
+    'after-create',
+    UserSupItem.__table__,
+    dialect='postgres',
     context={
         'db_basename': DB_BASENAME,
         'lowlevelservice_table': LowLevelService.__tablename__,
@@ -116,7 +119,7 @@ DDL(
         'grouphierarchy_table': GroupHierarchy.__tablename__,
         'datapermission_table': DataPermission.__tablename__,
     },
-).execute_at('after-create', UserSupItem.__table__)
+)
 
 
 # Création de la vue pour SQLite.
@@ -166,7 +169,9 @@ DDL(
             ON %(usertousergroups_table)s.idgroup =
                 %(datapermission_table)s.idusergroup;
     """,
-    on='sqlite',
+    'after-create',
+    UserSupItem.__table__,
+    dialect='sqlite',
     context={
         'db_basename': DB_BASENAME,
         'lowlevelservice_table': LowLevelService.__tablename__,
@@ -176,7 +181,7 @@ DDL(
         'grouphierarchy_table': GroupHierarchy.__tablename__,
         'datapermission_table': DataPermission.__tablename__,
     },
-).execute_at('after-create', UserSupItem.__table__)
+)
 
 
 # CREATE/DROP VIEW IF (NOT) EXISTS a été ajouté dans SQLite 3.3.8.
@@ -189,14 +194,18 @@ DDL(
 # On suppose que SQLite 3.5.4 ou plus est disponible.
 DDL(
     "DROP VIEW IF EXISTS %(fullname)s",
+    'before-drop',
+    UserSupItem.__table__,
     context={
         'db_basename': DB_BASENAME,
     },
-).execute_at('before-drop', UserSupItem.__table__)
+)
 
 DDL(
     "CREATE TABLE %(fullname)s (foo INTEGER)",
+    'before-drop',
+    UserSupItem.__table__,
     context={
         'db_basename': DB_BASENAME,
     },
-).execute_at('before-drop', UserSupItem.__table__)
+)

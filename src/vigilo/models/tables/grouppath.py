@@ -9,9 +9,8 @@ Chemins des groupes d'objets manipulés par Vigilo
 
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
-from sqlalchemy.schema import DDL
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase, ForeignKey, DDL
 from vigilo.models.tables.group import Group
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
 from vigilo.models.configure import DB_BASENAME
@@ -46,8 +45,10 @@ class GroupPath(DeclarativeBase, object):
 
 # Suppression de la table automatiquement générée par SQLAlchemy.
 DDL(
-    "DROP TABLE IF EXISTS %(fullname)s"
-).execute_at('after-create', GroupPath.__table__)
+    "DROP TABLE IF EXISTS %(fullname)s",
+    'after-create',
+    GroupPath.__table__
+)
 
 
 # Création de la vue pour PostgreSQL.
@@ -67,13 +68,15 @@ DDL(
         ), '/')) AS path
     FROM %(group_tbl)s g2;
     """,
-    on='postgres',
+    'after-create',
+    GroupPath.__table__,
+    dialect='postgres',
     context={
         'db_basename': DB_BASENAME,
         'group_tbl': Group.__tablename__,
         'grouphierarchy_tbl': GroupHierarchy.__tablename__,
     },
-).execute_at('after-create', GroupPath.__table__)
+)
 
 
 # Création de la vue pour SQLite.
@@ -99,13 +102,15 @@ DDL(
         )
         GROUP BY idchild
     """,
-    on='sqlite',
+    'after-create',
+    GroupPath.__table__,
+    dialect='sqlite',
     context={
         'db_basename': DB_BASENAME,
         'group_tbl': Group.__tablename__,
         'grouphierarchy_tbl': GroupHierarchy.__tablename__,
     },
-).execute_at('after-create', GroupPath.__table__)
+)
 
 
 # CREATE/DROP VIEW IF (NOT) EXISTS a été ajouté dans SQLite 3.3.8.
@@ -118,14 +123,18 @@ DDL(
 # On suppose que SQLite 3.5.4 ou plus est disponible.
 DDL(
     "DROP VIEW IF EXISTS %(fullname)s",
+    "before-drop",
+    GroupPath.__table__,
     context={
         'db_basename': DB_BASENAME,
     },
-).execute_at('before-drop', GroupPath.__table__)
+)
 
 DDL(
     "CREATE TABLE %(fullname)s (foo INTEGER)",
+    'before-drop',
+    GroupPath.__table__,
     context={
         'db_basename': DB_BASENAME,
     },
-).execute_at('before-drop', GroupPath.__table__)
+)

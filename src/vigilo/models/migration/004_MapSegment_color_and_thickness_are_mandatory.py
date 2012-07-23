@@ -29,10 +29,16 @@ def upgrade(migrate_engine, actions):
     """
 
     # Mise à jour des valeurs avec les valeurs par défaut.
-    DDL("UPDATE %(fullname)s SET color = '#000000' WHERE color IS NULL"
-        ).execute(migrate_engine, tables.MapSegment.__table__)
-    DDL("UPDATE %(fullname)s SET thickness = 1 WHERE thickness IS NULL"
-        ).execute(migrate_engine, tables.MapSegment.__table__)
+    DDL(
+        "UPDATE %(fullname)s SET color = '#000000' WHERE color IS NULL",
+        obj=tables.MapSegment.__table__,
+        bind=migrate_engine,
+    )
+    DDL(
+        "UPDATE %(fullname)s SET thickness = 1 WHERE thickness IS NULL",
+        obj=tables.MapSegment.__table__,
+        bind=migrate_engine,
+    )
 
     # On modifie le schéma des 2 attributs pour les rendre obligatoires.
     MigrationDDL(
