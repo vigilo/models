@@ -17,9 +17,6 @@ Voir également le ticket #999.
 # pylint: disable-msg=C0103
 # Invalid name "..." (should match ...)
 
-import time
-import datetime
-
 from vigilo.models.session import DBSession, MigrationDDL
 from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import SupItem
