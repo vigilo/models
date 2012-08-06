@@ -26,6 +26,7 @@ class Map(DeclarativeBase, object):
     @ivar background_image: Image d'arrière-plan (propriété CSS).
     @ivar background_position: Position d'arrière-plan (propriété CSS).
     @ivar background_repeat: Répétition d'arrière-plan (propriété CSS).
+    @ivar generated: Drapeau indiquant si la carte a été auto-générée ou non.
     @ivar groups: Liste des L{MapGroup}s auxquels cette carte appartient.
     @ivar links: Liste des liaisons (L{MapServiceLink}) présentes sur la carte.
     @ivar nodes: Liste des nœuds (L{MapNode}) présents sur la carte.
@@ -89,8 +90,8 @@ class Map(DeclarativeBase, object):
         Renvoie la carte dont le titre est L{maptitle} et qui appartient
         au groupe L{group}.
 
-        @param group: Nom, identifiant ou instance du groupe.
-        @type group: C{unicode} ou C{int} ou C{MapGroup}
+        @param group: Instance du groupe auquel appartient la carte.
+        @type group: C{MapGroup}
         @param maptitle: Titre de la carte voulue.
         @type maptitle: C{unicode}
         @return: L'instance correspondant à la carte demandée.
@@ -196,4 +197,3 @@ class Map(DeclarativeBase, object):
 
         return [submap for submap in submaps
                 if not nx.shortest_path(graph, submap.idmap, idmap)]
-

@@ -674,6 +674,22 @@ def add_map2group(map, group):
         group.maps.append(map)
         DBSession.flush()
 
+def add_node_simple(label, map, widget="SimpleElement",
+                    x=None, y=None, icon=None, submaps=None):
+    n = tables.MapNode.by_map_label(map, unicode(label))
+    if not n:
+        n = tables.MapNode(label=unicode(label), idmap=map.idmap,
+                              x_pos=x, y_pos=y, widget=unicode(widget),
+                              icon=unicode(icon))
+        DBSession.add(n)
+    if submaps is None:
+        submaps = []
+    for submap in submaps:
+        if submap.idmap not in [s.idmap for s in n.submaps]:
+            n.submaps.append(submap)
+    DBSession.flush()
+    return n
+
 def add_node_host(host, label, map, widget="ServiceElement",
                     x=None, y=None, icon=None, submaps=None):
     if isinstance(host, basestring):
@@ -750,7 +766,9 @@ def add_mapsegment(from_node, to_node, map):
         to_node = tables.MapNode.by_map_label(map, unicode(to_node))
     ms = tables.MapSegment(idfrom_node=from_node.idmapnode,
                            idto_node=to_node.idmapnode,
-                           idmap=map.idmap)
+                           idmap=map.idmap,
+                           color=u'#000000',
+                           thickness=2)
     DBSession.merge(ms)
     DBSession.flush()
     return ms
@@ -770,6 +788,21 @@ def add_mapllslink(from_node, to_node, lls, map):
                                idref=lls.idservice, idmap=map.idmap,
                                ds_out=pds_out,
                                ds_in=pds_in)
+    DBSession.merge(ms)
+    DBSession.flush()
+    return ms
+
+def add_maphlslink(from_node, to_node, hls, map):
+    if isinstance(from_node, basestring):
+        from_node = tables.MapNode.by_map_label(map, unicode(from_node))
+    if isinstance(to_node, basestring):
+        to_node = tables.MapNode.by_map_label(map, unicode(to_node))
+    if isinstance(hls, basestring):
+        hls = tables.HighLevelService.by_service_name()
+    ms = tables.MapHlsLink(idfrom_node=from_node.idmapnode,
+                               idto_node=to_node.idmapnode,
+                               idref=hls.idservice,
+                               idmap=map.idmap)
     DBSession.merge(ms)
     DBSession.flush()
     return ms
