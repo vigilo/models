@@ -71,6 +71,11 @@ setup(name='vigilo-models',
             'vigilo-models-demo = vigilo.models.demo:run_demo',
             'vigilo-permissions = vigilo.models.scripts.permissions.main:main',
         ],
+        # Compatibilité pour SQLAlchemy < 0.5.6 (RHEL 6),
+        # où l'alias "postgresql" n'était pas encore défini.
+        'sqlalchemy.databases': [
+            'postgresql = sqlalchemy.databases.postgres:dialect',
+        ],
     },
     package_dir={'': 'src'},
     data_files=install_i18n("i18n", os.path.join(sys.prefix, 'share', 'locale')) +
