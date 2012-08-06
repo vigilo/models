@@ -74,9 +74,10 @@ class Group(DeclarativeBase, object):
         @param kwargs: Un dictionnaire avec les informations sur le groupe.
         @type kwargs: C{dict}
         """
-        if 'parent' in kwargs:
-            loop = GroupHierarchy(parent=self, child=self, hops=0)
-            DBSession.add(loop)
+        # Ajoute une boucle dans la hiérarchie des groupes pour ce groupe,
+        # ce qui faciliter les tests sur l'héritage et la construction de
+        # la hiérarchie elle-même.
+        DBSession.add(GroupHierarchy(parent=self, child=self, hops=0))
         super(Group, self).__init__(**kwargs)
 
     def __unicode__(self):
@@ -388,6 +389,25 @@ class MapGroup(Group):
                     back_populates='groups',
                     order_by='Map.title',
                     cascade="all")
+
+    #pylint: disable-msg=E1003
+    def __init__(self, **kwargs):
+        """
+        Crée un nouveau groupe de cartes.
+
+        @param kwargs: Un dictionnaire avec les informations sur le groupe.
+        @type kwargs: C{dict}
+        """
+        # Si un parent a été donné, on peut créer la boucle vers l'objet,
+        # qui sera nécessaire pour créer l'arborescence des groupes.
+        if 'parent' in kwargs:
+            super(MapGroup, self).__init__(**kwargs)
+        # Sinon, on doit court-circuiter cette étape pour éviter une erreur
+        # dans Rum et l'Administration de VigiMap (clé primaire dupliquée).
+        else:
+            # On court-circuite Group.
+            # E1003: Bad first argument '...' given to super class
+            super(Group, self).__init__(**kwargs)
 
     def get_maps(self, limit=None, offset=None):
         """Renvoie les cartes du groupe."""

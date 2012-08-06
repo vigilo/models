@@ -11,4 +11,8 @@ __all__ = ('EventsAggregate', )
 
 
 class EventsAggregate(DeclarativeBase):
+    """
+    Classe servant d'enrobage autour de la table secondaire
+    L{EVENTSAGGREGATE_TABLE}.
+    """
     __table__ = EVENTSAGGREGATE_TABLE
