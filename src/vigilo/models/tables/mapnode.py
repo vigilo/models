@@ -79,7 +79,7 @@ class MapNode(DeclarativeBase, object):
     # qui n'ont pas de relations avec les SupItem, mais
     # permettent juste d'ajouter un label, une image et
     # éventuellement des liens vers des sous-cartes.
-    type_node = Column('type_node', Unicode(16), nullable=True)
+    type_node = Column(Unicode(16), nullable=True)
 
     icon = Column(
         Unicode(255)

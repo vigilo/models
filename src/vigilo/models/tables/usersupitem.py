@@ -109,7 +109,7 @@ DDL(
     """,
     'after-create',
     UserSupItem.__table__,
-    dialect='postgres',
+    dialect=('postgres', 'postgresql'),
     context={
         'db_basename': DB_BASENAME,
         'lowlevelservice_table': LowLevelService.__tablename__,

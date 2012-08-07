@@ -70,7 +70,7 @@ DDL(
     """,
     'after-create',
     GroupPath.__table__,
-    dialect='postgres',
+    dialect=('postgres', 'postgresql'),
     context={
         'db_basename': DB_BASENAME,
         'group_tbl': Group.__tablename__,

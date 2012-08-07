@@ -146,7 +146,7 @@ class Group(DeclarativeBase, object):
             DBSession.query(GroupHierarchy
                 ).filter(GroupHierarchy.idchild == c.idchild
                 ).filter(GroupHierarchy.hops > c.hops
-                ).delete()
+                ).delete(synchronize_session='fetch')
 
         # Si un groupe doit devenir le nouveau parent.
         if group:
@@ -264,7 +264,8 @@ class Group(DeclarativeBase, object):
             ).filter(GroupHierarchy.idparent == self.idgroup
             ).filter(GroupHierarchy.hops > 0).all()
         children_ids = [c.idchild for c in children_ids]
-        DBSession.query(Group).filter(Group.idgroup.in_(children_ids)).delete()
+        DBSession.query(Group).filter(Group.idgroup.in_(children_ids)).delete(
+            synchronize_session='fetch')
         DBSession.flush()
 
     # Méthodes de classe

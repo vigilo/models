@@ -75,7 +75,7 @@ class MapLink(DeclarativeBase, object):
         nullable=False,
     )
 
-    type_link = Column('type_link', Unicode(16), nullable=False)
+    type_link = Column(Unicode(16), nullable=False)
 
     __mapper_args__ = {'polymorphic_on': type_link}
 

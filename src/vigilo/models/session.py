@@ -90,11 +90,20 @@ class Table(SaTable):
     def __init__(self, name, *args, **kwargs):
         """
         Instancie la Table en ajoutant le préfixe
-        des tables de Vigilo.
+        des tables de Vigilo (pour SQLAlchemy < 0.6.0).
         """
         if isinstance(name, basestring):
             name = configure.DB_BASENAME + name
         super(Table, self).__init__(name, *args, **kwargs)
+
+    def _init(self, name, *args, **kwargs):
+        """
+        Instancie la table en ajoutant le préfixe
+        des tables de Vigilo (pour SQLAlchemy >= 0.6.0).
+        """
+        if isinstance(name, basestring):
+            name = configure.DB_BASENAME + name
+        super(Table, self)._init(name, *args, **kwargs)
 
 class PrefixedTables(DeclarativeMeta):
     """
@@ -136,7 +145,10 @@ class MigrationDDL(SaDDL):
         # on les combine ici.
         if isinstance(statement, list):
             statement = ';'.join(statement)
-        super(MigrationDDL, self).__init__(statement, 'postgres', context, bind)
+        # Initialement, les migrations étaient spécifiques à PostgreSQL.
+        # Cette contrainte est désormais levée et le script s'applique
+        # quel que soit le dialecte (d'où l'argument None ci-dessous).
+        super(MigrationDDL, self).__init__(statement, None, context, bind)
 
     def execute(self, bind=None, schema_item=None):
         """

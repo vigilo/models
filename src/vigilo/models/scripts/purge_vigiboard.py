@@ -82,8 +82,9 @@ def clean_vigiboard(logger, options, url):
                 ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
                 ).filter(CorrEvent.timestamp_active <= old_date).all()
             ids = [event.idevent for event in ids]
-            nb_deleted = DBSession.query(Event).filter(
-                            Event.idevent.in_(ids)).delete()
+            nb_deleted = DBSession.query(Event
+                            ).filter(Event.idevent.in_(ids)
+                            ).delete(synchronize_session='fetch')
             logger.info(_("Deleted %(nb_deleted)d closed events which were "
                             "at least %(days)d days old.") % {
                             'nb_deleted': nb_deleted,
@@ -96,7 +97,7 @@ def clean_vigiboard(logger, options, url):
             nb_deleted = DBSession.query(
                                 HLSHistory
                             ).filter(HLSHistory.timestamp <= old_date
-                            ).delete()
+                            ).delete(synchronize_session='fetch')
             logger.info(_("Deleted %(nb_deleted)d entries in the history "
                         "for high level services which were at least "
                         "%(days)d days old.") % {
@@ -134,8 +135,9 @@ def clean_vigiboard(logger, options, url):
                 if idevent is None:
                     break
 
-                nb_deleted = DBSession.query(Event).filter(
-                                Event.idevent == idevent).delete()
+                nb_deleted = DBSession.query(Event
+                                ).filter(Event.idevent == idevent
+                                ).delete(synchronize_session='fetch')
                 logger.info(_("Deleted closed event #%d to make room for "
                                 "new events.") % idevent)
                 if not nb_deleted:
@@ -171,8 +173,9 @@ def clean_vigiboard(logger, options, url):
                 if idhistory is None:
                     break
 
-                nb_deleted = DBSession.query(HLSHistory).filter(
-                                HLSHistory.idhistory == idhistory).delete()
+                nb_deleted = DBSession.query(HLSHistory
+                                ).filter(HLSHistory.idhistory == idhistory
+                                ).delete(synchronize_session='fetch')
                 if not nb_deleted:
                     break
                 total_deleted += nb_deleted
