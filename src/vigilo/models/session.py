@@ -129,7 +129,6 @@ class MigrationDDL(SaDDL):
     Exécute une requête SQL destinée à PostgreSQL
     et qui modifie le schéma (DDL).
     """
-
     def __init__(self, statement, context=None, bind=None):
         """
         Initialisation.
@@ -168,10 +167,13 @@ class MigrationDDL(SaDDL):
             bind = _bind_or_error(self)
 
         if self._should_execute(None, schema_item, bind):
-            # On évalue le contexte une fois pour toute (il ne changera plus).
-            self._prepare_context(schema_item, bind)
-            statement = self._expand(schema_item, bind)
-            res = bind.execute(expression.text(statement))
+            if hasattr(self, '_expand'):
+                # SQLAlchemy 0.5.
+                statement = self._expand(schema_item, bind)
+                res = bind.execute(expression.text(statement))
+            else:
+                # SQLAlchemy 0.6.
+                res = bind.execute(self.against(schema_item))
             return res
 
     def _should_execute(self, event, schema_item, bind):
