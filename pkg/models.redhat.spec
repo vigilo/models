@@ -24,7 +24,7 @@ BuildRequires:   python26-babel
 Requires:   python26-babel >= 0.9.4
 Requires:   python26-distribute
 Requires:   python26-psycopg2
-Requires:   python26-sqlalchemy0.5
+Requires:   python26-sqlalchemy0.7
 Requires:   python26-zope-sqlalchemy >= 0.4
 Requires:   python26-paste-deploy
 Requires:   vigilo-common
