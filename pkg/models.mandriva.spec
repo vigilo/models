@@ -58,7 +58,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc COPYING.txt README.txt doc/*
 %attr(755,root,root) %{_bindir}/*
-%config(noreplace) %{_sysconfdir}/vigilo
+%{_sysconfdir}/vigilo
+%{_sysconfdir}/vigilo/%{module}
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/vigilo/%{module}/settings.ini
 %{python_sitelib}/*
 
 
