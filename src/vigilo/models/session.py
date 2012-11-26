@@ -247,7 +247,11 @@ def DDL(statement, when=None, obj=None, bind=None, dialect=None, context=None):
         if dialect in ('postgres', 'postresql'):
             dialect = ('postgres', 'postgresql')
         if isinstance(dialect, (list, tuple)):
-            condition = lambda evt, item, bind: bind.engine.name in dialect
+            # @HACK: Dans SQLAlchemy 0.5.x, seulement 3 arguments
+            # positionnels sont passés : event, target & bind.
+            # Dans SQLAlchemy 0.6.x, il y en a 4 : self, event, target & bind.
+            # On ne s'intéresse qu'à bind (dernier argument à chaque fois).
+            condition = lambda *args, **kwargs: args[-1].engine.name in dialect
         else:
             condition = dialect
         ddl = SaDDL(statement, on=condition, context=context)
