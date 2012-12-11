@@ -19,7 +19,7 @@ port par défaut d'installation du SGBD choisi.
 
 Par exemple, voici la valeur correspondant à une installation mono-poste par défaut::
 
-    postgres://vigilo:vigilo@localhost/vigilo
+    postgresql://vigilo:vigilo@localhost/vigilo
 
 ..  warning::
     À l'heure actuelle, seul PostgreSQL a fait l'objet de tests intensifs.
