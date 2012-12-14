@@ -4,6 +4,7 @@
 
 """Peuple la base de données."""
 
+import os.path
 import transaction
 import pkg_resources
 
@@ -31,7 +32,10 @@ def get_migration_scripts(module):
     files = pkg_resources.resource_listdir(module, 'migration')
     scripts = {}
     for f in files:
-        if not f.endswith('.py') or f == '__init__.py':
+        if not f.endswith(('.py', '.pyc', '.pyo')):
+            continue
+        mod_name = os.path.splitext(f)[0]
+        if mod_name == '__init__':
             continue
 
         try:
@@ -39,7 +43,7 @@ def get_migration_scripts(module):
         except (ValueError, TypeError):
             continue
 
-        scripts[ver] = f[:-3]
+        scripts[ver] = mod_name
     return scripts
 
 class MigrationActions(object):
@@ -109,7 +113,7 @@ def migrate_model(bind, module, scripts, stop_at=None):
                 "the following changeset: '%(script)s'" % {
                 'module': module,
                 'version': ver,
-                'script': scripts[ver] + '.py',
+                'script': scripts[ver],
             }
 
             transaction.begin()
