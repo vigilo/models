@@ -28,11 +28,7 @@ class Group(DeclarativeBase, object):
     de créer une arborescence de groupes.
 
     @ivar idgroup: Identifiant (auto-généré) du groupe.
-    @ivar _grouptype: Discriminant pour savoir le type de groupe manipulé.
-        Note: n'utilisez jamais cet attribut dans votre code pour effectuer
-        un traitement en fonction du type de groupe. A la place, utilisez
-        la fonction isinstance() de Python.
-        Exemple : isinstance(grp, HostGroup).
+    @ivar grouptype: Discriminant pour savoir le type de groupe manipulé.
     @ivar name: Nom du groupe.
     """
     __tablename__ = 'group'
@@ -42,8 +38,8 @@ class Group(DeclarativeBase, object):
         primary_key=True, autoincrement=True,
     )
 
-    _grouptype = Column(
-        'grouptype', Unicode(20),
+    grouptype = Column(
+        Unicode(20),
         index=True, nullable=False,
     )
 
@@ -54,7 +50,7 @@ class Group(DeclarativeBase, object):
     )
 
     __mapper_args__ = {
-        'polymorphic_on': _grouptype,
+        'polymorphic_on': grouptype,
     }
 
     # @FIXME: fait échouer les tests de VigiMap lorsque lazy=True.

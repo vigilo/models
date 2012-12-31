@@ -297,8 +297,6 @@ def cmd_list(options):
     @return: Code de sortie (0 = pas d'erreur, autre = erreur).
     @rtype: C{int}
     """
-    # pylint: disable-msg=W0212
-    # W0212: Access to a protected member _grouptype of a client class
     object_type = _objects[options.object_type]
 
     if object_type == tables.UserGroup:
@@ -309,7 +307,7 @@ def cmd_list(options):
         objects = DBSession.query(tables.GroupPath.path
             ).join(
                 (object_type, object_type.idgroup == tables.GroupPath.idgroup),
-            ).filter(object_type._grouptype ==
+            ).filter(object_type.grouptype ==
                 object_type.__mapper_args__['polymorphic_identity']
             ).order_by(func.lower(tables.GroupPath.path))
 
