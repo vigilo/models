@@ -17,7 +17,8 @@ BuildRequires:   python-babel
 Requires:   python-babel >= 0.9.4
 Requires:   python-distribute
 Requires:   python-psycopg2
-Requires:   python-sqlalchemy0.7
+Requires:   python-sqlalchemy >= 0.7.8
+Requires:   python-sqlalchemy < 0.8
 Requires:   python-zope-sqlalchemy >= 0.4
 Requires:   python-paste-deploy
 Requires:   vigilo-common

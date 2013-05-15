@@ -19,7 +19,7 @@ Requires:   vigilo-common
 Requires:   python-transaction
 Requires:   python-setuptools
 Requires:   python-zope.sqlalchemy >= 0.4
-Requires:   python-sqlalchemy >= 0.5
+Requires:   python-sqlalchemy >= 0.7.8
 Requires:   python-sqlalchemy < 0.8
 Requires:   python-psycopg2
 Requires:   python-babel >= 0.9.4
