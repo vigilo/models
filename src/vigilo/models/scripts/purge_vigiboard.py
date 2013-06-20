@@ -82,9 +82,12 @@ def clean_vigiboard(logger, options, url):
                 ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
                 ).filter(CorrEvent.timestamp_active <= old_date).all()
             ids = [event.idevent for event in ids]
-            nb_deleted = DBSession.query(Event
+            if ids:
+                nb_deleted = DBSession.query(Event
                             ).filter(Event.idevent.in_(ids)
                             ).delete(synchronize_session='fetch')
+            else:
+                nb_deleted = 0
             logger.info(_("Deleted %(nb_deleted)d closed events which were "
                             "at least %(days)d days old.") % {
                             'nb_deleted': nb_deleted,
