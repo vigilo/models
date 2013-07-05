@@ -9,7 +9,8 @@ install_pkg: build install_python_pkg
 install_python: $(PYTHON)
 	$(PYTHON) setup.py install --record=INSTALLED_FILES
 install_python_pkg: $(PYTHON)
-	$(PYTHON) setup.py install --single-version-externally-managed --root=$(DESTDIR)
+	$(PYTHON) setup.py install --single-version-externally-managed \
+		$(SETUP_PY_OPTS) --root=$(DESTDIR)
 
 lint: lint_pylint
 tests: tests_nose
