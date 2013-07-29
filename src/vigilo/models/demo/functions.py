@@ -4,6 +4,9 @@
 
 # pylint: disable-msg=W0622
 # W0622: Redefining built-in 'map'
+# pylint: disable-msg=E1103
+# E1103: Instance of 'RelationshipProperty' has no 'append' member (but some
+#        types could not be inferred)
 
 """
 Fonctions permettant de peupler les tables du modèle.

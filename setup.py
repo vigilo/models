@@ -49,7 +49,6 @@ setup(name='vigilo-models',
         "vigilo-common",
         "transaction",
         "networkx",
-        "numpy",
         "argparse",
     ],
     extras_require ={

@@ -12,6 +12,9 @@ X-Python-Version: >= 2.5
 
 Package: vigilo-models
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}
+Depends:
+ ${misc:Depends},
+ ${python:Depends},
+ python-numpy
 Description: Vigilo data models (ORM)
  This library gives an API to the Vigilo data models.
