@@ -1,15 +1,15 @@
 # English translations for vigilo-models.
-# Copyright (C) 2012 ORGANIZATION
+# Copyright (C) 2013 ORGANIZATION
 # This file is distributed under the same license as the vigilo-models
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: vigilo-models 2.1.1\n"
+"Project-Id-Version: vigilo-models 3.3\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2012-04-16 13:09+0200\n"
-"PO-Revision-Date: 2012-04-16 13:09+0200\n"
+"POT-Creation-Date: 2013-09-10 19:52+0200\n"
+"PO-Revision-Date: 2013-09-10 19:52+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -51,21 +51,21 @@ msgstr "Close events for services in the 'OK' state."
 
 #: src/vigilo/models/scripts/close_vigiboard.py:103
 #: src/vigilo/models/scripts/passwd.py:36
-#: src/vigilo/models/scripts/purge_vigiboard.py:217
-#: src/vigilo/models/scripts/permissions/main.py:35
+#: src/vigilo/models/scripts/purge_vigiboard.py:223
+#: src/vigilo/models/scripts/permissions/main.py:37
 msgid "Load configuration from this file."
 msgstr "Load configuration from this file."
 
 #: src/vigilo/models/scripts/close_vigiboard.py:118
 #: src/vigilo/models/scripts/passwd.py:54
-#: src/vigilo/models/scripts/purge_vigiboard.py:232
+#: src/vigilo/models/scripts/purge_vigiboard.py:238
 msgid "Too many arguments"
 msgstr "Too many arguments"
 
 #: src/vigilo/models/scripts/close_vigiboard.py:125
 #: src/vigilo/models/scripts/passwd.py:61
-#: src/vigilo/models/scripts/purge_vigiboard.py:239
-#: src/vigilo/models/scripts/permissions/main.py:185
+#: src/vigilo/models/scripts/purge_vigiboard.py:245
+#: src/vigilo/models/scripts/permissions/main.py:219
 msgid "No database configuration found"
 msgstr "No database configuration found"
 
@@ -75,7 +75,7 @@ msgid "Either -k or -u must be used. See %s --help for more information."
 msgstr "Either -k or -u must be used. See %s --help for more information."
 
 #: src/vigilo/models/scripts/close_vigiboard.py:141
-#: src/vigilo/models/scripts/purge_vigiboard.py:256
+#: src/vigilo/models/scripts/purge_vigiboard.py:262
 msgid "Some error occurred:"
 msgstr "Some error occurred:"
 
@@ -139,7 +139,7 @@ msgstr "An exception occurred while updating password for user '%s'."
 msgid "Successfully updated password for user '%s'."
 msgstr "Successfully updated password for user '%s'."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:87
+#: src/vigilo/models/scripts/purge_vigiboard.py:91
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d closed events which were at least %(days)d days "
@@ -148,7 +148,7 @@ msgstr ""
 "Deleted %(nb_deleted)d closed events which were at least %(days)d days "
 "old."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:100
+#: src/vigilo/models/scripts/purge_vigiboard.py:104
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d entries in the history for high level services "
@@ -157,7 +157,7 @@ msgstr ""
 "Deleted %(nb_deleted)d entries in the history for high level services "
 "which were at least %(days)d days old."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:113
+#: src/vigilo/models/scripts/purge_vigiboard.py:117
 #, python-format
 msgid ""
 "The database is %(size)d bytes big, which is more than the limit "
@@ -168,12 +168,12 @@ msgstr ""
 "(%(limit)d bytes). I will now delete old closed events and history "
 "entries to make room for new ones."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:139
+#: src/vigilo/models/scripts/purge_vigiboard.py:144
 #, python-format
 msgid "Deleted closed event #%d to make room for new events."
 msgstr "Deleted closed event #%d to make room for new events."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:152
+#: src/vigilo/models/scripts/purge_vigiboard.py:157
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
@@ -182,7 +182,7 @@ msgstr ""
 "Deleted %(nb_deleted)d closed events. The database is now %(size)d bytes "
 "big (limit: %(limit)d bytes)"
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:186
+#: src/vigilo/models/scripts/purge_vigiboard.py:192
 #, python-format
 msgid ""
 "Deleted %(nb_deleted)d history entries on high level services. The "
@@ -191,7 +191,7 @@ msgstr ""
 "Deleted %(nb_deleted)d history entries on high level services. The "
 "database is now %(size)d bytes big (limit: %(limit)d bytes)"
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:210
+#: src/vigilo/models/scripts/purge_vigiboard.py:216
 msgid ""
 "Remove closed events which are at least DAYS old. DAYS must be a positive"
 " non-zero integer."
@@ -199,7 +199,7 @@ msgstr ""
 "Remove closed events which are at least DAYS old. DAYS must be a positive"
 " non-zero integer."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:213
+#: src/vigilo/models/scripts/purge_vigiboard.py:219
 msgid ""
 "Remove closed events, starting with the oldest ones, when the Vigilo "
 "database starts occupying more then SIZE bytes. SIZE must be a positive "
@@ -209,7 +209,7 @@ msgstr ""
 "database starts occupying more then SIZE bytes. SIZE must be a positive "
 "non-zero integer."
 
-#: src/vigilo/models/scripts/purge_vigiboard.py:245
+#: src/vigilo/models/scripts/purge_vigiboard.py:251
 #, python-format
 msgid "Either -d or -s must be used. See %s --help for more information."
 msgstr "Either -d or -s must be used. See %s --help for more information."
@@ -217,16 +217,16 @@ msgstr "Either -d or -s must be used. See %s --help for more information."
 #. TRANSLATORS: Used in a sentence such as:
 #. TRANSLATORS: "Added ... permission on Foo for usergroup Bar".
 #: src/vigilo/models/scripts/permissions/commands.py:28
-#: src/vigilo/models/scripts/permissions/main.py:76
-#: src/vigilo/models/scripts/permissions/main.py:116
+#: src/vigilo/models/scripts/permissions/main.py:83
+#: src/vigilo/models/scripts/permissions/main.py:123
 msgid "read-only"
 msgstr "read-only"
 
 #. TRANSLATORS: Used in a sentence such as:
 #. TRANSLATORS: "Added ... permission on Foo for usergroup Bar".
 #: src/vigilo/models/scripts/permissions/commands.py:32
-#: src/vigilo/models/scripts/permissions/main.py:77
-#: src/vigilo/models/scripts/permissions/main.py:117
+#: src/vigilo/models/scripts/permissions/main.py:84
+#: src/vigilo/models/scripts/permissions/main.py:124
 msgid "read/write"
 msgstr "read/write"
 
@@ -238,6 +238,8 @@ msgstr "all"
 
 #: src/vigilo/models/scripts/permissions/commands.py:64
 #: src/vigilo/models/scripts/permissions/commands.py:193
+#: src/vigilo/models/scripts/permissions/commands.py:341
+#: src/vigilo/models/scripts/permissions/commands.py:389
 #, python-format
 msgid "No such usergroup '%s'"
 msgstr "No such usergroup '%s'"
@@ -336,20 +338,42 @@ msgstr ""
 "Successfully removed %(perm)s permissions on %(nb_groups)d groups for "
 "usergroup '%(usergroup)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:318
+#: src/vigilo/models/scripts/permissions/commands.py:316
 #, python-format
 msgid "%(count)d groups found with type '%(type)s':"
 msgstr "%(count)d groups found with type '%(type)s':"
 
-#: src/vigilo/models/scripts/permissions/main.py:42
+#: src/vigilo/models/scripts/permissions/commands.py:345
+#: src/vigilo/models/scripts/permissions/commands.py:393
+msgid "No usergroup selected."
+msgstr "No usergroup selected."
+
+#: src/vigilo/models/scripts/permissions/commands.py:355
+#: src/vigilo/models/scripts/permissions/commands.py:403
+#, python-format
+msgid "No such permission '%s'."
+msgstr "No such permission '%s'."
+
+#: src/vigilo/models/scripts/permissions/commands.py:359
+#: src/vigilo/models/scripts/permissions/commands.py:407
+msgid "No permission selected."
+msgstr "No permission selected."
+
+#: src/vigilo/models/scripts/permissions/commands.py:364
+#, python-format
+msgid "Adding permissions for usergroup '%s'."
+msgstr "Adding permissions for usergroup '%s'."
+
+#: src/vigilo/models/scripts/permissions/commands.py:412
+#, python-format
+msgid "Removing permissions for usergroup '%s'."
+msgstr "Removing permissions for usergroup '%s'."
+
+#: src/vigilo/models/scripts/permissions/main.py:56
 msgid "Commands"
 msgstr "Commands"
 
-#: src/vigilo/models/scripts/permissions/main.py:49
-msgid "Display this program's version and exit."
-msgstr "Display this program's version and exit."
-
-#: src/vigilo/models/scripts/permissions/main.py:56
+#: src/vigilo/models/scripts/permissions/main.py:63
 msgid ""
 "Add or update permissions for the given usergroup to a certain group of "
 "objects."
@@ -357,12 +381,14 @@ msgstr ""
 "Add or update permissions for the given usergroup to a certain group of "
 "objects."
 
-#: src/vigilo/models/scripts/permissions/main.py:61
-#: src/vigilo/models/scripts/permissions/main.py:101
+#: src/vigilo/models/scripts/permissions/main.py:68
+#: src/vigilo/models/scripts/permissions/main.py:108
+#: src/vigilo/models/scripts/permissions/main.py:179
+#: src/vigilo/models/scripts/permissions/main.py:193
 msgid "Usergroup to act upon."
 msgstr "Usergroup to act upon."
 
-#: src/vigilo/models/scripts/permissions/main.py:65
+#: src/vigilo/models/scripts/permissions/main.py:72
 msgid ""
 "Type of object group to act upon: 'monitored' for groups of monitored "
 "items, 'map' for groups of maps, or 'graph' for groups of graphs"
@@ -370,8 +396,8 @@ msgstr ""
 "Type of object group to act upon: 'monitored' for groups of monitored "
 "items, 'map' for groups of maps, or 'graph' for groups of graphs"
 
-#: src/vigilo/models/scripts/permissions/main.py:70
-#: src/vigilo/models/scripts/permissions/main.py:110
+#: src/vigilo/models/scripts/permissions/main.py:77
+#: src/vigilo/models/scripts/permissions/main.py:117
 msgid ""
 "Group to act upon. This can be either the full path to the group, or a "
 "relative one."
@@ -379,14 +405,14 @@ msgstr ""
 "Group to act upon. This can be either the full path to the group, or a "
 "relative one."
 
-#: src/vigilo/models/scripts/permissions/main.py:74
-#: src/vigilo/models/scripts/permissions/main.py:114
+#: src/vigilo/models/scripts/permissions/main.py:81
+#: src/vigilo/models/scripts/permissions/main.py:121
 #, python-format
 msgid "Type of permission to give: 'ro' (%(ro)s) or 'rw' (%(rw)s)."
 msgstr "Type of permission to give: 'ro' (%(ro)s) or 'rw' (%(rw)s)."
 
-#: src/vigilo/models/scripts/permissions/main.py:80
-#: src/vigilo/models/scripts/permissions/main.py:120
+#: src/vigilo/models/scripts/permissions/main.py:87
+#: src/vigilo/models/scripts/permissions/main.py:127
 msgid ""
 "In case multiple groups of objects are found with the given name and "
 "type, apply the permissions for all of them at once."
@@ -394,15 +420,15 @@ msgstr ""
 "In case multiple groups of objects are found with the given name and "
 "type, apply the permissions for all of them at once."
 
-#: src/vigilo/models/scripts/permissions/main.py:84
+#: src/vigilo/models/scripts/permissions/main.py:91
 msgid "Resolve conflicts by updating existing permissions."
 msgstr "Resolve conflicts by updating existing permissions."
 
-#: src/vigilo/models/scripts/permissions/main.py:96
+#: src/vigilo/models/scripts/permissions/main.py:103
 msgid "Remove permissions for a given usergroup on a certain group of objects."
 msgstr "Remove permissions for a given usergroup on a certain group of objects."
 
-#: src/vigilo/models/scripts/permissions/main.py:105
+#: src/vigilo/models/scripts/permissions/main.py:112
 msgid ""
 "Type of object group to act upon: 'monitored' for groups of monitored "
 "items, 'map' for groups of maps, or 'graph' for groups of graphs."
@@ -410,11 +436,11 @@ msgstr ""
 "Type of object group to act upon: 'monitored' for groups of monitored "
 "items, 'map' for groups of maps, or 'graph' for groups of graphs."
 
-#: src/vigilo/models/scripts/permissions/main.py:130
+#: src/vigilo/models/scripts/permissions/main.py:137
 msgid "Display the list of existing usergroups and other groups of objects."
 msgstr "Display the list of existing usergroups and other groups of objects."
 
-#: src/vigilo/models/scripts/permissions/main.py:136
+#: src/vigilo/models/scripts/permissions/main.py:143
 msgid ""
 "Type of object group to act upon: 'monitored' for groups of monitored "
 "items, 'map' for groups of maps, 'graph' for groups of graphs, or 'user' "
@@ -424,19 +450,32 @@ msgstr ""
 "items, 'map' for groups of maps, 'graph' for groups of graphs, or 'user' "
 "for usergroups."
 
-#: src/vigilo/models/scripts/permissions/main.py:145
+#: src/vigilo/models/scripts/permissions/main.py:152
 #, python-format
 msgid "Alias for '%(prog)s add --update'."
 msgstr "Alias for '%(prog)s add --update'."
 
-#: src/vigilo/models/scripts/permissions/main.py:150
-#: src/vigilo/models/scripts/permissions/main.py:154
-#: src/vigilo/models/scripts/permissions/main.py:158
+#: src/vigilo/models/scripts/permissions/main.py:157
+#: src/vigilo/models/scripts/permissions/main.py:161
+#: src/vigilo/models/scripts/permissions/main.py:165
 #, python-format
 msgid "Alias for '%(prog)s remove'."
 msgstr "Alias for '%(prog)s remove'."
 
-#: src/vigilo/models/scripts/permissions/main.py:209
+#: src/vigilo/models/scripts/permissions/main.py:173
+msgid "Give permissions on Vigilo applications to some users."
+msgstr "Give permissions on Vigilo applications to some users."
+
+#: src/vigilo/models/scripts/permissions/main.py:177
+#: src/vigilo/models/scripts/permissions/main.py:191
+msgid "Comma-separated list of permissions."
+msgstr "Comma-separated list of permissions."
+
+#: src/vigilo/models/scripts/permissions/main.py:186
+msgid "Take away permissions on Vigilo applications from some users."
+msgstr "Take away permissions on Vigilo applications from some users."
+
+#: src/vigilo/models/scripts/permissions/main.py:243
 msgid "You must be root to use this script."
 msgstr "You must be root to use this script."
 

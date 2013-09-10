@@ -320,3 +320,104 @@ def cmd_list(options):
     for obj in objects:
         print "-", obj[0].encode('utf-8')
     return 0
+
+
+def cmd_allow(options):
+    """
+    Ajoute des permissions sur les applications.
+
+    @param options: Options et arguments passés au script.
+    @type options: C{argparse.Namespace}
+    @return: Code de sortie (0 = pas d'erreur, autre = erreur).
+    @rtype: C{int}
+    """
+
+    # Vérifications sur les groupes d'utilisateurs.
+    usergroups = set()
+    for usergroup_name in options.usergroup:
+        usergroup_name = usergroup_name.decode('utf-8')
+        usergroup = tables.UserGroup.by_group_name(usergroup_name)
+        if usergroup is None:
+            print _("No such usergroup '%s'") % usergroup_name
+        else:
+            usergroups.add(usergroup)
+    if not usergroups:
+        print _('No usergroup selected.')
+        return 2
+    usergroups = sorted(usergroups, key=lambda ug: ug.group_name)
+
+    # Vérifications sur les permissions.
+    permissions = set()
+    for permission_name in options.permissions.split(','):
+        permission_name = permission_name.strip().decode('utf-8')
+        permission = tables.Permission.by_permission_name(permission_name)
+        if permission is None:
+            print _("No such permission '%s'.") % permission_name
+        else:
+            permissions.add(permission)
+    if not permissions:
+        print _('No permission selected.')
+        return 2
+    permissions = sorted(permissions, key=lambda p: p.permission_name)
+
+    for usergroup in usergroups:
+        print _("Adding permissions for usergroup '%s'.") % usergroup.group_name
+        usergroup.permissions.extend(permissions)
+
+    DBSession.flush()
+    if options.commit:
+        transaction.commit()
+    return 0
+
+
+def cmd_deny(options):
+    """
+    Retire des permissions sur les applications.
+
+    @param options: Options et arguments passés au script.
+    @type options: C{argparse.Namespace}
+    @return: Code de sortie (0 = pas d'erreur, autre = erreur).
+    @rtype: C{int}
+    """
+
+    # Vérifications sur les groupes d'utilisateurs.
+    usergroups = set()
+    for usergroup_name in options.usergroup:
+        usergroup_name = usergroup_name.decode('utf-8')
+        usergroup = tables.UserGroup.by_group_name(usergroup_name)
+        if usergroup is None:
+            print _("No such usergroup '%s'") % usergroup_name
+        else:
+            usergroups.add(usergroup)
+    if not usergroups:
+        print _('No usergroup selected.')
+        return 2
+    usergroups = sorted(usergroups, key=lambda ug: ug.group_name)
+
+    # Vérifications sur les permissions.
+    permissions = set()
+    for permission_name in options.permissions.split(','):
+        permission_name = permission_name.strip().decode('utf-8')
+        permission = tables.Permission.by_permission_name(permission_name)
+        if permission is None:
+            print _("No such permission '%s'.") % permission_name
+        else:
+            permissions.add(permission)
+    if not permissions:
+        print _('No permission selected.')
+        return 2
+    permissions = sorted(permissions, key=lambda p: p.permission_name)
+
+    for usergroup in usergroups:
+        print _("Removing permissions for usergroup '%s'.") % \
+            usergroup.group_name
+        for permission in permissions:
+            try:
+                usergroup.permissions.remove(permission)
+            except ValueError:
+                pass
+
+    DBSession.flush()
+    if options.commit:
+        transaction.commit()
+    return 0

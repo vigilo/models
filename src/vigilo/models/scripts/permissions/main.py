@@ -55,7 +55,7 @@ def _parse_args(args):
     )
     subparsers = parser.add_subparsers(dest='action', title=N_('Commands'))
 
-    # Commande d'ajout/mise à jour de permissions.
+    # Commande d'ajout/mise à jour de permissions sur les données.
     parser_add = subparsers.add_parser(
         "add",
         add_help=False,
@@ -164,6 +164,33 @@ def _parse_args(args):
         add_help=False, parents=[parser_remove],
         help=N_("Alias for '%(prog)s remove'."),
     ).set_defaults(action="remove")
+
+    # Commande d'ajout de permissions sur les applications.
+    parser_allow = subparsers.add_parser(
+        "allow",
+        add_help=False,
+        parents=[common_options],
+        help=N_("Give permissions on Vigilo applications to some users."),
+    )
+    parser_allow.set_defaults(commit=True) # appeler transaction.commit().
+    parser_allow.add_argument("permissions", type=unicode,
+        help=N_("Comma-separated list of permissions."))
+    parser_allow.add_argument("usergroup", nargs='+',
+        help=N_("Usergroup to act upon."))
+
+    # Commande de retrait de permissions sur les applications.
+    parser_deny = subparsers.add_parser(
+        "deny",
+        add_help=False,
+        parents=[common_options],
+        help=N_("Take away permissions on Vigilo "
+                "applications from some users."),
+    )
+    parser_deny.set_defaults(commit=True) # appeler transaction.commit().
+    parser_deny.add_argument("permissions", type=unicode,
+        help=N_("Comma-separated list of permissions."))
+    parser_deny.add_argument("usergroup", nargs='+',
+        help=N_("Usergroup to act upon."))
 
     return parser.parse_args(args)
 
