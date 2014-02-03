@@ -1007,3 +1007,55 @@ def add_usergroup_permission(group, perm):
     perm.usergroups.append(group)
     DBSession.add(perm)
     DBSession.flush()
+
+
+#
+# Règles de mise en silence
+#
+
+def add_silence(states, host, service=None, user='manager', comment=None,
+    date=None):
+    """
+    Ajoute une règle de mise en silence pour un supitem et un état donnés
+
+    @param states:  Liste des états sur lesquels porte la règle.
+    @type states:   C{List} of C{basestr}
+    @param host:    Hôte sur lequel porte la règle.
+    @type host:     C{basestr} ou L{tables.Host}
+    @param service: Service sur lequel porte la règle.
+    @type service:  C{basestr} ou L{tables.LowLevelService}
+    @param user:    Utilisateur à l'origine de la règle.
+    @type user:     C{basestr} ou L{tables.User}
+    @param comment: Commentaire ajouté par l'utilisateur.
+    @type comment:  C{basestr}
+    @param date:    Date de dernière modification de la règle.
+    @type date:     C{basestr} ou L{datetime.datetime}
+    @return:        Instance de la règle créée. Cette fonction lèvera une
+                    exception si la règle existe déjà.
+    @rtype:         L{tables.Silence}
+    """
+    if isinstance(host, basestring):
+        host = tables.Host.by_host_name(unicode(host))
+    idsupitem = host.idhost
+    if service:
+        if isinstance(service, basestring):
+            service = tables.LowLevelService.by_host_service_name(
+                unicode(host.name), unicode(service))
+        idsupitem = service.idservice
+    if isinstance(user, tables.User):
+        user = user.name
+    if isinstance(date, basestring):
+        date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+
+    silence = tables.Silence()
+    silence.idsupitem = idsupitem
+    silence.comment = comment
+    silence.lastmodification = date or datetime.now().replace(microsecond=0)
+    silence.author = user
+    DBSession.add(silence)
+    for state in states:
+        s = DBSession.query(tables.StateName).filter(
+                tables.StateName.statename == state).one()
+        silence.states.append(s)
+    DBSession.flush()
+    return silence

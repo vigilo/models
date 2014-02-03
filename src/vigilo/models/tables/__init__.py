@@ -15,7 +15,7 @@ __all__ = [
     'MapGroup', 'MapLink', 'MapNode', 'MapNodeHost', 'MapNodeHls',
     'Map', 'MapSegment', 'MapServiceLink', 'Legend', 'Service', 'StateName',
     'Application', 'VigiloServer', 'Ventilation',
-    'ImpactedPath', 'ImpactedHLS', 'Downtime', 'DowntimeStatus',
+    'ImpactedPath', 'ImpactedHLS', 'Silence',
     'FileDeployment', 'Change', 'ConfItem',  'MapNodeLls', 'MapNodeService',
 ]
 
@@ -48,8 +48,7 @@ from .legend import Legend
 from .application import Application
 from .impactedpath import ImpactedPath
 from .impactedhls import ImpactedHLS
-from .downtime import Downtime
-from .downtimestatus import DowntimeStatus
+from .silence import Silence
 from .vigiloserver import VigiloServer
 from .ventilation import Ventilation
 from .filedeployment import FileDeployment

@@ -6,6 +6,9 @@
 
 from babel.dates import format_datetime
 from datetime import datetime
+from sqlalchemy.sql import expression
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.types import UnicodeText
 
 
 class DateMixin(object):
@@ -43,3 +46,55 @@ class DateMixin(object):
         minutes = divmod(date.seconds, 60)[0]
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
+
+
+class group_concat(expression.FunctionElement):
+    """
+    Définit une nouvelle fonction d'agrégation 'group_concat' utilisable dans
+    les requêtes SQLAlchemy. Cette fonction prend 2 paramètres en entrée :
+    - le nom d'une colonne ;
+    - un séparateur (optionnel, par défaut ",").
+    Elle retourne alors la concaténation de toutes les valeurs prises par la
+    colonne en question, séparées par le second paramètre.
+    """
+    type = UnicodeText()
+    name = "group_concat"
+
+@compiles(group_concat, 'mysql')
+def _group_concat_mysql(element, compiler, **kw):
+    """Implémentation de la fonction group_concat pour MySQL"""
+    if len(element.clauses) == 2:
+        separator = compiler.process(element.clauses.clauses[1])
+    else:
+        separator = u','
+
+    return u'GROUP_CONCAT(%s SEPARATOR %s)' % (
+        compiler.process(element.clauses.clauses[0]),
+        separator,
+    )
+
+@compiles(group_concat, 'sqlite')
+def _group_concat_sqlite(element, compiler, **kw):
+    """Implémentation de la fonction group_concat pour SQLite"""
+    if len(element.clauses) == 2:
+        separator = compiler.process(element.clauses.clauses[1])
+    else:
+        separator = u','
+
+    return u'GROUP_CONCAT(%s, %s)' % (
+        compiler.process(element.clauses.clauses[0]),
+        separator,
+    )
+
+@compiles(group_concat, 'postgresql')
+def _group_concat_postgresql(element, compiler, **kw):
+    """Implémentation de la fonction group_concat pour PostgreSQL"""
+    if len(element.clauses) == 2:
+        separator = compiler.process(element.clauses.clauses[1])
+    else:
+        separator = u','
+
+    return u'ARRAY_TO_STRING(ARRAY_AGG(%s), %s)' % (
+        compiler.process(element.clauses.clauses[0]),
+        separator,
+    )

@@ -279,3 +279,32 @@ GRAPH_PERFDATASOURCE_TABLE = Table(
         autoincrement=False,
     ),
 )
+
+SILENCE_STATE_TABLE = Table(
+    'silencestate', metadata,
+    Column(
+        'idsilence',
+        Integer,
+        ForeignKey(
+            'silence.idsilence',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
+    Column(
+        'idstate',
+        Integer,
+        ForeignKey(
+            'statename.idstatename',
+            onupdate="CASCADE",
+            ondelete="CASCADE",
+            deferrable=True,
+            initially='IMMEDIATE',
+        ),
+        primary_key=True,
+    ),
+)
+
