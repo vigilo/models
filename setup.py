@@ -30,7 +30,7 @@ def install_i18n(i18ndir, destdir):
     return data_files
 
 setup(name='vigilo-models',
-    version='3.3',
+    version='3.4',
     author='Vigilo Team',
     author_email='contact@projet-vigilo.org',
     url='http://www.projet-vigilo.org/',
