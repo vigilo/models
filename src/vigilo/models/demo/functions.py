@@ -42,14 +42,12 @@ def add_host(hostname, conffile=None):
                 address=u"127.0.0.1",
                 snmpcommunity=u"public",
                 snmpport=161,
-                weight=0,
                 conffile=conffile)
         DBSession.add(h)
         DBSession.flush()
     return h
 
-def add_lowlevelservice(host, servicename, statename="OK",
-                        message="", weight=100, warning_weight=100):
+def add_lowlevelservice(host, servicename, statename="OK", message=""):
     """
     Ajoute un service de bas niveau sur un hôte.
 
@@ -61,19 +59,9 @@ def add_lowlevelservice(host, servicename, statename="OK",
     @type statename: C{basestr}
     @param message: Message associé à l'état initial du service.
     @type message: C{basestr}
-    @param weight: Poids associé au service lorsqu'il se trouve
-        dans l'état OK.
-    @type weight: C{int}
-    @param warning_weight: Poids associé au service lorsqu'il se trouve
-        dans l'état WARNING.
-    @type warning_weight: C{int}
     @return: Instance du service créée ou existante.
     @rtype: L{tables.LowLevelService}
     """
-    if warning_weight is None:
-        warning_weight = weight
-    if warning_weight > weight:
-        raise ValueError("warning_weight must be less than or equal to weight")
     if isinstance(host, basestring):
         hostname = host
         host = tables.Host.by_host_name(unicode(hostname))
@@ -85,8 +73,6 @@ def add_lowlevelservice(host, servicename, statename="OK",
         s = tables.LowLevelService(
                 servicename=servicename,
                 idhost=host.idhost,
-                weight=weight,
-                warning_weight=warning_weight,
                 command=u"dummy")
         DBSession.add(s)
         DBSession.flush()
@@ -94,7 +80,7 @@ def add_lowlevelservice(host, servicename, statename="OK",
     return s
 
 def add_highlevelservice(servicename, operator="&", message="",
-                        priorities=None, weight=0, warning_weight=None):
+                        priorities=None):
     """
     Ajoute un service de haut niveau.
 
@@ -110,19 +96,9 @@ def add_highlevelservice(servicename, operator="&", message="",
         priorité associée à ce service de haut niveau lorsqu'il se trouve
         dans l'état indiqué.
     @type priorities: C{dict}
-    @param weight: Poids associé au service lorsqu'il se trouve
-        dans l'état OK.
-    @type weight: C{int}
-    @param warning_weight: Poids associé au service lorsqu'il se trouve
-        dans l'état WARNING.
-    @type warning_weight: C{int}
     @return: Instance du service de haut niveau créée ou existante.
     @rtype: L{tables.HighLevelService}
     """
-    if warning_weight is None:
-        warning_weight = weight
-    if warning_weight > weight:
-        raise ValueError("warning_weight must be less than or equal to weight")
     if priorities is None:
         priorities = {}
     servicename = unicode(servicename)
@@ -130,8 +106,6 @@ def add_highlevelservice(servicename, operator="&", message="",
     if not s:
         s = tables.HighLevelService(
                 servicename=servicename,
-                weight=weight,
-                warning_weight=warning_weight,
                 message=unicode(message),
                 warning_threshold=300,
                 critical_threshold=150)
@@ -199,7 +173,7 @@ def add_dependency_group(host, service, role, operator='&'):
     return group.idgroup
 
 
-def add_dependency(group, depended, distance=None):
+def add_dependency(group, depended, distance=None, weight=1, warning_weight=None):
     """
     Ajoute une dépendance à un groupe de dépendances.
 
@@ -209,7 +183,21 @@ def add_dependency(group, depended, distance=None):
         sous la forme d'un tuple (hôte, service) décrivant l'élément
         à ajouter.
     @type depended: C{tuple}
+    @param distance: Distance entre l'objet en dépendance et l'objet
+        qui en dépend.
+    @type distance: C{int}
+    @param weight: Poids associé au service lorsqu'il se trouve
+        dans l'état OK.
+    @type weight: C{int}
+    @param warning_weight: Poids associé au service lorsqu'il se trouve
+        dans l'état WARNING.
+    @type warning_weight: C{int}
     """
+    if warning_weight is None:
+        warning_weight = weight
+    if warning_weight > weight:
+        raise ValueError("warning_weight must be less than or equal to weight")
+
     if isinstance(group, int):
         idgroup = group
     else:
@@ -231,6 +219,8 @@ def add_dependency(group, depended, distance=None):
         idgroup=idgroup,
         supitem=dependency,
         distance=distance,
+        weight=weight,
+        warning_weight=warning_weight,
     ))
     DBSession.flush()
 

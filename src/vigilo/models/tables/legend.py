@@ -3,7 +3,7 @@
 # Copyright (C) 2011-2014 CS-SI
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
-"""Modèle pour la table Host"""
+"""Modèle pour la table Legend"""
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 

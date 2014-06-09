@@ -60,8 +60,6 @@ class Host(SupItem):
     @ivar snmpport: Port à utiliser pour le protocole SNMP.
     @ivar snmpoidsperpdu: Nombre d'OIDs à transmettre par PDU.
     @ivar snmpversion: Version du protocole SNMP à utiliser.
-    @ivar weight: Poids affecté à cet hôte pour le calcul de l'état
-        des services de haut niveau qui en dépendent.
     @ivar groups: Liste des groupes d'hôtes auxquels cet hôte appartient.
     @ivar hostclasses: Classes d'hôtes attachées à l'hôte.
     @ivar services: Liste des services de bas niveau configurés sur cet hôte.
@@ -120,11 +118,6 @@ class Host(SupItem):
     snmpoidsperpdu = Column(Integer)
 
     snmpversion = Column(Unicode(255))
-
-    weight = Column(
-        Integer,
-        nullable=False,
-    )
 
     conffile = relation('ConfFile', back_populates="hosts", lazy=True)
 

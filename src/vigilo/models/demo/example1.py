@@ -66,14 +66,12 @@ def main():
     functions.add_lowlevelservice('routeur2', 'Interface eth0')
     functions.add_lowlevelservice('firewall', 'Interface eth0')
     functions.add_lowlevelservice('proto4', 'Interface eth0')
-    functions.add_lowlevelservice('host2.example.com', 'Interface eth1',
-                                    weight=120)
+    functions.add_lowlevelservice('host2.example.com', 'Interface eth1')
     functions.add_lowlevelservice('host3.example.com', 'Interface eth1')
     functions.add_lowlevelservice('routeur1', 'Interface eth1')
     functions.add_lowlevelservice('routeur2', 'Interface eth1')
     functions.add_lowlevelservice('firewall', 'Interface eth1')
-    functions.add_lowlevelservice('host2.example.com', 'Interface eth2',
-                                    weight=130)
+    functions.add_lowlevelservice('host2.example.com', 'Interface eth2')
     functions.add_lowlevelservice('brouteur', 'UpTime')
     functions.add_lowlevelservice('messagerie', 'UpTime')
     functions.add_lowlevelservice('proto4', 'UpTime')

@@ -23,8 +23,6 @@ class TestLowLevelService(ModelTest, TagTestMixin):
     klass = LowLevelService
     attrs = {
         'servicename': u'myservice',
-        'weight': 100,
-        'warning_weight': 101,
     }
 
     def do_get_dependencies(self):
@@ -38,8 +36,6 @@ class TestLowLevelService(ModelTest, TagTestMixin):
         """Récupération d'un LowLevelService par son nom d'hôte/service."""
         ob = LowLevelService.by_host_service_name(
             u'myhost', self.attrs['servicename'])
-        assert_equals(ob.weight, 100)
-        assert_equals(ob.warning_weight, 101)
 
     def test_default_state(self):
         """L'état initial d'un service de bas niveau est 'UNKNOWN'."""
@@ -69,16 +65,12 @@ class TestHighLevelService(ModelTest, TagTestMixin):
         'message': u'Hello world',
         'warning_threshold': 50,
         'critical_threshold': 80,
-        'weight': 100,
-        'warning_weight': 101,
     }
 
     def test_by_service_name(self):
         """Récupération d'un HighLevelService par son nom."""
         ob = HighLevelService.by_service_name(self.attrs['servicename'])
         assert_equals(ob.critical_threshold, 80)
-        assert_equals(ob.weight, 100)
-        assert_equals(ob.warning_weight, 101)
 
     def test_default_state(self):
         """L'état initial d'un service de haut niveau est 'UNKNOWN'."""

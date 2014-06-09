@@ -27,6 +27,10 @@ class Dependency(DeclarativeBase, object):
         qui constitue la dépendance.
     @ivar supitem: Instance de l'élément supervisé
         qui constitue la dépendance.
+    @ivar weight: Poids de l'élément supervisé constituant
+        la dépendance dans un état nominal.
+    @ivar warning_weight: Poids de l'élément supervisé
+        constituant la dépendance dans un état dégradé.
     """
 
     __tablename__ = 'dependency'
@@ -62,6 +66,20 @@ class Dependency(DeclarativeBase, object):
     supitem = relation('SupItem')
 
     distance = Column(
+        Integer,
+        primary_key=False,
+        nullable=True,
+    )
+
+    # Uniquement pour les dépendances de type HLS.
+    weight = Column(
+        Integer,
+        primary_key=False,
+        nullable=True,
+    )
+
+    # Uniquement pour les dépendances de type HLS.
+    warning_weight = Column(
         Integer,
         primary_key=False,
         nullable=True,

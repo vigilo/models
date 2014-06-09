@@ -13,6 +13,11 @@ class TestDependency(ModelTest):
 
     klass = Dependency
 
+    attrs = {
+        'weight': 42,
+        'warning_weight': 24,
+    }
+
     def __init__(self):
         ModelTest.__init__(self)
 
@@ -22,7 +27,7 @@ class TestDependency(ModelTest):
         host = functions.add_host(u'myhost')
         service = functions.add_lowlevelservice(host, u'myservice')
         depgroup = functions.add_dependency_group(
-                        host, service, u'topology', u'+')
+                        host, service, u'hls', u'+')
 
         return dict(
             idgroup=depgroup,

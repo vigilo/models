@@ -29,7 +29,6 @@ class TestHostClass(ModelTest):
             hosttpl=u'template',
             address=u'127.0.0.1',
             snmpport=1234,
-            weight=42,
         )
         DBSession.add(host)
         return dict(hosts=[host])

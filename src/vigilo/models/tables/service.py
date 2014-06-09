@@ -98,12 +98,6 @@ class LowLevelService(Service):
     @ivar idhost: Identifiant de l'L{Host} sur lequel ce service est configuré.
     @ivar host: Instande de l'L{Host} sur lequel ce service est configuré.
     @ivar command: Commande à exécuter pour vérifier l'état du service.
-    @ivar weight: Poids du service lorsqu'il se trouve dans
-        l'état OK ou UNKNOWN. Sert pour le calcul de l'état
-        des services de haut niveau (L{HighLevelService}).
-    @ivar warning_weight: Poids du service lorsqu'il se trouve
-        dans l'état WARNING. Sert pour le calcul de l'état des
-        services de haut niveau (L{HighLevelService}).
     @ivar idcollector: Identifiant du Collector pour ce service.
     @ivar collector: Collector pour ce service.
     """
@@ -149,16 +143,6 @@ class LowLevelService(Service):
     command = Column(
         Unicode(512),
         default=u'',
-        nullable=False,
-    )
-
-    weight = Column(
-        Integer,
-        nullable=False,
-    )
-
-    warning_weight = Column(
-        Integer,
         nullable=False,
     )
 
@@ -273,10 +257,6 @@ class HighLevelService(Service):
         l'état OK à l'état WARNING.
     @ivar critical_threshold: Seuil à partir duquel le service passe de
         l'état WARNING à l'état CRITICAL.
-    @ivar weight: Poids du service de haut niveau
-        lorsqu'il se trouve dans l'état OK ou UNKNOWN.
-    @ivar warning_weight: Poids du service de haut niveau
-        lorsqu'il se trouve dans l'état WARNING.
     @ivar priority: Priorité à donner aux événements qui concernent
         ce service de haut niveau.
     @ivar impacts: Liste des services de haut niveau impactés par
@@ -317,16 +297,6 @@ class HighLevelService(Service):
     )
 
     critical_threshold = Column(
-        Integer,
-        nullable=False,
-    )
-
-    weight = Column(
-        Integer,
-        nullable=False,
-    )
-
-    warning_weight = Column(
         Integer,
         nullable=False,
     )

@@ -23,7 +23,6 @@ class TestHost(ModelTest, TagTestMixin):
         'hosttpl': u'template',
         'address': u'127.0.0.1',
         'snmpport': 1234,
-        'weight': 42,
     }
 
     def test_default_state(self):
