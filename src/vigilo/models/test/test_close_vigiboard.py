@@ -45,32 +45,28 @@ class TestCloseVigiBoard(unittest.TestCase):
         # UpTime OK : l'événement pourra être fermé (option -k).
         fn.add_correvent([fn.add_event(uptime, 'OK', 'foo')])
 
-        # Le Ping et les Users sont CRITICAL depuis une durée variable :
-        # les événements ne pourront pas être fermés.
+        # Ping et Users sont en erreur et ne pourront
+        # donc pas être fermés automatiquement.
         fn.add_correvent([fn.add_event(ping, 'CRITICAL', 'foo')])
         fn.add_correvent(
-            [fn.add_event(users, 'CRITICAL', 'foo')],
-            timestamp=two_days_ago
+            [fn.add_event(users, 'CRITICAL', 'foo', timestamp=two_days_ago)]
         )
 
         # localhost2 UP et événement ouvert depuis 2j.
         fn.add_correvent(
-            [fn.add_event(localhost2, 'UP', 'foo')],
-            timestamp=two_days_ago
+            [fn.add_event(localhost2, 'UP', 'foo', timestamp=two_days_ago)]
         )
 
         # UpTime2 OK et événement ouvert depuis 2j.
         fn.add_correvent(
-            [fn.add_event(uptime2, 'OK', 'foo')],
-            timestamp=two_days_ago
+            [fn.add_event(uptime2, 'OK', 'foo', timestamp=two_days_ago)]
         )
 
-        # localhost3 et 4 sont DOWN depuis une durée variable
-        # et ne doivent pas être fermés.
+        # localhost3 et localhost4 sont en erreur
+        # et ne pourront donc pas être fermés.
         fn.add_correvent([fn.add_event(localhost3, 'DOWN', 'foo')])
         fn.add_correvent(
-            [fn.add_event(localhost4, 'DOWN', 'foo')],
-            timestamp=two_days_ago
+            [fn.add_event(localhost4, 'DOWN', 'foo', timestamp=two_days_ago)]
         )
 
 
