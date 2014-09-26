@@ -132,7 +132,7 @@ def clean_vigiboard(logger, options, url):
                         (CorrEvent, Event.idevent == CorrEvent.idcause)
                     ).filter(Event.current_state.in_(sought_states)
                     ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
-                    ).order_by(CorrEvent.timestamp_active.asc()).scalar()
+                    ).order_by(Event.timestamp.asc()).scalar()
 
                 # Il n'y a plus aucun événement corrélé pouvant être supprimé.
                 if idevent is None:

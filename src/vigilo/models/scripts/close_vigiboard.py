@@ -55,7 +55,7 @@ def close_green(logger, options):
     if options.days is not None and options.days > 0:
         # Génère une date qui se trouve options.days jours dans le passé.
         old_date = datetime.fromtimestamp(time.time() - options.days * 86400)
-        query = query.filter(CorrEvent.timestamp_active <= old_date)
+        query = query.filter(Event.timestamp <= old_date)
 
     events = query.all()
     username = unicode(pwd.getpwuid(os.getuid())[0])
