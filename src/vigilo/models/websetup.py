@@ -199,17 +199,35 @@ def populate_db(bind, commit=True):
     # Sinon, c'est que le modèle n'existait pas, donc on le crée.
     else:
         print "Setting up the generic tables"
+        print "Creating 'manager' user account with default password"
         manager = tables.User()
         manager.user_name = u'manager'
-        manager.email = u'manager@somedomain.com'
-        manager.fullname = u'Manager'
+        manager.email = u''
+        manager.fullname = u'Manager account'
         manager.password = u'iddad'
         DBSession.add(manager)
         DBSession.flush()
 
+        print "Creating 'vigilo-monitoring' user account with default password"
+        monitor = tables.User()
+        monitor.user_name = u'vigilo-monitoring'
+        monitor.email = u''
+        monitor.fullname = u'Vigilo self-monitoring account'
+        monitor.password = u'vigilo-monitoring'
+        DBSession.add(monitor)
+        DBSession.flush()
+
+        print "Creating 'managers' usergroup"
         group = tables.UserGroup()
         group.group_name = u'managers'
         group.users.append(manager)
+        DBSession.add(group)
+        DBSession.flush()
+
+        print "Creating 'monitoring' usergroup"
+        group = tables.UserGroup()
+        group.group_name = u'monitoring'
+        group.users.append(monitor)
         DBSession.add(group)
         DBSession.flush()
 
