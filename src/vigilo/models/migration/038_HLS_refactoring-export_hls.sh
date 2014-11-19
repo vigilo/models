@@ -10,7 +10,7 @@ echo '<?xml version="1.0"?>
 
 <hlservices>'
 
-echo -n "SELECT * FROM vigilo_highlevelservice;" | su - postgres -c "psql -d $BDD -Anqt" | \
+echo -n "SELECT * FROM vigilo_highlevelservice ORDER BY servicename;" | su - postgres -c "psql -d $BDD -Anqt" | \
 while read line; do
     inc=$(($inc+1))
     echo -ne "\r$inc/$NBR" >&2
@@ -37,7 +37,7 @@ while read line; do
     esac
 
     echo ""
-    echo "<hlservice name=\"$servicename\" >
+    echo "<hlservice name=\"$servicename\">
 
     <message>$message</message>
 
@@ -56,7 +56,8 @@ while read line; do
               FROM vigilo_dependencygroup dg
               JOIN vigilo_dependency d ON d.idgroup = dg.idgroup
               JOIN vigilo_highlevelservice hls ON hls.idservice = d.idsupitem
-              WHERE dg.iddependent=${idservice};" | su - postgres -c "psql -d $BDD -Anqt" | \
+              WHERE dg.iddependent=${idservice}
+              ORDER BY hls.servicename ASC;" | su - postgres -c "psql -d $BDD -Anqt" | \
     while read l_hls; do
         dhlsservicename=`   echo $l_hls | awk -F "|" '{ print $1 }'`
         dhlsweight=`        echo $l_hls | awk -F "|" '{ print $2 }'`
@@ -82,7 +83,8 @@ while read line; do
               FROM vigilo_dependencygroup dg
               JOIN vigilo_dependency d ON d.idgroup = dg.idgroup
               JOIN vigilo_host h ON h.idhost = d.idsupitem
-              WHERE dg.iddependent=${idservice};" | su - postgres -c "psql -d $BDD -Anqt" | \
+              WHERE dg.iddependent=${idservice}
+              ORDER BY h.name ASC;" | su - postgres -c "psql -d $BDD -Anqt" | \
     while read l_h; do
         dhname=`  echo $l_h | awk -F "|" '{ print $1 }'`
         dhweight=`echo $l_h | awk -F "|" '{ print $2 }'`
@@ -104,7 +106,8 @@ while read line; do
               JOIN vigilo_dependency d ON d.idgroup = dg.idgroup
               JOIN vigilo_lowlevelservice lls ON lls.idservice = d.idsupitem
               JOIN vigilo_host h ON h.idhost = lls.idhost
-              WHERE dg.iddependent=${idservice};" | su - postgres -c "psql -d $BDD -Anqt" | \
+              WHERE dg.iddependent=${idservice}
+              ORDER BY h.name ASC, lls.servicename ASC;" | su - postgres -c "psql -d $BDD -Anqt" | \
     while read l_lls; do
         dhname=`            echo $l_lls | awk -F "|" '{ print $1 }'`
         dservicename=`      echo $l_lls | awk -F "|" '{ print $2 }'`
