@@ -1,5 +1,7 @@
 #!/bin/bash
 # lié à 038_HLS_refactoring
+# Copyright (C) 2014-2015 CS-SI
+# License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 # liste des fichiers XML des hosts
 LISTE_FICHIER_HOSTS=`        find /etc/vigilo/vigiconf/conf.d/hosts/         -type f -a -name "*.xml"`
