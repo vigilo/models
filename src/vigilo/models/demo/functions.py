@@ -723,14 +723,15 @@ def add_node_lls(lls, label, map, widget="ServiceElement",
     return n
 
 def add_node_hls(hls, label, map, widget="ServiceElement",
-                    x=None, y=None, icon=None, submaps=None):
+                    x=None, y=None, icon=None, submaps=None, show_deps='never'):
     if isinstance(hls, basestring):
         hls = tables.HighLevelService.by_service_name(hls)
     n = tables.MapNodeHls.by_map_label(map, unicode(label))
     if not n:
         n = tables.MapNodeHls(label=unicode(label), idmap=map.idmap,
                               x_pos=x, y_pos=y, widget=unicode(widget),
-                              idservice=hls.idservice, icon=unicode(icon))
+                              idservice=hls.idservice, icon=unicode(icon),
+                              show_deps=unicode(show_deps))
         DBSession.add(n)
     if submaps is None:
         submaps = []

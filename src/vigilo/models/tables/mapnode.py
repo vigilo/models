@@ -7,7 +7,7 @@
 Modèle pour la table MapNode
 """
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, Unicode, Boolean
+from sqlalchemy.types import Integer, Unicode, Boolean, Enum
 from sqlalchemy.orm import relation
 
 from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
@@ -203,8 +203,16 @@ class MapNodeService(MapNode):
     @ivar idmapnode: Identifiant du modèle de service (séquence).
     @ivar idservice: Identifiant du L{Service} représenté.
     @ivar service: Instance du L{Service} représenté.
+    @ivar show_deps: Contrôle l'affichage des dépendances pour les services
+        de haut niveau.
      """
     __tablename__ = 'mapnodeservice'
+
+    show_deps_flags = {
+        'never': 0,
+        'problems': 1,
+        'always': 2,
+    }
 
     idmapnode = Column(
         Integer,
@@ -233,6 +241,23 @@ class MapNodeService(MapNode):
     )
 
     service = relation('Service')
+
+    show_deps = Column(
+        Enum(
+            # Ne jamais afficher les états des dépendances du HLS.
+            'never',
+
+            # N'afficher que les dépendances dans un état anormal.
+            'problems',
+
+            # Toujours afficher l'état de l'ensemble des dépendances.
+            'always',
+
+            name='vigilo_mapnodehls_show_deps',
+        ),
+        nullable=False,
+        default='never',
+    )
 
 
     def __init__(self, **kwargs):
