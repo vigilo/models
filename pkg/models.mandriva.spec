@@ -29,6 +29,7 @@ Requires:   python-pastedeploy
 Requires:   python-paste
 Requires:   python-networkx
 Requires:   python-argparse
+Requires:   python-passlib
 
 
 %description

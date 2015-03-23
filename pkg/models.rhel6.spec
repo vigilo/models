@@ -25,6 +25,7 @@ Requires:   vigilo-common
 Requires:   python-transaction
 Requires:   python-networkx
 Requires:   python-argparse
+Requires:   python-passlib
 
 
 %description

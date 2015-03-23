@@ -50,6 +50,7 @@ setup(name='vigilo-models',
         "transaction",
         "networkx",
         "argparse",
+        "passlib",
     ],
     extras_require ={
         'tests': tests_require

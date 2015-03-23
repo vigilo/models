@@ -11,13 +11,15 @@ en vue de l'utilisation des tables du modèle de Vigilo.
 __all__ = (
     'DB_BASENAME',
     'DEFAULT_LANG',
-    'HASHING_FUNC',
+    'SCHEMES',
+    'DEPRECATED_SCHEMES',
     'configure_db',
 )
 
 DB_BASENAME = ''
 DEFAULT_LANG = None
-HASHING_FUNC = None
+SCHEMES = None
+DEPRECATED_SCHEMES = None
 
 def configure_db(config_obj, prefix, db_basename=None):
     """
@@ -55,7 +57,7 @@ def configure_db(config_obj, prefix, db_basename=None):
     # vigilo.models.session dépend de cette initialisation.
     # pylint: disable-msg=W0603
     # W0603: Using the global statement
-    global DB_BASENAME, DEFAULT_LANG, HASHING_FUNC
+    global DB_BASENAME, DEFAULT_LANG, SCHEMES, DEPRECATED_SCHEMES
 
     # Préfixe des noms de tables.
     DB_BASENAME = config_obj.get('db_basename', '')
@@ -63,9 +65,11 @@ def configure_db(config_obj, prefix, db_basename=None):
     # Langue par défaut des utilisateurs.
     DEFAULT_LANG = config_obj.get('lang', None)
 
-    # Fonction de hachage des mots de passe.
-    HASHING_FUNC = config_obj.get(
-        'password_hashing_function', None)
+    # Algorithmes de hachage des mots de passe.
+    DEPRECATED_SCHEMES = \
+        filter(None, config_obj['deprecated_password_schemes'].split(' '))
+    SCHEMES = filter(None, config_obj['password_schemes'].split(' ')) + \
+                DEPRECATED_SCHEMES
 
     import vigilo.models.session as session
 
