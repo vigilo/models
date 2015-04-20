@@ -66,10 +66,10 @@ def configure_db(config_obj, prefix, db_basename=None):
     DEFAULT_LANG = config_obj.get('lang', None)
 
     # Algorithmes de hachage des mots de passe.
-    DEPRECATED_SCHEMES = \
-        filter(None, config_obj.get('deprecated_password_schemes').split(' '))
-    SCHEMES = filter(None, config_obj.get('password_schemes').split(' ')) + \
-                DEPRECATED_SCHEMES
+    DEPRECATED_SCHEMES = filter(None, config_obj.get(
+        'deprecated_password_schemes', '').split(' '))
+    SCHEMES = filter(None, config_obj.get(
+        'password_schemes', '').split(' ')) + DEPRECATED_SCHEMES
 
     import vigilo.models.session as session
 
