@@ -4,12 +4,10 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table User"""
-import hashlib, random
-
 from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
-from sqlalchemy.types import Unicode, DateTime, String
-from passlib.context import CryptContext
+from sqlalchemy.types import Unicode, DateTime
+import hashlib, random
 
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import USER_GROUP_TABLE
@@ -26,10 +24,7 @@ class User(DeclarativeBase, object):
     @ivar user_name: Nom de l'utilisateur (identifiant).
     @ivar fullname: Nom complet de l'utilisateur.
     @ivar email: Adresse email de l'utilisateur.
-    @ivar password: Mot de passe de l'utilisateur.
-        Le format exact (haché ou clair, présence ou non de sel,
-        nombre d'itérations de l'algorithme, etc.) dépend des options
-        de configuration.
+    @ivar password: Mot de passe (chiffré) de l'utilisateur.
     @ivar language: Langage utilisé par l'utilisateur.
     @ivar last_changed: Date de dernière mise à jour des informations
         de l'utilisateur.
@@ -57,7 +52,7 @@ class User(DeclarativeBase, object):
     )
 
     _password = Column(
-        'password', String(256),
+        'password', Unicode(64),
         nullable=True,
     )
 
@@ -304,15 +299,16 @@ class User(DeclarativeBase, object):
 
     def _set_password(self, password):
         """
-        Modifie le mot de passe de l'utilisateur.
+        Attribue le mot de passe donné à l'utilisateur.
 
-        @param password: Nouveau mot de passe de l'utilisateur (en clair).
-            Le mot de passe sera haché avant d'être stocké en base de données.
+        Le mot de passe n'est pas stocké dans la base de données mais est géré
+        par une source quelconque. L'utilisateur peut simplement le modifier ou
+        comparer un texte avec le mot de passe.
+
+        @param password: Le nouveau mot de passe de l'utilisateur.
         @type password: C{str}
         """
-        from vigilo.models.configure import SCHEMES as schemes
-        ctx = CryptContext(schemes=schemes)
-        self._password = ctx.encrypt(password)
+        self._password = self._hash_password(password)
 
     def validate_password(self, password, allow_missing=False):
         """
@@ -322,9 +318,9 @@ class User(DeclarativeBase, object):
         @param password: Le mot de passe donné par l'utilisateur pour
             s'authentifier, en texte clair.
         @type password: C{str}
-        @param allow_missing: Indique si un mot de passe absent
-            dans la base de données donne systématiquement accès
-            ou si au contraire il refuse systématiquement l'accès.
+        @param allow_missing: Indique si un mot de passe absent donne
+            systématiquement accès ou si on contraire il refuse
+            systématiquement l'accès.
         @type allow_missing: C{bool}
         @return: Un booléen indiquant si le mot de passe est correct.
         @rtype: C{bool}
@@ -334,23 +330,41 @@ class User(DeclarativeBase, object):
         # Par défaut, la validation échouera systématiquement.
         if self._password is None:
             return bool(allow_missing)
+        return self._hash_password(password) == self._password
 
-        from vigilo.models.configure import SCHEMES as schemes
-        from vigilo.models.configure import DEPRECATED_SCHEMES as \
-            deprecated_schemes
+    @staticmethod
+    def _hash_password(password):
+        """
+        Applique une fonction de hachage au mot de passe.
 
-        ctx = CryptContext(schemes=schemes, deprecated=deprecated_schemes)
-        valid, needs_update = ctx.verify_and_update(password, self._password)
-        if not valid:
-            return False
-        if needs_update:
-            self._password = ctx.encrypt(password)
-        return True
+        @param password: Mot de passe à hacher.
+        @type password: C{str}
+        @return: Hash correspondant au mot de passe donné.
+        @rtype:
+        @note: Si la variable password_hashing_function a été définie dans la
+            configuration, la méthode correspondante du module C{hashlib} est
+            utilisée. Si la variable n'existe pas ou ne correspond pas à une
+            classe/fonction valide du module hashlib, alors le mot de passe
+            est stocké en clair.
+        """
+        from vigilo.models.configure import HASHING_FUNC as hash_method
 
-    # Définition des accesseurs pour le (haché du) mot de passe.
-    # Empêche la lecture directe et applique la méthode de hachage
-    # en cas de changement du mot de passe par l'utilisateur.
-    password = synonym('_password', descriptor=property(None, _set_password))
+        # Nécessaire car hashlib ne fonctionne pas sur des chaînes Unicode.
+        if isinstance(password, unicode):
+            password = password.encode('utf-8')
+
+        if not hash_method is None:
+            hash_method = getattr(hashlib, hash_method)
+            if not callable(hash_method):
+                hash_method = None
+
+        if hash_method is not None:
+            password = hash_method(password).hexdigest()
+        # On force la conversion vers Unicode pour SQLAlchemy.
+        return password.decode('utf-8')
+
+    password = synonym('_password', descriptor=property(None,
+                                                        _set_password))
 
     def _set_language(self, language):
         """

@@ -128,10 +128,9 @@ class TestUser(ModelTest):
         eq_(expected, received)
 
     def test_hash_function(self):
-        """Hachage des mots de passe (accentués)."""
+        """Hachage des mots de passe (accentués) avec md5."""
         from vigilo.models import configure
-        configure.SCHEMES = ['hex_md5']
-        configure.DEPRECATED_SCHEMES = []
+        configure.HASHING_FUNC = 'md5'
         password = u'éàçù'
         self.obj.password = password
         DBSession.flush()
@@ -141,3 +140,14 @@ class TestUser(ModelTest):
         user = DBSession.query(User).filter(User._password == digest).one()
         eq_(user, self.obj)
 
+
+    def test_hash_function2(self):
+        """Absence de hachage des mots de passe (accentués)."""
+        from vigilo.models import configure
+        configure.HASHING_FUNC = None
+        password = u'éàçù'
+        self.obj.password = password
+        DBSession.flush()
+
+        user = DBSession.query(User).filter(User._password == password).one()
+        eq_(user, self.obj)

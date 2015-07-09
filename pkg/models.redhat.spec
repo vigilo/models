@@ -32,7 +32,6 @@ Requires:   vigilo-common
 Requires:   python26-transaction
 Requires:   python26-networkx
 Requires:   python26-argparse
-Requires:   python26-passlib
 
 
 %description
