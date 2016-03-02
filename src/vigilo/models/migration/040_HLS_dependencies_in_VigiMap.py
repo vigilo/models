@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2015-2015 CS-SI
+# Copyright (C) 2015-2016 CS-SI
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 """
 Permet l'affichage de l'état des dépendances d'un service de haut niveau
