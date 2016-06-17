@@ -26,9 +26,7 @@ Requires:   python-zope-sqlalchemy < 0.5
 Requires:   python-paste-deploy
 Requires:   vigilo-common
 Requires:   python-transaction
-# On contraint la version à cause d'incompatibilités
-# constatées avec la version 1.8.1 apportée par RHEL 7.
-Requires:   python-networkx < 1.4
+Requires:   python-networkx
 Requires:   python-passlib
 
 

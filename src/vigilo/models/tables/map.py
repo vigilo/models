@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table Map"""
-import networkx as nx
 from sqlalchemy import Column
 from sqlalchemy.types import Unicode, DateTime, Integer, Boolean
 from sqlalchemy.orm import relation
 
+from vigilo.common.nx import networkx as nx
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
                                                 SUB_MAP_NODE_MAP_TABLE
@@ -149,9 +149,15 @@ class Map(DeclarativeBase, object):
         for path in paths:
             graph.add_edge(path[0], path[1])
 
-        return len([submap for submap in submaps
-                if not nx.shortest_path(graph, submap.idmap, idmap)]) > 0
-
+        for submap in submaps:
+            try:
+                nx.shortest_path(graph, submap.idmap, idmap)
+            except nx.NetworkXNoPath:
+                # On n'a pas trouvé de chemin reliant la sous-carte à la carte,
+                # alors qu'on en avait trouvé un de la carte vers la sous-carte.
+                # Donc pas de cycle, mais il y a (au moins) une sous-carte.
+                return True
+        return False
 
     @classmethod
     def get_submaps(cls, idmap, break_cycles=False):
