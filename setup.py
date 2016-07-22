@@ -4,9 +4,27 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 import os, sys
+from platform import python_version_tuple
 from setuptools import setup, find_packages
 
 sysconfdir = os.getenv("SYSCONFDIR", "/etc")
+
+install_requires = [
+    "Babel >= 0.9.4",
+    "setuptools",
+    "psycopg2",
+    "SQLAlchemy >= 0.7.2",
+    "SQLAlchemy < 0.8.0dev",
+    "zope.sqlalchemy >= 0.4",
+    "PasteDeploy",
+    "vigilo-common",
+    "transaction",
+    "networkx",
+    "passlib",
+]
+if tuple(python_version_tuple()) < ('2', '7'):
+    install_requires.append("argparse")
+
 
 tests_require = [
     'coverage',
@@ -38,21 +56,8 @@ setup(name='vigilo-models',
     description="Vigilo data models (ORM)",
     long_description="This library gives an API to the Vigilo data models.",
     zip_safe=False,
-    install_requires=[
-        "Babel >= 0.9.4",
-        "setuptools",
-        "psycopg2",
-        "SQLAlchemy >= 0.7.2",
-        "SQLAlchemy < 0.8.0dev",
-        "zope.sqlalchemy >= 0.4",
-        "PasteDeploy",
-        "vigilo-common",
-        "transaction",
-        "networkx",
-        "argparse",
-        "passlib",
-    ],
-    extras_require ={
+    install_requires=install_requires,
+    extras_require={
         'tests': tests_require
     },
     message_extractors={
