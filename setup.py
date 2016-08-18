@@ -69,6 +69,12 @@ setup(name='vigilo-models',
         'vigilo',
     ],
     packages=find_packages("src"),
+    package_data={
+        'vigilo.models.migration': [
+            '039_HLS_refactoring-export_hls.sh',
+            '039_HLS_refactoring-export_hosts_hosttemplates.sh',
+        ],
+    },
     entry_points={
         'console_scripts': [
             'vigilo-updatedb = vigilo.models.websetup:init_db',

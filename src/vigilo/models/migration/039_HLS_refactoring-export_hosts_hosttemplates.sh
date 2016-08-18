@@ -14,7 +14,7 @@ LISTE_FICHIER_HOSTTEMPLATES=`find /etc/vigilo/vigiconf/conf.d/hosttemplates/ -ty
 for file in $LISTE_FICHIER_HOSTS $LISTE_FICHIER_HOSTTEMPLATES; do
     dir=`dirname $file`
     # nouveau répertoire (pas d'écrasement de l'ancienne configuration) pour placer les fichiers corrigés
-    dir_post=`echo $dir | sed -e "s#/etc/vigilo/vigiconf/conf.d#/etc/vigilo/vigiconf/conf.d.post.038_HLS_refactoring#g"`
+    dir_post=`printf "%s" "$dir" | sed -e "s#/etc/vigilo/vigiconf/conf.d#/etc/vigilo/vigiconf/conf.d.post.039_HLS_refactoring#g"`
 
     if [ "$dir" == "$dir_post" ] ; then
         echo "Problème avec le répertoire destination $dir_post" >&2

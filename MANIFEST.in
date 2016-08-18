@@ -11,5 +11,6 @@ recursive-include i18n *.pot *.po
 
 include settings_tests.ini
 
+include src/vigilo/models/migration/*.sh
 include deployment/settings.ini
 include *.py
