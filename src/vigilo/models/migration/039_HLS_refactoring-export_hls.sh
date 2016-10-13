@@ -112,7 +112,7 @@ while read line; do
 
         if [ -n "$dhweight" ] ; then
             if [ $dhweight == "1" ] ; then
-                dhsweight=""
+                dhweight=""
             else
                 dhweight=" weight=\"$dhweight\""
             fi
