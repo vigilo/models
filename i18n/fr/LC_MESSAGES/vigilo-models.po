@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version:  vigilo.models\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
 "POT-Creation-Date: 2010-02-16 09:45+0100\n"
-"PO-Revision-Date: 2013-09-10 19:52+0200\n"
+"PO-Revision-Date: 2016-12-06 14:29+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -64,7 +64,7 @@ msgstr "Trop d'arguments"
 #: src/vigilo/models/scripts/close_vigiboard.py:125
 #: src/vigilo/models/scripts/passwd.py:61
 #: src/vigilo/models/scripts/purge_vigiboard.py:245
-#: src/vigilo/models/scripts/permissions/main.py:219
+#: src/vigilo/models/scripts/permissions/main.py:240
 msgid "No database configuration found"
 msgstr "Configuration de la base de données non trouvée"
 
@@ -246,6 +246,7 @@ msgstr "toutes"
 #: src/vigilo/models/scripts/permissions/commands.py:193
 #: src/vigilo/models/scripts/permissions/commands.py:341
 #: src/vigilo/models/scripts/permissions/commands.py:389
+#: src/vigilo/models/scripts/permissions/commands.py:446
 #, python-format
 msgid "No such usergroup '%s'"
 msgstr "Groupe d'utilisateurs inconnu '%s'"
@@ -326,8 +327,8 @@ msgid ""
 "No match found for group '%(group)s' with type '%(type)s' and permission "
 "'%(perm)s'."
 msgstr ""
-"Aucune correspondance trouvée pour le groupe '%(group)s' et la permission "
-"'%(perm)s'."
+"Aucune correspondance trouvée pour le groupe '%(group)s' et la permission"
+" '%(perm)s'."
 
 #: src/vigilo/models/scripts/permissions/commands.py:270
 #, python-format
@@ -377,6 +378,38 @@ msgstr "Ajout des permissions pour le groupe d'utilisateurs '%s'."
 #, python-format
 msgid "Removing permissions for usergroup '%s'."
 msgstr "Suppression des permissions pour le groupe d'utilisateur '%s'."
+
+#: src/vigilo/models/scripts/permissions/commands.py:440
+msgid "Usergroup must be different"
+msgstr "Les groupes d'utilisateurs doivent être différents"
+
+#: src/vigilo/models/scripts/permissions/commands.py:450
+msgid "Error on selected usergroups"
+msgstr "Groupe d'utilisateurs inconnu '%s'"
+
+#: src/vigilo/models/scripts/permissions/commands.py:459
+#, python-format
+msgid "Adding %s's datapermissions to usergroup '%s'."
+msgstr "Ajout des permissions sur données de '%s' au groupe d'utilisateurs '%s'."
+
+#: src/vigilo/models/scripts/permissions/commands.py:482
+#, python-format
+msgid "Successfully set %(dataperm)s permissions for usergroup '%(usergroup)s'."
+msgstr ""
+"Les permissions en %(dataperm)s ont correctement été positionnées pour le"
+" groupe d'utilisateurs '%(usergroup)s'."
+
+#: src/vigilo/models/scripts/permissions/commands.py:487
+msgid "Datapermissions duplication completed."
+msgstr "Duplication des permissions sur données effectuée."
+
+#: src/vigilo/models/scripts/permissions/commands.py:491
+msgid "Adding %s's permissions to usergroup '%s'."
+msgstr "Ajout des permissions de '%s' au groupe d'utilisateurs '%s'."
+
+#: src/vigilo/models/scripts/permissions/commands.py:494
+msgid "Permissions duplication completed."
+msgstr "Duplication des permissions effectuée."
 
 #: src/vigilo/models/scripts/permissions/main.py:56
 msgid "Commands"
@@ -479,7 +512,9 @@ msgstr "Alias pour '%(prog)s remove'."
 
 #: src/vigilo/models/scripts/permissions/main.py:173
 msgid "Give permissions on Vigilo applications to some users."
-msgstr "Donne des permissions à certains utilisateurs sur les applications de Vigilo."
+msgstr ""
+"Donne des permissions à certains utilisateurs sur les applications de "
+"Vigilo."
 
 #: src/vigilo/models/scripts/permissions/main.py:177
 #: src/vigilo/models/scripts/permissions/main.py:191
@@ -488,9 +523,33 @@ msgstr "Liste de permissions, séparées par des virgules."
 
 #: src/vigilo/models/scripts/permissions/main.py:186
 msgid "Take away permissions on Vigilo applications from some users."
-msgstr "Retire les permissions de certains utilisateurs sur les applications de Vigilo."
+msgstr ""
+"Retire les permissions de certains utilisateurs sur les applications de "
+"Vigilo."
 
-#: src/vigilo/models/scripts/permissions/main.py:243
+#: src/vigilo/models/scripts/permissions/main.py:200
+msgid ""
+"Duplicate permissions on Vigilo applications and/or data from one "
+"usergroup to another."
+msgstr ""
+"Duplique les permissions sur les applications et/ou les données d'un "
+"groupe d'utilisateurs à un autre."
+
+#: src/vigilo/models/scripts/permissions/main.py:207
+msgid ""
+"Type of permissions to duplicate: 'data' to duplicate permissions on "
+"data, 'apps' to duplicate permissions on Vigilo apps, or 'all' to "
+"duplicate both types of permissions"
+msgstr ""
+"Type de permissions à dupliquer: 'data' pour dupliquer les permissions "
+"sur les données, 'apps' pour dupliquer les permissions sur les "
+"applications, 'all' pour dupliquer tout type de permissions"
+
+#: src/vigilo/models/scripts/permissions/main.py:212
+msgid "Usergroup to act upon: <src_group> <dest_group>"
+msgstr "Sélection des groupes d'utilisateurs : <src_group> <dest_group>"
+
+#: src/vigilo/models/scripts/permissions/main.py:264
 msgid "You must be root to use this script."
 msgstr "Seul le super-utilisateur (root) peut utiliser ce script."
 

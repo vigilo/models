@@ -1,14 +1,14 @@
 # Translations template for vigilo-models.
-# Copyright (C) 2013 ORGANIZATION
+# Copyright (C) 2016 ORGANIZATION
 # This file is distributed under the same license as the vigilo-models project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: vigilo-models 3.3\n"
+"Project-Id-Version: vigilo-models 3.6.0\n"
 "Report-Msgid-Bugs-To: contact@projet-vigilo.org\n"
-"POT-Creation-Date: 2013-09-10 19:52+0200\n"
+"POT-Creation-Date: 2016-12-06 14:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 #: src/vigilo/models/scripts/close_vigiboard.py:125
 #: src/vigilo/models/scripts/passwd.py:61
 #: src/vigilo/models/scripts/purge_vigiboard.py:245
-#: src/vigilo/models/scripts/permissions/main.py:219
+#: src/vigilo/models/scripts/permissions/main.py:240
 msgid "No database configuration found"
 msgstr ""
 
@@ -217,6 +217,7 @@ msgstr ""
 #: src/vigilo/models/scripts/permissions/commands.py:193
 #: src/vigilo/models/scripts/permissions/commands.py:341
 #: src/vigilo/models/scripts/permissions/commands.py:389
+#: src/vigilo/models/scripts/permissions/commands.py:446
 #, python-format
 msgid "No such usergroup '%s'"
 msgstr ""
@@ -328,6 +329,37 @@ msgstr ""
 msgid "Removing permissions for usergroup '%s'."
 msgstr ""
 
+#: src/vigilo/models/scripts/permissions/commands.py:440
+msgid "Usergroup must be different"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:450
+msgid "Error on selected usergroups"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:459
+#, python-format
+msgid "Adding %s's datapermissions to usergroup '%s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:482
+#, python-format
+msgid "Successfully set %(dataperm)s permissions for usergroup '%(usergroup)s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:487
+msgid "Datapermissions duplication completed."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:491
+#, python-format
+msgid "Adding %s's permissions to usergroup '%s'."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/commands.py:494
+msgid "Permissions duplication completed."
+msgstr ""
+
 #: src/vigilo/models/scripts/permissions/main.py:56
 msgid "Commands"
 msgstr ""
@@ -421,7 +453,24 @@ msgstr ""
 msgid "Take away permissions on Vigilo applications from some users."
 msgstr ""
 
-#: src/vigilo/models/scripts/permissions/main.py:243
+#: src/vigilo/models/scripts/permissions/main.py:200
+msgid ""
+"Duplicate permissions on Vigilo applications and/or data from one usergroup "
+"to another."
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:207
+msgid ""
+"Type of permissions to duplicate: 'data' to duplicate permissions on data, "
+"'apps' to duplicate permissions on Vigilo apps, or 'all' to duplicate both "
+"types of permissions"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:212
+msgid "Usergroup to act upon: <src_group> <dest_group>"
+msgstr ""
+
+#: src/vigilo/models/scripts/permissions/main.py:264
 msgid "You must be root to use this script."
 msgstr ""
 

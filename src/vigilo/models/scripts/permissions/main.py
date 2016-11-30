@@ -192,6 +192,27 @@ def _parse_args(args):
     parser_deny.add_argument("usergroup", nargs='+',
         help=N_("Usergroup to act upon."))
 
+    # Commande de duplication des permissions sur les applications et/ou les données.
+    parser_duplicate = subparsers.add_parser(
+        "duplicate",
+        add_help=False,
+        parents=[common_options],
+        help=N_("Duplicate permissions on Vigilo applications and/or data "
+                "from one usergroup to another."),
+    )
+    parser_duplicate.set_defaults(commit=True) # appeler transaction.commit().
+    parser_duplicate.add_argument(
+        "permission_type",
+        choices=["apps", "data", "all"],
+        help=N_("Type of permissions to duplicate: "
+                "'data' to duplicate permissions on data, "
+                "'apps' to duplicate permissions on Vigilo apps, "
+                "or 'all' to duplicate both types of permissions"))
+    parser_duplicate.add_argument("usergroup", nargs=2,
+        help=N_("Usergroup to act upon: "
+                "<src_group> <dest_group>"))
+
+
     return parser.parse_args(args)
 
 

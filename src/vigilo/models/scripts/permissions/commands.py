@@ -421,3 +421,79 @@ def cmd_deny(options):
     if options.commit:
         transaction.commit()
     return 0
+
+
+def cmd_duplicate(options):
+    """
+    Duplique les permissions sur les applications et/ou les données
+    d'un groupe d'utilisateurs à un autre.
+
+    @param options: Options et arguments passés au script.
+    @type options: C{argparse.Namespace}
+    @return: Code de sortie (0 = pas d'erreur, autre = erreur).
+    @rtype: C{int}
+    """
+
+    # Vérifications sur les groupes d'utilisateurs.
+    usergroups = []
+    if options.usergroup[0] == options.usergroup[1]:
+        print _('Usergroup must be different')
+        return 2
+    for usergroup_name in options.usergroup:
+        usergroup_name = usergroup_name.decode('utf-8')
+        usergroup = tables.UserGroup.by_group_name(usergroup_name)
+        if usergroup is None:
+            print _("No such usergroup '%s'") % usergroup_name
+        else:
+            usergroups.append(usergroup)
+    if len(usergroups) != 2:
+        print _('Error on selected usergroups')
+        return 2
+
+    # Sélection des groupes d'utilisateurs.
+    usergroup_src = usergroups[0]
+    usergroup_dst = usergroups[1]
+
+    # Duplication des permissions sur les données.
+    if options.permission_type == "all" or options.permission_type == "data":
+        print _("Adding %s's datapermissions to usergroup '%s'.") % \
+            (usergroup_src.group_name, usergroup_dst.group_name)
+
+        datapermissions = {}
+
+        # Récupération des permissions sur données du groupe d'utilisateurs destinataire
+        for dataperm_dst in usergroup_dst.datapermissions:
+            datapermissions[dataperm_dst.idgroup] = dataperm_dst
+
+        # Duplication des permissions du groupe d'utilisateurs source vers
+        # le groupe de destination
+        for dataperm_src in usergroup_src.datapermissions:
+            if dataperm_src.idgroup in datapermissions and \
+                dataperm_src.access != datapermissions[dataperm_src.idgroup].access:
+                datapermissions[dataperm_src.idgroup].access = dataperm_src.access
+            elif dataperm_src.idgroup not in datapermissions:
+                datapermissions[dataperm_src.idgroup] = tables.DataPermission(
+                    idusergroup=usergroup_dst.idgroup,
+                    idgroup=dataperm_src.idgroup,
+                    access=dataperm_src.access,
+                )
+            # Ajout de la nouvelle permission sur donnée
+            DBSession.add(datapermissions[dataperm_src.idgroup])
+            LOGGER.info(_("Successfully set %(dataperm)s permissions "
+                          "for usergroup '%(usergroup)s'.") % {
+                            'usergroup': usergroup_dst.group_name,
+                            'dataperm': _reverse_permissions[dataperm_src.access],
+                          })
+        print _("Datapermissions duplication completed.")
+
+    # Duplication des permissions sur les applications.
+    if options.permission_type == "all" or options.permission_type == "apps":
+        print _("Adding %s's permissions to usergroup '%s'.") % \
+            (usergroup_src.group_name, usergroup_dst.group_name)
+        usergroup_dst.permissions.extend(usergroup_src.permissions)
+        print _("Permissions duplication completed.")
+
+    DBSession.flush()
+    if options.commit:
+        transaction.commit()
+    return 0
