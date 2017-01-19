@@ -20,11 +20,15 @@ Requires:   python-psycopg2
 Requires:   python-sqlalchemy >= 0.7.8
 Requires:   python-sqlalchemy < 0.8
 Requires:   python-zope-sqlalchemy >= 0.4
+# On contraint la version à cause d'incompatibilités
+# constatées avec la version 0.7.6 apportée par RHEL 7.
+Requires:   python-zope-sqlalchemy < 0.5
 Requires:   python-paste-deploy
 Requires:   vigilo-common
 Requires:   python-transaction
-Requires:   python-networkx
-Requires:   python-argparse
+# On contraint la version à cause d'incompatibilités
+# constatées avec la version 1.8.1 apportée par RHEL 7.
+Requires:   python-networkx < 1.4
 Requires:   python-passlib
 
 
