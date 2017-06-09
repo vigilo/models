@@ -18,7 +18,8 @@ class TestMapNodeHost(ModelTest):
         'x_pos': 220,
         'y_pos': 350,
         'icon': u'server',
-        'minimize': True,
+        'hide_label': True,
+        'hide_tags': True,
         }
 
     def do_get_dependencies(self):
@@ -43,7 +44,8 @@ class TestMapNodeLls(ModelTest):
         'x_pos': 220,
         'y_pos': 350,
         'icon': u'server',
-        'minimize': True,
+        'hide_label': True,
+        'hide_tags': True,
         }
 
     def do_get_dependencies(self):
@@ -69,7 +71,8 @@ class TestMapNodeHls(ModelTest):
         'x_pos': 220,
         'y_pos': 350,
         'icon': u'server',
-        'minimize': True,
+        'hide_label': True,
+        'hide_tags': True,
         }
 
     def do_get_dependencies(self):

@@ -31,7 +31,10 @@ class MapNode(DeclarativeBase, object):
     @ivar label: Label du nœud.
     @ivar x_pos: Abscisse du nœud.
     @ivar y_pos: Ordonnée du nœud.
-    @ivar minimize: Booléen indiquant l'action à effectuer.
+    @ivar hide_label: Booléen indiquant si le libellé de l'objet doit être
+        affiché ou non.
+    @ivar hide_tags: Booléen indiquant si les étiquettes associées à l'objet
+        doivent être affichées ou non.
     @ivar type_node: Le type de nœud, peut etre
         'host', 'service',  ou 'performance'.
     @ivar idmap: Référence vers un identifiant de carte.
@@ -64,7 +67,12 @@ class MapNode(DeclarativeBase, object):
 
     y_pos = Column(Integer, nullable=True)
 
-    minimize = Column(
+    hide_label = Column(
+        Boolean,
+        default = False,
+        nullable = False)
+
+    hide_tags = Column(
         Boolean,
         default = False,
         nullable = False)
