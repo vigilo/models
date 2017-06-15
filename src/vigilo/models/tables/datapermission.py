@@ -4,12 +4,12 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table Permissions"""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.usergroup import UserGroup
 from vigilo.models.tables.group import Group
 
@@ -20,7 +20,7 @@ class DataPermission(DeclarativeBase, object):
     Cette classe définit une permission sur des données.
     """
 
-    __tablename__ = 'datapermission'
+    __tablename__ = 'vigilo_datapermission'
     __table_args__ = (
         UniqueConstraint('idusergroup', 'idgroup'),
         {}

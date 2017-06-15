@@ -16,9 +16,6 @@ même si ces composants n'ont pas besoin des fonctionnalités apportées
 par ZopeTransactionExtension.
 """
 
-from sqlalchemy import ForeignKey as SaForeignKey, \
-                        ForeignKeyConstraint as SaForeignKeyConstraint
-from sqlalchemy import Table as SaTable
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 from sqlalchemy.orm import scoped_session, sessionmaker, query
 try:
@@ -41,88 +38,7 @@ __all__ = (
     'DBSession',
     'metadata',
     'DeclarativeBase',
-    'Table',
-    'ForeignKey',
 )
-
-class ForeignKey(SaForeignKey):
-    """
-    Une redéfinition des clés étrangères de SQLAlchemy
-    qui ajoute automatiquement le préfixe des tables de
-    Vigilo lorsque cela est nécessaire.
-    """
-
-    def __init__(self, name, *args, **kwargs):
-        """
-        Instancie la ForeignKey en ajoutant le préfixe
-        des tables de Vigilo.
-        """
-        if isinstance(name, basestring):
-            name = configure.DB_BASENAME + name
-        super(ForeignKey, self).__init__(name, *args, **kwargs)
-
-class ForeignKeyConstraint(SaForeignKeyConstraint):
-    """
-    Une redéfinition des clés étrangères de SQLAlchemy
-    qui ajoute automatiquement le préfixe des tables de
-    Vigilo lorsque cela est nécessaire.
-    """
-
-    def __init__(self, columns, refcolumns, name=None, *args, **kwargs):
-        """
-        Instancie la ForeignKey en ajoutant le préfixe
-        des tables de Vigilo.
-        """
-        if isinstance(name, basestring):
-            name = configure.DB_BASENAME + name
-        super(ForeignKeyConstraint, self).__init__(
-            columns, refcolumns, name, *args, **kwargs)
-
-class Table(SaTable):
-    """
-    Une redéfinition de l'objet Table de SQLAlchemy
-    qui ajoute automatiquement le préfixe des tables de
-    Vigilo.
-    """
-    # pylint: disable-msg=W0223
-    # W0223: Method '_export_columns' is abstract but is not overridden
-
-    def __init__(self, name, *args, **kwargs):
-        """
-        Instancie la Table en ajoutant le préfixe
-        des tables de Vigilo (pour SQLAlchemy < 0.6.0).
-        """
-        if isinstance(name, basestring):
-            name = configure.DB_BASENAME + name
-        super(Table, self).__init__(name, *args, **kwargs)
-
-    def _init(self, name, *args, **kwargs):
-        """
-        Instancie la table en ajoutant le préfixe
-        des tables de Vigilo (pour SQLAlchemy >= 0.6.0).
-        """
-        if isinstance(name, basestring):
-            name = configure.DB_BASENAME + name
-        super(Table, self)._init(name, *args, **kwargs)
-
-class PrefixedTables(DeclarativeMeta):
-    """
-    Une méta-classe qui permet de préfixer automatiquement
-    le nom de toutes les tables de la base de données avec
-    le préfixe configuré dans la configuration sous la clé
-    C{db_basename}.
-    """
-
-    def __init__(mcs, classname, bases, dict_):
-        """
-        Permet l'ajout automatique du préfixe aux tables
-        du modèle, lorsque celles-ci sont définies
-        en utilisant le mode "Declarative" de SQLAlchemy.
-        """
-        if '__tablename__' in dict_:
-            mcs.__tablename__ = dict_['__tablename__'] = \
-                configure.DB_BASENAME + dict_['__tablename__']
-        DeclarativeMeta.__init__(mcs, classname, bases, dict_)
 
 class MigrationDDL(SaDDL):
     """
@@ -322,8 +238,9 @@ class Query(query.Query):
             else:
                 self._distinct = criterion
 
-DeclarativeBase = declarative_base(metaclass=PrefixedTables)
+DeclarativeBase = declarative_base()
 metadata = DeclarativeBase.metadata
-DBSession = scoped_session(sessionmaker(autoflush=True, autocommit=False,
-		           extension=ZopeTransactionExtension(), query_cls=Query,
-))
+DBSession = scoped_session(sessionmaker(autoflush=True,
+                                        autocommit=False,
+                                        extension=ZopeTransactionExtension(),
+                                        query_cls=Query))

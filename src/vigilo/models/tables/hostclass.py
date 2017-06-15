@@ -27,7 +27,7 @@ class HostClass(DeclarativeBase, object):
     @ivar hosts: Liste des L{Host}s auxquels la classe d'hôte courante
         est attachée.
     """
-    __tablename__ = 'hostclass'
+    __tablename__ = 'vigilo_hostclass'
 
     idclass = Column(
         Integer,

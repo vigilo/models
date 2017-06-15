@@ -14,7 +14,6 @@ Ticket: #774
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -31,11 +30,7 @@ def upgrade(migrate_engine, actions):
 
     MigrationDDL(
         [
-            "CREATE INDEX ix_%(db_basename)scorrevent_timestamp_active "
-            "ON %(db_basename)scorrevent (timestamp_active)",
+            "CREATE INDEX ix_vigilo_correvent_timestamp_active "
+            "ON vigilo_correvent (timestamp_active)",
         ],
-        # Le nom de la contrainte dépend du préfixe utilisé.
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, tables.CorrEvent.__table__)

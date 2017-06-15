@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table ImpactedHLS."""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.impactedpath import ImpactedPath
 from vigilo.models.tables.service import HighLevelService
 
@@ -30,7 +30,7 @@ class ImpactedHLS(DeclarativeBase, object):
         distance est maximale sur le chemin).
     """
 
-    __tablename__ = 'impactedhls'
+    __tablename__ = 'vigilo_impactedhls'
 
 
     idpath = Column(

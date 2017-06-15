@@ -19,7 +19,6 @@ Voir ticket #800.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import secondary_tables
 
 def upgrade(migrate_engine, actions):
@@ -41,18 +40,18 @@ def upgrade(migrate_engine, actions):
             "ALTER TABLE %(fullname)s ADD COLUMN idhost INTEGER NULL",
             # Mise à jour avec les valeurs effectives.
             "UPDATE %(fullname)s SET idhost = ("
-                "SELECT %(db_basename)shost.idhost "
-                "FROM %(db_basename)shost "
-                "WHERE %(db_basename)shost.name = %(fullname)s.hostname "
+                "SELECT vigilo_host.idhost "
+                "FROM vigilo_host "
+                "WHERE vigilo_host.name = %(fullname)s.hostname "
                 "LIMIT 1"
             ")",
             # Ajout de la contrainte NOT NULL.
             "ALTER TABLE %(fullname)s ALTER COLUMN idhost SET NOT NULL",
             # Ajout de la contrainte référentielle.
             'ALTER TABLE %(fullname)s '
-                'ADD CONSTRAINT "%(db_basename)shost2hostclass_idhost_fkey" '
+                'ADD CONSTRAINT "vigilo_host2hostclass_idhost_fkey" '
                 'FOREIGN KEY (idhost) '
-                'REFERENCES %(db_basename)shost(idhost) '
+                'REFERENCES vigilo_host(idhost) '
                 'ON UPDATE CASCADE ON DELETE CASCADE '
                 'DEFERRABLE INITIALLY IMMEDIATE',
             # Suppression de la clé primaire actuelle
@@ -64,9 +63,6 @@ def upgrade(migrate_engine, actions):
             "ALTER TABLE %(fullname)s "
                 "ADD PRIMARY KEY(idclass, idhost)",
         ],
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, secondary_tables.HOST_HOSTCLASS_TABLE)
 
 
@@ -78,14 +74,13 @@ def upgrade(migrate_engine, actions):
             # table est automatiquement créée avec la bonne structure.
 
             # Recopie des données de l'ancienne table vers la nouvelle.
-            "INSERT INTO %(db_basename)ssubmaps(idmapnode, idmap) "
-            "SELECT mapnodeid, idmap FROM %(db_basename)ssubmapmapnodetable",
+            "INSERT INTO vigilo_submaps(idmapnode, idmap) "
+            "SELECT mapnodeid, idmap FROM vigilo_submapmapnodetable",
 
             # Destruction de l'ancienne table.
-            "DROP TABLE %(db_basename)ssubmapmapnodetable",
+            "DROP TABLE vigilo_submapmapnodetable",
         ],
         context={
-            'db_basename': DB_BASENAME,
             'old_table': 'submapmapnodetable',
             'new_table': 'submaps',
             'old_column': 'mapnodeid',

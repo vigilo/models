@@ -17,7 +17,6 @@ Les indexes ajoutés concernent :
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import Event
 
 def upgrade(migrate_engine, actions):
@@ -34,12 +33,9 @@ def upgrade(migrate_engine, actions):
 
     MigrationDDL(
         [
-            "CREATE INDEX ix_%(db_basename)sevent_idsupitem "
-                "ON %(db_basename)sevent (idsupitem)",
-            "CREATE INDEX ix_%(db_basename)sevent_current_state "
-                "ON %(db_basename)sevent (current_state)",
+            "CREATE INDEX ix_vigilo_event_idsupitem "
+                "ON vigilo_event (idsupitem)",
+            "CREATE INDEX ix_vigilo_event_current_state "
+                "ON vigilo_event (current_state)",
         ],
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, Event.__table__)

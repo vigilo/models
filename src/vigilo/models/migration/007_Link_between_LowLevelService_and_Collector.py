@@ -14,7 +14,6 @@ la collecte du service courant.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -35,13 +34,9 @@ def upgrade(migrate_engine, actions):
             "ALTER TABLE %(fullname)s "
                 "ADD CONSTRAINT %(fullname)s_idcollector_fkey "
                 "FOREIGN KEY(idcollector) "
-                "REFERENCES %(db_basename)ssupitem(idsupitem) "
+                "REFERENCES vigilo_supitem(idsupitem) "
                 "ON UPDATE CASCADE ON DELETE SET NULL",
         ],
-        # Le nom de la contrainte dépend du préfixe utilisé.
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, tables.LowLevelService.__table__)
 
     # Nécessite une mise à jour de VigiReport.

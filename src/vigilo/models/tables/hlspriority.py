@@ -4,40 +4,16 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table HLSPriority"""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import Index
+from sqlalchemy.ext.declarative import declared_attr
 
-from vigilo.models.session import DeclarativeBase, DBSession, \
-                                    ForeignKey, PrefixedTables
+from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.statename import StateName
 
-class HLSPriorityIndexMeta(PrefixedTables):
-    """
-    Cette méta-classe ajoute un index sur les colonnes "name"
-    et "idsupitem", utilisée par VigiConf lors de la mise à jour
-    des entrées de la table L{ConfItem}.
-    """
-    def __init__(mcs, *args, **kw):
-        if getattr(mcs, '_decl_class_registry', None) is None:
-            return
-
-        super(HLSPriorityIndexMeta, mcs).__init__(*args, **kw)
-        Index(
-            'ix_%s_key' % mcs.__tablename__,
-            mcs.idhls, mcs.idstatename,
-            unique=True
-        )
-
-class HLSPriorityMixin(object):
-    """
-    Ce mixin permet simplement d'intégrer la méta-classe,
-    afin d'éviter un conflit entre méta-classes dans ConfItem.
-    """
-    __metaclass__ = HLSPriorityIndexMeta
-
-class HLSPriority(DeclarativeBase, HLSPriorityMixin):
+class HLSPriority(DeclarativeBase):
     """
     Un tag associé soit à un élément supervisé.
 
@@ -47,12 +23,12 @@ class HLSPriority(DeclarativeBase, HLSPriorityMixin):
         le tag est rattaché.
     """
 
-    __tablename__ = 'hlspriority'
+    __tablename__ = 'vigilo_hlspriority'
 
     idhls = Column(
         Integer,
         ForeignKey(
-            'highlevelservice.idservice',
+            'vigilo_highlevelservice.idservice',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -67,7 +43,7 @@ class HLSPriority(DeclarativeBase, HLSPriorityMixin):
     idstatename = Column(
         Integer,
         ForeignKey(
-            'statename.idstatename',
+            StateName.idstatename,
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -86,6 +62,15 @@ class HLSPriority(DeclarativeBase, HLSPriorityMixin):
     )
 
     hls = relation('HighLevelService', lazy=True)
+
+    __table_args__ = (
+        Index(
+            'ix_%s_key' % __tablename__,
+            idhls,
+            idstatename,
+            unique=True
+        ),
+    )
 
     def __init__(self, statename, priority):
         """

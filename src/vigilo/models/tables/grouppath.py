@@ -7,13 +7,12 @@ Chemins des groupes d'objets manipulés par Vigilo
 (éléments supervisés, cartes, graphes).
 """
 
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode
 
-from vigilo.models.session import DeclarativeBase, ForeignKey, DDL
+from vigilo.models.session import DeclarativeBase, DDL
 from vigilo.models.tables.group import Group
 from vigilo.models.tables.grouphierarchy import GroupHierarchy
-from vigilo.models.configure import DB_BASENAME
 
 class GroupPath(DeclarativeBase, object):
     """
@@ -24,7 +23,7 @@ class GroupPath(DeclarativeBase, object):
 
     # Doit être synchronisé avec le nom de la vue
     # (cf. DDL en fin de fichier).
-    __tablename__ = 'group_paths'
+    __tablename__ = 'vigilo_group_paths'
 
     idgroup = Column(
         'idgroup',
@@ -72,7 +71,6 @@ DDL(
     GroupPath.__table__,
     dialect=('postgres', 'postgresql'),
     context={
-        'db_basename': DB_BASENAME,
         'group_tbl': Group.__tablename__,
         'grouphierarchy_tbl': GroupHierarchy.__tablename__,
     },
@@ -106,7 +104,6 @@ DDL(
     GroupPath.__table__,
     dialect='sqlite',
     context={
-        'db_basename': DB_BASENAME,
         'group_tbl': Group.__tablename__,
         'grouphierarchy_tbl': GroupHierarchy.__tablename__,
     },
@@ -125,16 +122,10 @@ DDL(
     "DROP VIEW IF EXISTS %(fullname)s",
     "before-drop",
     GroupPath.__table__,
-    context={
-        'db_basename': DB_BASENAME,
-    },
 )
 
 DDL(
     "CREATE TABLE %(fullname)s (foo INTEGER)",
     'before-drop',
     GroupPath.__table__,
-    context={
-        'db_basename': DB_BASENAME,
-    },
 )

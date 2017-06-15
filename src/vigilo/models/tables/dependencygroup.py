@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table dependency."""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, Unicode
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.supitem import SupItem
 
 __all__ = ('DependencyGroup', )
@@ -33,7 +33,7 @@ class DependencyGroup(DeclarativeBase, object):
         - ou "topology" pour des dépendances topologiques.
     """
 
-    __tablename__ = 'dependencygroup'
+    __tablename__ = 'vigilo_dependencygroup'
 
     idgroup = Column(
         Integer,

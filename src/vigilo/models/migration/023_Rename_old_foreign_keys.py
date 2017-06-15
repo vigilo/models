@@ -24,7 +24,6 @@ est obtenue pour les différentes installations.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -44,7 +43,7 @@ def upgrade(migrate_engine, actions):
         "FROM pg_catalog.pg_constraint "
         "WHERE conname = :constraint",
         params={
-            'constraint': '%smapservicelink_idds_in_fkey' % DB_BASENAME,
+            'constraint': 'vigilo_mapservicelink_idds_in_fkey',
         }).fetchone().found
 
     # Si le modèle a été installé après la migration 011,
@@ -57,30 +56,29 @@ def upgrade(migrate_engine, actions):
         [
             # Suppression des anciennes clés étrangères.
             # 1. idds_from_to_to
-            "ALTER TABLE %(db_basename)s%(table)s "
-            "DROP CONSTRAINT %(db_basename)s%(table)s_idds_from_to_to_fkey",
+            "ALTER TABLE %(table)s "
+            "DROP CONSTRAINT %(table)s_idds_from_to_to_fkey",
             # 2. idds_to_to_from
-            "ALTER TABLE %(db_basename)s%(table)s "
-            "DROP CONSTRAINT %(db_basename)s%(table)s_idds_to_to_from_fkey",
+            "ALTER TABLE %(table)s "
+            "DROP CONSTRAINT %(table)s_idds_to_to_from_fkey",
 
             # Création des nouvelles clés.
             # 1. idds_out
-            'ALTER TABLE %(db_basename)s%(table)s '
-            'ADD CONSTRAINT "%(db_basename)s%(table)s_idds_out_fkey" '
+            'ALTER TABLE %(table)s '
+            'ADD CONSTRAINT "%(table)s_idds_out_fkey" '
             'FOREIGN KEY (idds_out) '
-            'REFERENCES %(db_basename)s%(remote_table)s(%(remote_column)s) '
+            'REFERENCES %(remote_table)s(%(remote_column)s) '
             'ON UPDATE CASCADE ON DELETE CASCADE',
             # 2. idds_in
-            'ALTER TABLE %(db_basename)s%(table)s '
-            'ADD CONSTRAINT "%(db_basename)s%(table)s_idds_in_fkey" '
+            'ALTER TABLE %(table)s '
+            'ADD CONSTRAINT "%(table)s_idds_in_fkey" '
             'FOREIGN KEY (idds_in) '
-            'REFERENCES %(db_basename)s%(remote_table)s(%(remote_column)s) '
+            'REFERENCES %(remote_table)s(%(remote_column)s) '
             'ON UPDATE CASCADE ON DELETE CASCADE',
         ],
         context={
-            'db_basename': DB_BASENAME,
-            'table': 'mapservicelink',
-            'remote_table': 'perfdatasource',
+            'table': 'vigilo_mapservicelink',
+            'remote_table': 'vigilo_perfdatasource',
             'remote_column': 'idperfdatasource',
         }
     ).execute(DBSession, tables.HighLevelService.__table__)

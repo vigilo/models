@@ -60,7 +60,7 @@ class SupItem(DeclarativeBase, object):
         highlevelservice).
     @ivar tags: Libellés attachés à cet objet.
     """
-    __tablename__ = 'supitem'
+    __tablename__ = 'vigilo_supitem'
     __mapper_args__ = {'extension': SupItemMapperExt()}
 
     idsupitem = Column(

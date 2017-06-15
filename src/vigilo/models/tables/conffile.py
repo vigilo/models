@@ -21,7 +21,7 @@ class ConfFile(DeclarativeBase, object):
         relatif au répertoire de base de la configuration de VigiConf.
     """
 
-    __tablename__ = 'conffile'
+    __tablename__ = 'vigilo_conffile'
 
     idconffile = Column(
         Integer,

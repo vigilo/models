@@ -24,7 +24,7 @@ class Change(DeclarativeBase, object):
     @ivar element: Nom de la table.
     @ivar last_modified: Date de dernière modification.
     """
-    __tablename__ = 'change'
+    __tablename__ = 'vigilo_change'
 
     element = Column(
         Unicode(255),

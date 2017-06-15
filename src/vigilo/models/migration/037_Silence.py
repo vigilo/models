@@ -13,7 +13,6 @@ Ceci fait suite à la reprise des travaux sur la mise en silence (voir le ticket
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 
 def upgrade(migrate_engine, actions):
     """
@@ -30,22 +29,20 @@ def upgrade(migrate_engine, actions):
     MigrationDDL(
         [
             # Suppression de la table Downtime
-            "DROP TABLE %(db_basename)s%(table)s",
+            "DROP TABLE %(table)s",
         ],
         context={
-            'db_basename': DB_BASENAME,
-            'table': 'downtime',
+            'table': 'vigilo_downtime',
         },
     ).execute(DBSession)
 
     MigrationDDL(
         [
             # Suppression de la table DowntimeStatus
-            "DROP TABLE %(db_basename)s%(table)s",
+            "DROP TABLE %(table)s",
         ],
         context={
-            'db_basename': DB_BASENAME,
-            'table': 'downtime_status',
+            'table': 'vigilo_downtime_status',
         },
     ).execute(DBSession)
 

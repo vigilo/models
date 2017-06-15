@@ -3,11 +3,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table Ventilation."""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.host import Host
 from vigilo.models.tables.vigiloserver import VigiloServer
 from vigilo.models.tables.application import Application
@@ -30,7 +30,7 @@ class Ventilation(DeclarativeBase, object):
     @ivar application: Instance de l'L{Application} installée.
     """
 
-    __tablename__ = 'ventilation'
+    __tablename__ = 'vigilo_ventilation'
 
     idhost = Column(
         Integer,

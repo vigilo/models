@@ -6,12 +6,12 @@
 """Modèle pour la table Host"""
 from __future__ import absolute_import
 
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import EXT_CONTINUE
 
-from vigilo.models.session import DBSession, ForeignKey
+from vigilo.models.session import DBSession
 from vigilo.models.tables.secondary_tables import HOST_HOSTCLASS_TABLE
 from vigilo.models.tables.supitem import SupItem, SupItemMapperExt
 from vigilo.models.tables.conffile import ConfFile
@@ -64,7 +64,7 @@ class Host(SupItem):
     @ivar hostclasses: Classes d'hôtes attachées à l'hôte.
     @ivar services: Liste des services de bas niveau configurés sur cet hôte.
     """
-    __tablename__ = 'host'
+    __tablename__ = 'vigilo_host'
     __mapper_args__ = {
         'polymorphic_identity': 1,
         'extension': HostMapperExt(),

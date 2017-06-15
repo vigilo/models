@@ -33,7 +33,7 @@ class Permission(DeclarativeBase, object):
     @ivar maps: Liste des cartes accessibles grâce à cette permission.
     """
 
-    __tablename__ = 'permission'
+    __tablename__ = 'vigilo_permission'
 
     idpermission = Column(
         Integer,

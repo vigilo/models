@@ -12,17 +12,17 @@ table spécifique dans le reste du modèle (ie. : une classe qui hérite
 de DeclarativeBase).
 """
 
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey, Table
 from sqlalchemy.types import Unicode, Integer
-from vigilo.models.session import metadata, ForeignKey, Table
+from vigilo.models.session import metadata
 
 USERGROUP_PERMISSION_TABLE = Table(
-    'usergrouppermissions', metadata,
+    'vigilo_usergrouppermissions', metadata,
     Column(
         'idgroup',
         Integer,
         ForeignKey(
-            'usergroup.idgroup',
+            'vigilo_usergroup.idgroup',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -34,7 +34,7 @@ USERGROUP_PERMISSION_TABLE = Table(
         'idpermission',
         Integer,
         ForeignKey(
-            'permission.idpermission',
+            'vigilo_permission.idpermission',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -45,12 +45,12 @@ USERGROUP_PERMISSION_TABLE = Table(
 )
 
 EVENTSAGGREGATE_TABLE = Table(
-    'eventsaggregate', metadata,
+    'vigilo_eventsaggregate', metadata,
     Column(
         'idevent',
         Integer,
         ForeignKey(
-            'event.idevent',
+            'vigilo_event.idevent',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -63,7 +63,7 @@ EVENTSAGGREGATE_TABLE = Table(
         'idcorrevent',
         Integer,
         ForeignKey(
-            'correvent.idcorrevent',
+            'vigilo_correvent.idcorrevent',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -75,12 +75,12 @@ EVENTSAGGREGATE_TABLE = Table(
 )
 
 USER_GROUP_TABLE = Table(
-    'usertousergroups', metadata,
+    'vigilo_usertousergroups', metadata,
     Column(
         'username',
         Unicode(255),
         ForeignKey(
-            'user.user_name',
+            'vigilo_user.user_name',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -92,7 +92,7 @@ USER_GROUP_TABLE = Table(
         'idgroup',
         Integer,
         ForeignKey(
-            'usergroup.idgroup',
+            'vigilo_usergroup.idgroup',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -103,12 +103,12 @@ USER_GROUP_TABLE = Table(
 )
 
 MAP_GROUP_TABLE = Table(
-    'mapgroup', metadata,
+    'vigilo_mapgroup', metadata,
     Column(
         'idgroup',
         Integer,
         ForeignKey(
-            'group.idgroup',
+            'vigilo_group.idgroup',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -121,7 +121,7 @@ MAP_GROUP_TABLE = Table(
         'idmap',
         Integer,
         ForeignKey(
-            'map.idmap',
+            'vigilo_map.idmap',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -133,12 +133,12 @@ MAP_GROUP_TABLE = Table(
 )
 
 SUB_MAP_NODE_MAP_TABLE = Table(
-    'submaps', metadata,
+    'vigilo_submaps', metadata,
     Column(
         'idmapnode',
         Integer,
         ForeignKey(
-            'mapnode.idmapnode',
+            'vigilo_mapnode.idmapnode',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -150,7 +150,7 @@ SUB_MAP_NODE_MAP_TABLE = Table(
         'idmap',
         Integer,
         ForeignKey(
-            'map.idmap',
+            'vigilo_map.idmap',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -161,12 +161,12 @@ SUB_MAP_NODE_MAP_TABLE = Table(
 )
 
 HOST_HOSTCLASS_TABLE = Table(
-    'host2hostclass', metadata,
+    'vigilo_host2hostclass', metadata,
     Column(
         'idhost',
         Integer,
         ForeignKey(
-            'host.idhost',
+            'vigilo_host.idhost',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -179,7 +179,7 @@ HOST_HOSTCLASS_TABLE = Table(
         'idclass',
         Integer,
         ForeignKey(
-            'hostclass.idclass',
+            'vigilo_hostclass.idclass',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -191,12 +191,12 @@ HOST_HOSTCLASS_TABLE = Table(
 )
 
 SUPITEM_GROUP_TABLE = Table(
-    'supitemgroup', metadata,
+    'vigilo_supitemgroup', metadata,
     Column(
         'idsupitem',
         Integer,
         ForeignKey(
-            'supitem.idsupitem',
+            'vigilo_supitem.idsupitem',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -209,7 +209,7 @@ SUPITEM_GROUP_TABLE = Table(
         'idgroup',
         Integer,
         ForeignKey(
-            'group.idgroup',
+            'vigilo_group.idgroup',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -221,12 +221,12 @@ SUPITEM_GROUP_TABLE = Table(
 )
 
 GRAPH_GROUP_TABLE = Table(
-    'graphgroup', metadata,
+    'vigilo_graphgroup', metadata,
     Column(
         'idgraph',
         Integer,
         ForeignKey(
-            'graph.idgraph',
+            'vigilo_graph.idgraph',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -239,7 +239,7 @@ GRAPH_GROUP_TABLE = Table(
         'idgroup',
         Integer,
         ForeignKey(
-            'group.idgroup',
+            'vigilo_group.idgroup',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -251,12 +251,12 @@ GRAPH_GROUP_TABLE = Table(
 )
 
 GRAPH_PERFDATASOURCE_TABLE = Table(
-    'graphperfdatasource', metadata,
+    'vigilo_graphperfdatasource', metadata,
     Column(
         'idperfdatasource',
         Integer,
         ForeignKey(
-            'perfdatasource.idperfdatasource',
+            'vigilo_perfdatasource.idperfdatasource',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -269,7 +269,7 @@ GRAPH_PERFDATASOURCE_TABLE = Table(
         'idgraph',
         Integer,
         ForeignKey(
-            'graph.idgraph',
+            'vigilo_graph.idgraph',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -281,12 +281,12 @@ GRAPH_PERFDATASOURCE_TABLE = Table(
 )
 
 SILENCE_STATE_TABLE = Table(
-    'silencestate', metadata,
+    'vigilo_silencestate', metadata,
     Column(
         'idsilence',
         Integer,
         ForeignKey(
-            'silence.idsilence',
+            'vigilo_silence.idsilence',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
@@ -298,7 +298,7 @@ SILENCE_STATE_TABLE = Table(
         'idstate',
         Integer,
         ForeignKey(
-            'statename.idstatename',
+            'vigilo_statename.idstatename',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,

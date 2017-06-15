@@ -6,11 +6,11 @@
 """Modèle pour la table State"""
 import datetime
 
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, Text, DateTime
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.supitem import SupItem
 from vigilo.models.tables.statename import StateName
 
@@ -26,7 +26,7 @@ class State(DeclarativeBase, object):
     @ivar message: Message d'état transmis par Nagios.
     """
 
-    __tablename__ = 'state'
+    __tablename__ = 'vigilo_state'
 
     idsupitem = Column(
         Integer,

@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table HLSHistory."""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, DateTime
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables import HighLevelService, StateName
 
 __all__ = ('HLSHistory', )
@@ -21,7 +21,7 @@ class HLSHistory(DeclarativeBase, object):
     dépendances sur les événements (L{Event}) car ceux-ci ne concernent
     de toutes façons que les L{Host} et les L{LowLevelService}.
     """
-    __tablename__ = 'hlshistory'
+    __tablename__ = 'vigilo_hlshistory'
 
     idhistory = Column(
         Integer,

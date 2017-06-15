@@ -14,7 +14,6 @@ peut donc apparaître à plusieurs endroits dans cette arborescence.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -32,12 +31,8 @@ def upgrade(migrate_engine, actions):
     MigrationDDL(
         [
             "ALTER TABLE %(fullname)s DROP CONSTRAINT "
-                "%(db_basename)sgroup_grouptype_key",
+                "vigilo_group_grouptype_key",
         ],
-        # Le nom de la contrainte dépend du préfixe utilisé.
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, tables.Host.__table__)
 
     # Nécessite une mise à jour de VigiReport.

@@ -19,7 +19,7 @@ class Legend(DeclarativeBase, object):
     @ivar fillcolor: Couleur de remplissage.
     @ivar strokecolor: Couleur de bordure.
     """
-    __tablename__ = 'legend'
+    __tablename__ = 'vigilo_legend'
 
     minthreshold = Column(
         Integer,

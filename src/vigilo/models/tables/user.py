@@ -6,8 +6,8 @@
 """Modèle pour la table User"""
 import hashlib, random
 
-from sqlalchemy.orm import synonym, relation
 from sqlalchemy import Column
+from sqlalchemy.orm import synonym, relation
 from sqlalchemy.types import Unicode, DateTime, String
 from passlib.context import CryptContext
 
@@ -37,7 +37,7 @@ class User(DeclarativeBase, object):
         l'utilisateur courant appartient.
     """
 
-    __tablename__ = 'user'
+    __tablename__ = 'vigilo_user'
 
     user_name = Column(
         Unicode(255),

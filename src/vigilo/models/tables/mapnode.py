@@ -6,11 +6,11 @@
 """
 Modèle pour la table MapNode
 """
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode, Boolean, Enum
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
+from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import SUB_MAP_NODE_MAP_TABLE
 from vigilo.models.tables.map import Map
 from vigilo.models.tables.host import Host
@@ -42,7 +42,7 @@ class MapNode(DeclarativeBase, object):
     @ivar map: Relation vers la carte du nœud.
     @ivar submaps: Liste des sous-cartes associées au nœud.
     """
-    __tablename__ = 'mapnode'
+    __tablename__ = 'vigilo_mapnode'
 
     idmapnode = Column(
         Integer,
@@ -157,7 +157,7 @@ class MapNodeHost(MapNode):
     @ivar idhost: Identifiant de l'L{Host} représenté.
     @ivar host: Instance de l'L{Host} représenté.
     """
-    __tablename__ = 'mapnodehost'
+    __tablename__ = 'vigilo_mapnodehost'
     __mapper_args__ = {'polymorphic_identity': u'host'}
 
     idmapnode = Column(
@@ -214,7 +214,7 @@ class MapNodeService(MapNode):
     @ivar show_deps: Contrôle l'affichage des dépendances pour les services
         de haut niveau.
      """
-    __tablename__ = 'mapnodeservice'
+    __tablename__ = 'vigilo_mapnodeservice'
 
     show_deps_flags = {
         'never': 0,

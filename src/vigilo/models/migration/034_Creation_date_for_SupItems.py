@@ -18,7 +18,6 @@ Voir également le ticket #999.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import SupItem
 
 def upgrade(migrate_engine, actions):
@@ -47,15 +46,15 @@ def upgrade(migrate_engine, actions):
                             "SELECT "
                                 "e.idsupitem, "
                                 "MIN(eh.timestamp) AS timestamp "
-                            "FROM %(db_basename)seventhistory eh "
-                            "JOIN %(db_basename)sevent e "
+                            "FROM vigilo_eventhistory eh "
+                            "JOIN vigilo_event e "
                                 "ON eh.idevent = e.idevent "
                             "GROUP BY e.idsupitem "
                         "UNION "
                             "SELECT "
                                 "h.idhls AS idsupitem, "
                                 "MIN(h.timestamp) as timestamp "
-                            "FROM %(db_basename)shlshistory h "
+                            "FROM vigilo_hlshistory h "
                             "GROUP BY h.idhls"
                     ") first_events "
                         "ON %(fullname)s.idsupitem = "
@@ -64,7 +63,4 @@ def upgrade(migrate_engine, actions):
                 "WHERE sub.idsupitem = %(fullname)s.idsupitem",
             "ALTER TABLE %(fullname)s ALTER COLUMN creation_date SET NOT NULL",
         ],
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, SupItem.__table__)

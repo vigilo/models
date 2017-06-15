@@ -31,7 +31,7 @@ class Group(DeclarativeBase, object):
     @ivar grouptype: Discriminant pour savoir le type de groupe manipulé.
     @ivar name: Nom du groupe.
     """
-    __tablename__ = 'group'
+    __tablename__ = 'vigilo_group'
 
     idgroup = Column(
         Integer,

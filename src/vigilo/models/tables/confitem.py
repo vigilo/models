@@ -4,40 +4,15 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table confitem"""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import Index
 
-from vigilo.models.session import DeclarativeBase, DBSession, \
-                                    ForeignKey, PrefixedTables
+from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables import SupItem, Host, LowLevelService
 
-class ConfItemIndexMeta(PrefixedTables):
-    """
-    Cette méta-classe ajoute un index sur les colonnes "name"
-    et "idsupitem", utilisée par VigiConf lors de la mise à jour
-    des entrées de la table L{ConfItem}.
-    """
-    def __init__(mcs, *args, **kw):
-        if getattr(mcs, '_decl_class_registry', None) is None:
-            return
-
-        super(ConfItemIndexMeta, mcs).__init__(*args, **kw)
-        Index(
-            'ix_%s_key' % mcs.__tablename__,
-            mcs.name, mcs.idsupitem,
-            unique=True
-        )
-
-class ConfItemMixin(object):
-    """
-    Ce mixin permet simplement d'intégrer la méta-classe,
-    afin d'éviter un conflit entre méta-classes dans ConfItem.
-    """
-    __metaclass__ = ConfItemIndexMeta
-
-class ConfItem(DeclarativeBase, ConfItemMixin):
+class ConfItem(DeclarativeBase):
     """
     Un confitem (élément de configuration) est associé à un élément
     supervisé.
@@ -51,7 +26,7 @@ class ConfItem(DeclarativeBase, ConfItemMixin):
         le confitem est rattaché.
     """
 
-    __tablename__ = 'confitem'
+    __tablename__ = 'vigilo_confitem'
 
     idconfitem = Column(
         Integer,
@@ -76,6 +51,16 @@ class ConfItem(DeclarativeBase, ConfItemMixin):
     )
 
     supitem = relation('SupItem')
+
+    __table_args__ = (
+        Index(
+            'ix_%s_key' % __tablename__,
+            name,
+            idsupitem,
+            unique=True
+        ),
+    )
+
 
     def __init__(self, **kwargs):
         """Initialise un confitem."""

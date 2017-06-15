@@ -9,19 +9,17 @@ en vue de l'utilisation des tables du modèle de Vigilo.
 """
 
 __all__ = (
-    'DB_BASENAME',
     'DEFAULT_LANG',
     'SCHEMES',
     'DEPRECATED_SCHEMES',
     'configure_db',
 )
 
-DB_BASENAME = ''
 DEFAULT_LANG = None
 SCHEMES = None
 DEPRECATED_SCHEMES = None
 
-def configure_db(config_obj, prefix, db_basename=None):
+def configure_db(config_obj, prefix):
     """
     Permet de configurer la base de données.
 
@@ -30,19 +28,8 @@ def configure_db(config_obj, prefix, db_basename=None):
     @param prefix: Préfixe des paramètres de configuration
         liés à la base de données.
     @type prefix: C{basestring}
-    @param db_basename: Préfixe des noms de tables de Vigilo.
-    @type db_basename: C{basestring}
     @return: L'Engine configuré, utilisable par SQLAlchemy.
-    @note: Le paramètre L{db_basename} N'EST PLUS utilisé.
-        À la place, la valeur de la clé "db_basename" dans
-        config_obj est automatiquement utilisée.
     """
-    if db_basename is not None:
-        import warnings
-        warnings.warn(DeprecationWarning(
-            'Passing a third argument to configure_db() is now deprecated.'
-        ))
-
     # Permet de déterminer si l'objet config_obj est une configuration
     # de TurboGears (Pylons) ou bien un objet ConfigObj plus standard.
     using_tg = False
@@ -57,10 +44,7 @@ def configure_db(config_obj, prefix, db_basename=None):
     # vigilo.models.session dépend de cette initialisation.
     # pylint: disable-msg=W0603
     # W0603: Using the global statement
-    global DB_BASENAME, DEFAULT_LANG, SCHEMES, DEPRECATED_SCHEMES
-
-    # Préfixe des noms de tables.
-    DB_BASENAME = config_obj.get('db_basename', '')
+    global DEFAULT_LANG, SCHEMES, DEPRECATED_SCHEMES
 
     # Langue par défaut des utilisateurs.
     DEFAULT_LANG = config_obj.get('lang', None)

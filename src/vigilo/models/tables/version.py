@@ -20,7 +20,7 @@ class Version(DeclarativeBase, object):
     @ivar version: Numéro de version du composant (valeur numérique
         uniquement).
     """
-    __tablename__ = 'version'
+    __tablename__ = 'vigilo_version'
 
     name = Column(
         Unicode(64),

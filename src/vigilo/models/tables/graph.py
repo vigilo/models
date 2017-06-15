@@ -27,7 +27,7 @@ class Graph(DeclarativeBase, object):
     @ivar perfdatasources: Liste des sources de données de performances
         rattachées à ce graphe.
     """
-    __tablename__ = 'graph'
+    __tablename__ = 'vigilo_graph'
 
     idgraph = Column(
         Integer,

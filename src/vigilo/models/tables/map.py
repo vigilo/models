@@ -32,7 +32,7 @@ class Map(DeclarativeBase, object):
     @ivar nodes: Liste des nœuds (L{MapNode}) présents sur la carte.
     @ivar segments: Liste des segments (L{MapSegment}) présents sur la carte.
     """
-    __tablename__ = 'map'
+    __tablename__ = 'vigilo_map'
 
     idmap = Column(
         Integer,

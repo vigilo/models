@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table Silence"""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Text, DateTime, Integer, Unicode
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.supitem import SupItem
 from vigilo.models.tables.user import User
 from vigilo.models.tables.secondary_tables import SILENCE_STATE_TABLE
@@ -31,7 +31,7 @@ class Silence(DeclarativeBase, object):
     @ivar states: Liste des états (L{StateName}) concernés par la règle.
     """
 
-    __tablename__ = 'silence'
+    __tablename__ = 'vigilo_silence'
 
     idsilence = Column(
         Integer,

@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table PerfDataSource"""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer, Unicode, Float
 
-from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
+from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import GRAPH_PERFDATASOURCE_TABLE
 from vigilo.models.tables.host import Host
 
@@ -32,7 +32,7 @@ class PerfDataSource(DeclarativeBase, object):
         d'utilisation de la ressource.
     """
 
-    __tablename__ = 'perfdatasource'
+    __tablename__ = 'vigilo_perfdatasource'
 
     idperfdatasource = Column(
         Integer,

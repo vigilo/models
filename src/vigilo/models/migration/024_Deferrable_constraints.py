@@ -19,7 +19,6 @@ Voir ticket #791.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -117,9 +116,8 @@ def upgrade(migrate_engine, actions):
 
         table, column = fkey_name.split('.', 2)
         drop_stmt.append(
-            'ALTER TABLE %(db_basename)s%(table)s '
-            'DROP CONSTRAINT "%(db_basename)s%(fkey)s";' % {
-                'db_basename': DB_BASENAME,
+            'ALTER TABLE vigilo_%(table)s '
+            'DROP CONSTRAINT "vigilo_%(fkey)s";' % {
                 'table': table,
                 'fkey': fkey_name.replace('.', '_') + '_fkey',
             }
@@ -127,12 +125,11 @@ def upgrade(migrate_engine, actions):
 
         remote_table, remote_column = fkey_data['remote'].split('.', 2)
         add_stmt.append(
-            'ALTER TABLE %(db_basename)s%(table)s '
-            'ADD CONSTRAINT "%(db_basename)s%(fkey)s" '
+            'ALTER TABLE vigilo_%(table)s '
+            'ADD CONSTRAINT "vigilo_%(fkey)s" '
             'FOREIGN KEY (%(column)s) '
-            'REFERENCES %(db_basename)s%(remote_table)s(%(remote_column)s) '
+            'REFERENCES vigilo_%(remote_table)s(%(remote_column)s) '
             '%(on_update)s %(on_delete)s DEFERRABLE INITIALLY IMMEDIATE;' % {
-                'db_basename': DB_BASENAME,
                 'table': table,
                 'fkey': fkey_name.replace('.', '_') + '_fkey',
                 'column': column,

@@ -26,7 +26,6 @@ Voir également le ticket #467.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import CorrEvent, Dependency
 
 def upgrade(migrate_engine, actions):
@@ -52,13 +51,10 @@ def upgrade(migrate_engine, actions):
         [
             "ALTER TABLE %(fullname)s ADD COLUMN distance INTEGER",
             "UPDATE %(fullname)s SET distance = 1 WHERE idgroup IN ("
-                "SELECT idgroup FROM %(db_basename)sdependencygroup "
+                "SELECT idgroup FROM vigilo_dependencygroup "
                 "WHERE role = 'topology'"
             ")"
         ],
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, Dependency.__table__)
 
     # Invite l'utilisateur à resynchroniser sa configuration.

@@ -18,7 +18,6 @@ Voir également le ticket #918.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models.tables import LowLevelService, HighLevelService
 
 def upgrade(migrate_engine, actions):
@@ -42,9 +41,6 @@ def upgrade(migrate_engine, actions):
                 "UPDATE %(fullname)s SET warning_weight = weight",
                 "ALTER TABLE %(fullname)s ALTER COLUMN warning_weight SET NOT NULL",
             ],
-            context={
-                'db_basename': DB_BASENAME,
-            }
         ).execute(DBSession, table.__table__)
 
     # Pas besoin de forcer un vigiconf deploy.

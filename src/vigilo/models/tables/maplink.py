@@ -7,11 +7,11 @@
 Modèle pour la table maplink et ses tables dérivées par jointure
 mapservicelink et mapsegment.
 """
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer, Unicode
 from sqlalchemy.orm import relation
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.mapnode import MapNode
 from vigilo.models.tables.map import Map
 from vigilo.models.tables.graph import Graph
@@ -32,7 +32,7 @@ class MapLink(DeclarativeBase, object):
     @ivar from_node: Instance du nœud de départ de la liaison.
     @ivar to_node: Instance du nœud d'arrivée de la liaison.
     """
-    __tablename__ = 'maplink'
+    __tablename__ = 'vigilo_maplink'
 
     idmaplink = Column(
         Integer,
@@ -127,7 +127,7 @@ class MapServiceLink(MapLink):
     @ivar graph: Instance graphe associé à la liaison.
     @ivar map: Relation vers la carte.
     """
-    __tablename__ = 'mapservicelink'
+    __tablename__ = 'vigilo_mapservicelink'
 
     idmapservicelink = Column(
         Integer,
@@ -235,7 +235,7 @@ class MapSegment(MapLink):
     @ivar thickness: Épaisseur de trait du segment.
     @ivar map: Instance de la carte.
     """
-    __tablename__ = 'mapsegment'
+    __tablename__ = 'vigilo_mapsegment'
     __mapper_args__ = {'polymorphic_identity': u'mapsegment'}
 
     idmapsegment = Column(

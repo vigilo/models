@@ -4,12 +4,12 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table CorrEvent"""
-from sqlalchemy import Column, DefaultClause
+from sqlalchemy import Column, DefaultClause, ForeignKey
 from sqlalchemy.types import Integer, Unicode, DateTime
 from sqlalchemy.orm import relation
 
 from vigilo.models.utils import DateMixin
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.secondary_tables import EVENTSAGGREGATE_TABLE
 from vigilo.models.tables.event import Event
 
@@ -43,7 +43,7 @@ class CorrEvent(DeclarativeBase, DateMixin):
         VIGILO_EXIG_VIGILO_BAC_0010.
     """
 
-    __tablename__ = 'correvent'
+    __tablename__ = 'vigilo_correvent'
 
     # Constantes pour l'état d'acquittement:
     # - None : événement pas encore pris en compte.

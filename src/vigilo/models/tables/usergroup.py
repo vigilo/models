@@ -27,7 +27,7 @@ class UserGroup(DeclarativeBase, object):
     @ivar users: Liste des utilisateurs (L{User}) appartenant au groupe.
     """
 
-    __tablename__ = 'usergroup'
+    __tablename__ = 'vigilo_usergroup'
 
     idgroup = Column(
         Integer,

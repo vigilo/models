@@ -13,7 +13,6 @@ a été revue afin de permettre une plus grande souplesse.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -53,8 +52,8 @@ def upgrade(migrate_engine, actions):
     MigrationDDL(
         # Suppression des contraintes référentielles vers Service...
         [
-            "ALTER TABLE %%(db_basename)s%(table)s DROP CONSTRAINT "
-                "%%(db_basename)s%(table)s_%(field)s_fkey" % {
+            "ALTER TABLE vigilo_%(table)s DROP CONSTRAINT "
+                "vigilo_%(table)s_%(field)s_fkey" % {
                     'table': table,
                     'field': field,
                 } for (table, field) in (supitem_refs + hls_refs)
@@ -62,10 +61,10 @@ def upgrade(migrate_engine, actions):
 
         # ...et ajout de contraintes référentielles vers HighLevelService...
         [
-            "ALTER TABLE %%(db_basename)s%(table)s ADD CONSTRAINT "
-                "%%(db_basename)s%(table)s_%(field)s_fkey "
+            "ALTER TABLE vigilo_%(table)s ADD CONSTRAINT "
+                "vigilo_%(table)s_%(field)s_fkey "
                 "FOREIGN KEY(%(field)s) REFERENCES "
-                "%%(db_basename)shighlevelservice(idservice) "
+                "vigilo_highlevelservice(idservice) "
                 "ON UPDATE CASCADE ON DELETE CASCADE" % {
                     'table': table,
                     'field': field,
@@ -74,10 +73,10 @@ def upgrade(migrate_engine, actions):
 
         # ...ou SupItem directement selon les cas.
         [
-            "ALTER TABLE %%(db_basename)s%(table)s ADD CONSTRAINT "
-                "%%(db_basename)s%(table)s_%(field)s_fkey "
+            "ALTER TABLE vigilo_%(table)s ADD CONSTRAINT "
+                "vigilo_%(table)s_%(field)s_fkey "
                 "FOREIGN KEY(%(field)s) REFERENCES "
-                "%%(db_basename)ssupitem(idsupitem) "
+                "vigilo_supitem(idsupitem) "
                 "ON UPDATE CASCADE ON DELETE CASCADE" % {
                     'table': table,
                     'field': field,
@@ -87,18 +86,18 @@ def upgrade(migrate_engine, actions):
         # Autres modifications.
         [
             # Suppression de l'ancienne table Service.
-            "DROP TABLE %(db_basename)s%(old_table)s",
+            "DROP TABLE vigilo_%(old_table)s",
 
             # Purge du contenu de Dependency.
-            "DELETE FROM %(db_basename)sdependency",
+            "DELETE FROM vigilo_dependency",
 
             # Suppression des contraintes dans Dependency.
             "ALTER TABLE %(fullname)s DROP CONSTRAINT "
-                "%(db_basename)sdependency_pkey",
+                "vigilo_dependency_pkey",
             "ALTER TABLE %(fullname)s DROP CONSTRAINT "
-                "%(db_basename)sdependency_idsupitem1_fkey",
+                "vigilo_dependency_idsupitem1_fkey",
             "ALTER TABLE %(fullname)s DROP CONSTRAINT "
-                "%(db_basename)sdependency_idsupitem2_fkey",
+                "vigilo_dependency_idsupitem2_fkey",
 
             # Modification des champs dans Dependency.
             "ALTER TABLE %(fullname)s RENAME COLUMN idsupitem1 TO idgroup",
@@ -108,21 +107,20 @@ def upgrade(migrate_engine, actions):
             "ALTER TABLE %(fullname)s "
                 "ADD CONSTRAINT %(fullname)s_idgroup_fkey "
                 "FOREIGN KEY(idgroup) "
-                "REFERENCES %(db_basename)sdependencygroup(idgroup) "
+                "REFERENCES vigilo_dependencygroup(idgroup) "
                 "ON UPDATE CASCADE ON DELETE CASCADE",
             "ALTER TABLE %(fullname)s "
                 "ADD CONSTRAINT %(fullname)s_idsupitem_fkey "
                 "FOREIGN KEY(idsupitem) "
-                "REFERENCES %(db_basename)ssupitem(idsupitem) "
+                "REFERENCES vigilo_supitem(idsupitem) "
                 "ON UPDATE CASCADE ON DELETE CASCADE",
             "ALTER TABLE %(fullname)s ADD PRIMARY KEY (idgroup, idsupitem)",
 
             # Correction des droits sur DependencyGroup.
-            "ALTER TABLE %(db_basename)sdependencygroup OWNER TO %(owner)s",
+            "ALTER TABLE vigilo_dependencygroup OWNER TO %(owner)s",
         ],
         # Le nom de la contrainte dépend du préfixe utilisé.
         context={
-            'db_basename': DB_BASENAME,
             'old_table': 'service',
             'owner': owner,
         }

@@ -19,7 +19,7 @@ class StateName(DeclarativeBase, object):
         plus l'état a de l'importance et apparaîtra en début d'un
         tableau (cas des événements dans VigiBoard par exemple).
     """
-    __tablename__ = 'statename'
+    __tablename__ = 'vigilo_statename'
 
     idstatename = Column(
         Integer,

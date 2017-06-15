@@ -4,12 +4,12 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table Event"""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import synonym, relation
 from sqlalchemy.types import Text, DateTime, Integer
 
 from vigilo.models.utils import DateMixin
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.statename import StateName
 from vigilo.models.tables.supitem import SupItem
 
@@ -39,7 +39,7 @@ class Event(DeclarativeBase, DateMixin):
         VIGILO_EXIG_VIGILO_BAC_0010.
     """
 
-    __tablename__ = 'event'
+    __tablename__ = 'vigilo_event'
 
     idevent = Column(
         Integer,

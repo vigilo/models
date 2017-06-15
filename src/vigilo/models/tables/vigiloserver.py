@@ -20,7 +20,7 @@ class VigiloServer(DeclarativeBase, object):
     @ivar name: Nom complet (FQDN) du serveur hébergeant Vigilo.
     @ivar description: Une description intelligible du serveur.
     """
-    __tablename__ = 'vigiloserver'
+    __tablename__ = 'vigilo_vigiloserver'
 
 
     idvigiloserver = Column(

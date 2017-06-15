@@ -16,7 +16,6 @@ permettre aux administrateurs de migrer leur parc.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -45,15 +44,14 @@ def upgrade(migrate_engine, actions):
         [
             "ALTER TABLE %(fullname)s ADD COLUMN idconffile INTEGER",
             "ALTER TABLE %(fullname)s ADD CONSTRAINT %(fullname)s_idconffile_fkey "
-                "FOREIGN KEY(idconffile) REFERENCES %(db_basename)sconffile(idconffile) "
+                "FOREIGN KEY(idconffile) REFERENCES vigilo_conffile(idconffile) "
                 "ON UPDATE CASCADE ON DELETE CASCADE",
 
             # Correction des droits sur ConfFile.
-            "ALTER TABLE %(db_basename)sconffile OWNER TO %(owner)s",
+            "ALTER TABLE vigilo_conffile OWNER TO %(owner)s",
         ],
         # Le nom de la contrainte dépend du préfixe utilisé.
         context={
-            'db_basename': DB_BASENAME,
             'owner': owner,
         }
     ).execute(DBSession, tables.Host.__table__)

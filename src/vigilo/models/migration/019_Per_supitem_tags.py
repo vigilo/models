@@ -15,7 +15,6 @@ désormais être manipulées comme un dictionnaire classique.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -32,13 +31,13 @@ def upgrade(migrate_engine, actions):
     MigrationDDL(
         [
             # Préparation des données dans une table temporaire.
-            "CREATE TABLE %(db_basename)stag_migration AS "
+            "CREATE TABLE vigilo_tag_migration AS "
                 "SELECT service AS idsupitem, name, value "
-                "FROM %(db_basename)stag "
-                "NATURAL JOIN %(db_basename)stags2supitems",
+                "FROM vigilo_tag "
+                "NATURAL JOIN vigilo_tags2supitems",
 
             # Suppression de la table d'association devenue obsolète.
-            "DROP TABLE %(db_basename)stags2supitems",
+            "DROP TABLE vigilo_tags2supitems",
 
             # Purge de l'ancienne table des tags.
             "TRUNCATE %(fullname)s",
@@ -47,11 +46,11 @@ def upgrade(migrate_engine, actions):
             "ALTER TABLE %(fullname)s ADD COLUMN idsupitem INTEGER NOT NULL",
 
             # Mise à jour des contraintes.
-            "ALTER TABLE %(fullname)s DROP CONSTRAINT %(db_basename)stag_pkey",
+            "ALTER TABLE %(fullname)s DROP CONSTRAINT vigilo_tag_pkey",
             "ALTER TABLE %(fullname)s ADD "
-                "CONSTRAINT %(db_basename)stag_idsupitem_fkey "
+                "CONSTRAINT vigilo_tag_idsupitem_fkey "
                 "FOREIGN KEY (idsupitem) "
-                "REFERENCES %(db_basename)ssupitem(idsupitem) "
+                "REFERENCES vigilo_supitem(idsupitem) "
                 "ON UPDATE CASCADE "
                 "ON DELETE CASCADE",
             "ALTER TABLE %(fullname)s ADD PRIMARY KEY (idsupitem, name)",
@@ -63,13 +62,9 @@ def upgrade(migrate_engine, actions):
             # car le ADD COLUMN ajoute la colonne en fin de table.
             "INSERT INTO %(fullname)s "
                 "SELECT name, value, idsupitem "
-                "FROM %(db_basename)stag_migration",
-            "DROP TABLE %(db_basename)stag_migration",
+                "FROM vigilo_tag_migration",
+            "DROP TABLE vigilo_tag_migration",
         ],
-        # Le nom de la contrainte dépend du préfixe utilisé.
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, tables.Tag.__table__)
 
     # Nécessite un déploiement forcé.

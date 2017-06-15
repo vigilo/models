@@ -18,7 +18,7 @@ class Application(DeclarativeBase, object):
     @ivar idapp: Identifiant de l'application.
     @ivar name: Nom (unique) de l'application.
     """
-    __tablename__ = 'application'
+    __tablename__ = 'vigilo_application'
 
     idapp = Column(
         Integer,

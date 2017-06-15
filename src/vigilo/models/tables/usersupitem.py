@@ -10,7 +10,6 @@ from sqlalchemy import Column
 from sqlalchemy.types import Integer, Unicode
 
 from vigilo.models.session import DeclarativeBase, DDL
-from vigilo.models.configure import DB_BASENAME
 
 from vigilo.models.tables.service import LowLevelService
 from vigilo.models.tables.host import Host
@@ -25,7 +24,7 @@ class UserSupItem(DeclarativeBase, object):
 
     # Doit être synchronisé avec le nom de la vue
     # (cf. DDL en fin de fichier).
-    __tablename__ = 'usersupitem'
+    __tablename__ = 'vigilo_usersupitem'
 
     idsupitem = Column(
         Integer,
@@ -111,11 +110,10 @@ DDL(
     UserSupItem.__table__,
     dialect=('postgres', 'postgresql'),
     context={
-        'db_basename': DB_BASENAME,
         'lowlevelservice_table': LowLevelService.__tablename__,
         'host_table': Host.__tablename__,
-        'supitemgroup_table': '%ssupitemgroup' % DB_BASENAME,
-        'usertousergroups_table': '%susertousergroups' % DB_BASENAME,
+        'supitemgroup_table': 'vigilo_supitemgroup',
+        'usertousergroups_table': 'vigilo_usertousergroups',
         'grouphierarchy_table': GroupHierarchy.__tablename__,
         'datapermission_table': DataPermission.__tablename__,
     },
@@ -173,11 +171,10 @@ DDL(
     UserSupItem.__table__,
     dialect='sqlite',
     context={
-        'db_basename': DB_BASENAME,
         'lowlevelservice_table': LowLevelService.__tablename__,
         'host_table': Host.__tablename__,
-        'supitemgroup_table': '%ssupitemgroup' % DB_BASENAME,
-        'usertousergroups_table': '%susertousergroups' % DB_BASENAME,
+        'supitemgroup_table': 'vigilo_supitemgroup',
+        'usertousergroups_table': 'vigilo_usertousergroups',
         'grouphierarchy_table': GroupHierarchy.__tablename__,
         'datapermission_table': DataPermission.__tablename__,
     },
@@ -196,16 +193,10 @@ DDL(
     "DROP VIEW IF EXISTS %(fullname)s",
     'before-drop',
     UserSupItem.__table__,
-    context={
-        'db_basename': DB_BASENAME,
-    },
 )
 
 DDL(
     "CREATE TABLE %(fullname)s (foo INTEGER)",
     'before-drop',
     UserSupItem.__table__,
-    context={
-        'db_basename': DB_BASENAME,
-    },
 )

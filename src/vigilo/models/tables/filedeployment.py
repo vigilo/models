@@ -23,7 +23,7 @@ class FileDeployment(DeclarativeBase, object):
     """ Model used to implement partial deployment.
     """
     
-    __tablename__ = 'filedeployment'
+    __tablename__ = 'vigilo_filedeployment'
 
     idfiledeployment = Column(
         Integer,

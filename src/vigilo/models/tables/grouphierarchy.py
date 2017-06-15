@@ -4,13 +4,13 @@
 
 """Table représentant la hiérarchie des groupes."""
 
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Integer
 from sqlalchemy.orm import relation
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.orm.exc import NoResultFound
 
-from vigilo.models.session import DeclarativeBase, ForeignKey, DBSession
+from vigilo.models.session import DeclarativeBase, DBSession
 #from vigilo.models.tables.group import Group
 
 class GroupHierarchy(DeclarativeBase, object):
@@ -28,7 +28,7 @@ class GroupHierarchy(DeclarativeBase, object):
     @ivar child: Instance du groupe fils.
     """
 
-    __tablename__ = 'grouphierarchy'
+    __tablename__ = 'vigilo_grouphierarchy'
     __table_args__ = (
         # Contrainte garantissant qu'un groupe
         # n'a qu'un seul parent.
@@ -39,7 +39,7 @@ class GroupHierarchy(DeclarativeBase, object):
     idparent = Column(
         Integer,
         ForeignKey(
-            'group.idgroup',
+            'vigilo_group.idgroup',
             ondelete='CASCADE',
             onupdate='CASCADE',
             deferrable=True,
@@ -52,7 +52,7 @@ class GroupHierarchy(DeclarativeBase, object):
     idchild = Column(
         Integer,
         ForeignKey(
-            'group.idgroup',
+            'vigilo_group.idgroup',
             ondelete='CASCADE',
             onupdate='CASCADE',
             deferrable=True,

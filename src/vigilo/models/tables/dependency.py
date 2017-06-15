@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table dependency."""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relation
 from sqlalchemy.types import Integer
 
-from vigilo.models.session import DeclarativeBase, ForeignKey
+from vigilo.models.session import DeclarativeBase
 from vigilo.models.tables.supitem import SupItem
 from vigilo.models.tables.dependencygroup import DependencyGroup
 
@@ -33,7 +33,7 @@ class Dependency(DeclarativeBase, object):
         constituant la dépendance dans un état dégradé.
     """
 
-    __tablename__ = 'dependency'
+    __tablename__ = 'vigilo_dependency'
 
     idgroup = Column(
         Integer,

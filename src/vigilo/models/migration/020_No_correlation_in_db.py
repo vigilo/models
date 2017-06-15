@@ -13,7 +13,6 @@ uniquement dans memcached.
 # Invalid name "..." (should match ...)
 
 from vigilo.models.session import DBSession, MigrationDDL
-from vigilo.models.configure import DB_BASENAME
 from vigilo.models import tables
 
 def upgrade(migrate_engine, actions):
@@ -29,11 +28,6 @@ def upgrade(migrate_engine, actions):
     """
     MigrationDDL(
         [
-            "DROP TABLE %(db_basename)scorrelation_context",
+            "DROP TABLE vigilo_correlation_context",
         ],
-        # La table n'existe plus dans le modèle, on ne peut donc pas utiliser
-        # %(fullname)s
-        context={
-            'db_basename': DB_BASENAME,
-        }
     ).execute(DBSession, tables.SupItem.__table__)

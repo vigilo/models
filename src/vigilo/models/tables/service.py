@@ -4,14 +4,14 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table Service"""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import UnicodeText, Unicode, Integer
 from sqlalchemy.orm import relation, EXT_CONTINUE
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.associationproxy import association_proxy
 
-from vigilo.models.session import DBSession, ForeignKey
+from vigilo.models.session import DBSession
 from vigilo.models.tables.supitem import SupItem, SupItemMapperExt
 from vigilo.models.tables.host import Host
 from vigilo.models.tables.hlspriority import HLSPriority
@@ -101,7 +101,7 @@ class LowLevelService(Service):
     @ivar idcollector: Identifiant du Collector pour ce service.
     @ivar collector: Collector pour ce service.
     """
-    __tablename__ = 'lowlevelservice'
+    __tablename__ = 'vigilo_lowlevelservice'
     __table_args__ = (
         UniqueConstraint('servicename', 'idhost'),
         {}
@@ -262,7 +262,7 @@ class HighLevelService(Service):
     @ivar impacts: Liste des services de haut niveau impactés par
         celui-ci.
     """
-    __tablename__ = 'highlevelservice'
+    __tablename__ = 'vigilo_highlevelservice'
     __mapper_args__ = {
         'polymorphic_identity': 4,
         'extension': HlsMapperExt(),

@@ -4,11 +4,11 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table Tag"""
-from sqlalchemy import Column
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import Unicode, Integer
 from sqlalchemy.orm import relation, synonym
 
-from vigilo.models.session import DeclarativeBase, DBSession, ForeignKey
+from vigilo.models.session import DeclarativeBase, DBSession
 
 class Tag(DeclarativeBase, object):
     """
@@ -20,12 +20,12 @@ class Tag(DeclarativeBase, object):
         le tag est rattaché.
     """
 
-    __tablename__ = 'tag'
+    __tablename__ = 'vigilo_tag'
 
     idsupitem = Column(
         Integer,
         ForeignKey(
-            'supitem.idsupitem',
+            'vigilo_supitem.idsupitem',
             onupdate="CASCADE",
             ondelete="CASCADE",
             deferrable=True,
