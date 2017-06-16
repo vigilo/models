@@ -73,7 +73,7 @@ class State(DeclarativeBase, object):
     # mais on ne peut pas garantir le type, d'où l'utilisation du type
     # SQL générique "Text".
     message = Column(
-        Text(length=None, convert_unicode=True, assert_unicode=None))
+        Text(length=None, convert_unicode=True))
 
     def __init__(self, **kwargs):
         """Initialise un état."""

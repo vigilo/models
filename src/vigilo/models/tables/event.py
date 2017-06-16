@@ -151,7 +151,7 @@ class Event(DeclarativeBase, DateMixin):
         descriptor=property(_get_peak_state, None))
 
     message = Column(
-        Text(length=None, convert_unicode=True, assert_unicode=None),
+        Text(length=None, convert_unicode=True),
         nullable=False,
     )
 

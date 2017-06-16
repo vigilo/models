@@ -6,7 +6,7 @@
 """Modèle pour la table Service"""
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.types import UnicodeText, Unicode, Integer
-from sqlalchemy.orm import relation, EXT_CONTINUE
+from sqlalchemy.orm import relation, synonym, EXT_CONTINUE
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -80,8 +80,6 @@ class Service(SupItem):
     """
     Service générique.
     """
-    # Pour la compatibilité avec les versions précédentes du modèle.
-    idservice = SupItem.idsupitem
 
     # Nécessaire pour pouvoir récupérer uniquement
     # des instances de services et pas d'hôtes.

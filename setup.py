@@ -14,7 +14,7 @@ install_requires = [
     "setuptools",
     "psycopg2",
     "SQLAlchemy >= 0.7.2",
-    "SQLAlchemy < 0.8.0dev",
+    "SQLAlchemy < 1.0.0",
     "zope.sqlalchemy >= 0.4",
     "PasteDeploy",
     "vigilo-common",

@@ -16,21 +16,14 @@ même si ces composants n'ont pas besoin des fonctionnalités apportées
 par ZopeTransactionExtension.
 """
 
-from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
-from sqlalchemy.orm import scoped_session, sessionmaker, query
-try:
-    # Tentative d'import de la nouvelle API événementielle
-    # ajoutée dans SQLAlchemy 0.7.
-    from sqlalchemy import event as SaEvent
-except ImportError:
-    # SQLAlchemy 0.5/0.6.
-    SaEvent = None
-from zope.sqlalchemy import ZopeTransactionExtension
-
-from sqlalchemy.orm.scoping import ScopedSession
-from sqlalchemy.schema import DDL as SaDDL, _bind_or_error
-from sqlalchemy.sql import expression
+from sqlalchemy import event as SaEvent
 from sqlalchemy import exc as sa_exc
+from sqlalchemy.orm import scoped_session, sessionmaker, query
+from sqlalchemy.orm.scoping import ScopedSession
+from sqlalchemy.schema import DDL as SaDDL
+from sqlalchemy.sql import expression
+from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
+from zope.sqlalchemy import ZopeTransactionExtension
 
 import vigilo.models.configure as configure
 
@@ -79,18 +72,8 @@ class MigrationDDL(SaDDL):
             le nœud maître.
         @rtype: C{ResultProxy}
         """
-        if bind is None:
-            bind = _bind_or_error(self)
-
         if self._should_execute(None, schema_item, bind):
-            if hasattr(self, '_expand'):
-                # SQLAlchemy 0.5.
-                statement = self._expand(schema_item, bind)
-                res = bind.execute(expression.text(statement))
-            else:
-                # SQLAlchemy 0.6.
-                res = bind.execute(self.against(schema_item))
-            return res
+            return bind.execute(self.against(schema_item))
 
     def _should_execute(self, event, schema_item, bind):
         """
@@ -99,11 +82,6 @@ class MigrationDDL(SaDDL):
         # Permet de gérer une session donnée en argument.
         if isinstance(bind, ScopedSession):
             bind = bind.bind
-        if SaEvent is None:
-            # SQLAlchemy 0.5/0.6.
-            return super(MigrationDDL, self)._should_execute(
-                event, schema_item, bind)
-        # SQLAlchemy 0.7+
         return super(MigrationDDL, self)._should_execute(schema_item, bind)
 
     def _prepare_context(self, schema_item, bind):
@@ -155,38 +133,14 @@ def DDL(statement, when=None, obj=None, bind=None, dialect=None, context=None):
     if context is None:
         context = {}
 
-    # SQLAlchemy 0.5/0.6.
-    if SaEvent is None:
-        # Les dialectes "postgres" et "postgresql" sont définis
-        # comme des aliases l'un par rapport à l'autre (sha:7d7d6c2).
-        # On doit supporter le passage de l'un ou l'autre des noms.
-        if dialect in ('postgres', 'postresql'):
-            dialect = ('postgres', 'postgresql')
-        if isinstance(dialect, (list, tuple)):
-            # @HACK: Dans SQLAlchemy 0.5.x, seulement 3 arguments
-            # positionnels sont passés : event, target & bind.
-            # Dans SQLAlchemy 0.6.x, il y en a 4 : self, event, target & bind.
-            # On ne s'intéresse qu'à bind (dernier argument à chaque fois).
-            condition = lambda *args, **kwargs: args[-1].engine.name in dialect
-        else:
-            condition = dialect
-        ddl = SaDDL(statement, on=condition, context=context)
-        if when is None:
-            ddl.execute(bind)
-        else:
-            # Les mots dans le nom de l'événement sont séparés par
-            # des '-' dans cette version de SQLAlchemy.
-            ddl.execute_at(when.replace('_', '-'), obj)
-    # SQLAlchemy 0.7+
+    ddl = SaDDL(statement, context=context)
+    if when is None:
+        ddl.execute(bind)
     else:
-        ddl = SaDDL(statement, context=context)
-        if when is None:
-            ddl.execute(bind)
-        else:
-            # Les mots dans le nom de l'événement sont séparés par
-            # des '_' dans cette version de SQLAlchemy.
-            SaEvent.listen(obj, when.replace('-', '_'),
-                         ddl.execute_if(dialect=dialect))
+        # Les mots dans le nom de l'événement sont séparés par
+        # des '_' dans cette version de SQLAlchemy.
+        SaEvent.listen(obj, when.replace('-', '_'),
+                     ddl.execute_if(dialect=dialect))
 
 class Query(query.Query):
     """

@@ -80,7 +80,7 @@ class EventHistory(DeclarativeBase, DateMixin):
 
     # On ne peut pas imposer de l'Unicode au champ "text" car son contenu
     # provient parfois de Nagios, qui n'a pas la notion d'encodages.
-    text = Column(Text(length=None, convert_unicode=True, assert_unicode=None))
+    text = Column(Text(length=None, convert_unicode=True))
 
     timestamp = Column(DateTime(timezone=False), nullable=False)
 
