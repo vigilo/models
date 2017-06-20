@@ -350,7 +350,7 @@ class User(DeclarativeBase, object):
     # Définition des accesseurs pour le (haché du) mot de passe.
     # Empêche la lecture directe et applique la méthode de hachage
     # en cas de changement du mot de passe par l'utilisateur.
-    password = synonym('_password', descriptor=property(None, _set_password))
+    password = synonym('_password', descriptor=property(lambda obj: u'', _set_password))
 
     def _set_language(self, language):
         """

@@ -53,15 +53,15 @@ class Group(DeclarativeBase, object):
         'polymorphic_on': grouptype,
     }
 
+    datapermissions = relation('DataPermission', cascade="all",
+                      back_populates='group', lazy=True)
+
     # @FIXME: fait échouer les tests de VigiMap lorsque lazy=True.
     # Il faut empêcher toute tentative d'écriture via la vue,
     # donc empêcher les cascades et autres formes d'écritures.
     _path_obj = relation('GroupPath', uselist=False, lazy=False,
                             cascade="", viewonly=True)
     path = association_proxy('_path_obj', 'path')
-
-    datapermissions = relation('DataPermission', cascade="all",
-                      back_populates='group', lazy=True)
 
     def __init__(self, **kwargs):
         """
