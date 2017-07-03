@@ -66,3 +66,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/vigilo/%{module}
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/vigilo/%{module}/settings.ini
 %{python_sitelib}/*
+%attr(755,root,root) %{python_sitelib}/vigilo/models/migration/*.sh
