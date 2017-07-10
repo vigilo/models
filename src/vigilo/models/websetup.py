@@ -7,6 +7,9 @@
 import os.path
 import transaction
 import pkg_resources
+import sys
+
+from sqlalchemy.exc import OperationalError
 
 __all__ = [
     'populate_db',
@@ -147,6 +150,7 @@ def migrate_model(bind, module, scripts, stop_at=None):
 
 def populate_db(bind, commit=True):
     """Placez les commandes pour peupler la base de données ici."""
+
     from vigilo.models.session import DBSession, metadata
 
     # Chargement du modèle.
@@ -164,9 +168,15 @@ def populate_db(bind, commit=True):
     mapped_tables = metadata.tables.copy()
     del mapped_tables[GroupPath.__tablename__]
     del mapped_tables[UserSupItem.__tablename__]
-    metadata.create_all(bind=bind, tables=mapped_tables.itervalues())
-    metadata.create_all(bind=bind, tables=[GroupPath.__table__])
-    metadata.create_all(bind=bind, tables=[UserSupItem.__table__])
+
+
+    try:
+        metadata.create_all(bind=bind, tables=mapped_tables.itervalues())
+        metadata.create_all(bind=bind, tables=[GroupPath.__table__])
+        metadata.create_all(bind=bind, tables=[UserSupItem.__table__])
+    except OperationalError as e:
+        print >> sys.stderr, e.orig
+        sys.exit(1)
 
     module = 'vigilo.models'
     scripts = get_migration_scripts(module)
