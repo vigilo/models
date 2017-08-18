@@ -4,6 +4,7 @@
 
 """Peuple la base de données."""
 
+from __future__ import print_function
 import os.path
 import transaction
 import pkg_resources
@@ -89,7 +90,7 @@ def migrate_model(bind, module, scripts, stop_at=None):
 
     module = unicode(module)
 
-    print (u"Searching for already installed version of '%s' ..." % module),
+    print(u"Searching for already installed version of '%s' ..." % module, end='')
     current_version = DBSession.query(tables.Version.version).filter(
                             tables.Version.name == module
                         ).scalar()
@@ -99,10 +100,10 @@ def migrate_model(bind, module, scripts, stop_at=None):
     # alors on ne fait rien : populate_db() se chargera
     # de créer et de remplir les tables pour nous.
     if not current_version:
-        print "none found"
+        print("none found")
         return None
 
-    print "found version %d" % current_version
+    print("found version %d" % current_version)
 
     actions = MigrationActions()
     try:
@@ -112,12 +113,12 @@ def migrate_model(bind, module, scripts, stop_at=None):
             if ver <= current_version or ver > stop_at:
                 continue
 
-            print u"Upgrading %(module)s to version %(version)d using " \
-                "the following changeset: '%(script)s'" % {
-                'module': module,
-                'version': ver,
-                'script': scripts[ver],
-            }
+            print( u"Upgrading %(module)s to version %(version)d using "
+                    "the following changeset: '%(script)s'" % {
+                        'module': module,
+                        'version': ver,
+                        'script': scripts[ver],
+                    })
 
             transaction.begin()
 
@@ -159,7 +160,7 @@ def populate_db(bind, commit=True):
     from vigilo.models.tables.usersupitem import UserSupItem
 
     # Création des tables
-    print "Creating required tables"
+    print("Creating required tables")
 
     # La vue GroupPath dépend de Group et GroupHierarchy.
     # SQLAlchemy ne peut pas détecter correctement la dépendance.
@@ -175,7 +176,7 @@ def populate_db(bind, commit=True):
         metadata.create_all(bind=bind, tables=[GroupPath.__table__])
         metadata.create_all(bind=bind, tables=[UserSupItem.__table__])
     except OperationalError as e:
-        print >> sys.stderr, e.orig
+        print(e.orig, file=sys.stderr)
         sys.exit(1)
 
     module = 'vigilo.models'
@@ -188,28 +189,26 @@ def populate_db(bind, commit=True):
     if actions:
         # La migration nécessite de redéployer le parc.
         if actions.sync_force:
-            print   "ATTENTION: Although the schema migration completed " \
-                    "successfully,\n" \
-                    "you should re-sync your configuration using " \
-                    "'vigiconf deploy --force db-sync' to finish the migration."
+            print("ATTENTION: Although the schema migration completed "
+                  "successfully,\nyou should re-sync your configuration using "
+                  "'vigiconf deploy --force db-sync' to finish the migration.")
 
         # La migration nécessite de mettre à jour VigiReport.
         if actions.upgrade_vigireport:
-            print   "ATTENTION: The new schema is likely to be " \
-                    "incompatible with that of your VigiReport " \
-                    "installation.\n" \
-                    "You should upgrade VigiReport as soon as possible."
+            print("ATTENTION: The new schema is likely to be incompatible "
+                  "with that of your VigiReport installation.\n"
+                  "You should upgrade VigiReport as soon as possible.")
 
         # Dans tous les cas, une migration nécessite de mettre à jour
         # les autres nœuds dans un modèle maître/esclaves.
         if actions.was_upgraded:
-            print   "If you have set up a master/backup replication cluster, " \
-                    "you should also upgrade the model on the other nodes."
+            print("If you have set up a master/backup replication cluster, "
+                  "you should also upgrade the model on the other nodes.")
 
     # Sinon, c'est que le modèle n'existait pas, donc on le crée.
     else:
-        print "Setting up the generic tables"
-        print "Creating 'manager' user account with default password"
+        print("Setting up the generic tables")
+        print("Creating 'manager' user account with default password")
         manager = tables.User()
         manager.user_name = u'manager'
         manager.email = u''
@@ -218,7 +217,7 @@ def populate_db(bind, commit=True):
         DBSession.add(manager)
         DBSession.flush()
 
-        print "Creating 'vigilo-monitoring' user account with default password"
+        print("Creating 'vigilo-monitoring' user account with default password")
         monitor = tables.User()
         monitor.user_name = u'vigilo-monitoring'
         monitor.email = u''
@@ -227,14 +226,14 @@ def populate_db(bind, commit=True):
         DBSession.add(monitor)
         DBSession.flush()
 
-        print "Creating 'managers' usergroup"
+        print("Creating 'managers' usergroup")
         group = tables.UserGroup()
         group.group_name = u'managers'
         group.users.append(manager)
         DBSession.add(group)
         DBSession.flush()
 
-        print "Creating 'monitoring' usergroup"
+        print("Creating 'monitoring' usergroup")
         group = tables.UserGroup()
         group.group_name = u'monitoring'
         group.users.append(monitor)
@@ -261,12 +260,12 @@ def populate_db(bind, commit=True):
     for entry in working_set.iter_entry_points("vigilo.models", "populate_db"):
         # Charge les tables spécifiques
         pop_db = entry.load()
-        print "Setting up for %s" % entry.dist.project_name
+        print("Setting up for %s" % entry.dist.project_name)
         pop_db(bind)
 
     if commit:
         transaction.commit()
-    print "Successfully setup"
+    print("Successfully setup")
 
 def init_db():
     """

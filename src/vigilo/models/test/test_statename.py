@@ -78,7 +78,7 @@ class TestStateName(ModelTest):
             # On s'attend à avoir une KeyError car l'ancien nom
             # n'existe plus (ni dans la base, ni dans le cache).
             pass
-        except Exception, e:
+        except Exception as e:
             self.fail("Got an unexpected exception: %s (%s)" % (type(e), e))
         else:
             self.fail("The cache was not refreshed")

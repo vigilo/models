@@ -376,7 +376,7 @@ class User(DeclarativeBase, object):
             return self._language
 
         if not DEFAULT_LANG:
-            raise KeyError, "No default language in settings"
+            raise KeyError("No default language in settings")
         return DEFAULT_LANG
 
     language = synonym('_language', descriptor=property(_get_language,

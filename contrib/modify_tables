@@ -1,7 +1,9 @@
+#!bin/python
 # -*- coding: utf-8 -*-
 # Copyright (C) 2006-2016 CS-SI
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
+from __future__ import print_function
 import transaction
 import sqlalchemy
 
@@ -16,20 +18,20 @@ from vigilo.models.websetup import populate_db
 from vigilo.models import tables
 
 def drop():
-    print "DROPping all tables"
+    print("DROPping all tables")
     metadata.drop_all()
     transaction.commit()
 
 def truncate():
     for table in metadata.tables.items():
-        print "Truncating table '%s'" % table[0]
+        print("Truncating table '%s'" % table[0])
         try:
             table[1].delete().execute()
         except sqlalchemy.exc.ProgrammingError:
-            print "Table %s does not exist" % table[0]
+            print("Table %s does not exist" % table[0])
         DBSession.flush()
 
-    print "Re-inserting default data in tables"
+    print("Re-inserting default data in tables")
     populate_db(None)
     transaction.commit()
 
@@ -41,7 +43,7 @@ if __name__ == '__main__':
     import sys
 
     if len(sys.argv) < 2:
-        print "Usage: python %s <create/drop/trunc>" % sys.argv[0]
+        print("Usage: python %s <create/drop/trunc>" % sys.argv[0])
         sys.exit(1)
 
     action = sys.argv[1].lower()
@@ -58,5 +60,5 @@ if __name__ == '__main__':
         truncate()
         sys.exit(0)
 
-    print "Unknown action '%s'" % action
+    print("Unknown action '%s'" % action)
     sys.exit(2)

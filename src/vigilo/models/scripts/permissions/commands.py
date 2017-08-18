@@ -6,6 +6,7 @@ Commandes utilisables avec l'outil de gestion
 des permissions.
 """
 
+from __future__ import print_function
 import transaction
 from sqlalchemy.sql.expression import func
 from vigilo.common.gettext import translate
@@ -61,15 +62,15 @@ def cmd_add(options):
     usergroup_name = options.usergroup.decode('utf-8')
     usergroup = tables.UserGroup.by_group_name(usergroup_name)
     if usergroup is None:
-        print _("No such usergroup '%s'") % usergroup_name
+        print(_("No such usergroup '%s'") % usergroup_name)
         return 2
 
     # Vérification sur le chemin du/des groupe(s) d'objets.
     group_path = options.object_group.decode('utf-8')
     group_parts = parse_path(group_path)
     if group_parts is None:
-        print _("Could not parse <object group> (%s). "
-                "Make sure the value is correct and try again.") % group_path
+        print(_("Could not parse <object group> (%s). "
+                "Make sure the value is correct and try again.") % group_path)
         return 2
 
     if len(group_parts) == 1 and not group_path == '/':
@@ -81,25 +82,25 @@ def cmd_add(options):
         object_groups = [object_type.by_path(group_path)]
 
     if (not object_groups) or object_groups[0] is None:
-        print _("No match found for group '%(group)s' "
+        print(_("No match found for group '%(group)s' "
                 "with type '%(type)s'.") % {
                     'group': group_path,
                     'type': options.object_type,
-                }
+                })
         return 2
 
     object_groups.sort(key=lambda x: x.path.lower())
     if len(object_groups) > 1 and not options.batch:
-        print _("Multiple groups named '%(group)s' "
+        print(_("Multiple groups named '%(group)s' "
                 "with type '%(type)s' were found. "
                 "Use --batch to set permissions "
                 "on multiple groups at once.") % {
                     'group': group_path,
                     'type': options.object_type,
-                }
-        print _("The following groups were found:")
+                })
+        print(_("The following groups were found:"))
         for group in object_groups:
-            print "-", group.path.encode('utf-8')
+            print("-", group.path.encode('utf-8'))
         return 2
 
     datapermissions = {}
@@ -125,13 +126,13 @@ def cmd_add(options):
 
             # Sinon, si on est en mode ajout, il y a conflit.
             if not options.update:
-                print _("Conflict detected: usergroup '%(usergroup)s' "
+                print(_("Conflict detected: usergroup '%(usergroup)s' "
                         "already has %(perm)s permissions on '%(path)s'.") \
                         % {
                             'usergroup': usergroup_name,
                             'perm': _reverse_permissions[permission],
                             'path': datapermissions[group.idgroup].group.path,
-                        }
+                        })
                 return 2
 
             # Mode mise à jour. On s'exécute.
@@ -161,12 +162,12 @@ def cmd_add(options):
     if options.commit:
         transaction.commit()
 
-    print _("Successfully set %(perm)s permissions on %(nb_groups)d "
+    print(_("Successfully set %(perm)s permissions on %(nb_groups)d "
             "groups for usergroup '%(usergroup)s'.") % {
                 'perm': _reverse_permissions[permission],
                 'usergroup': usergroup_name,
                 'nb_groups': len(object_groups),
-            }
+            })
     return 0
 
 
@@ -190,15 +191,15 @@ def cmd_remove(options):
     usergroup_name = options.usergroup.decode('utf-8')
     usergroup = tables.UserGroup.by_group_name(usergroup_name)
     if usergroup is None:
-        print _("No such usergroup '%s'") % usergroup_name
+        print(_("No such usergroup '%s'") % usergroup_name)
         return 2
 
     # Vérification sur le chemin du/des groupe(s) d'objets.
     group_path = options.object_group.decode('utf-8')
     group_parts = parse_path(group_path)
     if group_parts is None:
-        print _("Could not parse <object group> (%s). "
-                "Make sure the value is correct and try again.") % group_path
+        print(_("Could not parse <object group> (%s). "
+                "Make sure the value is correct and try again.") % group_path)
         return 2
 
     if len(group_parts) == 1 and not group_path == '/':
@@ -224,32 +225,32 @@ def cmd_remove(options):
     object_groups.sort(key=lambda x: x.path.lower())
     if (not object_groups) or object_groups[0] is None:
         if permission:
-            print _("No match found for group '%(group)s' "
+            print(_("No match found for group '%(group)s' "
                     "with type '%(type)s'.") % {
                         'group': group_path,
                         'type': options.object_type,
-                    }
+                    })
             return 2
         else:
-            print _("No match found for group '%(group)s' "
+            print(_("No match found for group '%(group)s' "
                     "with type '%(type)s' and permission '%(perm)s'.") % {
                         'group': group_path,
                         'type': options.object_type,
                         'perm': options.permission,
-                    }
+                    })
             return 2
 
     if len(object_groups) > 1 and not options.batch:
-        print _("Multiple groups named '%(group)s' "
+        print(_("Multiple groups named '%(group)s' "
                 "with type '%(type)s' were found. "
                 "Use --batch to set permissions "
                 "on multiple groups at once.") % {
                     'group': group_path,
                     'type': options.object_type,
-                }
-        print _("The following groups were found:")
+                })
+        print(_("The following groups were found:"))
         for group in object_groups:
-            print "-", group.path.encode('utf-8')
+            print("-", group.path.encode('utf-8'))
         return 2
 
     idgroups = [group.idgroup for group in object_groups]
@@ -279,12 +280,12 @@ def cmd_remove(options):
     if options.commit:
         transaction.commit()
 
-    print _("Successfully removed %(perm)s permissions on %(nb_groups)d "
+    print(_("Successfully removed %(perm)s permissions on %(nb_groups)d "
             "groups for usergroup '%(usergroup)s'.") % {
                 'perm': _reverse_permissions[permission],
                 'usergroup': usergroup_name,
                 'nb_groups': removed,
-            }
+            })
     return 0
 
 
@@ -313,12 +314,12 @@ def cmd_list(options):
 
     objects = objects.all()
 
-    print _("%(count)d groups found with type '%(type)s':") % {
-        'type': options.object_type,
-        'count': len(objects),
-    }
+    print(_("%(count)d groups found with type '%(type)s':") % {
+                'type': options.object_type,
+                'count': len(objects),
+            })
     for obj in objects:
-        print "-", obj[0].encode('utf-8')
+        print("-", obj[0].encode('utf-8'))
     return 0
 
 
@@ -338,11 +339,11 @@ def cmd_allow(options):
         usergroup_name = usergroup_name.decode('utf-8')
         usergroup = tables.UserGroup.by_group_name(usergroup_name)
         if usergroup is None:
-            print _("No such usergroup '%s'") % usergroup_name
+            print(_("No such usergroup '%s'") % usergroup_name)
         else:
             usergroups.add(usergroup)
     if not usergroups:
-        print _('No usergroup selected.')
+        print(_('No usergroup selected.'))
         return 2
     usergroups = sorted(usergroups, key=lambda ug: ug.group_name)
 
@@ -352,16 +353,16 @@ def cmd_allow(options):
         permission_name = permission_name.strip().decode('utf-8')
         permission = tables.Permission.by_permission_name(permission_name)
         if permission is None:
-            print _("No such permission '%s'.") % permission_name
+            print(_("No such permission '%s'.") % permission_name)
         else:
             permissions.add(permission)
     if not permissions:
-        print _('No permission selected.')
+        print(_('No permission selected.'))
         return 2
     permissions = sorted(permissions, key=lambda p: p.permission_name)
 
     for usergroup in usergroups:
-        print _("Adding permissions for usergroup '%s'.") % usergroup.group_name
+        print(_("Adding permissions for usergroup '%s'.") % usergroup.group_name)
         usergroup.permissions.extend(permissions)
 
     DBSession.flush()
@@ -386,11 +387,11 @@ def cmd_deny(options):
         usergroup_name = usergroup_name.decode('utf-8')
         usergroup = tables.UserGroup.by_group_name(usergroup_name)
         if usergroup is None:
-            print _("No such usergroup '%s'") % usergroup_name
+            print(_("No such usergroup '%s'") % usergroup_name)
         else:
             usergroups.add(usergroup)
     if not usergroups:
-        print _('No usergroup selected.')
+        print(_('No usergroup selected.'))
         return 2
     usergroups = sorted(usergroups, key=lambda ug: ug.group_name)
 
@@ -400,17 +401,17 @@ def cmd_deny(options):
         permission_name = permission_name.strip().decode('utf-8')
         permission = tables.Permission.by_permission_name(permission_name)
         if permission is None:
-            print _("No such permission '%s'.") % permission_name
+            print(_("No such permission '%s'.") % permission_name)
         else:
             permissions.add(permission)
     if not permissions:
-        print _('No permission selected.')
+        print(_('No permission selected.'))
         return 2
     permissions = sorted(permissions, key=lambda p: p.permission_name)
 
     for usergroup in usergroups:
-        print _("Removing permissions for usergroup '%s'.") % \
-            usergroup.group_name
+        print(_("Removing permissions for usergroup '%s'.") %
+                usergroup.group_name)
         for permission in permissions:
             try:
                 usergroup.permissions.remove(permission)
@@ -437,17 +438,17 @@ def cmd_duplicate(options):
     # Vérifications sur les groupes d'utilisateurs.
     usergroups = []
     if options.usergroup[0] == options.usergroup[1]:
-        print _('Usergroup must be different')
+        print(_('Usergroup must be different'))
         return 2
     for usergroup_name in options.usergroup:
         usergroup_name = usergroup_name.decode('utf-8')
         usergroup = tables.UserGroup.by_group_name(usergroup_name)
         if usergroup is None:
-            print _("No such usergroup '%s'") % usergroup_name
+            print(_("No such usergroup '%s'") % usergroup_name)
         else:
             usergroups.append(usergroup)
     if len(usergroups) != 2:
-        print _('Error on selected usergroups')
+        print(_('Error on selected usergroups'))
         return 2
 
     # Sélection des groupes d'utilisateurs.
@@ -456,8 +457,8 @@ def cmd_duplicate(options):
 
     # Duplication des permissions sur les données.
     if options.permission_type == "all" or options.permission_type == "data":
-        print _("Adding %s's datapermissions to usergroup '%s'.") % \
-            (usergroup_src.group_name, usergroup_dst.group_name)
+        print(_("Adding %s's datapermissions to usergroup '%s'.") %
+                (usergroup_src.group_name, usergroup_dst.group_name))
 
         datapermissions = {}
 
@@ -484,14 +485,14 @@ def cmd_duplicate(options):
                             'usergroup': usergroup_dst.group_name,
                             'dataperm': _reverse_permissions[dataperm_src.access],
                           })
-        print _("Datapermissions duplication completed.")
+        print(_("Datapermissions duplication completed."))
 
     # Duplication des permissions sur les applications.
     if options.permission_type == "all" or options.permission_type == "apps":
-        print _("Adding %s's permissions to usergroup '%s'.") % \
-            (usergroup_src.group_name, usergroup_dst.group_name)
+        print(_("Adding %s's permissions to usergroup '%s'.") %
+                (usergroup_src.group_name, usergroup_dst.group_name))
         usergroup_dst.permissions.extend(usergroup_src.permissions)
-        print _("Permissions duplication completed.")
+        print(_("Permissions duplication completed."))
 
     DBSession.flush()
     if options.commit:

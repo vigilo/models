@@ -10,6 +10,7 @@
 # - R0904: Too many public methods
 # - W0212: Access to a protected member of a client class
 
+from __future__ import print_function
 import unittest
 import transaction
 
@@ -74,7 +75,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
     def test_add_single(self):
         """Ajout de permission sur un seul groupe."""
         for (incode, outcode) in commands._permissions.iteritems():
-            print "Test permission %s" % incode
+            print("Test permission %s" % incode)
             options = NamespaceStub(
                 permission=incode,
                 object_type=self._type,
@@ -107,7 +108,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
     def test_add_multiple_error(self):
         """Pas de permission sur plusieurs groupes par défaut."""
         for incode in commands._permissions:
-            print "Test permission %s" % incode
+            print("Test permission %s" % incode)
             options = NamespaceStub(
                 permission=incode,
                 object_type=self._type,
@@ -131,7 +132,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
     def test_add_multiple_batch(self):
         """Ajout permission sur plusieurs groupes en mode batch."""
         for (incode, outcode) in commands._permissions.iteritems():
-            print "Test permission %s" % incode
+            print("Test permission %s" % incode)
             options = NamespaceStub(
                 permission=incode,
                 object_type=self._type,
@@ -166,7 +167,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
 
 
     def _add_permission(self, group, perm):
-        print "group = %r, perm = %r" % (unicode(group).encode('utf-8'), perm)
+        print("group = %r, perm = %r" % (unicode(group).encode('utf-8'), perm))
         DBSession.add(tables.DataPermission(
             idgroup=group.idgroup,
             idusergroup=self._usergroup.idgroup,
@@ -178,7 +179,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
     def test_add_conflict(self):
         """Détection des conflits de permission."""
         for incode in commands._permissions:
-            print "Test permission %s" % incode
+            print("Test permission %s" % incode)
             # On simule l'existence d'une permission avant le début du test.
             # Si le test porte sur la permission "lecture seule", alors la
             # permission existante est en lecture/écriture et vice-versa.
@@ -221,7 +222,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
     def test_update(self):
         """Mise à jour des permissions."""
         for (incode, outcode) in commands._permissions.iteritems():
-            print "Test permission %s" % incode
+            print("Test permission %s" % incode)
             # On simule l'existence d'une permission avant le début du test.
             # Si le test porte sur la permission "lecture seule", alors la
             # permission existante est en lecture/écriture et vice-versa.

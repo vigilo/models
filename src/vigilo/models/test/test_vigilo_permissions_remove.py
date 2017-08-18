@@ -10,6 +10,7 @@
 # - R0904: Too many public methods
 # - W0212: Access to a protected member of a client class
 
+from __future__ import print_function
 import unittest
 import transaction
 
@@ -102,7 +103,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
         permissions = commands._permissions.copy()
         permissions[None] = None
         for incode in commands._permissions:
-            print "Test permission %s" % incode
+            print("Test permission %s" % incode)
             self._set_permissions()
             if incode == "ro":
                 group = self._group1
@@ -152,7 +153,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
         permissions = commands._permissions.copy()
         permissions[None] = None
         for incode in permissions:
-            print "Test permission %r" % (incode, )
+            print("Test permission %r" % (incode, ))
             self._set_permissions()
 
             options = NamespaceStub(
@@ -190,7 +191,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
         permissions = commands._permissions.copy()
         permissions[None] = None
         for incode in permissions:
-            print "Test permission %s" % incode
+            print("Test permission %s" % incode)
             self._set_permissions()
             options = NamespaceStub(
                 permission=incode,

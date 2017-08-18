@@ -3,6 +3,7 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Unit test suite for the models of the application."""
+from __future__ import print_function
 from nose.tools import assert_equals
 from vigilo.models.session import DBSession, metadata
 from vigilo.models.tables import StateName
@@ -67,7 +68,7 @@ class ModelTest(object):
         """Set up the fixture used to test the model."""
         setup_db()
         try:
-            print "Class being tested:", self.klass
+            print("Class being tested:", self.klass)
             new_attrs = {}
             new_attrs.update(self.attrs)
             new_attrs.update(self.do_get_dependencies())

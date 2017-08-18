@@ -7,6 +7,7 @@ Script permettant de modifier le mot de passe
 d'un utilisateur dans la base de données de Vigilo.
 """
 
+from __future__ import print_function
 import os
 import pwd
 import sys
@@ -51,14 +52,14 @@ def change_password(*args):
     logger = get_logger(__name__)
 
     if len(args) > 1:
-        print _('Too many arguments')
+        print(_('Too many arguments'))
         sys.exit(1)
 
     from vigilo.models.configure import configure_db
     try:
         configure_db(settings['database'], 'sqlalchemy_')
     except KeyError:
-        print _('No database configuration found')
+        print(_('No database configuration found'))
         sys.exit(1)
 
     from vigilo.models.session import DBSession
@@ -73,7 +74,7 @@ def change_password(*args):
 
     msg = _("Changing Vigilo password for user '%s'.")
     logger.info(msg, username)
-    print msg % username
+    print(msg % username)
 
     # Si l'utilisateur n'est pas "root" (UID 0),
     # alors on demande le mot de passe actuel.
@@ -83,7 +84,7 @@ def change_password(*args):
     user = tables.User.by_user_name(unicode(username))
     if user is None or (current_user.pw_uid != 0 and \
         not user.validate_password(current_password, True)):
-        print _("Bad login or password.")
+        print(_("Bad login or password."))
         sys.exit(1)
 
     if options.passfile:
@@ -97,13 +98,13 @@ def change_password(*args):
     # Le nouveau mot de passe et sa
     # confirmation doivent coïncider.
     if new_password != new_password2:
-        print _("Sorry, passwords do not match.")
+        print(_("Sorry, passwords do not match."))
         sys.exit(1)
 
     # Si le nouveau mot de passe est le même
     # que l'ancien, il n'y a rien à faire.
     if current_password == new_password:
-        print _("Password unchanged.")
+        print(_("Password unchanged."))
         sys.exit(0)
 
     user.password = new_password
@@ -114,11 +115,11 @@ def change_password(*args):
         # W0703: Catch "Exception"
         msg = _("An exception occurred while updating password for user '%s'.")
         logger.exception(msg, username)
-        print msg % username
+        print(msg % username)
         sys.exit(1)
 
     # Si on arrive ici, c'est que tout s'est bien passé.
     msg = _("Successfully updated password for user '%s'.")
     logger.info(msg, username)
-    print msg % username
+    print(msg % username)
     sys.exit(0)

@@ -6,6 +6,7 @@ Script permettant de modifier le mot de passe
 d'un utilisateur dans la base de données de Vigilo.
 """
 
+from __future__ import print_function
 import os, pwd, sys
 import warnings
 
@@ -237,7 +238,7 @@ def _prepare_db(options):
     try:
         configure_db(settings['database'], 'sqlalchemy_')
     except KeyError:
-        print _('No database configuration found')
+        print(_('No database configuration found'))
         return False
     return True
 
@@ -261,7 +262,7 @@ def main():
     # Seul "root" (UID 0) est autorisé à changer les permissions
     # dans Vigilo de façon arbitraire.
     if current_user.pw_uid != 0:
-        print _("You must be root to use this script.")
+        print(_("You must be root to use this script."))
         sys.exit(1)
 
     if not _prepare_db(options):

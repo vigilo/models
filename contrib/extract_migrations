@@ -10,6 +10,7 @@ Pour chaque migration, le script affiche le nom du fichier
 correspondant à la migration et la documentation associée
 à la migration (docstring).
 """
+from __future__ import print_function
 import sys
 import pkg_resources
 from vigilo.models.websetup import get_migration_scripts
@@ -32,7 +33,7 @@ def main(migration_no):
     sorted(versions)
     for (i, ver) in enumerate(versions):
         if i > 0:
-            print "-" * 30
+            print("-" * 30)
 
         ep = pkg_resources.EntryPoint.parse(
             'upgrade = %s.migration.%s' % (
@@ -40,11 +41,11 @@ def main(migration_no):
                 scripts[ver],
             )).load(require=False)
 
-        print scripts[ver] + '.py'
-        print ep.__doc__
+        print(scripts[ver] + '.py')
+        print(ep.__doc__)
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print "Usage: %s <migration>" % sys.argv[0]
+        print("Usage: %s <migration>" % sys.argv[0])
         sys.exit(1)
     main(int(sys.argv[1]))
