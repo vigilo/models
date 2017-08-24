@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version:  vigilo.models\n"
 "Report-Msgid-Bugs-To: contact.vigilo@c-s.fr\n"
 "POT-Creation-Date: 2010-02-16 09:45+0100\n"
-"PO-Revision-Date: 2016-12-06 14:29+0100\n"
+"PO-Revision-Date: 2017-08-24 12:17+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -49,22 +49,22 @@ msgid "Close events for services in the 'OK' state."
 msgstr "Fermer les événements pour les services dans l'état 'OK'."
 
 #: src/vigilo/models/scripts/close_vigiboard.py:103
-#: src/vigilo/models/scripts/passwd.py:36
+#: src/vigilo/models/scripts/passwd.py:37
 #: src/vigilo/models/scripts/purge_vigiboard.py:223
-#: src/vigilo/models/scripts/permissions/main.py:37
+#: src/vigilo/models/scripts/permissions/main.py:38
 msgid "Load configuration from this file."
 msgstr "Utiliser la configuration définie dans ce fichier."
 
 #: src/vigilo/models/scripts/close_vigiboard.py:118
-#: src/vigilo/models/scripts/passwd.py:54
+#: src/vigilo/models/scripts/passwd.py:55
 #: src/vigilo/models/scripts/purge_vigiboard.py:238
 msgid "Too many arguments"
 msgstr "Trop d'arguments"
 
 #: src/vigilo/models/scripts/close_vigiboard.py:125
-#: src/vigilo/models/scripts/passwd.py:61
+#: src/vigilo/models/scripts/passwd.py:62
 #: src/vigilo/models/scripts/purge_vigiboard.py:245
-#: src/vigilo/models/scripts/permissions/main.py:240
+#: src/vigilo/models/scripts/permissions/main.py:241
 msgid "No database configuration found"
 msgstr "Configuration de la base de données non trouvée"
 
@@ -85,11 +85,11 @@ msgstr "Une erreur est survenue :"
 msgid "Successfully closed %d events matching the given criteria."
 msgstr "%d événements fermés avec succès, correspondant aux critères donnés."
 
-#: src/vigilo/models/scripts/passwd.py:30
+#: src/vigilo/models/scripts/passwd.py:31
 msgid "%prog [options] [username]"
 msgstr "%prog [option] [nom d'utilisateur]"
 
-#: src/vigilo/models/scripts/passwd.py:32
+#: src/vigilo/models/scripts/passwd.py:33
 msgid ""
 "Changes Vigilo's password for user 'username' or the currently logged in "
 "user if this argument is omitted."
@@ -97,47 +97,47 @@ msgstr ""
 "Modifie le mot de passe Vigilo de l'utilisateur \"nom d'utilisateur\" ou "
 "de l'utilisateur qui lance la commande si cet argument est omis."
 
-#: src/vigilo/models/scripts/passwd.py:39
+#: src/vigilo/models/scripts/passwd.py:40
 msgid "Read the new password from this file."
 msgstr "Lire le nouveau mot de passe depuis ce fichier."
 
-#: src/vigilo/models/scripts/passwd.py:74
+#: src/vigilo/models/scripts/passwd.py:75
 #, python-format
 msgid "Changing Vigilo password for user '%s'."
 msgstr "Modification du mot de passe Vigilo pour l'utilisateur '%s'."
 
-#: src/vigilo/models/scripts/passwd.py:81
+#: src/vigilo/models/scripts/passwd.py:82
 msgid "Enter current password: "
 msgstr "Mot de passe actuel : "
 
-#: src/vigilo/models/scripts/passwd.py:86
+#: src/vigilo/models/scripts/passwd.py:87
 msgid "Bad login or password."
 msgstr "Identifiant ou mot de passe incorrect."
 
-#: src/vigilo/models/scripts/passwd.py:94
+#: src/vigilo/models/scripts/passwd.py:95
 msgid "Enter new password: "
 msgstr "Nouveau mot de passe : "
 
-#: src/vigilo/models/scripts/passwd.py:95
+#: src/vigilo/models/scripts/passwd.py:96
 msgid "Confirm new password: "
 msgstr "Confirmer : "
 
-#: src/vigilo/models/scripts/passwd.py:100
+#: src/vigilo/models/scripts/passwd.py:101
 msgid "Sorry, passwords do not match."
 msgstr "Désolé, les mots de passe ne coïncident pas."
 
-#: src/vigilo/models/scripts/passwd.py:106
+#: src/vigilo/models/scripts/passwd.py:107
 msgid "Password unchanged."
 msgstr "Le mot de passe n'a pas été modifié."
 
-#: src/vigilo/models/scripts/passwd.py:115
+#: src/vigilo/models/scripts/passwd.py:116
 #, python-format
 msgid "An exception occurred while updating password for user '%s'."
 msgstr ""
 "Une erreur est survenue durant la mise à jour du mot de passe de "
 "l'utilisateur '%s'."
 
-#: src/vigilo/models/scripts/passwd.py:121
+#: src/vigilo/models/scripts/passwd.py:122
 #, python-format
 msgid "Successfully updated password for user '%s'."
 msgstr "Le mot de passe de l'utilisateur '%s' a été mis à jour avec succès."
@@ -222,37 +222,37 @@ msgstr ""
 
 #. TRANSLATORS: Used in a sentence such as:
 #. TRANSLATORS: "Added ... permission on Foo for usergroup Bar".
-#: src/vigilo/models/scripts/permissions/commands.py:28
-#: src/vigilo/models/scripts/permissions/main.py:83
-#: src/vigilo/models/scripts/permissions/main.py:123
+#: src/vigilo/models/scripts/permissions/commands.py:29
+#: src/vigilo/models/scripts/permissions/main.py:84
+#: src/vigilo/models/scripts/permissions/main.py:124
 msgid "read-only"
 msgstr "lecture seule"
 
 #. TRANSLATORS: Used in a sentence such as:
 #. TRANSLATORS: "Added ... permission on Foo for usergroup Bar".
-#: src/vigilo/models/scripts/permissions/commands.py:32
-#: src/vigilo/models/scripts/permissions/main.py:84
-#: src/vigilo/models/scripts/permissions/main.py:124
+#: src/vigilo/models/scripts/permissions/commands.py:33
+#: src/vigilo/models/scripts/permissions/main.py:85
+#: src/vigilo/models/scripts/permissions/main.py:125
 msgid "read/write"
 msgstr "lecture/écriture"
 
 #. TRANSLATORS: Used in a sentence such as:
 #. TRANSLATORS: "Removed ... permission on Foo for usergroup Bar".
-#: src/vigilo/models/scripts/permissions/commands.py:36
+#: src/vigilo/models/scripts/permissions/commands.py:37
 msgid "all"
 msgstr "toutes"
 
-#: src/vigilo/models/scripts/permissions/commands.py:64
-#: src/vigilo/models/scripts/permissions/commands.py:193
-#: src/vigilo/models/scripts/permissions/commands.py:341
-#: src/vigilo/models/scripts/permissions/commands.py:389
-#: src/vigilo/models/scripts/permissions/commands.py:446
+#: src/vigilo/models/scripts/permissions/commands.py:65
+#: src/vigilo/models/scripts/permissions/commands.py:194
+#: src/vigilo/models/scripts/permissions/commands.py:342
+#: src/vigilo/models/scripts/permissions/commands.py:390
+#: src/vigilo/models/scripts/permissions/commands.py:447
 #, python-format
 msgid "No such usergroup '%s'"
 msgstr "Groupe d'utilisateurs inconnu '%s'"
 
-#: src/vigilo/models/scripts/permissions/commands.py:71
-#: src/vigilo/models/scripts/permissions/commands.py:200
+#: src/vigilo/models/scripts/permissions/commands.py:72
+#: src/vigilo/models/scripts/permissions/commands.py:201
 #, python-format
 msgid ""
 "Could not parse <object group> (%s). Make sure the value is correct and "
@@ -261,16 +261,16 @@ msgstr ""
 "Impossible de lire la valeur de <object group> (%s). Assuez-vous que la "
 "valeur est correcte et réessayez."
 
-#: src/vigilo/models/scripts/permissions/commands.py:84
-#: src/vigilo/models/scripts/permissions/commands.py:227
+#: src/vigilo/models/scripts/permissions/commands.py:85
+#: src/vigilo/models/scripts/permissions/commands.py:228
 #, python-format
 msgid "No match found for group '%(group)s' with type '%(type)s'."
 msgstr ""
 "Aucune correspondance trouvée pour le groupe '%(group)s' avec le type "
 "'%(type)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:93
-#: src/vigilo/models/scripts/permissions/commands.py:243
+#: src/vigilo/models/scripts/permissions/commands.py:94
+#: src/vigilo/models/scripts/permissions/commands.py:244
 #, python-format
 msgid ""
 "Multiple groups named '%(group)s' with type '%(type)s' were found. Use "
@@ -280,12 +280,12 @@ msgstr ""
 "trouvés. Utilisez --batch pour modifier les permissions sur plusieurs "
 "groupes simultanément."
 
-#: src/vigilo/models/scripts/permissions/commands.py:100
-#: src/vigilo/models/scripts/permissions/commands.py:250
+#: src/vigilo/models/scripts/permissions/commands.py:101
+#: src/vigilo/models/scripts/permissions/commands.py:251
 msgid "The following groups were found:"
 msgstr "Les groupes suivants ont été trouvés :"
 
-#: src/vigilo/models/scripts/permissions/commands.py:116
+#: src/vigilo/models/scripts/permissions/commands.py:117
 #, python-format
 msgid ""
 "Usergroup '%(usergroup)s' already has %(perm)s permissions on '%(path)s'."
@@ -294,7 +294,7 @@ msgstr ""
 "Le groupe d'utilisateur '%(usergroup)s' a déjà des permissions en "
 "%(perm)s sur '%(path)s'. Aucun changement n'est nécessaire."
 
-#: src/vigilo/models/scripts/permissions/commands.py:128
+#: src/vigilo/models/scripts/permissions/commands.py:129
 #, python-format
 msgid ""
 "Conflict detected: usergroup '%(usergroup)s' already has %(perm)s "
@@ -303,7 +303,7 @@ msgstr ""
 "Conflit détecté : le groupe d'utilisateurs '%(usergroup)s' a déjà un "
 "accès en %(perm)s sur '%(path)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:153
+#: src/vigilo/models/scripts/permissions/commands.py:154
 #, python-format
 msgid ""
 "Successfully set %(perm)s permissions on '%(path)s' for usergroup "
@@ -312,7 +312,7 @@ msgstr ""
 "Les permissions en %(perm)s ont correctement été positionnées sur "
 "'%(path)s' pour le groupe d'utilisateurs '%(usergroup)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:164
+#: src/vigilo/models/scripts/permissions/commands.py:165
 #, python-format
 msgid ""
 "Successfully set %(perm)s permissions on %(nb_groups)d groups for "
@@ -321,7 +321,7 @@ msgstr ""
 "Les permissions en %(perm)s ont correctement été positionnées sur "
 "%(nb_groups)d groupes pour le groupe d'utilisateurs '%(usergroup)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:234
+#: src/vigilo/models/scripts/permissions/commands.py:235
 #, python-format
 msgid ""
 "No match found for group '%(group)s' with type '%(type)s' and permission "
@@ -330,7 +330,7 @@ msgstr ""
 "Aucune correspondance trouvée pour le groupe '%(group)s' et la permission"
 " '%(perm)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:270
+#: src/vigilo/models/scripts/permissions/commands.py:271
 #, python-format
 msgid ""
 "Successfully removed %(perm)s permissions on '%(path)s' for usergroup "
@@ -339,7 +339,7 @@ msgstr ""
 "Les permissions en %(perm)s ont bien été retirées sur '%(path)s' pour le "
 "groupe d'utilisateurs '%(usergroup)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:282
+#: src/vigilo/models/scripts/permissions/commands.py:283
 #, python-format
 msgid ""
 "Successfully removed %(perm)s permissions on %(nb_groups)d groups for "
@@ -348,74 +348,75 @@ msgstr ""
 "Les permissions en %(perm)s ont bien été retirées sur %(nb_groups)d "
 "groupes pour le groupe d'utilisateurs '%(usergroup)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:316
+#: src/vigilo/models/scripts/permissions/commands.py:317
 #, python-format
 msgid "%(count)d groups found with type '%(type)s':"
 msgstr "%(count)d groupes trouvés avec le type '%(type)s' :"
 
-#: src/vigilo/models/scripts/permissions/commands.py:345
-#: src/vigilo/models/scripts/permissions/commands.py:393
+#: src/vigilo/models/scripts/permissions/commands.py:346
+#: src/vigilo/models/scripts/permissions/commands.py:394
 msgid "No usergroup selected."
 msgstr "Aucun groupe d'utilisateurs sélectionné."
 
-#: src/vigilo/models/scripts/permissions/commands.py:355
-#: src/vigilo/models/scripts/permissions/commands.py:403
+#: src/vigilo/models/scripts/permissions/commands.py:356
+#: src/vigilo/models/scripts/permissions/commands.py:404
 #, python-format
 msgid "No such permission '%s'."
 msgstr "Permission introuvable '%s'"
 
-#: src/vigilo/models/scripts/permissions/commands.py:359
-#: src/vigilo/models/scripts/permissions/commands.py:407
+#: src/vigilo/models/scripts/permissions/commands.py:360
+#: src/vigilo/models/scripts/permissions/commands.py:408
 msgid "No permission selected."
 msgstr "Aucune permission sélectionnée."
 
-#: src/vigilo/models/scripts/permissions/commands.py:364
+#: src/vigilo/models/scripts/permissions/commands.py:365
 #, python-format
 msgid "Adding permissions for usergroup '%s'."
 msgstr "Ajout des permissions pour le groupe d'utilisateurs '%s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:412
+#: src/vigilo/models/scripts/permissions/commands.py:413
 #, python-format
 msgid "Removing permissions for usergroup '%s'."
 msgstr "Suppression des permissions pour le groupe d'utilisateur '%s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:440
+#: src/vigilo/models/scripts/permissions/commands.py:441
 msgid "Usergroup must be different"
 msgstr "Les groupes d'utilisateurs doivent être différents"
 
-#: src/vigilo/models/scripts/permissions/commands.py:450
+#: src/vigilo/models/scripts/permissions/commands.py:451
 msgid "Error on selected usergroups"
 msgstr "Groupe d'utilisateurs inconnu '%s'"
 
-#: src/vigilo/models/scripts/permissions/commands.py:459
+#: src/vigilo/models/scripts/permissions/commands.py:460
 #, python-format
 msgid "Adding %s's datapermissions to usergroup '%s'."
 msgstr "Ajout des permissions sur données de '%s' au groupe d'utilisateurs '%s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:482
+#: src/vigilo/models/scripts/permissions/commands.py:483
 #, python-format
 msgid "Successfully set %(dataperm)s permissions for usergroup '%(usergroup)s'."
 msgstr ""
 "Les permissions en %(dataperm)s ont correctement été positionnées pour le"
 " groupe d'utilisateurs '%(usergroup)s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:487
+#: src/vigilo/models/scripts/permissions/commands.py:488
 msgid "Datapermissions duplication completed."
 msgstr "Duplication des permissions sur données effectuée."
 
-#: src/vigilo/models/scripts/permissions/commands.py:491
+#: src/vigilo/models/scripts/permissions/commands.py:492
+#, python-format
 msgid "Adding %s's permissions to usergroup '%s'."
 msgstr "Ajout des permissions de '%s' au groupe d'utilisateurs '%s'."
 
-#: src/vigilo/models/scripts/permissions/commands.py:494
+#: src/vigilo/models/scripts/permissions/commands.py:495
 msgid "Permissions duplication completed."
 msgstr "Duplication des permissions effectuée."
 
-#: src/vigilo/models/scripts/permissions/main.py:56
+#: src/vigilo/models/scripts/permissions/main.py:57
 msgid "Commands"
 msgstr "Commandes"
 
-#: src/vigilo/models/scripts/permissions/main.py:63
+#: src/vigilo/models/scripts/permissions/main.py:64
 msgid ""
 "Add or update permissions for the given usergroup to a certain group of "
 "objects."
@@ -423,14 +424,14 @@ msgstr ""
 "Ajoute ou met à jour les permissions pour le groupe d'utilisateurs donné "
 "sur un certain groupe d'objets."
 
-#: src/vigilo/models/scripts/permissions/main.py:68
-#: src/vigilo/models/scripts/permissions/main.py:108
-#: src/vigilo/models/scripts/permissions/main.py:179
-#: src/vigilo/models/scripts/permissions/main.py:193
+#: src/vigilo/models/scripts/permissions/main.py:69
+#: src/vigilo/models/scripts/permissions/main.py:109
+#: src/vigilo/models/scripts/permissions/main.py:180
+#: src/vigilo/models/scripts/permissions/main.py:194
 msgid "Usergroup to act upon."
 msgstr "Groupe d'utilisateurs sur lequel opérer."
 
-#: src/vigilo/models/scripts/permissions/main.py:72
+#: src/vigilo/models/scripts/permissions/main.py:73
 msgid ""
 "Type of object group to act upon: 'monitored' for groups of monitored "
 "items, 'map' for groups of maps, or 'graph' for groups of graphs"
@@ -439,8 +440,8 @@ msgstr ""
 "groupes d'éléments supervisés, 'map' pour les groupes de cartes ou "
 "'graph' pour les groupes de graphes."
 
-#: src/vigilo/models/scripts/permissions/main.py:77
-#: src/vigilo/models/scripts/permissions/main.py:117
+#: src/vigilo/models/scripts/permissions/main.py:78
+#: src/vigilo/models/scripts/permissions/main.py:118
 msgid ""
 "Group to act upon. This can be either the full path to the group, or a "
 "relative one."
@@ -448,14 +449,14 @@ msgstr ""
 "Groupe sur lequel opérer. Il peut s'agir du chemin complet vers le groupe"
 " ou bien d'un chemin relatif."
 
-#: src/vigilo/models/scripts/permissions/main.py:81
-#: src/vigilo/models/scripts/permissions/main.py:121
+#: src/vigilo/models/scripts/permissions/main.py:82
+#: src/vigilo/models/scripts/permissions/main.py:122
 #, python-format
 msgid "Type of permission to give: 'ro' (%(ro)s) or 'rw' (%(rw)s)."
 msgstr "Le type de permission à donner : 'ro' (%(ro)s) ou 'rw' (%(rw)s)."
 
-#: src/vigilo/models/scripts/permissions/main.py:87
-#: src/vigilo/models/scripts/permissions/main.py:127
+#: src/vigilo/models/scripts/permissions/main.py:88
+#: src/vigilo/models/scripts/permissions/main.py:128
 msgid ""
 "In case multiple groups of objects are found with the given name and "
 "type, apply the permissions for all of them at once."
@@ -463,17 +464,17 @@ msgstr ""
 "Dans le cas où plusieurs groupes d'objets correspondent au nom et au type"
 " donné, ajuster les permissions de tous les groupes simultanément."
 
-#: src/vigilo/models/scripts/permissions/main.py:91
+#: src/vigilo/models/scripts/permissions/main.py:92
 msgid "Resolve conflicts by updating existing permissions."
 msgstr "Résoudre les conflits en mettant à jour les permissions existantes."
 
-#: src/vigilo/models/scripts/permissions/main.py:103
+#: src/vigilo/models/scripts/permissions/main.py:104
 msgid "Remove permissions for a given usergroup on a certain group of objects."
 msgstr ""
 "Supprime les permissions d'un groupe d'utilisateur donné sur un certain "
 "groupe d'objets."
 
-#: src/vigilo/models/scripts/permissions/main.py:112
+#: src/vigilo/models/scripts/permissions/main.py:113
 msgid ""
 "Type of object group to act upon: 'monitored' for groups of monitored "
 "items, 'map' for groups of maps, or 'graph' for groups of graphs."
@@ -482,13 +483,13 @@ msgstr ""
 "groupes d'éléments supervisés, 'map' pour les groupes de cartes ou "
 "'graph' pour les groupes de graphes."
 
-#: src/vigilo/models/scripts/permissions/main.py:137
+#: src/vigilo/models/scripts/permissions/main.py:138
 msgid "Display the list of existing usergroups and other groups of objects."
 msgstr ""
 "Affiche la liste des groupes d'utilisateurs et autres groupes d'objets "
 "existant."
 
-#: src/vigilo/models/scripts/permissions/main.py:143
+#: src/vigilo/models/scripts/permissions/main.py:144
 msgid ""
 "Type of object group to act upon: 'monitored' for groups of monitored "
 "items, 'map' for groups of maps, 'graph' for groups of graphs, or 'user' "
@@ -498,36 +499,36 @@ msgstr ""
 "d'éléments supervisés, 'map' pour les groupes de cartes, 'graph' pour les"
 " groupes de graphes ou 'user' pour les groupes d'utilisateurs."
 
-#: src/vigilo/models/scripts/permissions/main.py:152
+#: src/vigilo/models/scripts/permissions/main.py:153
 #, python-format
 msgid "Alias for '%(prog)s add --update'."
 msgstr "Alias pour '%(prog)s add --update'."
 
-#: src/vigilo/models/scripts/permissions/main.py:157
-#: src/vigilo/models/scripts/permissions/main.py:161
-#: src/vigilo/models/scripts/permissions/main.py:165
+#: src/vigilo/models/scripts/permissions/main.py:158
+#: src/vigilo/models/scripts/permissions/main.py:162
+#: src/vigilo/models/scripts/permissions/main.py:166
 #, python-format
 msgid "Alias for '%(prog)s remove'."
 msgstr "Alias pour '%(prog)s remove'."
 
-#: src/vigilo/models/scripts/permissions/main.py:173
+#: src/vigilo/models/scripts/permissions/main.py:174
 msgid "Give permissions on Vigilo applications to some users."
 msgstr ""
 "Donne des permissions à certains utilisateurs sur les applications de "
 "Vigilo."
 
-#: src/vigilo/models/scripts/permissions/main.py:177
-#: src/vigilo/models/scripts/permissions/main.py:191
+#: src/vigilo/models/scripts/permissions/main.py:178
+#: src/vigilo/models/scripts/permissions/main.py:192
 msgid "Comma-separated list of permissions."
 msgstr "Liste de permissions, séparées par des virgules."
 
-#: src/vigilo/models/scripts/permissions/main.py:186
+#: src/vigilo/models/scripts/permissions/main.py:187
 msgid "Take away permissions on Vigilo applications from some users."
 msgstr ""
 "Retire les permissions de certains utilisateurs sur les applications de "
 "Vigilo."
 
-#: src/vigilo/models/scripts/permissions/main.py:200
+#: src/vigilo/models/scripts/permissions/main.py:201
 msgid ""
 "Duplicate permissions on Vigilo applications and/or data from one "
 "usergroup to another."
@@ -535,7 +536,7 @@ msgstr ""
 "Duplique les permissions sur les applications et/ou les données d'un "
 "groupe d'utilisateurs à un autre."
 
-#: src/vigilo/models/scripts/permissions/main.py:207
+#: src/vigilo/models/scripts/permissions/main.py:208
 msgid ""
 "Type of permissions to duplicate: 'data' to duplicate permissions on "
 "data, 'apps' to duplicate permissions on Vigilo apps, or 'all' to "
@@ -545,11 +546,11 @@ msgstr ""
 "sur les données, 'apps' pour dupliquer les permissions sur les "
 "applications, 'all' pour dupliquer tout type de permissions"
 
-#: src/vigilo/models/scripts/permissions/main.py:212
+#: src/vigilo/models/scripts/permissions/main.py:213
 msgid "Usergroup to act upon: <src_group> <dest_group>"
 msgstr "Sélection des groupes d'utilisateurs : <src_group> <dest_group>"
 
-#: src/vigilo/models/scripts/permissions/main.py:264
+#: src/vigilo/models/scripts/permissions/main.py:265
 msgid "You must be root to use this script."
 msgstr "Seul le super-utilisateur (root) peut utiliser ce script."
 
