@@ -312,7 +312,13 @@ class User(DeclarativeBase, object):
         """
         from vigilo.models.configure import SCHEMES as schemes
         ctx = CryptContext(schemes=schemes)
-        self._password = ctx.encrypt(password)
+
+        # Supporte l'API de Passlib 1.7.0+ (méthode hash())
+        # et celle des versions antérieures (méthode encrypt()).
+        if hasattr(ctx, 'hash'):
+            self._password = ctx.hash(password)
+        else:
+            self._password = ctx.encrypt(password)
 
     def validate_password(self, password, allow_missing=False):
         """
