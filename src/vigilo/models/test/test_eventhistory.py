@@ -34,9 +34,11 @@ class TestEventHistory(ModelTest):
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""
-        # Exemple de résultat attendu : Nov 12, 2013 8:43:40 PM
-        assert_true(re.compile("^\w{3} \d+, \d{4} \d+:\d+:\d+ \w+$").match(
-            self.obj.get_date("timestamp", "en")))
+        # Exemples de résultats attendus (selon la version de Babel) :
+        # Nov 12, 2013 8:43:40 PM
+        # Nov 12, 2013, 8:43:40 PM
+        pattern = re.compile("^\w{3} \d{1,2}, \d{4} \d+:\d+:\d+ [AP]M$")
+        assert_true(pattern.match(self.obj.get_date("timestamp", "en")))
 
     def test_get_since_date(self):
         """La fonction GetSinceDate doit renvoyer un objet formaté"""

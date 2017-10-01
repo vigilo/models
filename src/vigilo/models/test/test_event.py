@@ -36,10 +36,12 @@ class TestEvent(ModelTest):
 
     def test_get_date(self):
         """La fonction GetDate doit renvoyer un objet formaté"""
-        # Motif pour une date du type "Mar 15, 2011 2:44:21 PM".
-        form1 = re.compile("^\w* \d{1,2}, \d{4} \d{1,2}:\d{1,2}:\d{1,2} [PA]M$")
+        # Exemples de résultats attendus (selon la version de Babel) :
+        # Nov 12, 2013 8:43:40 PM
+        # Nov 12, 2013, 8:43:40 PM
+        pattern = re.compile("^\w{3} \d{1,2}, \d{4} \d+:\d+:\d+ [AP]M$")
         result = self.obj.get_date("timestamp", "en")
-        assert_true(form1.match(result))
+        assert_true(pattern.match(result))
 
     def test_get_since_date(self):
         """La fonction GetSinceDate doit renvoyer un objet formaté"""

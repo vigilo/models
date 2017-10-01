@@ -28,5 +28,7 @@ class TestDemo(unittest.TestCase):
 
     def test_demo(self):
         """Démonstration 'example1'."""
-        demo.example1.main()
+        for sample, ep in demo.samples.items():
+            mod = __import__(ep, globals(), locals(), ["main"], -1)
+            mod.main()
         DBSession.flush()
