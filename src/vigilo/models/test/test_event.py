@@ -39,7 +39,7 @@ class TestEvent(ModelTest):
         # Exemples de résultats attendus (selon la version de Babel) :
         # Nov 12, 2013 8:43:40 PM
         # Nov 12, 2013, 8:43:40 PM
-        pattern = re.compile("^\w{3} \d{1,2}, \d{4} \d+:\d+:\d+ [AP]M$")
+        pattern = re.compile("^\w{3} \d{1,2}, \d{4},? \d+:\d+:\d+ [AP]M$")
         result = self.obj.get_date("timestamp", "en")
         assert_true(pattern.match(result))
 
