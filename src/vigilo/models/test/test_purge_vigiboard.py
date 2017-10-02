@@ -88,14 +88,14 @@ class TestPurgeVigiBoard(unittest.TestCase):
 
         # L'entrée d'historique pour un HLS âgée
         # de 2j doit avoir été supprimée.
-        self.assertEquals(1, DBSession.query(tables.HLSHistory).count())
+        self.assertEqual(1, DBSession.query(tables.HLSHistory).count())
 
         # On s'assure que le CorrEvent et l'événement sur localhost2
         # âgés de 2j ont bien été supprimés.
         supitem = tables.Host.by_host_name(u'localhost2')
         event = DBSession.query(tables.Event).filter(
             tables.Event.idsupitem == supitem.idsupitem).first()
-        self.assertEquals(None, event) # sans Event, pas de CorrEvent possible.
+        self.assertEqual(None, event) # sans Event, pas de CorrEvent possible.
 
         # Les autres doivent être dans l'état "nouveau",
         # sauf l'événement sur localhost qui doit toujours être "fermé".
@@ -110,14 +110,14 @@ class TestPurgeVigiBoard(unittest.TestCase):
                 continue
 
             if other.cause.idsupitem == supitem.idsupitem:
-                self.assertEquals(
+                self.assertEqual(
                     other.ack,
                     tables.CorrEvent.ACK_CLOSED,
                     "L'événement corrélé sur %s devrait être 'fermé'" %
                         other.cause.supitem
                 )
             else:
-                self.assertEquals(
+                self.assertEqual(
                     other.ack,
                     tables.CorrEvent.ACK_NONE,
                     "L'événement corrélé sur %s devrait être 'nouveau'" %
@@ -134,14 +134,14 @@ class TestPurgeVigiBoard(unittest.TestCase):
 
         # Les 2 entrées d'historique pour un HLS
         # doivent avoir été supprimées.
-        self.assertEquals(0, DBSession.query(tables.HLSHistory).count())
+        self.assertEqual(0, DBSession.query(tables.HLSHistory).count())
 
         # On s'assure que le CorrEvent et l'événement sur localhost2
         # âgés de 2j ont bien été supprimés.
         supitem = tables.Host.by_host_name(u'localhost2')
         event = DBSession.query(tables.Event).filter(
             tables.Event.idsupitem == supitem.idsupitem).first()
-        self.assertEquals(None, event) # sans Event, pas de CorrEvent possible.
+        self.assertEqual(None, event) # sans Event, pas de CorrEvent possible.
 
         # Les autres doivent toujours être dans l'état "fermé".
         others = DBSession.query(tables.CorrEvent).all()
@@ -153,7 +153,7 @@ class TestPurgeVigiBoard(unittest.TestCase):
             if other.cause is None:
                 continue
 
-            self.assertEquals(
+            self.assertEqual(
                 other.ack,
                 tables.CorrEvent.ACK_NONE,
                 "L'événement corrélé sur %s devrait être 'nouveau'" %

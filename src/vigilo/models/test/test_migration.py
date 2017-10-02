@@ -44,7 +44,7 @@ class TestMigration(unittest.TestCase):
             tables.Version.name == u'vigilo.models').one()
         scripts = get_migration_scripts('vigilo.models')
         latest_version = max(scripts.keys())
-        self.assertEquals(installed_version.version, latest_version)
+        self.assertEqual(installed_version.version, latest_version)
 
     def test_migration(self):
         """Teste la migration (partielle/totale) du modèle."""
@@ -58,7 +58,7 @@ class TestMigration(unittest.TestCase):
             2: '002_Dummy',
             3: '003_Dummy',
         }
-        self.assertEquals(scripts, expected_scripts)
+        self.assertEqual(scripts, expected_scripts)
 
         # On simule l'installation d'un nouveau modèle.
         DBSession.add(tables.Version(
@@ -71,7 +71,7 @@ class TestMigration(unittest.TestCase):
         migrate_model(DBSession.bind, module, scripts, 2)
         version = DBSession.query(tables.Version).filter(
             tables.Version.name == module).one()
-        self.assertEquals(version.version, 2)
+        self.assertEqual(version.version, 2)
 
         # On annule la migration et on teste cette fois une migration
         # jusqu'à la dernière version disponible.
@@ -80,4 +80,4 @@ class TestMigration(unittest.TestCase):
         migrate_model(DBSession.bind, module, scripts)
         version = DBSession.query(tables.Version).filter(
             tables.Version.name == module).one()
-        self.assertEquals(version.version, 3)
+        self.assertEqual(version.version, 3)

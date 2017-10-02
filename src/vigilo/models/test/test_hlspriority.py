@@ -41,33 +41,33 @@ class TestHLSPriority(unittest.TestCase):
         DBSession.merge(self.hls)
         DBSession.flush()
         entry = DBSession.query(HLSPriority).one()
-        self.assertEquals(entry.idhls, self.hls.idservice)
-        self.assertEquals(entry.idstatename, StateName.statename_to_value(u'OK'))
-        self.assertEquals(entry.priority, 42)
+        self.assertEqual(entry.idhls, self.hls.idservice)
+        self.assertEqual(entry.idstatename, StateName.statename_to_value(u'OK'))
+        self.assertEqual(entry.priority, 42)
 
     def test_add_priority_by_name(self):
         """Ajout priorité pour un HLS par nom d'état."""
         self.hls.priorities[u'OK'] = 42
         DBSession.flush()
         entry = DBSession.query(HLSPriority).one()
-        self.assertEquals(entry.idhls, self.hls.idservice)
-        self.assertEquals(entry.idstatename, StateName.statename_to_value(u'OK'))
-        self.assertEquals(entry.priority, 42)
+        self.assertEqual(entry.idhls, self.hls.idservice)
+        self.assertEqual(entry.idstatename, StateName.statename_to_value(u'OK'))
+        self.assertEqual(entry.priority, 42)
 
     def test_add_priority_by_instance(self):
         """Ajout priorité pour un HLS par instance."""
         self.hls.priorities[self.statename] = 42
         DBSession.flush()
         entry = DBSession.query(HLSPriority).one()
-        self.assertEquals(entry.idhls, self.hls.idservice)
-        self.assertEquals(entry.idstatename, StateName.statename_to_value(u'OK'))
-        self.assertEquals(entry.priority, 42)
+        self.assertEqual(entry.idhls, self.hls.idservice)
+        self.assertEqual(entry.idstatename, StateName.statename_to_value(u'OK'))
+        self.assertEqual(entry.priority, 42)
 
     def test_by_hls_and_statename(self):
         """Récupération priorité avec by_hls_and_statename()."""
         self.hls.priorities[u'OK'] = 42
         self.hls.priorities[u'UNKNOWN'] = 43
         entry = HLSPriority.by_hls_and_statename(self.hls, u'OK')
-        self.assertEquals(entry.idhls, self.hls.idservice)
-        self.assertEquals(entry.idstatename, StateName.statename_to_value(u'OK'))
-        self.assertEquals(entry.priority, 42)
+        self.assertEqual(entry.idhls, self.hls.idservice)
+        self.assertEqual(entry.idstatename, StateName.statename_to_value(u'OK'))
+        self.assertEqual(entry.priority, 42)

@@ -87,22 +87,22 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
                                 # en la committant, on perdrait tout.
             )
             res = commands.cmd_add(options)
-            self.assertEquals(res, 0)
+            self.assertEqual(res, 0)
 
             # Une seule permission doit exister en base de données.
             # Elle doit porter sur le groupe 1 définis par le test
             # et avoir le bon type d'accès.
             dataperm = DBSession.query(tables.DataPermission).one()
-            self.assertEquals(dataperm.idgroup, self._group1.idgroup)
-            self.assertEquals(dataperm.idusergroup, self._usergroup.idgroup)
-            self.assertEquals(dataperm.access, outcode)
+            self.assertEqual(dataperm.idgroup, self._group1.idgroup)
+            self.assertEqual(dataperm.idusergroup, self._usergroup.idgroup)
+            self.assertEqual(dataperm.access, outcode)
 
             # Suppression de la permission pour le test
             # du type de permission suivant.
             DBSession.delete(dataperm)
             DBSession.flush()
             dataperm = DBSession.query(tables.DataPermission).first()
-            self.assertEquals(dataperm, None)
+            self.assertEqual(dataperm, None)
 
 
     def test_add_multiple_error(self):
@@ -126,7 +126,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
 
             # Aucune permission n'a été ajoutée.
             dataperm = DBSession.query(tables.DataPermission).first()
-            self.assertEquals(dataperm, None)
+            self.assertEqual(dataperm, None)
 
 
     def test_add_multiple_batch(self):
@@ -144,18 +144,18 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
                                 # en la committant, on perdrait tout.
             )
             res = commands.cmd_add(options)
-            self.assertEquals(res, 0)
+            self.assertEqual(res, 0)
 
             # 2 permissions doivent avoir été ajoutées.
             dataperms = DBSession.query(tables.DataPermission).all()
-            self.assertEquals(2, len(dataperms))
+            self.assertEqual(2, len(dataperms))
 
             idgroups = [self._group1.idgroup, self._group2.idgroup]
             for dataperm in dataperms:
                 self.assertTrue(dataperm.idgroup in idgroups)
                 idgroups.remove(dataperm.idgroup)
-                self.assertEquals(dataperm.idusergroup, self._usergroup.idgroup)
-                self.assertEquals(dataperm.access, outcode)
+                self.assertEqual(dataperm.idusergroup, self._usergroup.idgroup)
+                self.assertEqual(dataperm.access, outcode)
 
             # Suppression des permissions pour le test
             # du type de permission suivant.
@@ -163,7 +163,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
                 DBSession.delete(dataperm)
                 DBSession.flush()
             dataperm = DBSession.query(tables.DataPermission).first()
-            self.assertEquals(dataperm, None)
+            self.assertEqual(dataperm, None)
 
 
     def _add_permission(self, group, perm):
@@ -204,9 +204,9 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
             # Une seule permission doit exister en base de données.
             dataperm = DBSession.query(tables.DataPermission).one()
             # Le contenu de la permission NE DOIT PAS avoir changé.
-            self.assertEquals(self._usergroup.idgroup, dataperm.idusergroup)
-            self.assertEquals(self._group1.idgroup, dataperm.idgroup)
-            self.assertEquals(existing_perm, dataperm.access)
+            self.assertEqual(self._usergroup.idgroup, dataperm.idusergroup)
+            self.assertEqual(self._group1.idgroup, dataperm.idgroup)
+            self.assertEqual(existing_perm, dataperm.access)
 
             # Suppression de la permission pour le test
             # du type de permission suivant.
@@ -216,7 +216,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
                                     # DataPerm ne soit "vue" à l'itération
                                     # suivante.
             dataperm = DBSession.query(tables.DataPermission).first()
-            self.assertEquals(dataperm, None)
+            self.assertEqual(dataperm, None)
 
 
     def test_update(self):
@@ -242,14 +242,14 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
             # La demande doit être rejetée car elle rentre
             # en conflit avec les permissions existantes.
             res = commands.cmd_add(options)
-            self.assertEquals(res, 0)
+            self.assertEqual(res, 0)
 
             # Une seule permission doit exister en base de données.
             dataperm = DBSession.query(tables.DataPermission).one()
             # Le contenu de la permission doit avoir changé.
-            self.assertEquals(self._usergroup.idgroup, dataperm.idusergroup)
-            self.assertEquals(self._group1.idgroup, dataperm.idgroup)
-            self.assertEquals(outcode, dataperm.access)
+            self.assertEqual(self._usergroup.idgroup, dataperm.idusergroup)
+            self.assertEqual(self._group1.idgroup, dataperm.idgroup)
+            self.assertEqual(outcode, dataperm.access)
 
             # Suppression de la permission pour le test
             # du type de permission suivant.
@@ -259,7 +259,7 @@ class TestVigiloPermissionsAddMap(unittest.TestCase):
                                     # DataPerm ne soit "vue" à l'itération
                                     # suivante.
             dataperm = DBSession.query(tables.DataPermission).first()
-            self.assertEquals(dataperm, None)
+            self.assertEqual(dataperm, None)
 
 
 

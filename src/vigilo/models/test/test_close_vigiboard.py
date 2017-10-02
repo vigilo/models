@@ -104,7 +104,7 @@ class TestCloseVigiBoard(unittest.TestCase):
             for event in events
         ]
         for correvent in correvents:
-            self.assertEquals(correvent.ack, tables.CorrEvent.ACK_CLOSED)
+            self.assertEqual(correvent.ack, tables.CorrEvent.ACK_CLOSED)
 
         # Les autres doivent toujours être dans l'état "nouveau".
         others = DBSession.query(tables.CorrEvent).filter(
@@ -114,7 +114,7 @@ class TestCloseVigiBoard(unittest.TestCase):
             ).all()
         self.assertNotEquals(0, len(others))
         for other in others:
-            self.assertEquals(other.ack, tables.CorrEvent.ACK_NONE,
+            self.assertEqual(other.ack, tables.CorrEvent.ACK_NONE,
                 "L'événement corrélé sur %s devrait être 'nouveau'" %
                 other.cause.supitem
             )
@@ -136,14 +136,14 @@ class TestCloseVigiBoard(unittest.TestCase):
             tables.Event.idsupitem == supitem.idsupitem).one()
         correvent = DBSession.query(tables.CorrEvent).filter(
             tables.CorrEvent.idcause == event.idevent).one()
-        self.assertEquals(correvent.ack, tables.CorrEvent.ACK_CLOSED)
+        self.assertEqual(correvent.ack, tables.CorrEvent.ACK_CLOSED)
 
         # Les autres doivent toujours être dans l'état "nouveau".
         others = DBSession.query(tables.CorrEvent).filter(
             tables.CorrEvent.idcorrevent != correvent.idcorrevent).all()
         self.assertNotEquals(0, len(others))
         for other in others:
-            self.assertEquals(other.ack, tables.CorrEvent.ACK_NONE,
+            self.assertEqual(other.ack, tables.CorrEvent.ACK_NONE,
                 "L'événement corrélé sur %s devrait être 'nouveau'" %
                 other.cause.supitem
             )
@@ -178,7 +178,7 @@ class TestCloseVigiBoard(unittest.TestCase):
             for event in events
         ]
         for correvent in correvents:
-            self.assertEquals(correvent.ack, tables.CorrEvent.ACK_CLOSED)
+            self.assertEqual(correvent.ack, tables.CorrEvent.ACK_CLOSED)
 
         # Les autres doivent toujours être dans l'état "nouveau".
         others = DBSession.query(tables.CorrEvent).filter(
@@ -188,7 +188,7 @@ class TestCloseVigiBoard(unittest.TestCase):
             ).all()
         self.assertNotEquals(0, len(others))
         for other in others:
-            self.assertEquals(other.ack, tables.CorrEvent.ACK_NONE,
+            self.assertEqual(other.ack, tables.CorrEvent.ACK_NONE,
                 "L'événement corrélé sur %s devrait être 'nouveau'" %
                 other.cause.supitem
             )
@@ -208,14 +208,14 @@ class TestCloseVigiBoard(unittest.TestCase):
             tables.Event.idsupitem == supitem.idsupitem).one()
         correvent = DBSession.query(tables.CorrEvent).filter(
             tables.CorrEvent.idcause == event.idevent).one()
-        self.assertEquals(correvent.ack, tables.CorrEvent.ACK_CLOSED)
+        self.assertEqual(correvent.ack, tables.CorrEvent.ACK_CLOSED)
 
         # Les autres doivent toujours être dans l'état "nouveau".
         others = DBSession.query(tables.CorrEvent).filter(
             tables.CorrEvent.idcorrevent != correvent.idcorrevent).all()
         self.assertNotEquals(0, len(others))
         for other in others:
-            self.assertEquals(other.ack, tables.CorrEvent.ACK_NONE,
+            self.assertEqual(other.ack, tables.CorrEvent.ACK_NONE,
                 "L'événement corrélé sur %s devrait être 'nouveau'" %
                 other.cause.supitem
             )

@@ -40,9 +40,9 @@ class DeleteCascadeTest(unittest.TestCase):
         # On vérifie que la suppression de l'hôte a bien supprimé ses
         # représentations cartographiques
         mn_count = DBSession.query(tables.MapNode).count()
-        self.assertEquals(mn_count, 0)
+        self.assertEqual(mn_count, 0)
         mnh_count = DBSession.query(tables.MapNodeHost).count()
-        self.assertEquals(mnh_count, 0)
+        self.assertEqual(mnh_count, 0)
 
     def test_lls_mapnode(self):
         """Suppression des mapnodes d'un lls supprimé (#57)"""
@@ -57,11 +57,11 @@ class DeleteCascadeTest(unittest.TestCase):
         # On vérifie que la suppression du lls a bien supprimé ses
         # représentations cartographiques
         mn_count = DBSession.query(tables.MapNode).count()
-        self.assertEquals(mn_count, 0)
+        self.assertEqual(mn_count, 0)
         mns_count = DBSession.query(tables.MapNodeService).count()
-        self.assertEquals(mns_count, 0)
+        self.assertEqual(mns_count, 0)
         mnlls_count = DBSession.query(tables.MapNodeLls).count()
-        self.assertEquals(mnlls_count, 0)
+        self.assertEqual(mnlls_count, 0)
 
     def test_hls_mapnode(self):
         """Suppression des mapnodes d'un hls supprimé (#57)"""
@@ -76,11 +76,11 @@ class DeleteCascadeTest(unittest.TestCase):
         # On vérifie que la suppression du hls a bien supprimé ses
         # représentations cartographiques
         mn_count = DBSession.query(tables.MapNode).count()
-        self.assertEquals(mn_count, 0)
+        self.assertEqual(mn_count, 0)
         mns_count = DBSession.query(tables.MapNodeService).count()
-        self.assertEquals(mns_count, 0)
+        self.assertEqual(mns_count, 0)
         mnlls_count = DBSession.query(tables.MapNodeHls).count()
-        self.assertEquals(mnlls_count, 0)
+        self.assertEqual(mnlls_count, 0)
 
     def test_conffile(self):
         """Suppression des mapnodes d'un hôte d'un conffile"""
@@ -97,9 +97,9 @@ class DeleteCascadeTest(unittest.TestCase):
         # On vérifie que la suppression du fichier de configuration
         # de l'hôte a bien supprimé les représentations cartographiques.
         mn_count = DBSession.query(tables.MapNode).count()
-        self.assertEquals(mn_count, 0)
+        self.assertEqual(mn_count, 0)
         mnh_count = DBSession.query(tables.MapNodeHost).count()
-        self.assertEquals(mnh_count, 0)
+        self.assertEqual(mnh_count, 0)
 
 if __name__ == '__main__':
     unittest.main()

@@ -32,5 +32,5 @@ class TestMigration(unittest.TestCase):
         add_supitemgroup(u'TestRoot', None)
         root_path = DBSession.query(GroupPath).first()
 
-        self.assertEquals(u'/TestRoot', unicode(root_path))
-        self.assertEquals(u'<GroupPath "/TestRoot">', repr(root_path))
+        self.assertEqual(u'/TestRoot', unicode(root_path))
+        self.assertEqual(u'<GroupPath "/TestRoot">', repr(root_path))

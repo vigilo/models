@@ -121,12 +121,12 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
                                 # en la committant, on perdrait tout.
             )
             res = commands.cmd_remove(options)
-            self.assertEquals(res, 0)
+            self.assertEqual(res, 0)
 
             # On doit avoir 7 permissions en base :
             # les 8 de départ - 1 permission supprimée.
             dataperms = DBSession.query(tables.DataPermission).all()
-            self.assertEquals(7, len(dataperms))
+            self.assertEqual(7, len(dataperms))
 
             # On vérifie que la permission qu'on voulait supprimer
             # a effectivement été supprimée.
@@ -135,7 +135,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
                 ).filter(tables.DataPermission.idusergroup ==
                     self._usergroup.idgroup
                 ).first()
-            self.assertEquals(None, dataperm)
+            self.assertEqual(None, dataperm)
 
             # Suppression des permissions pour le test
             # du type de permission suivant.
@@ -143,7 +143,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
                 DBSession.delete(dataperm)
             DBSession.flush()
             dataperm = DBSession.query(tables.DataPermission).first()
-            self.assertEquals(dataperm, None)
+            self.assertEqual(dataperm, None)
 
 
     def test_remove_multiple_error(self):
@@ -173,7 +173,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
 
             # Aucune permission n'a été retirée.
             dataperms = DBSession.query(tables.DataPermission).all()
-            self.assertEquals(8, len(dataperms))
+            self.assertEqual(8, len(dataperms))
 
             # Suppression des permissions pour le test
             # du type de permission suivant.
@@ -181,7 +181,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
                 DBSession.delete(dataperm)
             DBSession.flush()
             dataperm = DBSession.query(tables.DataPermission).first()
-            self.assertEquals(dataperm, None)
+            self.assertEqual(dataperm, None)
 
 
     def test_remove_multiple_batch(self):
@@ -204,7 +204,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
                                 # en la committant, on perdrait tout.
             )
             res = commands.cmd_remove(options)
-            self.assertEquals(res, 0)
+            self.assertEqual(res, 0)
 
             dataperms = DBSession.query(tables.DataPermission).all()
 
@@ -212,11 +212,11 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
                 # Les 4 permissions de l'utilisateur
                 # doivent avoir été supprimées.
                 # Il reste donc 8-4 permissions en base.
-                self.assertEquals(4, len(dataperms))
+                self.assertEqual(4, len(dataperms))
             else:
                 # 2 permissions de l'utilisateur doivent avoir été supprimées.
                 # Il en reste donc 8-2 en base.
-                self.assertEquals(6, len(dataperms))
+                self.assertEqual(6, len(dataperms))
 
             # Suppression des permissions pour le test
             # du type de permission suivant.
@@ -224,7 +224,7 @@ class TestVigiloPermissionsRemoveMap(unittest.TestCase):
                 DBSession.delete(dataperm)
                 DBSession.flush()
             dataperm = DBSession.query(tables.DataPermission).first()
-            self.assertEquals(dataperm, None)
+            self.assertEqual(dataperm, None)
 
 
 class TestVigiloPermissionsRemoveGraph(TestVigiloPermissionsRemoveMap):
