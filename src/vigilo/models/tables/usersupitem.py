@@ -41,6 +41,11 @@ class UserSupItem(DeclarativeBase, object):
         nullable=False,
         primary_key=True,
     )
+    address = Column(
+        Unicode(255),
+        nullable=False,
+        primary_key=False,
+    )
     idsupitemgroup = Column(
         Integer,
         nullable=False,
@@ -68,6 +73,7 @@ DDL(
         SELECT %(lowlevelservice_table)s.idservice AS idsupitem,
             %(lowlevelservice_table)s.servicename AS servicename,
             %(host_table)s.name AS hostname,
+            %(host_table)s.address AS address,
             %(supitemgroup_table)s.idgroup AS idsupitemgroup,
             %(usertousergroups_table)s.username AS username
         FROM %(lowlevelservice_table)s
@@ -91,6 +97,7 @@ DDL(
         SELECT %(host_table)s.idhost AS idsupitem,
             NULL AS servicename,
             %(host_table)s.name AS hostname,
+            %(host_table)s.address AS address,
             %(supitemgroup_table)s.idgroup AS idsupitemgroup,
             %(usertousergroups_table)s.username AS username
         FROM %(host_table)s
@@ -129,6 +136,7 @@ DDL(
         SELECT %(lowlevelservice_table)s.idservice AS idsupitem,
             %(lowlevelservice_table)s.servicename AS servicename,
             %(host_table)s.name AS hostname,
+            %(host_table)s.address AS address,
             %(supitemgroup_table)s.idgroup AS idsupitemgroup,
             %(usertousergroups_table)s.username AS username
         FROM %(lowlevelservice_table)s
@@ -152,6 +160,7 @@ DDL(
         SELECT %(host_table)s.idhost AS idsupitem,
             NULL AS servicename,
             %(host_table)s.name AS hostname,
+            %(host_table)s.address AS address,
             %(supitemgroup_table)s.idgroup AS idsupitemgroup,
             %(usertousergroups_table)s.username AS username
         FROM %(host_table)s
