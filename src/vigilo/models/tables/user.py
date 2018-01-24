@@ -350,7 +350,12 @@ class User(DeclarativeBase, object):
         if not valid:
             return False
         if needs_update:
-            self._password = ctx.encrypt(password)
+            # Supporte l'API de Passlib 1.7.0+ (méthode hash())
+            # et celle des versions antérieures (méthode encrypt()).
+            if hasattr(ctx, 'hash'):
+                self._password = ctx.hash(password)
+            else:
+                self._password = ctx.encrypt(password)
         return True
 
     # Définition des accesseurs pour le (haché du) mot de passe.
