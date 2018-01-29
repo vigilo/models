@@ -346,16 +346,11 @@ class User(DeclarativeBase, object):
             deprecated_schemes
 
         ctx = CryptContext(schemes=schemes, deprecated=deprecated_schemes)
-        valid, needs_update = ctx.verify_and_update(password, self._password)
+        valid, new_hash = ctx.verify_and_update(password, self._password)
         if not valid:
             return False
-        if needs_update:
-            # Supporte l'API de Passlib 1.7.0+ (méthode hash())
-            # et celle des versions antérieures (méthode encrypt()).
-            if hasattr(ctx, 'hash'):
-                self._password = ctx.hash(password)
-            else:
-                self._password = ctx.encrypt(password)
+        if new_hash:
+            self._password = new_hash
         return True
 
     # Définition des accesseurs pour le (haché du) mot de passe.
