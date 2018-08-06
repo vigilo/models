@@ -451,11 +451,16 @@ class SupItemGroup(Group):
     """
     __mapper_args__ = {'polymorphic_identity': u'supitemgroup'}
 
+    # SUPITEM_GROUP_TABLE contient déjà des règles ON DELETE CASCADE.
+    # On en informe SQLAlchemy pour éviter un "double DELETE".
     supitems = relation('SupItem', secondary=SUPITEM_GROUP_TABLE,
-                back_populates='groups')
+                back_populates='groups', passive_deletes=True)
 
-    hosts = relation('Host', secondary=SUPITEM_GROUP_TABLE)
+    hosts = relation('Host', secondary=SUPITEM_GROUP_TABLE,
+            passive_deletes=True)
 
-    lls = relation('LowLevelService', secondary=SUPITEM_GROUP_TABLE)
+    lls = relation('LowLevelService', secondary=SUPITEM_GROUP_TABLE,
+            passive_deletes=True)
 
-    hls = relation('HighLevelService', secondary=SUPITEM_GROUP_TABLE)
+    hls = relation('HighLevelService', secondary=SUPITEM_GROUP_TABLE,
+            passive_deletes=True)
