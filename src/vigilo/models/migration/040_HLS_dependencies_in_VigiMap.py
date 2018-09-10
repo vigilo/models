@@ -27,6 +27,7 @@ def upgrade(migrate_engine, actions):
     # Création du type (pour postgresql).
     MigrationDDL(
         [
+            "DROP TYPE IF EXISTS vigilo_mapnodehls_show_deps RESTRICT",
             "CREATE TYPE vigilo_mapnodehls_show_deps "
                 "AS ENUM ('never','problems','always')",
         ],
