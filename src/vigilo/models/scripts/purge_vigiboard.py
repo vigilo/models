@@ -71,8 +71,8 @@ def clean_vigiboard(logger, options, url):
             nb_deleted = 0
             while True:
                 # On supprime tous les événements dont l'idevent correspond à
-                # un événement corrélé dont la dernière date d'activation est
-                # plus vieille que old_date.
+                # la cause d'un événement corrélé dont la dernière
+                # date d'activation est plus vieille que old_date.
                 #
                 # Comme les relations/FK sont créées en CASCADE, la suppression
                 # des événements entraine aussi la suppression des événements
