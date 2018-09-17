@@ -68,28 +68,44 @@ def clean_vigiboard(logger, options, url):
             old_date = datetime.fromtimestamp(
                 time.time() - options.days * 86400)
 
-            # On supprime tous les événements dont l'idevent correspond à
-            # un événement corrélé dont la dernière date d'activation est
-            # plus vieille que old_date.
-            # Comme les relations/FK sont créées en CASCADE, la suppression
-            # des événements entraine aussi la suppression des événements
-            # corrélés, des agrégats et de l'historique des événements.
-            ids = DBSession.query(
-                    Event.idevent
-                ).join(
-                    (CorrEvent, Event.idevent == CorrEvent.idcause)
-                ).filter(Event.current_state.in_(sought_states)
-                ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
-                ).filter(CorrEvent.timestamp_active <= old_date).all()
-            ids = [event.idevent for event in ids]
-            if ids:
-                nb_deleted = DBSession.query(Event
-                            ).filter(Event.idevent.in_(ids)
-                            ).delete(synchronize_session='fetch')
-            else:
-                nb_deleted = 0
-            logger.info(_("Deleted %(nb_deleted)d closed events which were "
-                            "at least %(days)d days old.") % {
+            nb_deleted = 0
+            while True:
+                # On supprime tous les événements dont l'idevent correspond à
+                # un événement corrélé dont la dernière date d'activation est
+                # plus vieille que old_date.
+                #
+                # Comme les relations/FK sont créées en CASCADE, la suppression
+                # des événements entraine aussi la suppression des événements
+                # corrélés, des agrégats et de l'historique des événements.
+                #
+                # Les événements sont supprimés par lots de 100, ce qui permet
+                # à la base de données de souffler un peu entre chaque lot,
+                # et de libérer les éventuels verrous qu'elle détient
+                # (ce qui peut permettre à d'autres transaction de s'exécuter).
+                new_deleted = DBSession.query(Event
+                    ).filter(Event.idevent.in_(
+                        DBSession.query(
+                            Event.idevent
+                        ).join(
+                            (CorrEvent, Event.idevent == CorrEvent.idcause)
+                        ).filter(Event.current_state.in_(sought_states)
+                        ).filter(CorrEvent.ack == CorrEvent.ACK_CLOSED
+                        ).filter(CorrEvent.timestamp_active <= old_date
+                        ).limit(100)
+                    )).delete(synchronize_session='fetch')
+
+                if not new_deleted:
+                    break
+
+                logger.info(_("Deleted %(nb_deleted)d closed events which were "
+                              "at least %(days)d days old.") % {
+                                'nb_deleted': new_deleted,
+                                'days': options.days,
+                            })
+                nb_deleted += new_deleted
+
+            logger.info(_("Deleted a total of %(nb_deleted)d closed events "
+                          "which were at least %(days)d days old.") % {
                             'nb_deleted': nb_deleted,
                             'days': options.days,
                         })
