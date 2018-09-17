@@ -94,6 +94,15 @@ def clean_vigiboard(logger, options, url):
                         ).limit(100)
                     )).delete(synchronize_session='fetch')
 
+                # On force la prise en compte immédiate des modifications,
+                # pour éviter de maintenir une transaction longue.
+                DBSession.flush()
+                # Cas des tests unitaires : on ne veut pas faire de COMMIT
+                # car on perdrait l'accès à la base de données (stockée en RAM).
+                if url is not None:
+                    transaction.commit()
+                    transaction.begin()
+
                 if not new_deleted:
                     break
 
