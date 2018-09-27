@@ -87,7 +87,8 @@ class SupItem(DeclarativeBase, object):
     tags = association_proxy('_tags', 'value', creator=Tag)
 
     groups = relation('SupItemGroup', secondary=SUPITEM_GROUP_TABLE,
-                back_populates='supitems', lazy=True)
+                back_populates='supitems', lazy=True,
+                cascade="all", passive_deletes=True)
 
     state = relation('State', back_populates="supitem", cascade="all",
                      lazy=True, uselist=False)

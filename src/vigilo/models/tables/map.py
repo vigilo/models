@@ -12,7 +12,6 @@ from vigilo.common.nx import networkx as nx
 from vigilo.models.session import DeclarativeBase, DBSession
 from vigilo.models.tables.secondary_tables import MAP_GROUP_TABLE, \
                                                 SUB_MAP_NODE_MAP_TABLE
-#from vigilo.models.tables.group import MapGroup
 
 __all__ = ('Map', )
 
@@ -55,7 +54,8 @@ class Map(DeclarativeBase, object):
         nullable = False)
 
     groups = relation('MapGroup', secondary=MAP_GROUP_TABLE,
-                         back_populates='maps', lazy=True)
+                         back_populates='maps', lazy=True,
+                         cascade="all", passive_deletes=True)
 
     links = relation('MapServiceLink', back_populates='map',
                      lazy=True, cascade="all")

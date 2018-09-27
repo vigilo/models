@@ -384,8 +384,9 @@ class MapGroup(Group):
 
     maps = relation('Map', secondary=MAP_GROUP_TABLE,
                     back_populates='groups',
-                    order_by='Map.title',
-                    cascade="all")
+                    cascade="all",
+                    passive_deletes=True,
+                    order_by='Map.title')
 
     #pylint: disable-msg=E1003
     def __init__(self, **kwargs):
@@ -441,7 +442,8 @@ class GraphGroup(Group):
     __mapper_args__ = {'polymorphic_identity': u'graphgroup'}
 
     graphs = relation('Graph', secondary=GRAPH_GROUP_TABLE,
-                    back_populates='groups')
+                back_populates='groups', cascade="all",
+                passive_deletes=True)
 
 class SupItemGroup(Group):
     """
@@ -454,7 +456,8 @@ class SupItemGroup(Group):
     # SUPITEM_GROUP_TABLE contient déjà des règles ON DELETE CASCADE.
     # On en informe SQLAlchemy pour éviter un "double DELETE".
     supitems = relation('SupItem', secondary=SUPITEM_GROUP_TABLE,
-                back_populates='groups', passive_deletes=True)
+                back_populates='groups', cascade="all",
+                passive_deletes=True)
 
     hosts = relation('Host', secondary=SUPITEM_GROUP_TABLE,
             passive_deletes=True)
