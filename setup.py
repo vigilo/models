@@ -83,12 +83,37 @@ setup(name='vigilo-models',
             'vigilo-passwd = vigilo.models.scripts.passwd:change_password',
             'vigilo-models-demo = vigilo.models.demo:run_demo',
             'vigilo-permissions = vigilo.models.scripts.permissions.main:main',
+            'vigilo-cli = vigilo.models.scripts.cli.main:main',
         ],
         # Compatibilité pour SQLAlchemy < 0.5.6 (RHEL 6),
         # où l'alias "postgresql" n'était pas encore défini.
         'sqlalchemy.databases': [
             'postgresql = sqlalchemy.databases.postgres:dialect',
         ],
+        'vigilo.cli': [
+            'action-copy = vigilo.models.scripts.cli.commands.action:ActionCopy',
+            'action-grant = vigilo.models.scripts.cli.commands.action:ActionGrant',
+            'action-list = vigilo.models.scripts.cli.commands.action:ActionList',
+            'action-revoke = vigilo.models.scripts.cli.commands.action:ActionRevoke',
+
+            'data-copy = vigilo.models.scripts.cli.commands.data:DataCopy',
+            'data-grant = vigilo.models.scripts.cli.commands.data:DataGrant',
+            'data-list = vigilo.models.scripts.cli.commands.data:DataList',
+            'data-revoke = vigilo.models.scripts.cli.commands.data:DataRevoke',
+
+            'user-create = vigilo.models.scripts.cli.commands.user:UserCreate',
+            'user-delete = vigilo.models.scripts.cli.commands.user:UserDelete',
+            'user-list = vigilo.models.scripts.cli.commands.user:UserList',
+            'user-update = vigilo.models.scripts.cli.commands.user:UserUpdate',
+
+            'usergroup-create = vigilo.models.scripts.cli.commands.usergroup:UsergroupCreate',
+            'usergroup-delete = vigilo.models.scripts.cli.commands.usergroup:UsergroupDelete',
+            'usergroup-exclude = vigilo.models.scripts.cli.commands.usergroup:UsergroupExclude',
+            'usergroup-include = vigilo.models.scripts.cli.commands.usergroup:UsergroupInclude',
+            'usergroup-list = vigilo.models.scripts.cli.commands.usergroup:UsergroupList',
+            'usergroup-rename = vigilo.models.scripts.cli.commands.usergroup:UsergroupRename',
+            'usergroup-show = vigilo.models.scripts.cli.commands.usergroup:UsergroupShow',
+        ]
     },
     package_dir={'': 'src'},
     data_files=install_i18n("i18n", os.path.join(sys.prefix, 'share', 'locale')) +
