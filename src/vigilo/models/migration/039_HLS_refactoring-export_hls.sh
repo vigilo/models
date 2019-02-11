@@ -1,6 +1,6 @@
 #!/bin/bash
 # lié à 039_HLS_refactoring
-# Copyright (C) 2014-2018 CS-SI
+# Copyright (C) 2014-2019 CS-SI
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 escape_characters()
