@@ -158,6 +158,8 @@ def populate_db(bind, commit=True):
     from vigilo.models import tables
     from vigilo.models.tables.grouppath import GroupPath
     from vigilo.models.tables.usersupitem import UserSupItem
+    from vigilo.models.tables.guievent import GuiEvent
+    from vigilo.models.tables.guieventduration import GuiEventDuration
 
     # Création des tables
     print("Creating required tables")
@@ -165,16 +167,19 @@ def populate_db(bind, commit=True):
     # La vue GroupPath dépend de Group et GroupHierarchy.
     # SQLAlchemy ne peut pas détecter correctement la dépendance.
     # On crée le schéma en 2 fois pour contourner ce problème.
-    # Idem pour la vue UserSupItem (6 dépendances).
     mapped_tables = metadata.tables.copy()
     del mapped_tables[GroupPath.__tablename__]
     del mapped_tables[UserSupItem.__tablename__]
+    del mapped_tables[GuiEvent.__tablename__]
+    del mapped_tables[GuiEventDuration.__tablename__]
 
 
     try:
         metadata.create_all(bind=bind, tables=mapped_tables.itervalues())
         metadata.create_all(bind=bind, tables=[GroupPath.__table__])
         metadata.create_all(bind=bind, tables=[UserSupItem.__table__])
+        metadata.create_all(bind=bind, tables=[GuiEvent.__table__])
+        metadata.create_all(bind=bind, tables=[GuiEventDuration.__table__])
     except OperationalError as e:
         print(e.orig, file=sys.stderr)
         sys.exit(1)

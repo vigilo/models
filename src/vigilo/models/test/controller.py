@@ -9,6 +9,8 @@ from vigilo.models.session import DBSession, metadata
 from vigilo.models.tables import StateName
 from vigilo.models.tables.grouppath import GroupPath
 from vigilo.models.tables.usersupitem import UserSupItem
+from vigilo.models.tables.guievent import GuiEvent
+from vigilo.models.tables.guieventduration import GuiEventDuration
 
 __all__ = ['ModelTest', 'setup_db', 'teardown_db', 'Options']
 
@@ -44,8 +46,12 @@ def setup_db():
     tables = metadata.tables.copy()
     del tables[GroupPath.__tablename__]
     del tables[UserSupItem.__tablename__]
+    del tables[GuiEvent.__tablename__]
+    del tables[GuiEventDuration.__tablename__]
     metadata.create_all(tables=tables.itervalues())
     metadata.create_all(tables=[GroupPath.__table__, UserSupItem.__table__])
+    metadata.create_all(tables=[GuiEvent.__table__])
+    metadata.create_all(tables=[GuiEventDuration.__table__])
     populate_statename()
 
 #Teardown that database
