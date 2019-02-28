@@ -22,8 +22,6 @@ class UserSupItem(DeclarativeBase, object):
     Cette vue liste tous les supitems auxquels chaque utilisateur a accès.
     """
 
-    # Doit être synchronisé avec le nom de la vue
-    # (cf. DDL en fin de fichier).
     __tablename__ = 'vigilo_usersupitem'
 
     idsupitem = Column(
@@ -56,6 +54,9 @@ class UserSupItem(DeclarativeBase, object):
         nullable=False,
         primary_key=True,
     )
+
+# Permet d'indiquer qu'il s'agit d'une vue et non pas d'une table réelle.
+UserSupItem.__table__.info = {'vigilo_view': True}
 
 
 # Suppression de la table automatiquement générée par SQLAlchemy.

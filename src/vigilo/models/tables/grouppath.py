@@ -21,8 +21,6 @@ class GroupPath(DeclarativeBase, object):
     Les chemins retournés sont correctement échappés.
     """
 
-    # Doit être synchronisé avec le nom de la vue
-    # (cf. DDL en fin de fichier).
     __tablename__ = 'vigilo_group_paths'
 
     idgroup = Column(
@@ -40,6 +38,9 @@ class GroupPath(DeclarativeBase, object):
 
     def __repr__(self):
         return u"<%s \"%s\">" % (self.__class__.__name__, unicode(self.path))
+
+# Permet d'indiquer qu'il s'agit d'une vue et non pas d'une table réelle.
+GroupPath.__table__.info = {'vigilo_view': True}
 
 
 # Suppression de la table automatiquement générée par SQLAlchemy.

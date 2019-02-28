@@ -156,30 +156,27 @@ def populate_db(bind, commit=True):
 
     # Chargement du modèle.
     from vigilo.models import tables
-    from vigilo.models.tables.grouppath import GroupPath
-    from vigilo.models.tables.usersupitem import UserSupItem
-    from vigilo.models.tables.guievent import GuiEvent
-    from vigilo.models.tables.guieventduration import GuiEventDuration
 
     # Création des tables
     print("Creating required tables")
 
-    # La vue GroupPath dépend de Group et GroupHierarchy.
-    # SQLAlchemy ne peut pas détecter correctement la dépendance.
-    # On crée le schéma en 2 fois pour contourner ce problème.
+    # Pour permettre la rétrocompatibilité, les vues de Vigilo
+    # sont déclarées comme des tables factices.
+    # Malheureusement, SQLAlchemy tente généralement de créer les vues
+    # avant les tables dont elles dépendent, ce qui échoue.
+    # Pour éviter ça, on crée d'abord les tables, puis les vues.
     mapped_tables = metadata.tables.copy()
-    del mapped_tables[GroupPath.__tablename__]
-    del mapped_tables[UserSupItem.__tablename__]
-    del mapped_tables[GuiEvent.__tablename__]
-    del mapped_tables[GuiEventDuration.__tablename__]
-
+    views = {}
+    for tablename in mapped_tables:
+        info = mapped_tables[tablename].info or {}
+        if info.get('vigilo_view'):
+            views[tablename] = mapped_tables[tablename]
+    for view in views:
+        del mapped_tables[view]
 
     try:
-        metadata.create_all(bind=bind, tables=mapped_tables.itervalues())
-        metadata.create_all(bind=bind, tables=[GroupPath.__table__])
-        metadata.create_all(bind=bind, tables=[UserSupItem.__table__])
-        metadata.create_all(bind=bind, tables=[GuiEvent.__table__])
-        metadata.create_all(bind=bind, tables=[GuiEventDuration.__table__])
+        metadata.create_all(bind=bind, tables=mapped_tables.values())
+        metadata.create_all(bind=bind, tables=views.values())
     except OperationalError as e:
         print(e.orig, file=sys.stderr)
         sys.exit(1)

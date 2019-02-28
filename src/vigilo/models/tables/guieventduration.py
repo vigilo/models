@@ -31,6 +31,10 @@ class GuiEventDuration(DeclarativeBase, object):
         nullable=False,
     )
 
+# Permet d'indiquer qu'il s'agit d'une vue et non pas d'une table réelle.
+GuiEventDuration.__table__.info = {'vigilo_view': True}
+
+
 # Suppression de la table automatiquement générée par SQLAlchemy.
 DDL(
     "DROP TABLE IF EXISTS %(fullname)s",

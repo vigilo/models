@@ -7,10 +7,6 @@ from __future__ import print_function
 from nose.tools import assert_equals
 from vigilo.models.session import DBSession, metadata
 from vigilo.models.tables import StateName
-from vigilo.models.tables.grouppath import GroupPath
-from vigilo.models.tables.usersupitem import UserSupItem
-from vigilo.models.tables.guievent import GuiEvent
-from vigilo.models.tables.guieventduration import GuiEventDuration
 
 __all__ = ['ModelTest', 'setup_db', 'teardown_db', 'Options']
 
@@ -38,20 +34,18 @@ def populate_statename():
 #Create an empty database before we start our tests for this module
 def setup_db():
     """Crée toutes les tables du modèle dans la BDD."""
-    # GroupPath dépend de Group & GroupHierarchy,
-    # mais on n'a aucun moyen de le signaler à SQLAlchemy.
-    # Résultat dans SQLite, les tables se retrouveraient créées
-    # dans le mauvais ordre.
-    # Idem pour la vue UserSupItem (6 dépendances).
-    tables = metadata.tables.copy()
-    del tables[GroupPath.__tablename__]
-    del tables[UserSupItem.__tablename__]
-    del tables[GuiEvent.__tablename__]
-    del tables[GuiEventDuration.__tablename__]
-    metadata.create_all(tables=tables.itervalues())
-    metadata.create_all(tables=[GroupPath.__table__, UserSupItem.__table__])
-    metadata.create_all(tables=[GuiEvent.__table__])
-    metadata.create_all(tables=[GuiEventDuration.__table__])
+    # On crée les tables, puis les vues.
+    mapped_tables = metadata.tables.copy()
+    views = {}
+    for tablename in mapped_tables:
+        info = mapped_tables[tablename].info or {}
+        if info.get('vigilo_view'):
+            views[tablename] = mapped_tables[tablename]
+    for view in views:
+        del mapped_tables[view]
+
+    metadata.create_all(tables=mapped_tables.itervalues())
+    metadata.create_all(tables=views.values())
     populate_statename()
 
 #Teardown that database
