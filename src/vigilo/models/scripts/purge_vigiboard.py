@@ -65,7 +65,7 @@ def clean_vigiboard(logger, options, url):
     if options.days is not None:
         if options.days >= 0:
             # Génère une date qui se trouve options.days jours dans le passé.
-            old_date = datetime.fromtimestamp(
+            old_date = datetime.utcfromtimestamp(
                 time.time() - options.days * 86400)
 
             nb_deleted = 0

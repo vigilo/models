@@ -75,6 +75,6 @@ class Change(DeclarativeBase, object):
         if not change:
             change = cls(element=element)
 
-        change.last_modified = datetime.now()
+        change.last_modified = datetime.utcnow()
         DBSession.add(change)
         DBSession.flush()

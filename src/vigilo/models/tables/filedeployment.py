@@ -75,7 +75,7 @@ class FileDeployment(DeclarativeBase, object):
         """ Updates the hashcode attribute.
         """
         self.hashcode = self._get_actual_hashcode(sub_func)
-        self.date = datetime.now()
+        self.date = datetime.utcnow()
         DBSession.flush()
         
     def need_deployment(self, sub_func=None):

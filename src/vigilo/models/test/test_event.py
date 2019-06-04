@@ -18,7 +18,7 @@ class TestEvent(ModelTest):
     klass = Event
     attrs = {
         'idevent': 42,
-        'timestamp': datetime.now(),
+        'timestamp': datetime.utcnow(),
         # On ne peut pas utiliser StateName.statename_to_value ici
         # car le modèle n'est pas encore créé lorsque ce code est
         # exécuté.

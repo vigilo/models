@@ -21,7 +21,7 @@ class TestEventHistory(ModelTest):
         'value': u'',
         'text': u'',
         'username': u'manager',
-        'timestamp': datetime.now(),
+        'timestamp': datetime.utcnow(),
     }
 
     def do_get_dependencies(self):

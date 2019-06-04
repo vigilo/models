@@ -54,7 +54,7 @@ def close_green(logger, options):
         ).filter(CorrEvent.ack != CorrEvent.ACK_CLOSED)
     if options.days is not None and options.days > 0:
         # Génère une date qui se trouve options.days jours dans le passé.
-        old_date = datetime.fromtimestamp(time.time() - options.days * 86400)
+        old_date = datetime.utcfromtimestamp(time.time() - options.days * 86400)
         query = query.filter(Event.timestamp <= old_date)
 
     events = query.all()
@@ -69,7 +69,7 @@ def close_green(logger, options):
                 value=u"",
                 text=u"Automatically marked the event as closed",
                 username=username,
-                timestamp=datetime.now(),
+                timestamp=datetime.utcnow(),
             )
         DBSession.add(history)
 

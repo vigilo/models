@@ -24,7 +24,7 @@ class TestFileDeployment(ModelTest):
     klass = FileDeployment
     attrs = {
         'hashcode': u'-',
-        'date': datetime.now(),
+        'date': datetime.utcnow(),
         'src_path': u'',
         'dest_path': u'sample_dep.dest',
     }

@@ -15,7 +15,7 @@ class TestHLSHistory(ModelTest):
 
     klass = HLSHistory
     attrs = {
-        'timestamp': datetime.now(),
+        'timestamp': datetime.utcnow(),
     }
 
     def do_get_dependencies(self):

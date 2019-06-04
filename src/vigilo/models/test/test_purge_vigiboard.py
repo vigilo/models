@@ -29,7 +29,7 @@ class TestPurgeVigiBoard(unittest.TestCase):
 
     def setUp(self):
         setup_db()
-        two_days_ago = datetime.fromtimestamp(time.time() - 2 * 86400)
+        two_days_ago = datetime.utcfromtimestamp(time.time() - 2 * 86400)
 
         localhost = fn.add_host('localhost')
         localhost2 = fn.add_host('localhost2')
@@ -69,7 +69,7 @@ class TestPurgeVigiBoard(unittest.TestCase):
         DBSession.add(tables.HLSHistory(
             hls=hls,
             idstatename=tables.StateName.statename_to_value(u'OK'),
-            timestamp=datetime.now(),
+            timestamp=datetime.utcnow(),
         ))
 
 

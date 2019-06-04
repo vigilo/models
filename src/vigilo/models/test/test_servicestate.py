@@ -23,7 +23,7 @@ class TestServiceState(ModelTest):
         # exécuté.
         'state': 3, # = WARNING
         'attempt': 42,
-        'timestamp': datetime.now(),
+        'timestamp': datetime.utcnow(),
         'message': 'Foo!',
     }
 

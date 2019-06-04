@@ -46,7 +46,7 @@ class State(DeclarativeBase, object):
     timestamp = Column(
             DateTime(timezone=False),
             nullable=False,
-            default=datetime.datetime.now,
+            default=datetime.datetime.utcnow,
     )
 
     state = Column(

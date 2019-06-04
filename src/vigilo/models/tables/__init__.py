@@ -61,7 +61,6 @@ from .hlspriority import HLSPriority
 # Importation des vues.
 from .grouppath import GroupPath
 from .usersupitem import UserSupItem
-from .guievent import GuiEvent
 from .guieventduration import GuiEventDuration
 
 # Spécifique projets

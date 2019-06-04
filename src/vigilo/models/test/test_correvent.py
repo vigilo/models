@@ -17,7 +17,7 @@ class TestCorrEvent(ModelTest):
     klass = CorrEvent
     attrs = {
         'ack': CorrEvent.ACK_NONE,
-        'timestamp_active': datetime.now(),
+        'timestamp_active': datetime.utcnow(),
         'priority': 0,
     }
 

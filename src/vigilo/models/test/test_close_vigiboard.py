@@ -26,7 +26,7 @@ class TestCloseVigiBoard(unittest.TestCase):
 
     def setUp(self):
         setup_db()
-        two_days_ago = datetime.fromtimestamp(time.time() - 2 * 86400)
+        two_days_ago = datetime.utcfromtimestamp(time.time() - 2 * 86400)
 
         localhost = fn.add_host('localhost')
         uptime = fn.add_lowlevelservice(localhost, 'UpTime')

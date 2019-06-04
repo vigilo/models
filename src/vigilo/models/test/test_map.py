@@ -19,7 +19,7 @@ class TestMap(ModelTest):
 
     klass = Map
     attrs = {
-        'mtime' : datetime.today(),
+        'mtime' : datetime.utcnow(),
         'title' : u'Carte 1',
         'background_color' : u'#00CC99',
         'background_image' : u'France',

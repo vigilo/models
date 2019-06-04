@@ -4,6 +4,7 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 """Modèle pour la table SupItem"""
+import datetime
 from sqlalchemy import Column
 from sqlalchemy.orm import relation, aliased
 from sqlalchemy.orm.interfaces import MapperExtension
@@ -76,9 +77,9 @@ class SupItem(DeclarativeBase, object):
     )
 
     creation_date = Column(
-        DateTime,
+        DateTime(timezone=False),
         nullable=False,
-        default=functions.now(),
+        default=datetime.datetime.utcnow,
     )
 
     _tags = relation(Tag,

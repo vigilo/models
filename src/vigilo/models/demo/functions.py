@@ -477,7 +477,7 @@ def add_svc_state(service, statename, message=None, timestamp=None):
     elif isinstance(service, basestring):
         service = tables.HighLevelService.by_service_name(service)
     if timestamp is None:
-        timestamp = datetime.now()
+        timestamp = datetime.utcnow()
     s = tables.State(idsupitem=service.idservice,
                     state=tables.StateName.statename_to_value(statename),
                     message=unicode(message),
@@ -505,7 +505,7 @@ def add_host_state(host, statename, message=None, timestamp=None):
     else:
         idhost = host.idhost
     if timestamp is None:
-        timestamp = datetime.now()
+        timestamp = datetime.utcnow()
     s = tables.State(idsupitem=idhost,
                     state=tables.StateName.statename_to_value(statename),
                     message=unicode(message),
@@ -542,7 +542,7 @@ def add_event(supitem, statename, message, timestamp=None):
     elif isinstance(supitem, tables.SupItem):
         idsupitem = supitem.idsupitem
     if timestamp is None:
-        timestamp = datetime.now()
+        timestamp = datetime.utcnow()
     e = tables.Event(
                 idsupitem=idsupitem,
                 current_state=tables.StateName.statename_to_value(statename),
@@ -578,7 +578,7 @@ def add_correvent(events, cause=None, status=tables.CorrEvent.ACK_NONE,
     if cause is None:
         cause = events[0]
     if timestamp is None:
-        timestamp = datetime.now()
+        timestamp = datetime.utcnow()
 
     ce = tables.CorrEvent(
                 idcause=cause.idevent,
@@ -622,7 +622,7 @@ def add_map(name, group=None):
     m = tables.Map.by_group_and_title(group, name)
     if not m:
         m = tables.Map(
-                mtime=datetime.today(),
+                mtime=datetime.utcnow(),
                 title=name,
                 generated=True,
                 background_color=u'',
@@ -1041,7 +1041,7 @@ def add_silence(states, host, service=None, user='manager', comment=None,
     silence = tables.Silence()
     silence.idsupitem = idsupitem
     silence.comment = comment
-    silence.lastmodification = date or datetime.now().replace(microsecond=0)
+    silence.lastmodification = date or datetime.utcnow().replace(microsecond=0)
     silence.author = user
     DBSession.add(silence)
     for state in states:

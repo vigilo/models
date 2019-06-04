@@ -30,7 +30,7 @@ class DateMixin(object):
 
     def get_since_date(self, element, locale):
         """
-        Permet d'obtenir le temps écoulé entre maintenant (datetime.now())
+        Permet d'obtenir le temps écoulé entre maintenant (datetime.utcnow())
         et le temps contenu dans la variable de temps indiquée.
         Le format utilisé pour représenter la valeur dépend de la locale
         de l'utilisateur.
@@ -42,7 +42,7 @@ class DateMixin(object):
         @return: Le temps écoulé depuis la date demandée, ex: "4d 8h 15'".
         @rtype: C{unicode}
         """
-        date = datetime.now() - getattr(self, element)
+        date = datetime.utcnow() - getattr(self, element)
         minutes = divmod(date.seconds, 60)[0]
         hours, minutes = divmod(minutes, 60)
         return "%dd %dh %d'" % (date.days , hours , minutes)
