@@ -200,8 +200,24 @@ class SupItem(DeclarativeBase, object):
         """
         # pylint: disable-msg=W0613
         # W0613: Unused argument 'perm_type'
-        if u"managers" in [g.group_name for g in user.usergroups]:
+
+        managers = []
+        try:
+            from tg import config
+        except ImportError:
+            # La configuration de TurboGears n'est pas toujours disponible
+            # (si on ne se trouve pas dans une interface web par exemple).
+            pass
+        else:
+            admin_groups = config.get('admin_groups', 'managers')
+            if admin_groups.strip():
+                managers = [s.strip() for s in admin_groups.split(',')]
+
+        # Si l'utilisateur est membre d'au moins un groupe d'admin,
+        # alors il a automatiquement accès à l'objet.
+        if set(managers) & set([g.group_name for g in user.usergroups]):
             return True
+
         direct_groups = [sg[0] for sg in user.supitemgroups() if sg[1]]
         for group in self.groups:
             if group.idgroup in direct_groups:
