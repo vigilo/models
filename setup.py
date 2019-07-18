@@ -48,7 +48,7 @@ def install_i18n(i18ndir, destdir):
     return data_files
 
 setup(name='vigilo-models',
-    version='5.1.0a2',
+    version='5.1.0a3',
     author='Vigilo Team',
     author_email='contact.vigilo@c-s.fr',
     url='https://www.vigilo-nms.com/',
