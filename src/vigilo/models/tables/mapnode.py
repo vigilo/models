@@ -81,7 +81,8 @@ class MapNode(DeclarativeBase, object):
 
     map = relation('Map', back_populates='nodes')
 
-    submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE)
+    submaps = relation('Map', secondary=SUB_MAP_NODE_MAP_TABLE,
+                        cascade='all', passive_deletes=True)
 
     # Il est possible de créer des éléments sur la carte
     # qui n'ont pas de relations avec les SupItem, mais
