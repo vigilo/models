@@ -85,11 +85,6 @@ setup(name='vigilo-models',
             'vigilo-permissions = vigilo.models.scripts.permissions.main:main',
             'vigilo-cli = vigilo.models.scripts.cli.main:main',
         ],
-        # Compatibilité pour SQLAlchemy < 0.5.6 (RHEL 6),
-        # où l'alias "postgresql" n'était pas encore défini.
-        'sqlalchemy.databases': [
-            'postgresql = sqlalchemy.databases.postgres:dialect',
-        ],
         'vigilo.cli': [
             'action-copy = vigilo.models.scripts.cli.commands.action:ActionCopy',
             'action-grant = vigilo.models.scripts.cli.commands.action:ActionGrant',
