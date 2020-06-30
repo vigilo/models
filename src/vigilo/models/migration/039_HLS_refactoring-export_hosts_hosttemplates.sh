@@ -1,6 +1,6 @@
 #!/bin/bash
 # lié à 039_HLS_refactoring
-# Copyright (C) 2014-2020 CS GROUP – France
+# Copyright (C) 2014-2020 CS GROUP - France
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 export PATH=/sbin:/bin:/usr/sbin:/usr/bin
