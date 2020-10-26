@@ -1,1 +1,0 @@
-models.rhel6.spec

@@ -111,6 +111,7 @@ setup(name='vigilo-models',
         ]
     },
     package_dir={'': 'src'},
+    test_suite='nose.collector',
     data_files=install_i18n("i18n", os.path.join(sys.prefix, 'share', 'locale')) +
-        [(os.path.join(sysconfdir, "vigilo/models"), ["deployment/settings.ini"])],
+        [(os.path.join(sysconfdir, "vigilo", "models"), ["deployment/settings.ini"])],
 )

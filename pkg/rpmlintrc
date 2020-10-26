@@ -1,6 +1,0 @@
-# -*- python -*-
-
-from Config import addFilter
-
-# Faux positif de rpmlint a cause du "lib" dans "python-passlib"
-addFilter("E: explicit-lib-dependency python-passlib")
