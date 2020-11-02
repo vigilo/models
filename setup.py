@@ -4,7 +4,6 @@
 # License: GNU GPL v2 <http://www.gnu.org/licenses/gpl-2.0.html>
 
 import os, sys
-from platform import python_version_tuple
 from setuptools import setup, find_packages
 
 sysconfdir = os.getenv("SYSCONFDIR", "/etc")
@@ -22,9 +21,6 @@ install_requires = [
     "networkx",
     "passlib",
 ]
-if tuple(python_version_tuple()) < ('2', '7'):
-    install_requires.append("argparse")
-
 
 tests_require = [
     'coverage',
