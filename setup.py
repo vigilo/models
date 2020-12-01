@@ -6,7 +6,7 @@
 import os, sys
 from setuptools import setup, find_packages
 
-sysconfdir = os.getenv("SYSCONFDIR", "/etc")
+setup_requires = ['vigilo-common'] if not os.environ.get('CI') else []
 
 install_requires = [
     "Babel >= 0.9.4",
@@ -52,6 +52,7 @@ setup(name='vigilo-models',
     description="Vigilo data models (ORM)",
     long_description="This library gives an API to the Vigilo data models.",
     zip_safe=False,
+    setup_requires=setup_requires,
     install_requires=install_requires,
     extras_require={
         'tests': tests_require
@@ -108,6 +109,12 @@ setup(name='vigilo-models',
     },
     package_dir={'': 'src'},
     test_suite='nose.collector',
+    vigilo_build_vars={
+        'sysconfdir': {
+            'default': '/etc',
+            'description': "installation directory for configuration files",
+        },
+    },
     data_files=install_i18n("i18n", os.path.join(sys.prefix, 'share', 'locale')) +
-        [(os.path.join(sysconfdir, "vigilo", "models"), ["deployment/settings.ini"])],
+        [(os.path.join("@sysconfdir@", "vigilo", "models"), ["deployment/settings.ini"])],
 )
