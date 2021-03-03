@@ -47,7 +47,7 @@ def configure_db(config_obj, prefix):
     global DEFAULT_LANG, SCHEMES, DEPRECATED_SCHEMES
 
     # Langue par défaut des utilisateurs.
-    DEFAULT_LANG = config_obj.get('lang', None)
+    DEFAULT_LANG = config_obj.get('i18n.lang', None)
 
     # Algorithmes de hachage des mots de passe.
     DEPRECATED_SCHEMES = filter(None, config_obj.get(
